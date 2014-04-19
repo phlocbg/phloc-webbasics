@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -74,12 +75,29 @@ public class PasswordConstraintMustContainNumber implements IPasswordConstraint
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
     return EPasswordConstraintText.DESC_MUST_CONTAIN_DIGITS.getDisplayTextWithArgs (aContentLocale,
-                                                                                     Integer.valueOf (m_nMinNumbers));
+                                                                                    Integer.valueOf (m_nMinNumbers));
   }
 
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
     aElement.setAttribute (ATTR_MIN_NUMBERS, m_nMinNumbers);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final PasswordConstraintMustContainNumber rhs = (PasswordConstraintMustContainNumber) o;
+    return m_nMinNumbers == rhs.m_nMinNumbers;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_nMinNumbers).getHashCode ();
   }
 
   @Override

@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -72,6 +73,23 @@ public class PasswordConstraintMinLength implements IPasswordConstraint
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
     aElement.setAttribute (ATTR_MIN_LENGTH, m_nMinLength);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final PasswordConstraintMinLength rhs = (PasswordConstraintMinLength) o;
+    return m_nMinLength == rhs.m_nMinLength;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_nMinLength).getHashCode ();
   }
 
   @Override

@@ -29,6 +29,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -147,6 +148,23 @@ public class PasswordConstraintList implements IPasswordConstraintList
   public PasswordConstraintList getClone ()
   {
     return new PasswordConstraintList (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final PasswordConstraintList rhs = (PasswordConstraintList) o;
+    return m_aConstraints.equals (rhs.m_aConstraints);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aConstraints).getHashCode ();
   }
 
   @Override

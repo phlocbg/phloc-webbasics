@@ -67,7 +67,7 @@ public abstract class AbstractDAO implements IDAO
 
   protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
   {
-    m_aIO = ValueEnforcer.notNull (aDAOIO, "DataIO");
+    m_aIO = ValueEnforcer.notNull (aDAOIO, "DAOIO");
   }
 
   /**

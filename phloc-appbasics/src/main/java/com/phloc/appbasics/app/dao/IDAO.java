@@ -36,6 +36,12 @@ import org.joda.time.DateTime;
  */
 public interface IDAO extends IChangeable, IAutoSaveAware
 {
+  public enum EMode
+  {
+    READ,
+    WRITE;
+  }
+
   /**
    * This method is called to persist the content in disk in case there are
    * pending changes. If no pending changes are present, nothing happens. In

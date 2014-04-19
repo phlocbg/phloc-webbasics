@@ -34,7 +34,6 @@ import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
-import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustBeLocked;
@@ -94,7 +93,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
                                                                                                        "$write");
 
   private final IHasFilename m_aFilenameProvider;
-  private String m_sLastFilename;
+  private String m_sPreviousFilename;
   private int m_nInitCount = 0;
   private DateTime m_aLastInitDT;
   private int m_nReadCount = 0;
@@ -114,7 +113,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
-   * @return The filename provider used internally. Never <code>null</code>.
+   * @return The filename provider used internally to build filenames. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public final IHasFilename getFilenameProvider ()
@@ -149,17 +149,43 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected abstract EChange onRead (@Nonnull IMicroDocument aDoc);
 
   @Nonnull
-  protected static final File getSafeFile (@Nonnull final String sFilename) throws DAOException
+  protected final File getSafeFile (@Nonnull final String sFilename, @Nonnull final EMode eMode) throws DAOException
   {
-    final File aFile = WebFileIO.getFile (sFilename);
+    ValueEnforcer.notNull (sFilename, "Filename");
+    ValueEnforcer.notNull (eMode, "Mode");
+
+    final File aFile = getIO ().getFileIO ().getFile (sFilename);
     if (aFile.exists ())
     {
       // file exist -> must be a file!
       if (!aFile.isFile ())
         throw new DAOException ("The passed filename '" +
                                 sFilename +
-                                "' is not a file - maybe a directory: " +
-                                aFile.getAbsolutePath ());
+                                "' is not a file - maybe a directory? Path is '" +
+                                aFile.getAbsolutePath () +
+                                "'");
+
+      switch (eMode)
+      {
+        case READ:
+          // Check for read-rights
+          if (!FileUtils.canRead (aFile))
+            throw new DAOException ("The DAO of class " +
+                                    getClass ().getName () +
+                                    " has no access rights to read from '" +
+                                    aFile.getAbsolutePath () +
+                                    "'");
+          break;
+        case WRITE:
+          // Check for write-rights
+          if (!FileUtils.canWrite (aFile))
+            throw new DAOException ("The DAO of class " +
+                                    getClass ().getName () +
+                                    " has no access rights to write to '" +
+                                    aFile.getAbsolutePath () +
+                                    "'");
+          break;
+      }
     }
     else
     {
@@ -167,11 +193,17 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       final File aParentDir = aFile.getParentFile ();
       if (aParentDir != null)
       {
-        final FileIOError aError = WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentDir);
+        final FileIOError aError = getIO ().getFileOperationMgr ().createDirRecursiveIfNotExisting (aParentDir);
         if (aError.isFailure ())
-          throw new DAOException ("Failed to create parent directory '" + aParentDir + "': " + aError);
+          throw new DAOException ("The DAO of class " +
+                                  getClass ().getName () +
+                                  " failed to create parent directory '" +
+                                  aParentDir +
+                                  "': " +
+                                  aError);
       }
     }
+
     return aFile;
   }
 
@@ -199,20 +231,12 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     else
     {
       // Check consistency
-      aFile = getSafeFile (sFilename);
+      aFile = getSafeFile (sFilename, EMode.READ);
     }
 
     m_aRWLock.writeLock ().lock ();
     try
     {
-      // Check for read-rights
-      if (aFile != null && aFile.exists () && !FileUtils.canRead (aFile))
-        throw new DAOException ("The DAO of class " +
-                                getClass ().getName () +
-                                " has not access rights to read from '" +
-                                aFile.getAbsolutePath () +
-                                "'");
-
       ESuccess eWriteSuccess = ESuccess.SUCCESS;
       bIsInitialization = aFile == null || !aFile.exists ();
       if (bIsInitialization)
@@ -393,7 +417,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_sLastFilename;
+      return m_sPreviousFilename;
     }
     finally
     {
@@ -422,10 +446,10 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
 
     // Check for a filename change before writing
-    if (!sFilename.equals (m_sLastFilename))
+    if (!sFilename.equals (m_sPreviousFilename))
     {
-      onFilenameChange (m_sLastFilename, sFilename);
-      m_sLastFilename = sFilename;
+      onFilenameChange (m_sPreviousFilename, sFilename);
+      m_sPreviousFilename = sFilename;
     }
 
     if (GlobalDebug.isDebugMode ())
@@ -436,9 +460,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     try
     {
       // Get the file handle
-      aFile = getSafeFile (sFilename);
-      if (aFile.exists () && !FileUtils.canWrite (aFile))
-        throw new DAOException ("Missing access rights to write to file");
+      aFile = getSafeFile (sFilename, EMode.WRITE);
 
       s_aStatsCounterWriteTotal.increment ();
       final StopWatch aSW = new StopWatch (true);
@@ -598,7 +620,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("filenameProvider", m_aFilenameProvider)
-                            .append ("previousFilename", m_sLastFilename)
+                            .append ("previousFilename", m_sPreviousFilename)
                             .append ("initCount", m_nInitCount)
                             .appendIfNotNull ("lastInitDT", m_aLastInitDT)
                             .append ("readCount", m_nReadCount)

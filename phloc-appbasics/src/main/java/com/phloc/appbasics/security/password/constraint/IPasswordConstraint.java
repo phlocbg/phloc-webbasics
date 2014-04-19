@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.microdom.IMicroElement;
 
 /**
@@ -29,6 +30,7 @@ import com.phloc.commons.microdom.IMicroElement;
  * 
  * @author Philip Helger
  */
+@MustImplementEqualsAndHashcode
 public interface IPasswordConstraint
 {
   /**

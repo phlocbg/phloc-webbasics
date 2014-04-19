@@ -23,7 +23,9 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.io.PathRelativeFileIO;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.state.ESuccess;
 
 /**
@@ -33,6 +35,20 @@ import com.phloc.commons.state.ESuccess;
  */
 public interface IDAOIO
 {
+  /**
+   * @return The base file IO object. Never <code>null</code>.
+   * @since 2.7.4
+   */
+  @Nonnull
+  PathRelativeFileIO getFileIO ();
+
+  /**
+   * @return The file operation manager to be used. Never <code>null</code>.
+   * @since 2.7.4
+   */
+  @Nonnull
+  FileOperationManager getFileOperationMgr ();
+
   @Nullable
   InputStream openInputStream (@Nullable String sFilename);
 

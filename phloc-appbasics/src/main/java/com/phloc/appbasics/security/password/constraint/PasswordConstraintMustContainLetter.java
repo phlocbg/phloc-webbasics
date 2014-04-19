@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -71,8 +72,8 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
   @Nullable
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
-    return EPasswordConstraintText.DESC_MUST_CONTAIN_DIGITS.getDisplayTextWithArgs (aContentLocale,
-                                                                                    Integer.valueOf (m_nMinLetters));
+    return EPasswordConstraintText.DESC_MUST_CONTAIN_LETTERS.getDisplayTextWithArgs (aContentLocale,
+                                                                                     Integer.valueOf (m_nMinLetters));
   }
 
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
@@ -81,8 +82,25 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
   }
 
   @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final PasswordConstraintMustContainLetter rhs = (PasswordConstraintMustContainLetter) o;
+    return m_nMinLetters == rhs.m_nMinLetters;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_nMinLetters).getHashCode ();
+  }
+
+  @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("minDigits", m_nMinLetters).toString ();
+    return new ToStringGenerator (this).append ("minLetters", m_nMinLetters).toString ();
   }
 }

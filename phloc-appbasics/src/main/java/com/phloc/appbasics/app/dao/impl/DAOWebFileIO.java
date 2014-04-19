@@ -49,13 +49,13 @@ public final class DAOWebFileIO implements IDAOIO
   }
 
   @Nonnull
-  private static PathRelativeFileIO _getIO ()
+  public PathRelativeFileIO getFileIO ()
   {
     return WebFileIO.getDataIO ();
   }
 
   @Nonnull
-  private static FileOperationManager _getFOM ()
+  public FileOperationManager getFileOperationMgr ()
   {
     return WebFileIO.getFileOpMgr ();
   }
@@ -70,27 +70,29 @@ public final class DAOWebFileIO implements IDAOIO
     if (sFilename == null)
       return null;
 
-    return _getIO ().getInputStream (sFilename);
+    return getFileIO ().getInputStream (sFilename);
   }
 
   @Nonnull
   public IReadableResource getReadableResource (@Nonnull final String sFilename)
   {
-    return _getIO ().getResource (sFilename);
+    return getFileIO ().getResource (sFilename);
   }
 
   public void renameFile (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
   {
-    final PathRelativeFileIO aIO = _getIO ();
+    final PathRelativeFileIO aIO = getFileIO ();
     final File aSrcFile = aIO.getFile (sSrcFileName);
-    final File aDstFile = aIO.getFile (sDstFileName);
     if (FileUtils.existsFile (aSrcFile))
     {
+      final File aDstFile = aIO.getFile (sDstFileName);
+
       // Delete destination file if present
-      if (_getFOM ().deleteFileIfExisting (aDstFile).isSuccess ())
+      final FileOperationManager aFileOpMgr = getFileOperationMgr ();
+      if (aFileOpMgr.deleteFileIfExisting (aDstFile).isSuccess ())
       {
         // and rename existing file to backup file
-        _getFOM ().renameFile (aSrcFile, aDstFile);
+        aFileOpMgr.renameFile (aSrcFile, aDstFile);
       }
     }
   }
@@ -100,7 +102,7 @@ public final class DAOWebFileIO implements IDAOIO
                             @Nonnull final String sContent,
                             @Nonnull final Charset aCharset)
   {
-    return _getIO ().saveFile (sFilename, sContent, aCharset);
+    return getFileIO ().saveFile (sFilename, sContent, aCharset);
   }
 
   @Override
