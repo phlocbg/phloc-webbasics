@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.servlet.response.ResponseHelper;
 
@@ -62,15 +62,9 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
                                                 final long nContentLength,
                                                 @Nonnegative final int nMinCompressSize) throws IOException
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
-    if (aHttpResponse == null)
-      throw new NullPointerException ("httpResponse");
-    if (StringHelper.hasNoText (sContentEncoding))
-      throw new IllegalArgumentException ("content-encoding");
-    m_aHttpRequest = aHttpRequest;
-    m_aHttpResponse = aHttpResponse;
-    m_sContentEncoding = sContentEncoding;
+    m_aHttpRequest = ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
+    m_sContentEncoding = ValueEnforcer.notEmpty (sContentEncoding, "ContentEncoding");
     m_nContentLength = nContentLength;
     m_nMinCompressSize = nMinCompressSize;
     if (nMinCompressSize == 0)

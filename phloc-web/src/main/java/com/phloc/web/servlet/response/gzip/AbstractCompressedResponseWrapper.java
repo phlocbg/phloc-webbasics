@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.AcceptEncodingHandler;
@@ -66,12 +67,8 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
                                             @Nonnull @Nonempty final String sContentEncoding)
   {
     super (aHttpResponse);
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
-    if (StringHelper.hasNoText (sContentEncoding))
-      throw new IllegalArgumentException ("content-encoding");
-    m_aHttpRequest = aHttpRequest;
-    m_sContentEncoding = sContentEncoding;
+    m_aHttpRequest = ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    m_sContentEncoding = ValueEnforcer.notEmpty (sContentEncoding, "ContentEncoding");
   }
 
   public void setNoCompression ()
