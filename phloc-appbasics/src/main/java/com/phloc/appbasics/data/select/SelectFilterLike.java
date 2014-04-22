@@ -30,9 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public class SelectFilterLike implements ISelectFilterLike
 {
-  @Nonnull
   private final String m_sColumn;
-  @Nullable
   private final String m_sFilterValue;
 
   /**

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
@@ -42,13 +41,9 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
  */
 public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
-  @Nonnull
   private final IMenuTree m_aMenuTree;
-  @Nonnull
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
-  @Nullable
   private final String m_sSelectedItemID;
-  @Nullable
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
   public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
