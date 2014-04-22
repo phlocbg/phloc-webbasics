@@ -17,7 +17,6 @@
  */
 package com.phloc.appbasics.object;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
@@ -31,14 +30,10 @@ import com.phloc.commons.type.ObjectType;
 @Immutable
 public final class CObject
 {
-  @Nonnull
   public static final String GLOBAL_CLIENT = "$";
-  @Nonnull
   public static final String GLOBAL_CLIENT_NAME = "$system client$";
 
-  @Nonnull
   public static final ObjectType OT_ACCOUNTINGAREA = new ObjectType ("accountingarea");
-  @Nonnull
   public static final ObjectType OT_CLIENT = new ObjectType ("client");
 
   @PresentForCodeCoverage

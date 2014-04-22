@@ -78,7 +78,7 @@ public final class HttpProxyConfigTest
       new HttpProxyConfig (EHttpProxyType.HTTPS, null, 8080);
       fail ();
     }
-    catch (final IllegalArgumentException ex)
+    catch (final NullPointerException ex)
     {}
 
     try

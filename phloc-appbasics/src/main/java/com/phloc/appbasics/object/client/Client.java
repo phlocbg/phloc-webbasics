@@ -37,7 +37,6 @@ import com.phloc.commons.type.ObjectType;
 @NotThreadSafe
 public final class Client extends AbstractObject implements IClient
 {
-  @Nonnull
   private String m_sDisplayName;
 
   /**

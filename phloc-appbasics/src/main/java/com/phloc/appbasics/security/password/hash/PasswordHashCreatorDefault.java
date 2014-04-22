@@ -31,7 +31,6 @@ import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
  */
 public final class PasswordHashCreatorDefault extends AbstractPasswordHashCreator
 {
-  @Nonnull
   public static final String ALGORITHM = "default";
 
   /** Hashing algorithm to use for user passwords - never change it! */

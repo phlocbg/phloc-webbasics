@@ -273,7 +273,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   }
 
   @Nonnull
-  EChange setLoginName (@Nullable final String sLoginName)
+  EChange setLoginName (@Nonnull @Nonempty final String sLoginName)
   {
     ValueEnforcer.notEmpty (sLoginName, "loginName");
 
