@@ -22,6 +22,7 @@ import java.net.PasswordAuthentication;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringParser;
 
 /**
@@ -35,9 +36,7 @@ public class HttpProxyAuthenticator extends Authenticator
 
   public HttpProxyAuthenticator (@Nonnull final EHttpProxyType eProxyType)
   {
-    if (eProxyType == null)
-      throw new NullPointerException ("ProxyType");
-    m_eProxyType = eProxyType;
+    m_eProxyType = ValueEnforcer.notNull (eProxyType, "ProxyType");
   }
 
   @Nonnull

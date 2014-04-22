@@ -23,6 +23,7 @@ import java.net.PasswordAuthentication;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -36,6 +37,8 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public class ConstantAuthenticator extends Authenticator
 {
+  public static final String DOMAIN_SEPARATOR = "\\";
+
   private final String m_sUserName;
   private final String m_sPassword;
 
@@ -43,17 +46,13 @@ public class ConstantAuthenticator extends Authenticator
                                 @Nonnull final String sUserName,
                                 @Nonnull final String sPassword)
   {
-    this (StringHelper.getConcatenatedOnDemand (sDomain, "\\", sUserName), sPassword);
+    this (StringHelper.getConcatenatedOnDemand (sDomain, DOMAIN_SEPARATOR, sUserName), sPassword);
   }
 
   public ConstantAuthenticator (@Nonnull final String sUserName, @Nonnull final String sPassword)
   {
-    if (sUserName == null)
-      throw new NullPointerException ("userName");
-    if (sPassword == null)
-      throw new NullPointerException ("password");
-    m_sUserName = sUserName;
-    m_sPassword = sPassword;
+    m_sUserName = ValueEnforcer.notNull (sUserName, "UserName");
+    m_sPassword = ValueEnforcer.notNull (sPassword, "Password");
   }
 
   /**

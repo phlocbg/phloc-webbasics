@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -285,9 +286,8 @@ public abstract class AbstractFileUploadBase
       final IFileItemIterator iter = getItemIterator (ctx);
       final IFileItemFactory fac = getFileItemFactory ();
       if (fac == null)
-      {
         throw new NullPointerException ("No FileItemFactory has been set.");
-      }
+
       while (iter.hasNext ())
       {
         final IFileItemStream item = iter.next ();
@@ -813,8 +813,7 @@ public abstract class AbstractFileUploadBase
      */
     FileItemIteratorImpl (@Nonnull final IRequestContext ctx) throws FileUploadException, IOException
     {
-      if (ctx == null)
-        throw new NullPointerException ("ctx parameter");
+      ValueEnforcer.notNull (ctx, "RequestContext");
 
       final String sContentType = ctx.getContentType ();
       if (sContentType == null || !sContentType.toLowerCase (Locale.US).startsWith (MULTIPART))

@@ -31,6 +31,7 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.GenericReflection;
@@ -75,12 +76,8 @@ public class MockServletPool
 
     public ServletItem (@Nonnull final Servlet aServlet, @Nonnull @Nonempty final String sServletPath)
     {
-      if (aServlet == null)
-        throw new NullPointerException ("servlet");
-      if (StringHelper.hasNoText (sServletPath))
-        throw new IllegalArgumentException ("servletPath");
-      m_aServlet = aServlet;
-      m_sServletPath = sServletPath;
+      m_aServlet = ValueEnforcer.notNull (aServlet, "Servlet");
+      m_sServletPath = ValueEnforcer.notEmpty (sServletPath, "ServletPath");
       m_sServletPathRegEx = _getAsRegEx (sServletPath);
     }
 
@@ -126,9 +123,7 @@ public class MockServletPool
 
   public MockServletPool (@Nonnull final MockServletContext aSC)
   {
-    if (aSC == null)
-      throw new NullPointerException ("servletContext");
-    m_aSC = aSC;
+    m_aSC = ValueEnforcer.notNull (aSC, "ServletContext");
   }
 
   /**
@@ -170,10 +165,8 @@ public class MockServletPool
                                @Nonnull @Nonempty final String sServletName,
                                @Nullable final Map <String, String> aServletInitParams)
   {
-    if (aServletClass == null)
-      throw new NullPointerException ("servletClass");
-    if (StringHelper.hasNoText (sServletPath))
-      throw new IllegalArgumentException ("servletPath");
+    ValueEnforcer.notNull (aServletClass, "ServletClass");
+    ValueEnforcer.notEmpty (sServletPath, "ServletPath");
 
     for (final ServletItem aItem : m_aServlets)
     {

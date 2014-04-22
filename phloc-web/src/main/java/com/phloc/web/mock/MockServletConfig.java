@@ -27,10 +27,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -73,13 +73,8 @@ public class MockServletConfig implements ServletConfig
                             @Nonnull @Nonempty final String sServletName,
                             @Nullable final Map <String, String> aServletInitParams)
   {
-    if (aSC == null)
-      throw new NullPointerException ("servletContext");
-    if (StringHelper.hasNoText (sServletName))
-      throw new NullPointerException ("servletName");
-
-    m_aSC = aSC;
-    m_sServletName = sServletName;
+    m_aSC = ValueEnforcer.notNull (aSC, "ServletContext");
+    m_sServletName = ValueEnforcer.notEmpty (sServletName, "ServletName");
     if (aServletInitParams != null)
       m_aServletInitParams.putAll (aServletInitParams);
   }
@@ -111,10 +106,8 @@ public class MockServletConfig implements ServletConfig
 
   public void addInitParameter (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (sValue, "Value");
     m_aServletInitParams.put (sName, sValue);
   }
 

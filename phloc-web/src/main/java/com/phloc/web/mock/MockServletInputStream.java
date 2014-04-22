@@ -23,6 +23,7 @@ import java.io.InputStream;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletInputStream;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 
 /**
@@ -42,9 +43,7 @@ public class MockServletInputStream extends ServletInputStream
 
   public MockServletInputStream (@Nonnull final InputStream aBaseIS)
   {
-    if (aBaseIS == null)
-      throw new NullPointerException ("baseIS");
-    m_aIS = aBaseIS;
+    m_aIS = ValueEnforcer.notNull (aBaseIS, "BaseInputStream");
   }
 
   @Override

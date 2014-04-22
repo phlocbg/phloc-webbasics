@@ -50,6 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.IHasLocale;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UnsupportedOperation;
@@ -403,8 +404,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest setParameter (@Nonnull final String sName, @Nullable final String [] aValues)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     m_aParameters.put (sName, aValues);
     return this;
   }
@@ -470,8 +470,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public final MockHttpServletRequest addParameter (@Nonnull final String sName, @Nullable final String [] aValues)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
 
     final String [] aOldParams = m_aParameters.get (sName);
     m_aParameters.put (sName, ArrayHelper.getConcatenated (aOldParams, aValues));
@@ -516,8 +515,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest removeParameter (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     m_aParameters.remove (sName);
     return this;
   }
@@ -537,8 +535,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nullable
   public String getParameter (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
 
     final String [] aParamValues = m_aParameters.get (sName);
     return ArrayHelper.getFirst (aParamValues);
@@ -554,8 +551,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @ReturnsMutableCopy
   public String [] getParameterValues (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     return ArrayHelper.getCopy (m_aParameters.get (sName));
   }
 
@@ -657,8 +653,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     checkActive ();
-    if (sName == null)
-      throw new NullPointerException ("name");
+    ValueEnforcer.notNull (sName, "Name");
 
     if (aValue != null)
       m_aAttributes.put (sName, aValue);
@@ -668,8 +663,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
 
   public void removeAttribute (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("name");
+    ValueEnforcer.notNull (sName, "Name");
 
     checkActive ();
     m_aAttributes.remove (sName);
@@ -695,8 +689,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest addPreferredLocale (@Nonnull final Locale aLocale)
   {
-    if (aLocale == null)
-      throw new NullPointerException ("Locale must not be null");
+    ValueEnforcer.notNull (aLocale, "Locale");
     m_aLocales.add (0, aLocale);
     return this;
   }

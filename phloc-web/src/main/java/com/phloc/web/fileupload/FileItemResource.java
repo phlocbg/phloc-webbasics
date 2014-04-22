@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IReadableResource;
@@ -50,9 +51,7 @@ public final class FileItemResource implements IReadableResource
 
   public FileItemResource (@Nonnull final IFileItem aFileItem)
   {
-    if (aFileItem == null)
-      throw new NullPointerException ("fileItem");
-    m_aFileItem = aFileItem;
+    m_aFileItem = ValueEnforcer.notNull (aFileItem, "FileItem");
   }
 
   @Nonnull

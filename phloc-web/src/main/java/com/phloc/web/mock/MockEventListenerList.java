@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
@@ -66,8 +67,7 @@ public class MockEventListenerList
   @Nonnull
   public EChange setFrom (@Nonnull final MockEventListenerList aList)
   {
-    if (aList == null)
-      throw new NullPointerException ("list");
+    ValueEnforcer.notNull (aList, "List");
 
     // Assigning this to this?
     if (this == aList)
@@ -102,8 +102,7 @@ public class MockEventListenerList
   @Nonnull
   public EChange addListener (@Nonnull final EventListener aListener)
   {
-    if (aListener == null)
-      throw new NullPointerException ("listener");
+    ValueEnforcer.notNull (aListener, "Listener");
 
     // Small consistency check
     if (!(aListener instanceof ServletContextListener) &&

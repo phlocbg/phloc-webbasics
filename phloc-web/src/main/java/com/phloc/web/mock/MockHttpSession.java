@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSessionContext;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.collections.ArrayHelper;
@@ -152,8 +153,7 @@ public class MockHttpSession implements HttpSession
   @Nullable
   public Object getAttribute (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     return m_aAttributes.get (sName);
   }
 
@@ -178,8 +178,8 @@ public class MockHttpSession implements HttpSession
 
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
+
     if (aValue != null)
     {
       m_aAttributes.put (sName, aValue);
@@ -200,8 +200,7 @@ public class MockHttpSession implements HttpSession
 
   public void removeAttribute (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
 
     final Object aValue = m_aAttributes.remove (sName);
     if (aValue instanceof HttpSessionBindingListener)

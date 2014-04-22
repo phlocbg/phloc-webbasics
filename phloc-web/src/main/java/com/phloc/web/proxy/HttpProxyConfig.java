@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -76,14 +77,10 @@ public final class HttpProxyConfig implements IProxyConfig
                           @Nullable final String sPassword,
                           @Nullable final List <String> aNonProxyHosts)
   {
-    if (eProxyType == null)
-      throw new NullPointerException ("proxyType");
-    if (StringHelper.hasNoText (sHost))
-      throw new IllegalArgumentException ("host may not empty");
     if (!DefaultNetworkPorts.isValidPort (nPort))
       throw new IllegalArgumentException ("The passed port is invalid: " + nPort);
-    m_eProxyType = eProxyType;
-    m_sHost = sHost;
+    m_eProxyType = ValueEnforcer.notNull (eProxyType, "ProxyType");
+    m_sHost = ValueEnforcer.notEmpty (sHost, "HostName");
     m_nPort = nPort;
     m_sUserName = sUserName;
     m_sPassword = sPassword;

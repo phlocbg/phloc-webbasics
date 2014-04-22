@@ -24,6 +24,7 @@ import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.mime.CMimeType;
@@ -40,39 +41,35 @@ public class InputStreamProviderDataSource implements DataSource
 {
   public static final IMimeType DEFAULT_CONTENT_TYPE = CMimeType.APPLICATION_OCTET_STREAM;
 
-  private final IInputStreamProvider m_aISS;
+  private final IInputStreamProvider m_aISP;
   private final String m_sFilename;
   private final String m_sContentType;
 
-  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS, @Nonnull final String sFilename)
+  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISP, @Nonnull final String sFilename)
   {
-    this (aISS, sFilename, (String) null);
+    this (aISP, sFilename, (String) null);
   }
 
-  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS,
+  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISP,
                                         @Nonnull final String sFilename,
                                         @Nullable final IMimeType aContentType)
   {
-    this (aISS, sFilename, aContentType == null ? null : aContentType.getAsString ());
+    this (aISP, sFilename, aContentType == null ? null : aContentType.getAsString ());
   }
 
-  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS,
+  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISP,
                                         @Nonnull final String sFilename,
                                         @Nullable final String sContentType)
   {
-    if (aISS == null)
-      throw new NullPointerException ("inputStreamProvider");
-    if (sFilename == null)
-      throw new NullPointerException ("filename");
-    m_aISS = aISS;
-    m_sFilename = sFilename;
+    m_aISP = ValueEnforcer.notNull (aISP, "InputStreamProvider");
+    m_sFilename = ValueEnforcer.notNull (sFilename, "Filename");
     m_sContentType = sContentType;
   }
 
   @Nullable
   public InputStream getInputStream ()
   {
-    return m_aISS.getInputStream ();
+    return m_aISP.getInputStream ();
   }
 
   @UnsupportedOperation
@@ -97,7 +94,7 @@ public class InputStreamProviderDataSource implements DataSource
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ISS", m_aISS)
+    return new ToStringGenerator (this).append ("ISS", m_aISP)
                                        .append ("filename", m_sFilename)
                                        .appendIfNotNull ("contentType", m_sContentType)
                                        .toString ();

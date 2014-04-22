@@ -22,6 +22,7 @@ import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.encode.IEncoder;
@@ -119,16 +120,13 @@ public class RFC5987Encoder implements IEncoder <String>
 
   public RFC5987Encoder (@Nonnull final Charset aCharset)
   {
-    if (aCharset == null)
-      throw new NullPointerException ("Charset");
-    m_aCharset = aCharset;
+    m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
   }
 
   @Nonnull
   public static String getRFC5987Encoded (@Nonnull final String sSrc, @Nonnull final Charset aCharset)
   {
-    if (sSrc == null)
-      throw new NullPointerException ("src");
+    ValueEnforcer.notNull (sSrc, "Src");
 
     final StringBuilder aSB = new StringBuilder (sSrc.length () * 2);
     for (final byte b : CharsetManager.getAsBytes (sSrc, aCharset))

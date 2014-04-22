@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
+
 /**
  * Mock implementation of the {@link RequestDispatcher} interface
  * 
@@ -47,17 +49,13 @@ public class MockRequestDispatcher implements RequestDispatcher
    */
   public MockRequestDispatcher (@Nonnull final String sURL)
   {
-    if (sURL == null)
-      throw new NullPointerException ("URL");
-    m_sURL = sURL;
+    m_sURL = ValueEnforcer.notNull (sURL, "URL");
   }
 
   public void forward (@Nonnull final ServletRequest aRequest, @Nonnull final ServletResponse aResponse)
   {
-    if (aRequest == null)
-      throw new NullPointerException ("Request must not be null");
-    if (aResponse == null)
-      throw new NullPointerException ("Response must not be null");
+    ValueEnforcer.notNull (aRequest, "Request");
+    ValueEnforcer.notNull (aResponse, "Response");
     if (aResponse.isCommitted ())
       throw new IllegalStateException ("Cannot perform forward - response is already committed");
 
@@ -68,10 +66,8 @@ public class MockRequestDispatcher implements RequestDispatcher
 
   public void include (@Nonnull final ServletRequest aRequest, @Nonnull final ServletResponse aResponse)
   {
-    if (aRequest == null)
-      throw new NullPointerException ("Request must not be null");
-    if (aResponse == null)
-      throw new NullPointerException ("Response must not be null");
+    ValueEnforcer.notNull (aRequest, "Request");
+    ValueEnforcer.notNull (aResponse, "Response");
 
     getMockHttpServletResponse (aResponse).setIncludedUrl (m_sURL);
     if (s_aLogger.isDebugEnabled ())

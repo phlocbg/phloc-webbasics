@@ -21,6 +21,11 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.ValueEnforcer;
+
 /**
  * An input stream, which limits its data size. This stream is used, if the
  * content length is unknown.
@@ -120,15 +125,13 @@ public abstract class AbstractLimitedInputStream extends FilterInputStream imple
    * 
    * @param b
    *        the buffer into which the data is read.
-   * @param off
+   * @param nOfs
    *        The start offset in the destination array <code>b</code>.
-   * @param len
+   * @param nLen
    *        the maximum number of bytes read.
    * @return the total number of bytes read into the buffer, or <code>-1</code>
    *         if there is no more data because the end of the stream has been
    *         reached.
-   * @exception NullPointerException
-   *            If <code>b</code> is <code>null</code>.
    * @exception IndexOutOfBoundsException
    *            If <code>off</code> is negative, <code>len</code> is negative,
    *            or <code>len</code> is greater than <code>b.length - off</code>
@@ -137,9 +140,10 @@ public abstract class AbstractLimitedInputStream extends FilterInputStream imple
    * @see java.io.FilterInputStream
    */
   @Override
-  public int read (final byte [] b, final int off, final int len) throws IOException
+  public int read (@Nonnull final byte [] b, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
   {
-    final int res = super.read (b, off, len);
+    ValueEnforcer.isArrayOfsLen (b, nOfs, nLen);
+    final int res = super.read (b, nOfs, nLen);
     if (res > 0)
     {
       m_nCount += res;

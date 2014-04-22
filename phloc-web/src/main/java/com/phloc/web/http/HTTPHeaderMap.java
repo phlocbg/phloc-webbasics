@@ -32,6 +32,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.IHasSize;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -74,10 +75,8 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
 
   private void _setHeader (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (sValue, "Value");
 
     final List <String> aValues = _getOrCreateHeaderList (sName);
     aValues.clear ();
@@ -86,10 +85,8 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
 
   private void _addHeader (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (sValue, "Value");
 
     _getOrCreateHeaderList (sName).add (sValue);
   }

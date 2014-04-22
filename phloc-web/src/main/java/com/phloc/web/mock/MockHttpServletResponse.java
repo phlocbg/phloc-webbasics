@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.IHasLocale;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
@@ -349,12 +350,12 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 
   public void addCookie (@Nonnull final Cookie aCookie)
   {
-    if (aCookie == null)
-      throw new NullPointerException ("Cookie must not be null");
+    ValueEnforcer.notNull (aCookie, "Cookie");
     m_aCookies.add (aCookie);
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public Cookie [] getCookies ()
   {
     return ArrayHelper.newArray (m_aCookies, Cookie.class);
@@ -363,8 +364,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   @Nullable
   public Cookie getCookie (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Cookie name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     for (final Cookie aCookie : m_aCookies)
       if (sName.equals (aCookie.getName ()))
         return aCookie;
@@ -488,8 +488,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   {
     if (isCommitted ())
       throw new IllegalStateException ("Cannot send redirect - response is already committed");
-    if (sUrl == null)
-      throw new NullPointerException ("Redirect URL must not be null");
+    ValueEnforcer.notNull (sUrl, "URL");
     m_sRedirectedUrl = sUrl;
     setCommitted (true);
   }
@@ -604,7 +603,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     }
 
     @Override
-    public void write (final char aBuf [], final int nOff, final int nLen)
+    public void write (final char aBuf[], final int nOff, final int nLen)
     {
       super.write (aBuf, nOff, nLen);
       super.flush ();

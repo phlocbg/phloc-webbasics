@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.collections.ContainerHelper;
@@ -206,10 +207,8 @@ public class MockServletContext implements ServletContext
 
   public void registerContext (@Nonnull final String sContextPath, @Nonnull final ServletContext aContext)
   {
-    if (sContextPath == null)
-      throw new NullPointerException ("contextPath");
-    if (aContext == null)
-      throw new NullPointerException ("context");
+    ValueEnforcer.notNull (sContextPath, "ContextPath");
+    ValueEnforcer.notNull (aContext, "Context");
     m_aContexts.put (sContextPath, aContext);
   }
 
@@ -338,17 +337,14 @@ public class MockServletContext implements ServletContext
   @Nullable
   public String getInitParameter (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     return m_aInitParameters.getProperty (sName);
   }
 
   public void addInitParameter (@Nonnull final String sName, @Nonnull final String sValue)
   {
-    if (sName == null)
-      throw new NullPointerException ("Parameter name must not be null");
-    if (sValue == null)
-      throw new NullPointerException ("Parameter value must not be null");
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sValue, "Value");
     m_aInitParameters.setProperty (sName, sValue);
   }
 
@@ -361,8 +357,7 @@ public class MockServletContext implements ServletContext
   @Nullable
   public Object getAttribute (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     return m_aAttributes.get (sName);
   }
 
@@ -374,8 +369,7 @@ public class MockServletContext implements ServletContext
 
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     if (aValue != null)
       m_aAttributes.put (sName, aValue);
     else
@@ -384,8 +378,7 @@ public class MockServletContext implements ServletContext
 
   public void removeAttribute (@Nonnull final String sName)
   {
-    if (sName == null)
-      throw new NullPointerException ("Attribute name must not be null");
+    ValueEnforcer.notNull (sName, "Name");
     m_aAttributes.remove (sName);
   }
 
@@ -443,8 +436,7 @@ public class MockServletContext implements ServletContext
   @Nullable
   public MockHttpServletResponse invoke (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     // Find matching servlet
     final String sServletPath = aHttpRequest.getServletPath ();

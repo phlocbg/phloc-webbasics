@@ -19,6 +19,7 @@ package com.phloc.web.encoding;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.encode.IEncoder;
 
 /**
@@ -42,8 +43,7 @@ public class AndroidFilenameEncoder implements IEncoder <String>
   @Nonnull
   public static String getSafeAndroidFilename (@Nonnull final String sSrc, final char cReplacement)
   {
-    if (sSrc == null)
-      throw new NullPointerException ("src");
+    ValueEnforcer.notNull (sSrc, "Src");
     if (ALLOWED_CHARS.indexOf (cReplacement) < 0)
       throw new IllegalArgumentException ("Passed character is an invalid replacement char: " + cReplacement);
 

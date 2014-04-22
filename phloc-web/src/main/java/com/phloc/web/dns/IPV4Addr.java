@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.IHasStringRepresentation;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.equals.EqualsUtils;
@@ -95,8 +96,7 @@ public class IPV4Addr implements IHasStringRepresentation
    */
   public IPV4Addr (@Nonnull final String sText)
   {
-    if (sText == null)
-      throw new NullPointerException ("text");
+    ValueEnforcer.notNull (sText, "Text");
     final String [] aParts = StringHelper.getExplodedArray ('.', sText);
     if (aParts.length != 4)
       throw new IllegalArgumentException ("Expected exactly 4 parts");
