@@ -33,8 +33,11 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustBeLocked;
 import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
+import com.phloc.commons.callback.AdapterThrowingRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
+import com.phloc.commons.callback.IThrowingCallable;
+import com.phloc.commons.callback.IThrowingRunnable;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -261,6 +264,47 @@ public abstract class AbstractDAO implements IDAO
    */
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
+  {
+    ValueEnforcer.notNull (aCallable, "Callable");
+
+    beginWithoutAutoSave ();
+    try
+    {
+      // Main call of callable
+      return aCallable.call ();
+    }
+    finally
+    {
+      endWithoutAutoSave ();
+    }
+  }
+
+  /**
+   * Execute a callback with autosave being disabled. Must be called outside a
+   * writeLock, as this method locks itself!
+   * 
+   * @param aRunnable
+   *        The callback to be executed
+   * @throws Exception
+   *         In case of an error
+   */
+  public final void performWithoutAutoSave (@Nonnull final IThrowingRunnable aRunnable) throws Exception
+  {
+    performWithoutAutoSave (AdapterThrowingRunnableToCallable.createAdapter (aRunnable));
+  }
+
+  /**
+   * Execute a callback with autosave being disabled. Must be called outside a
+   * writeLock, as this method locks itself!
+   * 
+   * @param aCallable
+   *        The callback to be executed
+   * @return The result of the callback. May be <code>null</code>.
+   * @throws Exception
+   *         In case of an error
+   */
+  @Nullable
+  public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final IThrowingCallable <RETURNTYPE> aCallable) throws Exception
   {
     ValueEnforcer.notNull (aCallable, "Callable");
 
