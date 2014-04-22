@@ -104,15 +104,22 @@ public interface IRequestManager
 
   /**
    * Get the locale to be used for this request. If no parameter is present, the
-   * one from the session is used.
+   * one from the session is used. If neither request nor session data is
+   * present, the default locale is returned.
    * 
-   * @return The locale to be used for the current request.
+   * @return The locale to be used for the current request. Never
+   *         <code>null</code>.
    */
   @Nonnull
   Locale getRequestDisplayLocale ();
 
   /**
-   * @return The country-Locale of the request display locale
+   * Get the country to be used for this request. If no parameter is present,
+   * the one from the session is used. If neither request nor session data is
+   * present, the country of the default locale is returned.
+   * 
+   * @return The country-Locale of the request display locale. Never
+   *         <code>null</code>.
    * @see #getRequestDisplayLocale()
    */
   @Nonnull
