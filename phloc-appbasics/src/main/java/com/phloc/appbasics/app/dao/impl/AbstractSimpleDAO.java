@@ -43,7 +43,9 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.microdom.IMicroComment;
 import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroComment;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
@@ -374,11 +376,16 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   @MustBeLocked (ELockType.WRITE)
   protected void modifyWriteData (@Nonnull final IMicroDocument aDoc)
   {
+    final IMicroComment aComment = new MicroComment ("This file was generated automatically - do NOT modify!\n" +
+                                                     "Written at " +
+                                                     PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (),
+                                                                              Locale.US));
+    final IMicroElement eRoot = aDoc.getDocumentElement ();
     // Add a small comment
-    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
-                                         "Written at " +
-                                         PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
-                       aDoc.getDocumentElement ());
+    if (eRoot != null)
+      aDoc.insertBefore (aComment, eRoot);
+    else
+      aDoc.appendChild (aComment);
   }
 
   /**
