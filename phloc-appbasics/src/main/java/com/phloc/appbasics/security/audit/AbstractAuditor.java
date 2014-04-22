@@ -107,7 +107,7 @@ public abstract class AbstractAuditor implements IAuditor
   }
 
   public void onModifySuccess (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
+                               @Nonnull final String sWhat,
                                @Nullable final String... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -118,7 +118,7 @@ public abstract class AbstractAuditor implements IAuditor
   }
 
   public void onModifyFailure (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
+                               @Nonnull final String sWhat,
                                @Nullable final String... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");

@@ -97,10 +97,11 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   Locale getDesiredLocale ();
 
   /**
-   * @return The date time when the user last logged in.
+   * @return The date time when the user last logged in. May be
+   *         <code>null</code> if the user never logged in.
    * @since 2.4.2
    */
-  @Nonnull
+  @Nullable
   DateTime getLastLoginDateTime ();
 
   /**

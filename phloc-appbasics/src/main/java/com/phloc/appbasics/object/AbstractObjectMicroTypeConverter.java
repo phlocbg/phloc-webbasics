@@ -31,12 +31,19 @@ import com.phloc.commons.microdom.convert.IMicroTypeConverter;
  */
 public abstract class AbstractObjectMicroTypeConverter implements IMicroTypeConverter
 {
+  @Nonnull
   private static final String ATTR_ID = "id";
+  @Nonnull
   private static final String ATTR_CREATIONDT = "creationdt";
+  @Nonnull
   private static final String ATTR_CREATIONUSERID = "creationuserid";
+  @Nonnull
   private static final String ATTR_LASTMODDT = "lastmoddt";
+  @Nonnull
   private static final String ATTR_LASTMODUSERID = "lastmoduserid";
+  @Nonnull
   private static final String ATTR_DELETIONDT = "deletiondt";
+  @Nonnull
   private static final String ATTR_DELETIONUSERID = "deletionuserid";
 
   public static final void setObjectFields (@Nonnull final IObject aValue, @Nonnull final IMicroElement aElement)

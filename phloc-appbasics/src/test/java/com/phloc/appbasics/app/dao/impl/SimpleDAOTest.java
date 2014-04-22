@@ -49,7 +49,7 @@ public class SimpleDAOTest
 
     @Override
     @Nonnull
-    protected EChange onRead (final IMicroDocument aDoc)
+    protected EChange onRead (@Nonnull final IMicroDocument aDoc)
     {
       return EChange.UNCHANGED;
     }

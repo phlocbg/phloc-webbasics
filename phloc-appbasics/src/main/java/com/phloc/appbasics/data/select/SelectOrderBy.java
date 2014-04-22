@@ -34,7 +34,9 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public final class SelectOrderBy
 {
+  @Nonnull
   private final String m_sColumn;
+  @Nonnull
   private final ESortOrder m_eSortOrder;
 
   /**

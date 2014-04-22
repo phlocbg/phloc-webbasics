@@ -35,6 +35,7 @@ import com.phloc.datetime.PDTFactory;
  */
 public final class StubObject extends AbstractObject
 {
+  @Nonnull
   public static final ObjectType OT_STUB = new ObjectType ("stub-object");
 
   private StubObject (@Nonnull @Nonempty final String sID, @Nullable final String sCreationUserID)

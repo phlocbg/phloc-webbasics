@@ -36,16 +36,22 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 public enum EExchangeFileTypeName implements IHasDisplayText
 {
   /** CSV - comma separated values */
+  @Nonnull
   CSV ("CSV", "CSV"),
   /** Old Excel */
+  @Nonnull
   XLS ("Excel 2003 (XLS)", "Excel 2003 (XLS)"),
   /** New Excel */
+  @Nonnull
   XLSX ("Excel 2007 (XLSX)", "Excel 2007 (XLSX)"),
   /** XML structured text */
+  @Nonnull
   XML ("XML", "XML"),
   /** Pure text file */
+  @Nonnull
   TXT ("Text", "Text");
 
+  @Nonnull
   private final ITextProvider m_aTP;
 
   private EExchangeFileTypeName (@Nonnull final String sDE, @Nonnull final String sEN)
@@ -53,7 +59,7 @@ public enum EExchangeFileTypeName implements IHasDisplayText
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }
 
-  public String getDisplayText (final Locale aContentLocale)
+  public String getDisplayText (@Nonnull final Locale aContentLocale)
   {
     return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }

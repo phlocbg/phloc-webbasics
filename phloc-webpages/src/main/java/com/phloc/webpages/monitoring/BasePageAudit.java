@@ -42,6 +42,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.audit.IAuditItem;
 import com.phloc.appbasics.security.audit.IAuditManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
@@ -80,9 +81,10 @@ public class BasePageAudit extends AbstractWebPageExt
     MSG_SUCCESS ("Erfolg?", "Success?"),
     MSG_ACTION ("Aktion", "Action");
 
+    @Nonnull
     private final ITextProvider m_aTP;
 
-    private EText (final String sDE, final String sEN)
+    private EText (@Nonnull final String sDE, @Nonnull final String sEN)
     {
       m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
@@ -99,9 +101,7 @@ public class BasePageAudit extends AbstractWebPageExt
   public BasePageAudit (@Nonnull @Nonempty final String sID, @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, EWebPageText.PAGE_NAME_MONITORING_AUDIT.getAsMLT ());
-    if (aAuditManager == null)
-      throw new NullPointerException ("auditManager");
-    m_aAuditManager = aAuditManager;
+    m_aAuditManager = ValueEnforcer.notNull (aAuditManager, "AuditManager");
   }
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
@@ -109,9 +109,7 @@ public class BasePageAudit extends AbstractWebPageExt
                         @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, sName);
-    if (aAuditManager == null)
-      throw new NullPointerException ("auditManager");
-    m_aAuditManager = aAuditManager;
+    m_aAuditManager = ValueEnforcer.notNull (aAuditManager, "AuditManager");
   }
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
@@ -120,9 +118,7 @@ public class BasePageAudit extends AbstractWebPageExt
                         @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, sName, sDescription);
-    if (aAuditManager == null)
-      throw new NullPointerException ("auditManager");
-    m_aAuditManager = aAuditManager;
+    m_aAuditManager = ValueEnforcer.notNull (aAuditManager, "AuditManager");
   }
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
@@ -131,9 +127,7 @@ public class BasePageAudit extends AbstractWebPageExt
                         @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, aName, aDescription);
-    if (aAuditManager == null)
-      throw new NullPointerException ("auditManager");
-    m_aAuditManager = aAuditManager;
+    m_aAuditManager = ValueEnforcer.notNull (aAuditManager, "AuditManager");
   }
 
   @Nonnull

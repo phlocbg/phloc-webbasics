@@ -54,6 +54,7 @@ public final class WebFileIO
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
+  @Nonnull
   private static FileOperationManager s_aFileOpMgr = new FileOperationManager (new LoggingFileOperationCallback ());
   @GuardedBy ("s_aRWLock")
   private static PathRelativeFileIO s_aDataPath;

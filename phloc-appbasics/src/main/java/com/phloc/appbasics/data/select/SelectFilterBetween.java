@@ -29,8 +29,11 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public final class SelectFilterBetween implements ISelectFilter
 {
+  @Nonnull
   private final String m_sColumn;
+  @Nonnull
   private final Object m_aFilterValueFrom;
+  @Nonnull
   private final Object m_aFilterValueTo;
 
   public SelectFilterBetween (@Nonnull @Nonempty final String sColumn,

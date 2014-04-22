@@ -44,6 +44,7 @@ public final class GlobalLocaleManager extends GlobalSingleton implements ILocal
   public GlobalLocaleManager ()
   {}
 
+  @Nonnull
   public static GlobalLocaleManager getInstance ()
   {
     return getGlobalSingleton (GlobalLocaleManager.class);

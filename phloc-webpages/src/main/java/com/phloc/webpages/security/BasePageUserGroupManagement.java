@@ -98,7 +98,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
 
     private final ITextProvider m_aTP;
 
-    private EText (final String sDE, final String sEN)
+    private EText (@Nonnull final String sDE, @Nonnull final String sEN)
     {
       m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
@@ -116,7 +116,9 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
     }
   }
 
+  @Nonnull
   public static final String FIELD_NAME = "name";
+  @Nonnull
   public static final String FIELD_ROLES = "roles";
 
   public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID)
@@ -152,7 +154,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
 
   @Override
   @Nullable
-  protected IUserGroup getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IUserGroup getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserGroupOfID (sID);
   }

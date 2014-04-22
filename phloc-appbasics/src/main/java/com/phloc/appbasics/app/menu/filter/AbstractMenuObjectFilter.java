@@ -25,7 +25,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Abstract base class for a menu object filter.
- *
+ * 
  * @author Philip Helger
  */
 public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>, Serializable

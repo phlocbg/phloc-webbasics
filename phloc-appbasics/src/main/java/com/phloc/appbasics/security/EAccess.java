@@ -31,10 +31,14 @@ import com.phloc.commons.lang.EnumHelper;
  */
 public enum EAccess implements IHasID <String>
 {
+  @Nonnull
   GRANTED ("grant", true),
+  @Nonnull
   DENIED ("deny", false),
+  @Nonnull
   INHERITED ("inherit", CSecurity.NO_RIGHT_SPECIFIED_MEANS_HAS_ACCESS);
 
+  @Nonnull
   private final String m_sID;
   private final boolean m_bHasAccess;
 

@@ -41,12 +41,19 @@ import com.phloc.datetime.PDTUtils;
 @Immutable
 public abstract class AbstractBaseObject implements IObject
 {
+  @Nonnull
   private final String m_sID;
+  @Nullable
   private final DateTime m_aCreationDT;
+  @Nullable
   private final String m_sCreationUserID;
+  @Nullable
   private DateTime m_aLastModificationDT;
+  @Nullable
   private String m_sLastModificationUserID;
+  @Nullable
   private DateTime m_aDeletionDT;
+  @Nullable
   private String m_sDeletionUserID;
 
   public AbstractBaseObject (@Nonnull final IObject aObject)

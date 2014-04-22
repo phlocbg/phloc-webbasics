@@ -147,7 +147,7 @@ public final class ExportRecord implements IExportRecord
   }
 
   @Nonnull
-  public ExportRecord addField (final Long aValue)
+  public ExportRecord addField (@Nonnull final Long aValue)
   {
     return addField (ExportRecordField.create (aValue));
   }
@@ -165,7 +165,7 @@ public final class ExportRecord implements IExportRecord
   }
 
   @Nonnull
-  public ExportRecord addField (final Double aValue)
+  public ExportRecord addField (@Nonnull final Double aValue)
   {
     return addField (ExportRecordField.create (aValue));
   }

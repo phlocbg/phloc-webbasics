@@ -44,6 +44,7 @@ public final class ApplicationLocaleManager extends ApplicationSingleton impleme
   public ApplicationLocaleManager ()
   {}
 
+  @Nonnull
   public static ApplicationLocaleManager getInstance ()
   {
     return getApplicationSingleton (ApplicationLocaleManager.class);

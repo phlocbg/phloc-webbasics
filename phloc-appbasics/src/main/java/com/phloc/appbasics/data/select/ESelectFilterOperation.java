@@ -25,13 +25,20 @@ import com.phloc.commons.annotations.Nonempty;
 
 public enum ESelectFilterOperation
 {
+  @Nonnull
   EQUALS ("=", null, 1),
+  @Nonnull
   LIKE ("LIKE", null, 1),
+  @Nonnull
   BETWEEN ("BETWEEN", "AND", 2),
+  @Nonnull
   IS_NULL ("IS NULL", null, 0),
+  @Nonnull
   NOT_NULL ("IS NOT NULL", null, 0);
 
+  @Nonnull
   private final String m_sSQL;
+  @Nullable
   private final String m_sSQL2;
   private final int m_nParamCount;
 

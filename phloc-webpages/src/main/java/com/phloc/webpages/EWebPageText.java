@@ -72,9 +72,10 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_DATA_TIMEZONES ("Zeitzonen", "Time zones"),
   PAGE_NAME_CHANGE_PASSWORD ("Passwort ändern", "Change password");
 
+  @Nonnull
   private final ISimpleMultiLingualText m_aTP;
 
-  private EWebPageText (final String sDE, final String sEN)
+  private EWebPageText (@Nonnull final String sDE, @Nonnull final String sEN)
   {
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }

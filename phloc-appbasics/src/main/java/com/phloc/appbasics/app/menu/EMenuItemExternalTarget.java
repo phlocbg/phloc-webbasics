@@ -31,16 +31,21 @@ import com.phloc.commons.annotations.Nonempty;
 public enum EMenuItemExternalTarget
 {
   /** New window */
+  @Nonnull
   BLANK ("_blank"),
   /** This window */
+  @Nonnull
   SELF ("_self"),
   /** Parent frame */
+  @Nonnull
   PARENT ("_parent"),
   /** Out of frames */
+  @Nonnull
   TOP ("_top");
 
   public static final EMenuItemExternalTarget DEFAULT = SELF;
 
+  @Nonnull
   private final String m_sName;
 
   private EMenuItemExternalTarget (@Nonnull @Nonempty final String sName)

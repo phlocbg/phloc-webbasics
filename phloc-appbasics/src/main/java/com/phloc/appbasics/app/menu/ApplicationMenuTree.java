@@ -30,6 +30,7 @@ import com.phloc.scopes.singleton.ApplicationSingleton;
  */
 public final class ApplicationMenuTree extends ApplicationSingleton
 {
+  @Nonnull
   private final IMenuTree m_aTree = new MenuTree ();
 
   @UsedViaReflection

@@ -36,6 +36,7 @@ import com.phloc.commons.collections.ContainerHelper;
  */
 public class DefaultDAOContainer extends AbstractDAOContainer
 {
+  @Nonnull
   private final List <IDAO> m_aDAOs;
 
   public DefaultDAOContainer (@Nonnull @Nonempty final IDAO... aDAOs)

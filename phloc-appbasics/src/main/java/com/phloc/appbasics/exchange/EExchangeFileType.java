@@ -37,16 +37,25 @@ import com.phloc.poi.excel.EExcelVersion;
  */
 public enum EExchangeFileType implements IHasID <String>, IHasDisplayText
 {
+  @Nonnull
   CSV ("csv", ".csv", CMimeType.TEXT_CSV, true, EExchangeFileTypeName.CSV),
+  @Nonnull
   XLS ("xls", EExcelVersion.XLS.getFileExtension (), EExcelVersion.XLS.getMimeType (), true, EExchangeFileTypeName.XLS),
+  @Nonnull
   XLSX ("xlsx", EExcelVersion.XLSX.getFileExtension (), EExcelVersion.XLSX.getMimeType (), true, EExchangeFileTypeName.XLSX),
+  @Nonnull
   XML ("xml", ".xml", CMimeType.TEXT_XML, false, EExchangeFileTypeName.XML),
+  @Nonnull
   TXT ("txt", ".txt", CMimeType.TEXT_PLAIN, false, EExchangeFileTypeName.TXT);
 
+  @Nonnull
   private final String m_sID;
+  @Nonnull
   private final String m_sExt;
+  @Nonnull
   private final IMimeType m_aMimeType;
   private final boolean m_bLineBased;
+  @Nonnull
   private final IHasDisplayText m_aName;
 
   private EExchangeFileType (@Nonnull @Nonempty final String sID,

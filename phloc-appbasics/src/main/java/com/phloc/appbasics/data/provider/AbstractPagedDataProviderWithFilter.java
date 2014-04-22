@@ -26,6 +26,7 @@ import com.phloc.appbasics.data.select.SelectConstraints;
 
 public abstract class AbstractPagedDataProviderWithFilter <T> implements IPagedDataProviderWithFilter <T>
 {
+  @Nonnull
   private final SelectConstraints m_aSC = new SelectConstraints ();
 
   protected AbstractPagedDataProviderWithFilter ()

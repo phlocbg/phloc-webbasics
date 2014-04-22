@@ -41,13 +41,14 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 /**
  * Base class for pages consisting of external HTML code that is provided from
  * an external resource (e.g. for static pages).
- *
+ * 
  * @author Philip Helger
  */
 @ThreadSafe
 public abstract class AbstractPageViewExternal extends AbstractWebPageExt
 {
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @Nonnull
   protected final IReadableResource m_aResource;
   @GuardedBy ("m_aRWLock")
   private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
@@ -143,7 +144,7 @@ public abstract class AbstractPageViewExternal extends AbstractWebPageExt
   /**
    * Re-read the content from the underlying resource. This only makes sense, if
    * {@link #isReadEveryTime()} is <code>false</code>.
-   *
+   * 
    * @see #isReadEveryTime()
    * @see #setReadEveryTime(boolean)
    */

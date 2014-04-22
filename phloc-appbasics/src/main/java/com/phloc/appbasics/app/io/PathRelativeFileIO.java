@@ -57,6 +57,7 @@ public final class PathRelativeFileIO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PathRelativeFileIO.class);
 
+  @Nonnull
   private final File m_aBasePath;
 
   public PathRelativeFileIO (@Nonnull final File aBasePath, final boolean bCheckAccessRights)

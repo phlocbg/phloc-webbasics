@@ -37,8 +37,11 @@ import com.phloc.commons.collections.ContainerHelper;
 @Immutable
 public class ConstantExportRecordProvider implements IExportRecordProvider
 {
+  @Nullable
   private final IExportRecord m_aHeader;
+  @Nonnull
   private final List <IExportRecord> m_aBody;
+  @Nullable
   private final IExportRecord m_aFooter;
 
   public ConstantExportRecordProvider (@Nonnull final Collection <? extends IExportRecord> aBody)

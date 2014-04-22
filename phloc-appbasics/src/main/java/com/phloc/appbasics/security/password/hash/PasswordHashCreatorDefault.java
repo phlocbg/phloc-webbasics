@@ -31,9 +31,11 @@ import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
  */
 public final class PasswordHashCreatorDefault extends AbstractPasswordHashCreator
 {
+  @Nonnull
   public static final String ALGORITHM = "default";
 
   /** Hashing algorithm to use for user passwords - never change it! */
+  @Nonnull
   public static final EMessageDigestAlgorithm USER_PASSWORD_ALGO = EMessageDigestAlgorithm.SHA_512;
 
   public PasswordHashCreatorDefault ()
@@ -42,7 +44,7 @@ public final class PasswordHashCreatorDefault extends AbstractPasswordHashCreato
   }
 
   @Nonnull
-  public String createPasswordHash (final String sPlainTextPassword)
+  public String createPasswordHash (@Nonnull final String sPlainTextPassword)
   {
     ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 

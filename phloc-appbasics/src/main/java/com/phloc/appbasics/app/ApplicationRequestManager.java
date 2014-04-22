@@ -42,7 +42,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * <li>Menu item to show</li>
  * <li>Display locale</li>
  * </ul>
- *
+ * 
  * @author Philip Helger
  */
 @SuppressWarnings ("deprecation")
@@ -142,7 +142,7 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
     m_aRM.setRequestParamNameLocale (sRequestParamNameLocale);
   }
 
-  @Nullable
+  @Nonnull
   public IMenuTree getMenuTree ()
   {
     return m_aRM.getMenuTree ();

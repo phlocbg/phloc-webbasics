@@ -29,6 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public final class SelectFilterIsNull implements ISelectFilter
 {
+  @Nonnull
   private final String m_sColumn;
 
   public SelectFilterIsNull (@Nonnull @Nonempty final String sColumn)

@@ -53,25 +53,44 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   /** The width of a single action column in pixels */
   public static final int DEFAULT_ACTION_COL_WIDTH = 20;
   @Deprecated
+  @Nonnull
   public static final int ACTION_COL_WIDTH = DEFAULT_ACTION_COL_WIDTH;
+  @Nonnull
   public static final String ACTION_CANCEL = "cancel";
+  @Nonnull
   public static final String ACTION_COLLAPSE = CHCParam.ACTION_COLLAPSE;
+  @Nonnull
   public static final String ACTION_COPY = "copy";
+  @Nonnull
   public static final String ACTION_CREATE = CHCParam.ACTION_CREATE;
+  @Nonnull
   public static final String ACTION_DELETE = CHCParam.ACTION_DELETE;
+  @Nonnull
   public static final String ACTION_DELETE_ALL = "delete-all";
+  @Nonnull
   public static final String ACTION_EDIT = CHCParam.ACTION_EDIT;
+  @Nonnull
   public static final String ACTION_EXPAND = CHCParam.ACTION_EXPAND;
+  @Nonnull
   public static final String ACTION_PERFORM = CHCParam.ACTION_PERFORM;
+  @Nonnull
   public static final String ACTION_SAVE = CHCParam.ACTION_SAVE;
+  @Nonnull
   public static final String ACTION_UNDELETE = "undelete";
+  @Nonnull
   public static final String ACTION_UNDELETE_ALL = "undelete-all";
+  @Nonnull
   public static final String ACTION_VIEW = CHCParam.ACTION_VIEW;
 
+  @Nonnull
   protected static final ICSSClassProvider CSS_CLASS_LEFT = WebBasicsCSS.CSS_CLASS_LEFT;
+  @Nonnull
   protected static final ICSSClassProvider CSS_CLASS_CENTER = WebBasicsCSS.CSS_CLASS_CENTER;
+  @Nonnull
   protected static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
+  @Nonnull
   protected static final ICSSClassProvider CSS_CLASS_ACTION_COL = WebBasicsCSS.CSS_CLASS_ACTION_COL;
+  @Nonnull
   protected static final ICSSClassProvider CSS_CLASS_EMPTY_ACTION = DefaultCSSClassProvider.create ("empty-action");
 
   private static int s_nActionColWidth = DEFAULT_ACTION_COL_WIDTH;

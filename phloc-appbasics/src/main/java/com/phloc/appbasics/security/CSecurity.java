@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.security;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.type.ObjectType;
@@ -71,45 +72,75 @@ public final class CSecurity
   public static final boolean FORBIDDEN_HAS_HIGHER_PRECEDENCE = false;
 
   // Default right object facet names
+  @Nonnull
   public static final String FACET_READ = "read";
+  @Nonnull
   public static final String FACET_WRITE = "write";
 
   // Object types
+  @Nonnull
   public static final ObjectType TYPE_USER = new ObjectType ("user");
+  @Nonnull
   public static final ObjectType TYPE_USERGROUP = new ObjectType ("usergroup");
+  @Nonnull
   public static final ObjectType TYPE_ROLE = new ObjectType ("role");
 
   // Default users
+  @Nonnull
   public static final String USER_ADMINISTRATOR_ID = "admin";
+  @Nonnull
   public static final String USER_ADMINISTRATOR_LOGIN = "Admin";
+  @Nonnull
   public static final String USER_ADMINISTRATOR_EMAIL = "admin@phloc.com";
+  @Nonnull
   public static final String USER_ADMINISTRATOR_NAME = "Administrator";
+  @Nonnull
   public static final String USER_ADMINISTRATOR_PASSWORD = "password";
 
+  @Nonnull
   public static final String USER_USER_ID = "user";
+  @Nonnull
   public static final String USER_USER_LOGIN = "User";
+  @Nonnull
   public static final String USER_USER_EMAIL = "user@phloc.com";
+  @Nonnull
   public static final String USER_USER_NAME = "User";
+  @Nonnull
   public static final String USER_USER_PASSWORD = "user";
 
+  @Nonnull
   public static final String USER_GUEST_ID = "guest";
+  @Nonnull
   public static final String USER_GUEST_LOGIN = "Guest";
+  @Nonnull
   public static final String USER_GUEST_EMAIL = "guest@phloc.com";
+  @Nonnull
   public static final String USER_GUEST_NAME = "Guest";
+  @Nonnull
   public static final String USER_GUEST_PASSWORD = "guest";
 
   // Default roles
+  @Nonnull
   public static final String ROLE_ADMINISTRATOR_ID = "radmin";
+  @Nonnull
   public static final String ROLE_ADMINISTRATOR_NAME = "Administrator";
+  @Nonnull
   public static final String ROLE_USER_ID = "ruser";
+  @Nonnull
   public static final String ROLE_USER_NAME = "User";
 
   // Default user groups
+  @Nonnull
   public static final String USERGROUP_ADMINISTRATORS_ID = "ugadmin";
+  @Nonnull
   public static final String USERGROUP_ADMINISTRATORS_NAME = "Administrators";
+  @Nonnull
   public static final String USERGROUP_USERS_ID = "uguser";
+  @Nonnull
   public static final String USERGROUP_USERS_NAME = "Users";
+  @Nonnull
   public static final String USERGROUP_GUESTS_ID = "ugguest";
+  @Nonnull
   public static final String USERGROUP_GUESTS_NAME = "Guests";
 
   private CSecurity ()

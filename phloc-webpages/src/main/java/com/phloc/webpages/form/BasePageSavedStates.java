@@ -75,7 +75,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
     private final ITextProvider m_aTP;
 
-    private EText (final String sDE, final String sEN)
+    private EText (@Nonnull final String sDE, @Nonnull final String sEN)
     {
       m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
@@ -119,13 +119,14 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
   @Override
   @Nullable
-  protected FormState getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected FormState getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return FormStateManager.getInstance ().getFormStateOfID (sID);
   }
 
   @Override
-  protected void showSelectedObject (final WebPageExecutionContext aWPEC, final FormState aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                     @Nonnull final FormState aSelectedObject)
   {}
 
   @Override

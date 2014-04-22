@@ -46,7 +46,9 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public abstract class AbstractRequestManager implements IRequestManager
 {
+  @Nonnull
   private String m_sRequestParamMenuItem = DEFAULT_REQUEST_PARAMETER_MENUITEM;
+  @Nonnull
   private String m_sRequestParamNameLocale = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
 
   public AbstractRequestManager ()
@@ -153,7 +155,7 @@ public abstract class AbstractRequestManager implements IRequestManager
 
     // Last fallback: use the first menu item
     final DefaultTreeItemWithID <String, IMenuObject> aRootItem = aMenuTree.getRootItem ();
-    if (aRootItem != null && aRootItem.hasChildren ())
+    if (aRootItem.hasChildren ())
       for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
         if (aItem.getData () instanceof IMenuItemPage)
         {

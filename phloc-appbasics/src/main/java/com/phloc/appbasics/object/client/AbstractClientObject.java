@@ -33,6 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public abstract class AbstractClientObject extends AbstractBaseObject implements IClientObject
 {
+  @Nonnull
   private final IClient m_aClient;
   private Integer m_aHashCode;
 

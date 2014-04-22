@@ -36,7 +36,9 @@ import com.phloc.commons.string.ToStringGenerator;
 @NotThreadSafe
 public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> extends FlagContainer implements IMenuObject
 {
+  @Nonnull
   private final String m_sID;
+  @Nullable
   private IFilter <IMenuObject> m_aDisplayFilter;
 
   public AbstractMenuObject (@Nonnull @Nonempty final String sID)

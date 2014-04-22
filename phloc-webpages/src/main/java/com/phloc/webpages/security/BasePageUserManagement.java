@@ -234,7 +234,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @Override
   @Nullable
-  protected IUser getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IUser getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserOfID (sID);
   }
@@ -326,7 +326,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @Override
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, final IUser aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IUser aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

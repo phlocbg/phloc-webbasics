@@ -75,7 +75,7 @@ public final class ExporterXML implements IExporterFile
   }
 
   @Nonnull
-  public ExporterXML setEmitTypeAttr (@Nonnull final boolean bEmitTypeAttr)
+  public ExporterXML setEmitTypeAttr (final boolean bEmitTypeAttr)
   {
     m_bEmitTypeAttr = bEmitTypeAttr;
     return this;

@@ -46,9 +46,13 @@ import com.phloc.commons.type.ObjectType;
 @NotThreadSafe
 public final class UserGroup extends MapBasedAttributeContainer implements IUserGroup
 {
+  @Nonnull
   private final String m_sID;
+  @Nonnull
   private String m_sName;
+  @Nonnull
   private final Set <String> m_aUserIDs = new HashSet <String> ();
+  @Nonnull
   private final Set <String> m_aRoleIDs = new HashSet <String> ();
 
   public UserGroup (@Nonnull @Nonempty final String sName)

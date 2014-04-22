@@ -31,6 +31,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
 @Deprecated
 public final class GlobalMenuTree extends GlobalSingleton
 {
+  @Nonnull
   private final IMenuTree m_aTree = new MenuTree ();
 
   @UsedViaReflection

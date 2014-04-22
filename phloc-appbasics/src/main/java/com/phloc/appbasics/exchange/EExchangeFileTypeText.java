@@ -39,6 +39,7 @@ public enum EExchangeFileTypeText implements IHasDisplayTextWithArgs
   EXPORT_AS ("Exportieren als {0}", "Export as {0}"),
   SAVE_AS ("Speichern als {0}", "Save as {0}");
 
+  @Nonnull
   private final ITextProvider m_aTP;
 
   private EExchangeFileTypeText (@Nonnull final String sDE, @Nonnull final String sEN)

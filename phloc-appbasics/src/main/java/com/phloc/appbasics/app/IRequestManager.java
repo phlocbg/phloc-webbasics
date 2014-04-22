@@ -31,17 +31,21 @@ import com.phloc.scopes.domain.IRequestScope;
 public interface IRequestManager
 {
   /** The default name of the parameter selecting the current menu item */
+  @Nonnull
   String DEFAULT_REQUEST_PARAMETER_MENUITEM = "menuitem";
 
   /** The name of the parameter selecting the current menu item */
   @Deprecated
+  @Nonnull
   String REQUEST_PARAMETER_MENUITEM = DEFAULT_REQUEST_PARAMETER_MENUITEM;
 
   /** The default name of the parameter selecting the current display locale */
+  @Nonnull
   String DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
 
   /** The name of the parameter selecting the current display locale */
   @Deprecated
+  @Nonnull
   String REQUEST_PARAMETER_DISPLAY_LOCALE = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
 
   @Nonnull
@@ -62,7 +66,7 @@ public interface IRequestManager
    * selected menu item. Checks for the content of the request parameter
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
-   *
+   * 
    * @param aRequestScope
    *        The request scope that just begun
    */
@@ -84,7 +88,7 @@ public interface IRequestManager
   /**
    * Resolve the request parameter for the menu item to an {@link IMenuItem}
    * object. If no parameter is present, return the default menu item.
-   *
+   * 
    * @return The resolved menu item object from the request parameter. Never
    *         <code>null</code>.
    */
@@ -101,7 +105,7 @@ public interface IRequestManager
   /**
    * Get the locale to be used for this request. If no parameter is present, the
    * one from the session is used.
-   *
+   * 
    * @return The locale to be used for the current request.
    */
   @Nonnull

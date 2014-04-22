@@ -56,10 +56,14 @@ import com.phloc.poi.excel.style.ExcelStyle;
 @NotThreadSafe
 public class ExporterExcel implements IExporterFile
 {
+  @Nonnull
   private static final ExcelStyle STYLE_DATE = new ExcelStyle ().setDataFormat ("dd.mm.yyyy");
+  @Nonnull
   private static final ExcelStyle STYLE_TIME = new ExcelStyle ().setDataFormat ("hh:mm:ss");
+  @Nonnull
   private static final ExcelStyle STYLE_DATETIME = new ExcelStyle ().setDataFormat ("dd.mm.yyyy hh:mm:ss");
 
+  @Nonnull
   private final EExcelVersion m_eVersion;
 
   public ExporterExcel (@Nonnull final EExcelVersion eVersion)

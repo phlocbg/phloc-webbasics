@@ -23,9 +23,12 @@ import com.phloc.commons.annotations.Nonempty;
 
 public enum ESelectFilterChainOperation
 {
+  @Nonnull
   AND ("AND"),
+  @Nonnull
   OR ("OR");
 
+  @Nonnull
   private final String m_sSQL;
 
   private ESelectFilterChainOperation (@Nonnull @Nonempty final String sSQL)

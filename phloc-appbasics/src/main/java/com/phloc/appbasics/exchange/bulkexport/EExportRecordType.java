@@ -32,14 +32,18 @@ import com.phloc.commons.lang.EnumHelper;
 public enum EExportRecordType implements IHasID <String>
 {
   /** Export headline */
+  @Nonnull
   HEADER ("header"),
 
   /** Export body */
+  @Nonnull
   BODY ("body"),
 
   /** Export footer */
+  @Nonnull
   FOOTER ("footer");
 
+  @Nonnull
   private final String m_sID;
 
   private EExportRecordType (@Nonnull @Nonempty final String sID)
