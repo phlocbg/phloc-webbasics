@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.port.DefaultNetworkPorts;
 
@@ -67,8 +67,7 @@ public final class SocksProxyConfig implements IProxyConfig
    */
   public SocksProxyConfig (@Nonnull final String sHost, @Nonnegative final int nPort)
   {
-    if (StringHelper.hasNoText (sHost))
-      throw new IllegalArgumentException ("host may not empty");
+    ValueEnforcer.notEmpty (sHost, "Host");
     if (!DefaultNetworkPorts.isValidPort (nPort))
       throw new IllegalArgumentException ("The passed port is invalid");
     m_sHost = sHost;

@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -63,16 +64,11 @@ public class DigestAuthClientCredentials implements Serializable
                                       @Nullable final String sMessageQOP,
                                       @Nullable final String sNonceCount)
   {
-    if (StringHelper.hasNoText (sUserName))
-      throw new IllegalArgumentException ("UserName");
-    if (StringHelper.hasNoText (sRealm))
-      throw new IllegalArgumentException ("Realm");
-    if (StringHelper.hasNoText (sServerNonce))
-      throw new IllegalArgumentException ("Nonce");
-    if (StringHelper.hasNoText (sUserName))
-      throw new IllegalArgumentException ("DigestURI");
-    if (StringHelper.hasNoText (sResponse))
-      throw new IllegalArgumentException ("Response");
+    ValueEnforcer.notEmpty (sUserName, "UserName");
+    ValueEnforcer.notEmpty (sRealm, "Realm");
+    ValueEnforcer.notEmpty (sServerNonce, "ServerNonce");
+    ValueEnforcer.notEmpty (sDigestURI, "DigestURI");
+    ValueEnforcer.notEmpty (sResponse, "Response");
     if (sResponse.length () != 32)
       throw new IllegalArgumentException ("The 'response' value must be a 32-byte hex string!");
     if (!HTTPStringHelper.isLowerHexNotEmpty (sResponse))

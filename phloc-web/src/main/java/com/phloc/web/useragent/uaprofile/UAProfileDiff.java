@@ -27,6 +27,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64;
@@ -38,7 +39,6 @@ import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.serialize.MicroReader;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -49,6 +49,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public class UAProfileDiff implements Serializable
 {
+  public static final int EXPECTED_MD5_DIGEST_BYTES = 16;
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfileDiff.class);
 
   private final String m_sData;
@@ -59,10 +60,9 @@ public class UAProfileDiff implements Serializable
 
   public UAProfileDiff (@Nonnull @Nonempty final String sData, @Nullable final byte [] aMD5Digest)
   {
-    if (StringHelper.hasNoText ("data"))
-      throw new IllegalArgumentException ("profileDiffData");
-    if (aMD5Digest != null && aMD5Digest.length != 16)
-      throw new IllegalArgumentException ("invalid MD5 digest length!");
+    ValueEnforcer.notEmpty (sData, "Data");
+    if (aMD5Digest != null && aMD5Digest.length != EXPECTED_MD5_DIGEST_BYTES)
+      throw new IllegalArgumentException ("invalid MD5 digest length: " + aMD5Digest.length);
 
     m_sData = sData;
     m_aMD5Digest = ArrayHelper.getCopy (aMD5Digest);

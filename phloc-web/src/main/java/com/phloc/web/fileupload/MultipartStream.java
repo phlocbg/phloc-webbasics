@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.system.SystemHelper;
@@ -147,8 +148,7 @@ public final class MultipartStream
      */
     void noteBytesRead (@Nonnegative final int pBytes)
     {
-      if (pBytes < 0)
-        throw new IllegalArgumentException ("Bytes negative: " + pBytes);
+      ValueEnforcer.isGE0 (pBytes, "Bytes");
       /*
        * Indicates, that the given number of bytes have been read from the input
        * stream.

@@ -330,8 +330,8 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setMimeTypeString (@Nonnull @Nonempty final String sMimeType)
   {
-    if (StringHelper.hasNoText (sMimeType))
-      throw new IllegalArgumentException ("mimeType");
+    ValueEnforcer.notEmpty (sMimeType, "MimeType");
+
     final IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
     if (aMimeType != null)
       setMimeType (aMimeType);
@@ -475,8 +475,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setETag (@Nonnull @Nonempty final String sETag)
   {
-    if (StringHelper.hasNoText (sETag))
-      throw new IllegalArgumentException ("An empty ETag is not allowed!");
+    ValueEnforcer.notEmpty (sETag, "ETag");
     if (!sETag.startsWith ("\"") && !sETag.startsWith ("W/\""))
       throw new IllegalArgumentException ("Etag must start with a '\"' character or with 'W/\"': " + sETag);
     if (!sETag.endsWith ("\""))
@@ -531,8 +530,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setContentDispositionFilename (@Nonnull @Nonempty final String sFilename)
   {
-    if (StringHelper.hasNoText (sFilename))
-      throw new IllegalArgumentException ("An empty filename is not allowed!");
+    ValueEnforcer.notEmpty (sFilename, "Filename");
 
     // Ensure that a valid filename is used
     // -> Strip all paths and replace all invalid characters
@@ -749,14 +747,15 @@ public class UnifiedResponse
   public UnifiedResponse setRedirect (@Nonnull final ISimpleURL aRedirectTargetUrl)
   {
     ValueEnforcer.notNull (aRedirectTargetUrl, "RedirectTargetUrl");
+
     return setRedirect (aRedirectTargetUrl.getAsString ());
   }
 
   @Nonnull
   public UnifiedResponse setRedirect (@Nonnull @Nonempty final String sRedirectTargetUrl)
   {
-    if (StringHelper.hasNoText (sRedirectTargetUrl))
-      throw new IllegalArgumentException ("redirectTargetUrl may not be empty");
+    ValueEnforcer.notEmpty (sRedirectTargetUrl, "RedirectTargetUrl");
+
     if (m_sRedirectTargetUrl != null)
       _info ("Overwriting redirect target URL '" + m_sRedirectTargetUrl + "' with '" + m_sRedirectTargetUrl + "'");
     m_sRedirectTargetUrl = sRedirectTargetUrl;
@@ -821,10 +820,9 @@ public class UnifiedResponse
    */
   public void addCustomResponseHeader (@Nonnull @Nonempty final String sName, @Nonnull @Nonempty final String sValue)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("sName must not be null or empty!");
-    if (StringHelper.hasNoText (sValue))
-      throw new IllegalArgumentException ("sValue must not be null or empty!");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notEmpty (sValue, "Value");
+
     m_aResponseHeaderMap.addHeader (sName, sValue);
   }
 
@@ -841,8 +839,8 @@ public class UnifiedResponse
   @Nonnull
   public EChange removeCustomResponseHeaders (@Nonnull @Nonempty final String sName)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("sName must not be null or empty!");
+    ValueEnforcer.notEmpty (sName, "Name");
+
     return m_aResponseHeaderMap.removeHeaders (sName);
   }
 

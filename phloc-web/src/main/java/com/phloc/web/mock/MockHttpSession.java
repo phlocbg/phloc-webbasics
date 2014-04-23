@@ -231,7 +231,7 @@ public class MockHttpSession implements HttpSession
   public void invalidate ()
   {
     if (m_bInvalidated)
-      throw new IllegalArgumentException ("Session scope '" + getId () + "' already invalidated!");
+      throw new IllegalStateException ("Session scope '" + getId () + "' already invalidated!");
     m_bInvalidated = true;
 
     final HttpSessionEvent aHSE = new HttpSessionEvent (this);

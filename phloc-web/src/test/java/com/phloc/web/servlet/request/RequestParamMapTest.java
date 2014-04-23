@@ -126,7 +126,7 @@ public final class RequestParamMapTest
       RequestParamMap.setSeparators (null, "!");
       fail ();
     }
-    catch (final IllegalArgumentException ex)
+    catch (final NullPointerException ex)
     {}
     assertEquals ("!", RequestParamMap.getOpenSeparator ());
     assertEquals ("?", RequestParamMap.getCloseSeparator ());
@@ -146,7 +146,7 @@ public final class RequestParamMapTest
       RequestParamMap.setSeparators ("!", null);
       fail ();
     }
-    catch (final IllegalArgumentException ex)
+    catch (final NullPointerException ex)
     {}
     assertEquals ("!", RequestParamMap.getOpenSeparator ());
     assertEquals ("?", RequestParamMap.getCloseSeparator ());

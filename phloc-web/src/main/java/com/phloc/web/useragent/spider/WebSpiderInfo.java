@@ -22,11 +22,11 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.id.IHasID;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -43,9 +43,7 @@ public final class WebSpiderInfo implements IHasID <String>, Serializable
 
   public WebSpiderInfo (@Nonnull @Nonempty final String sID)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("empty ID");
-    m_sID = sID;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
   }
 
   @Nonnull

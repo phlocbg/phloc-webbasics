@@ -61,9 +61,9 @@ public final class RhinoUtils
         aReader = new InputStreamReader (aIS, sCharset);
         aCtx.evaluateReader (aScope, aReader, sResName, 1, null);
       }
-      catch (final Exception ex)
+      catch (final Throwable t)
       {
-        throw new IllegalArgumentException ("Failed to read JS resource '" + sResName + "'", ex);
+        throw new IllegalArgumentException ("Failed to read JS resource '" + sResName + "'", t);
       }
       finally
       {

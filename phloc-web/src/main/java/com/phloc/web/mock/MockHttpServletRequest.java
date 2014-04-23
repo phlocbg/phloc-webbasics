@@ -248,7 +248,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public void invalidate ()
   {
     if (m_bInvalidated)
-      throw new IllegalArgumentException ("Request scope already invalidated!");
+      throw new IllegalStateException ("Request scope already invalidated!");
     m_bInvalidated = true;
 
     if (m_aServletContext != null)

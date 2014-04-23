@@ -463,7 +463,7 @@ public class MockServletContext implements ServletContext
   public void invalidate ()
   {
     if (m_bInvalidated)
-      throw new IllegalArgumentException ("Servlet context already invalidated!");
+      throw new IllegalStateException ("Servlet context already invalidated!");
     m_bInvalidated = true;
 
     // Destroy all servlets

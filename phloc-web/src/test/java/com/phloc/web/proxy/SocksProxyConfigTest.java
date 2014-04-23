@@ -67,7 +67,7 @@ public final class SocksProxyConfigTest
       new SocksProxyConfig (null);
       fail ();
     }
-    catch (final IllegalArgumentException ex)
+    catch (final NullPointerException ex)
     {}
 
     try
@@ -85,7 +85,7 @@ public final class SocksProxyConfigTest
       new SocksProxyConfig (null, 1234);
       fail ();
     }
-    catch (final IllegalArgumentException ex)
+    catch (final NullPointerException ex)
     {}
     try
     {

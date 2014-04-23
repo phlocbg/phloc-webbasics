@@ -57,7 +57,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * problem with JS expressions, {@link #setSeparators(char, char)} and
  * {@link #setSeparators(String, String)} offer the possibility to set different
  * separator separators that are not special.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -82,7 +82,7 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * This constructor is private, because it does not call the
    * {@link #put(String, Object)} method which does the main string parsing!
-   *
+   * 
    * @param aMap
    *        The map to use. May not be <code>null</code>.
    */
@@ -150,7 +150,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Iterate the root map down to the map specified by the passed path.
-   *
+   * 
    * @param aPath
    *        The path to iterate. May neither be <code>null</code> nor empty.
    * @return The map. May be <code>null</code> if the path did not find such a
@@ -159,8 +159,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Nullable
   private Map <String, Object> _getResolvedChildMap (@Nonnull @Nonempty final String... aPath)
   {
-    if (ArrayHelper.isEmpty (aPath))
-      throw new IllegalArgumentException ("Path path array may not be empty!");
+    ValueEnforcer.notEmpty (aPath, "Path");
 
     Map <String, Object> aMap = m_aMap;
     // Until the second last object
@@ -197,8 +196,7 @@ public final class RequestParamMap implements IRequestParamMap
   @ReturnsMutableCopy
   public IRequestParamMap getMap (@Nonnull @Nonempty final String... aPath)
   {
-    if (ArrayHelper.isEmpty (aPath))
-      throw new IllegalArgumentException ("Path path array may not be empty!");
+    ValueEnforcer.notEmpty (aPath, "Path");
 
     Map <String, Object> aMap = m_aMap;
     for (final String sPath : aPath)
@@ -301,7 +299,7 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * This method doesn't make sense but it should stay, so that it's easy to
    * spot usage of this invalid method.
-   *
+   * 
    * @param sBaseName
    *        Base name
    * @return Base name as is.
@@ -311,8 +309,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Deprecated
   public static String getFieldName (@Nonnull @Nonempty final String sBaseName)
   {
-    if (StringHelper.hasNoText (sBaseName))
-      throw new IllegalArgumentException ("baseName");
+    ValueEnforcer.notEmpty (sBaseName, "BaseName");
 
     return sBaseName;
   }
@@ -321,8 +318,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Nonempty
   public static String getFieldName (@Nonnull @Nonempty final String sBaseName, @Nullable final String... aSuffixes)
   {
-    if (StringHelper.hasNoText (sBaseName))
-      throw new IllegalArgumentException ("baseName");
+    ValueEnforcer.notEmpty (sBaseName, "BaseName");
 
     final StringBuilder aSB = new StringBuilder (sBaseName);
     if (aSuffixes != null)
@@ -335,8 +331,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Nonempty
   public static String getFieldName (@Nonnull @Nonempty final String sBaseName, @Nullable final int... aSuffixes)
   {
-    if (StringHelper.hasNoText (sBaseName))
-      throw new IllegalArgumentException ("baseName");
+    ValueEnforcer.notEmpty (sBaseName, "BaseName");
 
     final StringBuilder aSB = new StringBuilder (sBaseName);
     if (aSuffixes != null)
@@ -353,7 +348,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Set the separator chars to use.
-   *
+   * 
    * @param cOpen
    *        Open char
    * @param cClose
@@ -369,7 +364,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Set the separators to use.
-   *
+   * 
    * @param sOpen
    *        Open string. May neither be <code>null</code> nor empty.
    * @param sClose
@@ -377,10 +372,8 @@ public final class RequestParamMap implements IRequestParamMap
    */
   public static void setSeparators (@Nonnull @Nonempty final String sOpen, @Nonnull @Nonempty final String sClose)
   {
-    if (StringHelper.hasNoText (sOpen))
-      throw new IllegalArgumentException ("open");
-    if (StringHelper.hasNoText (sClose))
-      throw new IllegalArgumentException ("close");
+    ValueEnforcer.notEmpty (sOpen, "Open");
+    ValueEnforcer.notEmpty (sClose, "Close");
     if (sOpen.contains (sClose))
       throw new IllegalArgumentException ("open may not contain close");
     if (sClose.contains (sOpen))

@@ -47,9 +47,7 @@ public class IPV4Addr implements IHasStringRepresentation
 
   private static int _validatePart (@Nonnegative final int n)
   {
-    if (n < 0 || n > 255)
-      throw new IllegalArgumentException ("Illegal IP part");
-    return n;
+    return ValueEnforcer.isBetweenInclusive (n, "IP part", 0, 255);
   }
 
   private static int _validatePart (@Nullable final String s)
