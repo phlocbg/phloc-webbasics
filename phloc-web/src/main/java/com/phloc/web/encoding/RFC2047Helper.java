@@ -47,9 +47,9 @@ public class RFC2047Helper
   }
 
   @Nullable
-  public static String encode (@Nullable final String SValue, @Nonnull final Charset aCharset)
+  public static String encode (@Nullable final String sValue, @Nonnull final Charset aCharset)
   {
-    return encode (SValue, aCharset, ECodec.B);
+    return encode (sValue, aCharset, ECodec.B);
   }
 
   /**

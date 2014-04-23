@@ -104,10 +104,10 @@ public final class Punycode
     return encode (s.toCharArray (), null);
   }
 
-  public static String encode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
+  public static String encode (@Nonnull final char [] aChars, @Nullable final boolean [] aCaseFlags)
   {
     final StringBuilder aSB = new StringBuilder ();
-    final CodepointIteratorCharArray aIter = new CodepointIteratorCharArray (chars);
+    final CodepointIteratorCharArray aIter = new CodepointIteratorCharArray (aChars);
     int n = INITIAL_N;
     int delta = 0;
     int bias = INITIAL_BIAS;
@@ -117,17 +117,18 @@ public final class Punycode
       i = aIter.next ().getValue ();
       if (_basic (i))
       {
-        if (case_flags == null)
+        if (aCaseFlags == null)
         {
           aSB.append ((char) i);
         }
       }
     }
     int h, b, m, q, k, t;
-    h = b = aSB.length ();
+    b = aSB.length ();
+    h = b;
     if (b > 0)
       aSB.append ((char) DELIMITER);
-    while (h < chars.length)
+    while (h < aChars.length)
     {
       aIter.position (0);
       i = -1;
@@ -162,7 +163,7 @@ public final class Punycode
             aSB.append ((char) _encode_digit (t + (q - t) % (BASE - t), false));
             q = (q - t) / (BASE - t);
           }
-          aSB.append ((char) _encode_digit (q, (case_flags != null) ? case_flags[aIter.position () - 1] : false));
+          aSB.append ((char) _encode_digit (q, (aCaseFlags != null) ? aCaseFlags[aIter.position () - 1] : false));
           bias = _adapt (delta, h + 1, h == b);
           delta = 0;
           ++h;
@@ -184,32 +185,33 @@ public final class Punycode
 
   @SuppressFBWarnings ("QF_QUESTIONABLE_FOR_LOOP")
   @Nonnull
-  public static String decode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
+  public static String decode (@Nonnull final char [] aChars, @Nullable final boolean [] aCaseFlags)
   {
     final StringBuilder aSB = new StringBuilder ();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
     n = INITIAL_N;
-    out = i = 0;
+    out = 0;
+    i = 0;
     bias = INITIAL_BIAS;
-    for (b = j = 0; j < chars.length; ++j)
-      if (_delim (chars[j]))
+    for (b = 0, j = 0; j < aChars.length; ++j)
+      if (_delim (aChars[j]))
         b = j;
     for (j = 0; j < b; ++j)
     {
-      if (case_flags != null)
-        case_flags[out] = _flagged (chars[j]);
-      if (!_basic (chars[j]))
+      if (aCaseFlags != null)
+        aCaseFlags[out] = _flagged (aChars[j]);
+      if (!_basic (aChars[j]))
         throw new DecoderException ("Bad Input");
-      aSB.append (chars[j]);
+      aSB.append (aChars[j]);
     }
     out = aSB.length ();
-    for (in = (b > 0) ? b + 1 : 0; in < chars.length; ++out)
+    for (in = (b > 0) ? b + 1 : 0; in < aChars.length; ++out)
     {
       for (oldi = i, w = 1, k = BASE;; k += BASE)
       {
-        if (in > chars.length)
+        if (in > aChars.length)
           throw new DecoderException ("Bad input");
-        digit = _decode_digit (chars[in++]);
+        digit = _decode_digit (aChars[in++]);
         if (digit >= BASE)
           throw new DecoderException ("Bad input");
         if (digit > (Integer.MAX_VALUE - i) / w)
@@ -227,10 +229,10 @@ public final class Punycode
         throw new DecoderException ("Overflow");
       n += i / (out + 1);
       i %= (out + 1);
-      if (case_flags != null)
+      if (aCaseFlags != null)
       {
         // not sure if this is right
-        System.arraycopy (case_flags, i, case_flags, i + Character.charCount (n), case_flags.length - i);
+        System.arraycopy (aCaseFlags, i, aCaseFlags, i + Character.charCount (n), aCaseFlags.length - i);
       }
       CodepointUtils.insert (aSB, i++, n);
     }

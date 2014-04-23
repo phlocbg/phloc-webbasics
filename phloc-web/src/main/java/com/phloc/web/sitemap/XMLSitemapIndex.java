@@ -34,7 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.file.FileUtils;
@@ -46,6 +47,7 @@ import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.datetime.PDTWebDateUtils;
@@ -103,10 +105,10 @@ public final class XMLSitemapIndex implements Serializable
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <XMLSitemapURLSet> getAllURLSets ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aURLSets);
+    return ContainerHelper.newList (m_aURLSets);
   }
 
   public void addURLSet (@Nonnull final XMLSitemapURLSet aURLSet)
@@ -143,12 +145,22 @@ public final class XMLSitemapIndex implements Serializable
   }
 
   @Nonnull
+  @Nonempty
   public static String getSitemapFilename (@Nonnegative final int nIndex, final boolean bUseGZip)
   {
     return "sitemap" + nIndex + ".xml" + (bUseGZip ? ".gz" : "");
   }
 
+  /**
+   * Get the name of the sitemap file at the specified index
+   * 
+   * @param nIndex
+   *        The index to be used. Should be ge; 0.
+   * @return The name of the sitemap file. Neither <code>null</code> nor empty.
+   * @see #getSitemapFilename(int, boolean)
+   */
   @Nonnull
+  @Nonempty
   public String getSitemapFilename (@Nonnegative final int nIndex)
   {
     return getSitemapFilename (nIndex, m_bUseGZip);
@@ -157,21 +169,24 @@ public final class XMLSitemapIndex implements Serializable
   @Nonnull
   public IMicroDocument getAsDocument ()
   {
+    final String sNamespaceURL = CXMLSitemap.XML_NAMESPACE_0_9;
     final IMicroDocument ret = new MicroDocument ();
-    final IMicroElement eSitemapindex = ret.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_SITEMAPINDEX);
+    final IMicroElement eSitemapindex = ret.appendElement (sNamespaceURL, ELEMENT_SITEMAPINDEX);
     int nIndex = 0;
     for (final XMLSitemapURLSet aURLSet : m_aURLSets)
     {
-      final IMicroElement eSitemap = eSitemapindex.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_SITEMAP);
+      final IMicroElement eSitemap = eSitemapindex.appendElement (sNamespaceURL, ELEMENT_SITEMAP);
 
       // The location of the sub-sitemaps must be prefixed with the full server
       // and context path
-      eSitemap.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_LOC)
-              .appendText (StaticServerInfo.getInstance ().getFullContextPath () + "/" + getSitemapFilename (nIndex));
+      eSitemap.appendElement (sNamespaceURL, ELEMENT_LOC).appendText (StaticServerInfo.getInstance ()
+                                                                                      .getFullContextPath () +
+                                                                      "/" +
+                                                                      getSitemapFilename (nIndex));
 
       final DateTime aLastModification = aURLSet.getLastModificationDateTime ();
       if (aLastModification != null)
-        eSitemap.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_LASTMOD)
+        eSitemap.appendElement (sNamespaceURL, ELEMENT_LASTMOD)
                 .appendText (PDTWebDateUtils.getAsStringXSD (aLastModification));
       ++nIndex;
     }
@@ -179,11 +194,17 @@ public final class XMLSitemapIndex implements Serializable
   }
 
   @Nonnull
-  public String getAsXMLString ()
+  protected IXMLWriterSettings getXMLWriterSettings ()
   {
     // Important: No indent and align, because otherwise the calculated output
     // length would not be suitable
-    return MicroWriter.getNodeAsString (getAsDocument (), CXMLSitemap.XML_WRITER_SETTINGS);
+    return CXMLSitemap.XML_WRITER_SETTINGS;
+  }
+
+  @Nonnull
+  public String getAsXMLString ()
+  {
+    return MicroWriter.getNodeAsString (getAsDocument (), getXMLWriterSettings ());
   }
 
   @Nonnull

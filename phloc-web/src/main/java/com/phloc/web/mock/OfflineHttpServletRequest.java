@@ -21,6 +21,8 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletContext;
 
+import com.phloc.web.annotations.IsOffline;
+
 /**
  * A special {@link MockHttpServletRequest} that throws
  * {@link UnsupportedOperationException} exceptions for server or path related
@@ -29,6 +31,7 @@ import javax.servlet.ServletContext;
  * @author Philip Helger
  */
 @NotThreadSafe
+@IsOffline
 public class OfflineHttpServletRequest extends MockHttpServletRequest
 {
   public OfflineHttpServletRequest ()

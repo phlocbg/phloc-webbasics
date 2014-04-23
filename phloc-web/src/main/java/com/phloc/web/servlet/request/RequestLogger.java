@@ -32,13 +32,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.cache.AnnotationUsageCache;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.web.annotations.IsOffline;
 import com.phloc.web.http.HTTPHeaderMap;
-import com.phloc.web.mock.OfflineHttpServletRequest;
 
 /**
  * Helper class to debug information passed to a JSP page or a servlet.
@@ -51,6 +53,8 @@ public final class RequestLogger
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestLogger.class);
 
+  private static final AnnotationUsageCache s_aOfflineCache = new AnnotationUsageCache (IsOffline.class);
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final RequestLogger s_aInstance = new RequestLogger ();
@@ -62,8 +66,10 @@ public final class RequestLogger
   @ReturnsMutableCopy
   public static Map <String, String> getRequestFieldMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    if (aHttpRequest instanceof OfflineHttpServletRequest)
+    if (s_aOfflineCache.hasAnnotation (aHttpRequest))
     {
       // Special handling, because otherwise exceptions would be thrown
       ret.put ("Offline", "true");
