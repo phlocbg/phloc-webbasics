@@ -46,6 +46,11 @@ public final class HTTPStringHelper
   /** Quoted text end character */
   public static final char QUOTEDTEXT_END = '"';
 
+  public static final int CHAR_TAB = 9;
+  public static final int CHAR_LF = 10;
+  public static final int CHAR_CR = 13;
+  public static final int CHAR_SPACE = 32;
+
   private static final int UALPHA = 0x00000001;
   private static final int LALPHA = 0x00000002;
   private static final int ALPHA = 0x00000004;
@@ -251,22 +256,22 @@ public final class HTTPStringHelper
 
   public static boolean isCRChar (final int n)
   {
-    return n == 13;
+    return n == CHAR_CR;
   }
 
   public static boolean isLFChar (final int n)
   {
-    return n == 10;
+    return n == CHAR_LF;
   }
 
   public static boolean isSpaceChar (final int n)
   {
-    return n == 32;
+    return n == CHAR_SPACE;
   }
 
   public static boolean isTabChar (final int n)
   {
-    return n == 9;
+    return n == CHAR_TAB;
   }
 
   public static boolean isLinearWhitespaceChar (final int n)

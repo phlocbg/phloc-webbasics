@@ -341,7 +341,7 @@ public class MockServletContext implements ServletContext
     return m_aInitParameters.getProperty (sName);
   }
 
-  public void addInitParameter (@Nonnull final String sName, @Nonnull final String sValue)
+  public final void addInitParameter (@Nonnull final String sName, @Nonnull final String sValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (sValue, "Value");
@@ -367,7 +367,7 @@ public class MockServletContext implements ServletContext
     return ContainerHelper.getEnumeration (m_aAttributes.keySet ());
   }
 
-  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
+  public final void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     if (aValue != null)
