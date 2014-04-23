@@ -22,23 +22,33 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.RFC1522BCodec;
 import com.phloc.commons.codec.RFC1522QCodec;
 
 /**
+ * RFC 2047 Helper
+ * 
  * @author Apache Abdera
  */
 public class RFC2047Helper
 {
-  public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
-
   public static enum ECodec
   {
     B,
     Q
   }
+
+  public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final RFC2047Helper s_aInstance = new RFC2047Helper ();
+
+  private RFC2047Helper ()
+  {}
 
   @Nullable
   public static String encode (@Nullable final String sValue)

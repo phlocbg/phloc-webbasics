@@ -20,7 +20,6 @@ package com.phloc.web.smtp;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 
-import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -68,7 +67,7 @@ public interface IEmailAttachment extends IInputStreamProvider, Serializable
   EEmailAttachmentDisposition getDisposition ();
 
   /**
-   * @return The attachment as a {@link DataSource}.
+   * @return The attachment as a {@link javax.activation.DataSource}.
    */
   @Nonnull
   IEmailAttachmentDataSource getAsDataSource ();

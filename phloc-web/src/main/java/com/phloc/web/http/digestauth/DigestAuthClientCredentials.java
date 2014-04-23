@@ -42,6 +42,9 @@ import com.phloc.web.http.HTTPStringHelper;
 @Immutable
 public class DigestAuthClientCredentials implements Serializable
 {
+  public static final int EXPECTED_RESPONSE_LENGTH = 32;
+  public static final int EXPECTED_NONCE_COUNT_LENGTH = 8;
+
   private final String m_sUserName;
   private final String m_sRealm;
   private final String m_sServerNonce;
@@ -69,7 +72,7 @@ public class DigestAuthClientCredentials implements Serializable
     ValueEnforcer.notEmpty (sServerNonce, "ServerNonce");
     ValueEnforcer.notEmpty (sDigestURI, "DigestURI");
     ValueEnforcer.notEmpty (sResponse, "Response");
-    if (sResponse.length () != 32)
+    if (sResponse.length () != EXPECTED_RESPONSE_LENGTH)
       throw new IllegalArgumentException ("The 'response' value must be a 32-byte hex string!");
     if (!HTTPStringHelper.isLowerHexNotEmpty (sResponse))
       throw new IllegalArgumentException ("The 'response' value must consist of all lowercase hex chars!");
@@ -81,7 +84,7 @@ public class DigestAuthClientCredentials implements Serializable
       throw new IllegalArgumentException ("If 'qop' is present 'nc' must also be present!");
     if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sNonceCount))
       throw new IllegalArgumentException ("If 'qop' is not present 'nc' must also not be present!");
-    if (sNonceCount != null && sNonceCount.length () != 8)
+    if (sNonceCount != null && sNonceCount.length () != EXPECTED_NONCE_COUNT_LENGTH)
       throw new IllegalArgumentException ("The 'nonce-count' value must be a 8-byte hex string!");
     if (sNonceCount != null && !HTTPStringHelper.isHexNotEmpty (sNonceCount))
       throw new IllegalArgumentException ("The 'nonce-count' value must consist only of hex chars!");

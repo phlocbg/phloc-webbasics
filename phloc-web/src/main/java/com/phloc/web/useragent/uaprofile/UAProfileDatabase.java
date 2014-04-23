@@ -72,6 +72,8 @@ public final class UAProfileDatabase
   public static final String PROFILE_DIFF = "Profile-Diff";
   public static final String WAP_PROFILE_DIFF = "Wap-Profile-Diff";
 
+  public static final int EXPECTED_MD5_DIGEST_LENGTH = 16;
+
   private static final String REQUEST_ATTR = UAProfileDatabase.class.getName ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfileDatabase.class);
 
@@ -283,7 +285,7 @@ public final class UAProfileDatabase
                   if (aDigest != null)
                   {
                     // MD5 hashes have 16 bytes!
-                    if (aDigest.length == 16)
+                    if (aDigest.length == EXPECTED_MD5_DIGEST_LENGTH)
                       aProfileDiffDigests.put (Integer.valueOf (nDiffIndex), aDigest);
                     else
                       s_aLogger.warn ("Decoded Base64 profile diff digest has an illegal length of " + aDigest.length);

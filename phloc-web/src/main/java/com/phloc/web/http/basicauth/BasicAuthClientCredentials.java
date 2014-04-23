@@ -30,11 +30,10 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.web.http.CHTTPHeader;
 
 /**
  * Credentials for HTTP basic authentication
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -45,7 +44,7 @@ public class BasicAuthClientCredentials implements Serializable
 
   /**
    * Create credentials with a user name only and no password.
-   *
+   * 
    * @param sUserName
    *        The user name to use. May neither be <code>null</code> nor empty.
    */
@@ -56,7 +55,7 @@ public class BasicAuthClientCredentials implements Serializable
 
   /**
    * Create credentials with a user name and a password.
-   *
+   * 
    * @param sUserName
    *        The user name to use. May neither be <code>null</code> nor empty.
    * @param sPassword
@@ -100,8 +99,8 @@ public class BasicAuthClientCredentials implements Serializable
 
   /**
    * Create the request HTTP header value for use with the
-   * {@link CHTTPHeader#AUTHORIZATION} header name.
-   *
+   * {@link com.phloc.web.http.CHTTPHeader#AUTHORIZATION} header name.
+   * 
    * @return The HTTP header value to use. Neither <code>null</code> nor empty.
    */
   @Nonnull

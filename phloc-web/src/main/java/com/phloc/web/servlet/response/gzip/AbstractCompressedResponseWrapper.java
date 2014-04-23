@@ -225,7 +225,7 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
     else
       if (m_aCompressedOS != null)
       {
-        if (true || CompressFilterSettings.isDebugModeEnabled ())
+        if (CompressFilterSettings.isDebugModeEnabled ())
           s_aLogger.warn ("flushBuffer on compressedOS - FINISH and CLOSE!");
         m_aCompressedOS.finishAndClose ();
       }

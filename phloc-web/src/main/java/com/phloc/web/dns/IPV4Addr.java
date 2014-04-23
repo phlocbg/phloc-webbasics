@@ -29,7 +29,6 @@ import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
-import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
@@ -43,11 +42,18 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public class IPV4Addr implements IHasStringRepresentation
 {
-  private final int [] m_aIP = new int [4];
+  public static final int PARTS = 4;
+  public static final int PART_MIN_VALUE = 0;
+  public static final int PART_MAX_VALUE = 255;
+
+  private final int m_nIP0;
+  private final int m_nIP1;
+  private final int m_nIP2;
+  private final int m_nIP3;
 
   private static int _validatePart (@Nonnegative final int n)
   {
-    return ValueEnforcer.isBetweenInclusive (n, "IP part", 0, 255);
+    return ValueEnforcer.isBetweenInclusive (n, "IP part", PART_MIN_VALUE, PART_MAX_VALUE);
   }
 
   private static int _validatePart (@Nullable final String s)
@@ -62,7 +68,10 @@ public class IPV4Addr implements IHasStringRepresentation
 
   public IPV4Addr (final byte [] aAddressBytes)
   {
-    this (aAddressBytes[0] & 0xff, aAddressBytes[1] & 0xff, aAddressBytes[2] & 0xff, aAddressBytes[3] & 0xff);
+    this (aAddressBytes[0] & PART_MAX_VALUE,
+          aAddressBytes[1] & PART_MAX_VALUE,
+          aAddressBytes[2] & PART_MAX_VALUE,
+          aAddressBytes[3] & PART_MAX_VALUE);
   }
 
   /**
@@ -82,10 +91,10 @@ public class IPV4Addr implements IHasStringRepresentation
                    @Nonnegative final int n3,
                    @Nonnegative final int n4)
   {
-    m_aIP[0] = _validatePart (n1);
-    m_aIP[1] = _validatePart (n2);
-    m_aIP[2] = _validatePart (n3);
-    m_aIP[3] = _validatePart (n4);
+    m_nIP0 = _validatePart (n1);
+    m_nIP1 = _validatePart (n2);
+    m_nIP2 = _validatePart (n3);
+    m_nIP3 = _validatePart (n4);
   }
 
   /**
@@ -96,17 +105,19 @@ public class IPV4Addr implements IHasStringRepresentation
   {
     ValueEnforcer.notNull (sText, "Text");
     final String [] aParts = StringHelper.getExplodedArray ('.', sText);
-    if (aParts.length != 4)
-      throw new IllegalArgumentException ("Expected exactly 4 parts");
-    for (int i = 0; i < 4; ++i)
-      m_aIP[i] = _validatePart (aParts[i]);
+    if (aParts.length != PARTS)
+      throw new IllegalArgumentException ("Expected exactly " + PARTS + " parts");
+    m_nIP0 = _validatePart (aParts[0]);
+    m_nIP1 = _validatePart (aParts[1]);
+    m_nIP2 = _validatePart (aParts[2]);
+    m_nIP3 = _validatePart (aParts[3]);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public int [] getNumberParts ()
   {
-    return ArrayHelper.getCopy (m_aIP);
+    return ArrayHelper.newIntArray (m_nIP0, m_nIP1, m_nIP2, m_nIP3);
   }
 
   /**
@@ -115,13 +126,13 @@ public class IPV4Addr implements IHasStringRepresentation
   @Nonnull
   public String getAsString ()
   {
-    return new StringBuilder (15).append (m_aIP[0])
+    return new StringBuilder (15).append (m_nIP0)
                                  .append ('.')
-                                 .append (m_aIP[1])
+                                 .append (m_nIP1)
                                  .append ('.')
-                                 .append (m_aIP[2])
+                                 .append (m_nIP2)
                                  .append ('.')
-                                 .append (m_aIP[3])
+                                 .append (m_nIP3)
                                  .toString ();
   }
 
@@ -133,18 +144,22 @@ public class IPV4Addr implements IHasStringRepresentation
     if (!(o instanceof IPV4Addr))
       return false;
     final IPV4Addr rhs = (IPV4Addr) o;
-    return EqualsUtils.equals (m_aIP, rhs.m_aIP);
+    return m_nIP0 == rhs.m_nIP0 && m_nIP1 == rhs.m_nIP1 && m_nIP2 == rhs.m_nIP2 && m_nIP3 == rhs.m_nIP3;
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aIP).getHashCode ();
+    return new HashCodeGenerator (this).append (m_nIP0).append (m_nIP1).append (m_nIP2).append (m_nIP3).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ip", m_aIP).toString ();
+    return new ToStringGenerator (this).append ("ip0", m_nIP0)
+                                       .append ("ip1", m_nIP1)
+                                       .append ("ip2", m_nIP2)
+                                       .append ("ip3", m_nIP3)
+                                       .toString ();
   }
 }

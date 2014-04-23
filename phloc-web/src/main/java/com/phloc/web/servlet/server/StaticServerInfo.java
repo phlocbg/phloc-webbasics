@@ -51,10 +51,10 @@ public class StaticServerInfo implements Serializable
   private final String m_sFullServerPath;
   private final String m_sFullServerAndContextPath;
 
-  private StaticServerInfo (@Nonnull @Nonempty final String sScheme,
-                            @Nonnull @Nonempty final String sServerName,
-                            @Nonnegative final int nServerPort,
-                            @Nonnull final String sContextPath)
+  protected StaticServerInfo (@Nonnull @Nonempty final String sScheme,
+                              @Nonnull @Nonempty final String sServerName,
+                              @Nonnegative final int nServerPort,
+                              @Nonnull final String sContextPath)
   {
     m_sScheme = ValueEnforcer.notEmpty (sScheme, "Scheme");
     m_sServerName = ValueEnforcer.notEmpty (sServerName, "ServerName");

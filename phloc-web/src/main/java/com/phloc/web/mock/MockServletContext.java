@@ -187,7 +187,7 @@ public class MockServletContext implements ServletContext
     return StringHelper.startsWith (sPath, '/') ? m_sResourceBasePath + sPath : m_sResourceBasePath + "/" + sPath;
   }
 
-  public void setContextPath (@Nullable final String sContextPath)
+  public final void setContextPath (@Nullable final String sContextPath)
   {
     if (sContextPath == null)
       m_sContextPath = "";

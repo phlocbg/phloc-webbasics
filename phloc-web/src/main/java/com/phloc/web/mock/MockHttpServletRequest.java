@@ -887,7 +887,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   }
 
   @Nonnull
-  public MockHttpServletRequest setMethod (@Nullable final EHTTPMethod eMethod)
+  public final MockHttpServletRequest setMethod (@Nullable final EHTTPMethod eMethod)
   {
     m_eMethod = eMethod;
     return this;

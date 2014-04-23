@@ -70,7 +70,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setEmailType (@Nonnull final EEmailType eEmailType)
+  public final EmailData setEmailType (@Nonnull final EEmailType eEmailType)
   {
     ValueEnforcer.notNull (eEmailType, "EmailType");
     m_eEmailType = eEmailType;
@@ -84,7 +84,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setFrom (@Nullable final IEmailAddress sFrom)
+  public final EmailData setFrom (@Nullable final IEmailAddress sFrom)
   {
     m_aFrom = sFrom;
     return this;
@@ -97,7 +97,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
+  public final EmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
   {
     m_aReplyTo.clear ();
     if (aReplyTo != null)
@@ -106,7 +106,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setReplyTo (@Nullable final IEmailAddress... aReplyTos)
+  public final EmailData setReplyTo (@Nullable final IEmailAddress... aReplyTos)
   {
     m_aReplyTo.clear ();
     if (aReplyTos != null)
@@ -117,7 +117,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
+  public final EmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
   {
     m_aReplyTo.clear ();
     if (aReplyTos != null)
@@ -184,7 +184,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setTo (@Nullable final IEmailAddress aTo)
+  public final EmailData setTo (@Nullable final IEmailAddress aTo)
   {
     m_aTo.clear ();
     if (aTo != null)
@@ -193,7 +193,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setTo (@Nullable final IEmailAddress... aTos)
+  public final EmailData setTo (@Nullable final IEmailAddress... aTos)
   {
     m_aTo.clear ();
     if (aTos != null)
@@ -204,7 +204,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
+  public final EmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
   {
     m_aTo.clear ();
     if (aTos != null)
@@ -244,7 +244,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setCc (@Nullable final IEmailAddress aCc)
+  public final EmailData setCc (@Nullable final IEmailAddress aCc)
   {
     m_aCc.clear ();
     if (aCc != null)
@@ -253,7 +253,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setCc (@Nullable final IEmailAddress... aCcs)
+  public final EmailData setCc (@Nullable final IEmailAddress... aCcs)
   {
     m_aCc.clear ();
     if (aCcs != null)
@@ -264,7 +264,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
+  public final EmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
   {
     m_aCc.clear ();
     if (aCcs != null)
@@ -304,7 +304,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setBcc (@Nullable final IEmailAddress aBcc)
+  public final EmailData setBcc (@Nullable final IEmailAddress aBcc)
   {
     m_aBcc.clear ();
     if (aBcc != null)
@@ -313,7 +313,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setBcc (@Nullable final IEmailAddress... aBccs)
+  public final EmailData setBcc (@Nullable final IEmailAddress... aBccs)
   {
     m_aBcc.clear ();
     if (aBccs != null)
@@ -324,7 +324,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
+  public final EmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
   {
     m_aBcc.clear ();
     if (aBccs != null)
@@ -364,7 +364,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setSentDate (@Nullable final DateTime aSentDate)
+  public final EmailData setSentDate (@Nullable final DateTime aSentDate)
   {
     m_aSentDate = aSentDate;
     return this;
@@ -377,7 +377,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setSubject (@Nullable final String sSubject)
+  public final EmailData setSubject (@Nullable final String sSubject)
   {
     m_sSubject = sSubject;
     return this;
@@ -390,7 +390,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setBody (@Nullable final String sBody)
+  public final EmailData setBody (@Nullable final String sBody)
   {
     m_sBody = sBody;
     return this;
@@ -409,7 +409,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Nonnull
-  public EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
+  public final EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
     if (aAttachments != null && aAttachments.size () > 0)
       m_aAttachments = aAttachments;
