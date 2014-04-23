@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.pair.ReadonlyPair;
 import com.phloc.commons.regex.RegExHelper;
@@ -140,8 +141,7 @@ public final class UserAgentDecryptor
   @Nonnull
   public static IUserAgent decryptUserAgentString (@Nonnull final String sUserAgent)
   {
-    if (sUserAgent == null)
-      throw new NullPointerException ("userAgent");
+    ValueEnforcer.notNull (sUserAgent, "UserAgent");
 
     String sRealUserAgent = sUserAgent;
 

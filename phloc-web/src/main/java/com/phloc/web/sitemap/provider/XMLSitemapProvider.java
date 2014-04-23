@@ -27,6 +27,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.lang.ServiceLoaderUtils;
@@ -75,8 +76,7 @@ public final class XMLSitemapProvider
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public static ESuccess createSitemapFiles (@Nonnull final File aTargetDirectory, final boolean bUseGZip)
   {
-    if (aTargetDirectory == null)
-      throw new NullPointerException ("targetDirectory");
+    ValueEnforcer.notNull (aTargetDirectory, "TargetDirectory");
     if (!FileUtils.existsDir (aTargetDirectory))
       throw new IllegalArgumentException ("The passed file is not an existing directory: " + aTargetDirectory);
 

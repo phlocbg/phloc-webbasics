@@ -27,8 +27,8 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.servlet.request.RequestHelper;
 
@@ -56,18 +56,11 @@ public class StaticServerInfo implements Serializable
                             @Nonnegative final int nServerPort,
                             @Nonnull final String sContextPath)
   {
-    if (StringHelper.hasNoText (sScheme))
-      throw new IllegalArgumentException ("scheme");
-    if (StringHelper.hasNoText (sServerName))
-      throw new IllegalArgumentException ("serverName");
-    // may be empty!!
-    if (sContextPath == null)
-      throw new NullPointerException ("contextPath");
-
-    m_sScheme = sScheme;
-    m_sServerName = sServerName;
+    m_sScheme = ValueEnforcer.notEmpty (sScheme, "Scheme");
+    m_sServerName = ValueEnforcer.notEmpty (sServerName, "ServerName");
     m_nServerPort = RequestHelper.getServerPortToUse (sScheme, nServerPort);
-    m_sContextPath = sContextPath;
+    // may be empty!!
+    m_sContextPath = ValueEnforcer.notNull (sContextPath, "ContextPath");
 
     m_sFullServerPath = RequestHelper.getFullServerName (sScheme, sServerName, nServerPort).toString ();
     m_sFullServerAndContextPath = m_sFullServerPath + sContextPath;

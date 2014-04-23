@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -130,15 +131,9 @@ public final class FailedMailData implements ITypedObject <String>
                          @Nullable final IEmailData aEmailData,
                          @Nullable final Throwable aError)
   {
-    if (sID == null)
-      throw new NullPointerException ("id");
-    if (aErrorDT == null)
-      throw new NullPointerException ("errorDateTime");
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
-    m_sID = sID;
-    m_aErrorDT = aErrorDT;
-    m_aSettings = aSettings;
+    m_sID = ValueEnforcer.notNull (sID, "ID");
+    m_aErrorDT = ValueEnforcer.notNull (aErrorDT, "ErrorDT");
+    m_aSettings = ValueEnforcer.notNull (aSettings, "Settings");
     m_aOriginalSentDateTime = aOriginalSentDT != null ? aOriginalSentDT
                                                      : (aEmailData != null ? aEmailData.getSentDate () : null);
     m_aEmailData = aEmailData;

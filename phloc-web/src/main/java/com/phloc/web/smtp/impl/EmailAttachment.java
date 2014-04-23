@@ -28,13 +28,13 @@ import javax.activation.FileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
 import com.phloc.commons.serialize.convert.SerializationConverter;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.EEmailAttachmentDisposition;
 import com.phloc.web.smtp.IEmailAttachment;
@@ -92,17 +92,11 @@ public class EmailAttachment implements IEmailAttachment
                                                                             @Nullable final Charset aCharset,
                                                                             @Nonnull final EEmailAttachmentDisposition eDisposition)
   {
-    if (StringHelper.hasNoText (sFilename))
-      throw new IllegalArgumentException ("filename");
-    if (aInputStreamProvider == null)
-      throw new NullPointerException ("InputStreamProvider");
-    if (eDisposition == null)
-      throw new NullPointerException ("Disposition");
-    m_sFilename = sFilename;
-    m_aInputStreamProvider = aInputStreamProvider;
+    m_sFilename = ValueEnforcer.notEmpty (sFilename, "Filename");
+    m_aInputStreamProvider = ValueEnforcer.notNull (aInputStreamProvider, "InputStreamProvider");
     m_aCharset = aCharset;
     m_sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
-    m_eDisposition = eDisposition;
+    m_eDisposition = ValueEnforcer.notNull (eDisposition, "Disposition");
   }
 
   private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException

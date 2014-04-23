@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.charset.CCharset;
@@ -183,15 +184,9 @@ public class UnifiedResponse
                           @Nonnull final EHTTPMethod eHTTPMethod,
                           @Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (eHTTPVersion == null)
-      throw new NullPointerException ("httpVersion");
-    if (eHTTPMethod == null)
-      throw new NullPointerException ("httpMethod");
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
-    m_eHTTPVersion = eHTTPVersion;
-    m_eHTTPMethod = eHTTPMethod;
-    m_aHttpRequest = aHttpRequest;
+    m_eHTTPVersion = ValueEnforcer.notNull (eHTTPVersion, "HTTPVersion");
+    m_eHTTPMethod = ValueEnforcer.notNull (eHTTPMethod, "HTTPMethod");
+    m_aHttpRequest = ValueEnforcer.notNull (aHttpRequest, "HTTPRequest");
     m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aHttpRequest);
     m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aHttpRequest);
     m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aHttpRequest);
@@ -302,8 +297,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setCharset (@Nonnull final Charset aCharset)
   {
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
+    ValueEnforcer.notNull (aCharset, "Charset");
     if (m_aCharset != null)
       _info ("Overwriting charset from " + m_aCharset + " to " + aCharset);
     m_aCharset = aCharset;
@@ -326,8 +320,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setMimeType (@Nonnull final IMimeType aMimeType)
   {
-    if (aMimeType == null)
-      throw new NullPointerException ("mimeType");
+    ValueEnforcer.notNull (aMimeType, "MimeType");
     if (m_aMimeType != null)
       _info ("Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
     m_aMimeType = aMimeType;
@@ -386,8 +379,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setContentAndCharset (@Nonnull final String sContent, @Nonnull final Charset aCharset)
   {
-    if (sContent == null)
-      throw new NullPointerException ("content");
+    ValueEnforcer.notNull (sContent, "Content");
     setCharset (aCharset);
     setContent (CharsetManager.getAsBytes (sContent, aCharset));
     return this;
@@ -406,8 +398,7 @@ public class UnifiedResponse
   @SuppressFBWarnings ("EI_EXPOSE_REP2")
   public UnifiedResponse setContent (@Nonnull final byte [] aContent)
   {
-    if (aContent == null)
-      throw new NullPointerException ("content");
+    ValueEnforcer.notNull (aContent, "Content");
     if (hasContent ())
       _info ("Overwriting content with byte array!");
     m_aContent = aContent;
@@ -425,8 +416,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setContent (@Nonnull final IInputStreamProvider aISP)
   {
-    if (aISP == null)
-      throw new NullPointerException ("content");
+    ValueEnforcer.notNull (aISP, "InputStreamProvider");
     if (hasContent ())
       _info ("Overwriting content with content provider!");
     m_aContent = null;
@@ -526,8 +516,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setContentDispositionType (@Nonnull final EContentDispositionType eContentDispositionType)
   {
-    if (eContentDispositionType == null)
-      throw new NullPointerException ("ContentDispositionType");
+    ValueEnforcer.notNull (eContentDispositionType, "ContentDispositionType");
 
     m_eContentDispositionType = eContentDispositionType;
     return this;
@@ -608,8 +597,8 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setCacheControl (@Nonnull final CacheControlBuilder aCacheControl)
   {
-    if (aCacheControl == null)
-      throw new NullPointerException ("cacheControl");
+    ValueEnforcer.notNull (aCacheControl, "CacheControl");
+
     if (m_aCacheControl != null)
       _info ("Overwriting Cache-Control data from '" +
              m_aCacheControl.getAsHTTPHeaderValue () +
@@ -691,8 +680,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse enableCaching (@Nonnegative final int nSeconds)
   {
-    if (nSeconds <= 0)
-      throw new NullPointerException ("seconds");
+    ValueEnforcer.isGT0 (nSeconds, "Seconds");
 
     // Remove any eventually set headers
     // Note: don't remove Last-Modified and ETag!
@@ -760,8 +748,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setRedirect (@Nonnull final ISimpleURL aRedirectTargetUrl)
   {
-    if (aRedirectTargetUrl == null)
-      throw new NullPointerException ("redirectTargetUrl");
+    ValueEnforcer.notNull (aRedirectTargetUrl, "RedirectTargetUrl");
     return setRedirect (aRedirectTargetUrl.getAsString ());
   }
 
@@ -779,8 +766,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse addCookie (@Nonnull final Cookie aCookie)
   {
-    if (aCookie == null)
-      throw new NullPointerException ("cookie");
+    ValueEnforcer.notNull (aCookie, "Cookie");
 
     final String sKey = aCookie.getName ();
     if (m_aCookies == null)
@@ -959,8 +945,7 @@ public class UnifiedResponse
 
   public void applyToResponse (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
-    if (aHttpResponse == null)
-      throw new NullPointerException ("httpResponse");
+    ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
 
     // Apply all collected headers
     for (final Map.Entry <String, List <String>> aEntry : m_aResponseHeaderMap)

@@ -31,6 +31,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
@@ -71,8 +72,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   @Nonnull
   public EmailData setEmailType (@Nonnull final EEmailType eEmailType)
   {
-    if (eEmailType == null)
-      throw new NullPointerException ("emailType");
+    ValueEnforcer.notNull (eEmailType, "EmailType");
     m_eEmailType = eEmailType;
     return this;
   }

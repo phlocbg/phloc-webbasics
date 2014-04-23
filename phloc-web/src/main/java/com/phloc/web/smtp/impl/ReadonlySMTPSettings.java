@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.EmailGlobalSettings;
@@ -48,9 +49,7 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    */
   ReadonlySMTPSettings (@Nonnull final SMTPSettings aOther)
   {
-    if (aOther == null)
-      throw new NullPointerException ("other");
-    m_aSettings = aOther;
+    m_aSettings = ValueEnforcer.notNull (aOther, "Other");
   }
 
   /**

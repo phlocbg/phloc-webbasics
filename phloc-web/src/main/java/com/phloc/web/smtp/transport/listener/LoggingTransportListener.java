@@ -29,6 +29,7 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.log.LogUtils;
@@ -52,9 +53,13 @@ public class LoggingTransportListener implements TransportListener
 
   public LoggingTransportListener (@Nonnull final EErrorLevel eErrorLevel)
   {
-    if (eErrorLevel == null)
-      throw new NullPointerException ("ErrorLevel");
-    m_eErrorLevel = eErrorLevel;
+    m_eErrorLevel = ValueEnforcer.notNull (eErrorLevel, "ErrorLevel");
+  }
+
+  @Nonnull
+  public EErrorLevel getErrorLevel ()
+  {
+    return m_eErrorLevel;
   }
 
   @Nonnull

@@ -20,6 +20,7 @@ package com.phloc.web.smtp.impl;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.datasource.InputStreamProviderDataSource;
@@ -36,9 +37,7 @@ public class EmailAttachmentDataSource extends InputStreamProviderDataSource imp
                                     @Nonnull final EEmailAttachmentDisposition eDisposition)
   {
     super (aISS, sFilename, sContentType);
-    if (eDisposition == null)
-      throw new NullPointerException ("disposition");
-    m_eDisposition = eDisposition;
+    m_eDisposition = ValueEnforcer.notNull (eDisposition, "Disposition");
   }
 
   @Nonnull

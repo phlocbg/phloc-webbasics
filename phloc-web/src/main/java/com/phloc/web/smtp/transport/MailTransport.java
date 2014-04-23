@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -77,8 +78,7 @@ final class MailTransport
 
   public MailTransport (@Nonnull final ISMTPSettings aSettings)
   {
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
+    ValueEnforcer.notNull (aSettings, "Settings");
 
     m_aSMTPSettings = aSettings;
     m_bSMTPS = aSettings.isSSLEnabled () || aSettings.isSTARTTLSEnabled ();

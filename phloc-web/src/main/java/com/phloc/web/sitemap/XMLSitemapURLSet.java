@@ -29,6 +29,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroElement;
@@ -64,8 +65,7 @@ public final class XMLSitemapURLSet implements IHasLastModificationDateTime, Ser
 
   public void addURL (@Nonnull final XMLSitemapURL aURL)
   {
-    if (aURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (aURL, "URL");
     m_aURLs.add (aURL);
     m_nOutputLength += aURL.getOutputLength ();
 

@@ -284,8 +284,8 @@ public abstract class AbstractFileUploadBase
     try
     {
       final IFileItemIterator iter = getItemIterator (ctx);
-      final IFileItemFactory fac = getFileItemFactory ();
-      if (fac == null)
+      final IFileItemFactory aFileItemFactory = getFileItemFactory ();
+      if (aFileItemFactory == null)
         throw new NullPointerException ("No FileItemFactory has been set.");
 
       while (iter.hasNext ())
@@ -293,7 +293,7 @@ public abstract class AbstractFileUploadBase
         final IFileItemStream item = iter.next ();
         // Don't use getName() here to prevent an InvalidFileNameException.
         final String fileName = ((AbstractFileUploadBase.FileItemIteratorImpl.FileItemStreamImpl) item).m_sName;
-        final IFileItem fileItem = fac.createItem (item.getFieldName (),
+        final IFileItem fileItem = aFileItemFactory.createItem (item.getFieldName (),
                                                    item.getContentType (),
                                                    item.isFormField (),
                                                    fileName);

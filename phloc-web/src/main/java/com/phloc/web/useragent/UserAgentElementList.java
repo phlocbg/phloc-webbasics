@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.pair.IReadonlyPair;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -39,22 +40,19 @@ final class UserAgentElementList
 
   public void add (@Nonnull final IReadonlyPair <String, String> aPair)
   {
-    if (aPair == null)
-      throw new NullPointerException ("pair");
+    ValueEnforcer.notNull (aPair, "Pair");
     m_aList.add (aPair);
   }
 
   public void add (@Nonnull final String sValue)
   {
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notNull (sValue, "Value");
     m_aList.add (sValue);
   }
 
   public void add (@Nonnull final List <String> aItems)
   {
-    if (aItems == null)
-      throw new NullPointerException ("items");
+    ValueEnforcer.notNull (aItems, "Items");
     m_aList.add (aItems);
   }
 

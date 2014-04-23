@@ -29,6 +29,7 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.concurrent.collector.ConcurrentCollectorMultiple;
@@ -69,8 +70,7 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
                            @Nonnull final FailedMailQueue aFailedMailQueue)
   {
     super (nMaxQueueSize, nMaxPerformCount, null);
-    if (aSMTPSettings == null)
-      throw new NullPointerException ("SMTPSettings");
+    ValueEnforcer.notNull (aSMTPSettings, "SMTPSettings");
 
     // Mail mail transport object
     m_aTransport = new MailTransport (aSMTPSettings);
@@ -100,9 +100,7 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
 
   public void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
   {
-    if (aFailedMailQueue == null)
-      throw new NullPointerException ("failedMailQueue");
-    m_aFailedMailQueue = aFailedMailQueue;
+    m_aFailedMailQueue = ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
   }
 
   /**

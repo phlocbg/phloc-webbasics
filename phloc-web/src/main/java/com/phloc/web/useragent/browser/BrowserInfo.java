@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.ToStringGenerator;
@@ -54,12 +55,8 @@ public class BrowserInfo implements IHasDisplayText, Serializable
 
   public BrowserInfo (@Nonnull final EBrowserType eBrowserType, @Nonnull final Version aVersion)
   {
-    if (eBrowserType == null)
-      throw new NullPointerException ("browserType");
-    if (aVersion == null)
-      throw new NullPointerException ("version");
-    m_eBrowserType = eBrowserType;
-    m_aVersion = aVersion;
+    m_eBrowserType = ValueEnforcer.notNull (eBrowserType, "BrowserType");
+    m_aVersion = ValueEnforcer.notNull (aVersion, "Version");
   }
 
   public final boolean isIt ()

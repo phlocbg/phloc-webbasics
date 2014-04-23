@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64Helper;
@@ -216,8 +217,7 @@ public final class UAProfileDatabase
   @Nullable
   public static UAProfile getUAProfileFromRequest (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "httpRequest");
 
     // Determine the main profile to use
     String sExtNSValue = null;
@@ -369,8 +369,7 @@ public final class UAProfileDatabase
   @Nonnull
   public static UAProfile getUAProfile (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     UAProfile aUAProfile = (UAProfile) aHttpRequest.getAttribute (REQUEST_ATTR);
     if (aUAProfile == null)

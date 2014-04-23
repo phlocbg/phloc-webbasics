@@ -32,6 +32,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
@@ -78,8 +79,7 @@ public class EmailAttachmentList implements IEmailAttachmentList
 
   public void addAttachment (@Nonnull final IEmailAttachment aAttachment)
   {
-    if (aAttachment == null)
-      throw new NullPointerException ("attachment");
+    ValueEnforcer.notNull (aAttachment, "Attachment");
 
     final String sKey = aAttachment.getFilename ();
     if (m_aMap.containsKey (sKey))

@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.concurrent.ExtendedDefaultThreadFactory;
 import com.phloc.commons.email.IEmailAddress;
@@ -115,8 +116,7 @@ public final class MailAPI
    */
   public static void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
   {
-    if (aFailedMailQueue == null)
-      throw new NullPointerException ("FailedMailQueue");
+    ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -138,8 +138,7 @@ public final class MailAPI
   @Nonnull
   private static MailQueuePerSMTP _getOrCreateMailQueuePerSMTP (@Nonnull final ISMTPSettings aSMTPSettings)
   {
-    if (aSMTPSettings == null)
-      throw new NullPointerException ("smtpSettings");
+    ValueEnforcer.notNull (aSMTPSettings, "SmtpSettings");
     if (s_aSenderThreadPool.isShutdown ())
       throw new IllegalStateException ("Cannot submit to mailqueues that are already stopped!");
 
@@ -207,10 +206,8 @@ public final class MailAPI
   public static int queueMails (@Nonnull final ISMTPSettings aSMTPSettings,
                                 @Nonnull final Collection <? extends IEmailData> aMailDataList)
   {
-    if (aSMTPSettings == null)
-      throw new NullPointerException ("smtpSettings");
-    if (aMailDataList == null)
-      throw new NullPointerException ("mailDataList");
+    ValueEnforcer.notNull (aSMTPSettings, "SmtpSettings");
+    ValueEnforcer.notNull (aMailDataList, "MailDataList");
     if (aMailDataList.isEmpty ())
       throw new IllegalArgumentException ("At least one message has to be supplied!");
 

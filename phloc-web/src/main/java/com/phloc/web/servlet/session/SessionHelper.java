@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.GenericReflection;
@@ -86,8 +87,7 @@ public final class SessionHelper
   @Nonnull
   public static Enumeration <String> getAllAttributes (@Nonnull final HttpSession aSession)
   {
-    if (aSession == null)
-      throw new NullPointerException ("session");
+    ValueEnforcer.notNull (aSession, "Session");
 
     try
     {
@@ -104,18 +104,17 @@ public final class SessionHelper
    * Invalidate the session of the specified request (if any) and create a new
    * session.
    * 
-   * @param aRequest
+   * @param aHttpRequest
    *        The HTTP request to use. May not be <code>null</code>.
    * @return The new {@link HttpSession} to use. Never <code>null</code>.
    */
   @Nonnull
-  public static HttpSession safeRenewSession (@Nonnull final HttpServletRequest aRequest)
+  public static HttpSession safeRenewSession (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aRequest == null)
-      throw new NullPointerException ("request");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     // Is there any existing session?
-    final HttpSession aSession = aRequest.getSession (false);
+    final HttpSession aSession = aHttpRequest.getSession (false);
     if (aSession != null)
     {
       try
@@ -130,6 +129,6 @@ public final class SessionHelper
     }
 
     // Create the new session
-    return aRequest.getSession (true);
+    return aHttpRequest.getSession (true);
   }
 }

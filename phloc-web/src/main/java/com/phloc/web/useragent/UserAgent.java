@@ -20,6 +20,7 @@ package com.phloc.web.useragent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.version.Version;
 import com.phloc.web.useragent.browser.BrowserInfo;
@@ -73,12 +74,8 @@ final class UserAgent implements IUserAgent
 
   public UserAgent (@Nonnull final String sFullUserAgent, @Nonnull final UserAgentElementList aElements)
   {
-    if (sFullUserAgent == null)
-      throw new NullPointerException ("fullUserAgent");
-    if (aElements == null)
-      throw new NullPointerException ("elements");
-    m_sFullUserAgent = sFullUserAgent;
-    m_aElements = aElements;
+    m_sFullUserAgent = ValueEnforcer.notNull (sFullUserAgent, "FullUserAgent");
+    m_aElements = ValueEnforcer.notNull (aElements, "Elements");
   }
 
   @Nonnull

@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustBeLocked;
 import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -68,8 +69,7 @@ public class FailedMailQueue
 
   public void add (@Nonnull final FailedMailData aFailedMailData)
   {
-    if (aFailedMailData == null)
-      throw new NullPointerException ("failedMailData");
+    ValueEnforcer.notNull (aFailedMailData, "FailedMailData");
 
     m_aRWLock.writeLock ().lock ();
     try

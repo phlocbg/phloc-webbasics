@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroElement;
@@ -80,11 +81,9 @@ public final class XMLSitemapURL implements IHasLastModificationDateTime, Serial
                         @Nullable final EXMLSitemapChangeFequency eChangeFreq,
                         @Nullable final Double aPriority)
   {
-    if (aLocation == null)
-      throw new NullPointerException ("location");
+    ValueEnforcer.notNull (aLocation, "Location");
     if (aPriority != null)
-      if (aPriority.doubleValue () < MIN_PRIORITY || aPriority.doubleValue () > MAX_PRIORITY)
-        throw new IllegalArgumentException ("Invalid priority passed: " + aPriority);
+      ValueEnforcer.isBetweenInclusive (aPriority.doubleValue (), "Priority", MIN_PRIORITY, MAX_PRIORITY);
 
     m_sLocation = aLocation.getAsString ();
     if (m_sLocation.length () > LOCATION_MAX_LENGTH)

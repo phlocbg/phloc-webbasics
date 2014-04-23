@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -207,8 +208,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   @Nonnull
   public EChange setHostName (@Nonnull final String sHostName)
   {
-    if (sHostName == null)
-      throw new NullPointerException ("host");
+    ValueEnforcer.notNull (sHostName, "Host");
 
     if (sHostName.equals (m_sHostName))
       return EChange.UNCHANGED;

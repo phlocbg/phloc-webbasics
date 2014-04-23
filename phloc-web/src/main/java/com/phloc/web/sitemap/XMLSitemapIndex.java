@@ -33,6 +33,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -110,8 +111,7 @@ public final class XMLSitemapIndex implements Serializable
 
   public void addURLSet (@Nonnull final XMLSitemapURLSet aURLSet)
   {
-    if (aURLSet == null)
-      throw new NullPointerException ("URLset");
+    ValueEnforcer.notNull (aURLSet, "URLset");
 
     if (aURLSet.isMultiFileSitemap ())
     {
@@ -205,8 +205,7 @@ public final class XMLSitemapIndex implements Serializable
   @Nonnull
   public ESuccess writeToDisk (@Nonnull final File aBaseDir)
   {
-    if (aBaseDir == null)
-      throw new NullPointerException ("basedir");
+    ValueEnforcer.notNull (aBaseDir, "Basedir");
     if (!FileUtils.existsDir (aBaseDir))
       throw new IllegalArgumentException ("The passed directory does not exist: " + aBaseDir);
 

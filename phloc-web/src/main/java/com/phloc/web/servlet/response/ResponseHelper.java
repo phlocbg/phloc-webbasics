@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.web.http.AcceptEncodingHandler;
 import com.phloc.web.http.AcceptEncodingList;
@@ -159,8 +160,7 @@ public final class ResponseHelper
 
   public static void finishReponseOutputStream (@Nonnull final OutputStream aOS) throws IOException
   {
-    if (aOS == null)
-      throw new NullPointerException ("outputStream");
+    ValueEnforcer.notNull (aOS, "OutputStream");
 
     aOS.flush ();
     aOS.close ();
