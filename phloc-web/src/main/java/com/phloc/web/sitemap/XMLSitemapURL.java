@@ -124,7 +124,10 @@ public final class XMLSitemapURL implements IHasLastModificationDateTime, Serial
                                                  m_sLocation);
 
     if (m_aLastModification != null)
+    {
+      // 24 == length of formatted date
       ret += _getTagOutputLength (ELEMENT_LASTMOD) + 24;
+    }
 
     if (m_eChangeFreq != null)
       ret += _getTagOutputLength (ELEMENT_CHANGEFREQ) + m_eChangeFreq.getText ().length ();
@@ -174,15 +177,16 @@ public final class XMLSitemapURL implements IHasLastModificationDateTime, Serial
   @Nonnull
   public IMicroElement getAsElement ()
   {
-    final IMicroElement ret = new MicroElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_URL);
-    ret.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_LOC).appendText (m_sLocation);
+    final String sNamespaceURI = CXMLSitemap.XML_NAMESPACE_0_9;
+    final IMicroElement ret = new MicroElement (sNamespaceURI, ELEMENT_URL);
+    ret.appendElement (sNamespaceURI, ELEMENT_LOC).appendText (m_sLocation);
     if (m_aLastModification != null)
-      ret.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_LASTMOD)
+      ret.appendElement (sNamespaceURI, ELEMENT_LASTMOD)
          .appendText (PDTWebDateUtils.getAsStringXSD (m_aLastModification));
     if (m_eChangeFreq != null)
-      ret.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_CHANGEFREQ).appendText (m_eChangeFreq.getText ());
+      ret.appendElement (sNamespaceURI, ELEMENT_CHANGEFREQ).appendText (m_eChangeFreq.getText ());
     if (m_sPriority != null)
-      ret.appendElement (CXMLSitemap.XML_NAMESPACE_0_9, ELEMENT_PRIORITY).appendText (m_sPriority);
+      ret.appendElement (sNamespaceURI, ELEMENT_PRIORITY).appendText (m_sPriority);
     return ret;
   }
 

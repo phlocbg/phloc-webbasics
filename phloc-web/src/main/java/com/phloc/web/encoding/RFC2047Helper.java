@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
@@ -33,7 +34,8 @@ import com.phloc.commons.codec.RFC1522QCodec;
  * 
  * @author Apache Abdera
  */
-public class RFC2047Helper
+@Immutable
+public final class RFC2047Helper
 {
   public static enum ECodec
   {

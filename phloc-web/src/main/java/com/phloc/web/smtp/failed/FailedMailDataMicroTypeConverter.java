@@ -127,7 +127,7 @@ public final class FailedMailDataMicroTypeConverter implements IMicroTypeConvert
       s_aLogger.error ("Failed to get child element of errormessage!");
       return null;
     }
-    final Throwable aError = new Throwable (eErrorMessage.getTextContent ());
+    final Exception aError = new Exception (eErrorMessage.getTextContent ());
 
     return new FailedMailData (sID, aErrorDT, aSMTPSettings, aOriginalSentDT, aEmailData, aError);
   }
