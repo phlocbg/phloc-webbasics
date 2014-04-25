@@ -30,36 +30,36 @@ import com.phloc.commons.microdom.utils.MicroUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
-public final class MigrationResultMicroTypeConverter implements IMicroTypeConverter
+public final class SystemMigrationResultMicroTypeConverter implements IMicroTypeConverter
 {
-  private static final String ATTR_ID = "id";
-  private static final String ATTR_EXECUTIONDT = "executiondt";
+  private static final String ATTR_MIGRATION_ID = "id";
+  private static final String ATTR_EXECUTION_DT = "executiondt";
   private static final String ATTR_SUCCESS = "success";
-  private static final String ELEMENT_ERRORMSG = "errormsg";
+  private static final String ELEMENT_ERROR_MSG = "errormsg";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aObject,
                                               @Nullable final String sNamespaceURI,
                                               @Nonnull @Nonempty final String sTagName)
   {
-    final MigrationResult aValue = (MigrationResult) aObject;
+    final SystemMigrationResult aValue = (SystemMigrationResult) aObject;
     final IMicroElement aElement = new MicroElement (sNamespaceURI, sTagName);
-    aElement.setAttribute (ATTR_ID, aValue.getID ());
-    aElement.setAttributeWithConversion (ATTR_EXECUTIONDT, aValue.getExecutionDateTime ());
+    aElement.setAttribute (ATTR_MIGRATION_ID, aValue.getID ());
+    aElement.setAttributeWithConversion (ATTR_EXECUTION_DT, aValue.getExecutionDateTime ());
     aElement.setAttribute (ATTR_SUCCESS, Boolean.toString (aValue.isSuccess ()));
     if (StringHelper.hasText (aValue.getErrorMessage ()))
-      aElement.appendElement (sNamespaceURI, ELEMENT_ERRORMSG).appendText (aValue.getErrorMessage ());
+      aElement.appendElement (sNamespaceURI, ELEMENT_ERROR_MSG).appendText (aValue.getErrorMessage ());
     return aElement;
   }
 
   @Nonnull
-  public MigrationResult convertToNative (@Nonnull final IMicroElement aElement)
+  public SystemMigrationResult convertToNative (@Nonnull final IMicroElement aElement)
   {
-    final String sID = aElement.getAttribute (ATTR_ID);
-    final DateTime aExecDT = aElement.getAttributeWithConversion (ATTR_EXECUTIONDT, DateTime.class);
+    final String sID = aElement.getAttribute (ATTR_MIGRATION_ID);
+    final DateTime aExecDT = aElement.getAttributeWithConversion (ATTR_EXECUTION_DT, DateTime.class);
     final String sSuccess = aElement.getAttribute (ATTR_SUCCESS);
     final boolean bSuccess = StringParser.parseBool (sSuccess);
-    final String sErrorMsg = MicroUtils.getChildTextContent (aElement, ELEMENT_ERRORMSG);
-    return new MigrationResult (sID, aExecDT, bSuccess, sErrorMsg);
+    final String sErrorMsg = MicroUtils.getChildTextContent (aElement, ELEMENT_ERROR_MSG);
+    return new SystemMigrationResult (sID, aExecDT, bSuccess, sErrorMsg);
   }
 }

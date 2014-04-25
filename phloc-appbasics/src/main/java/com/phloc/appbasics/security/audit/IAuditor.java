@@ -37,7 +37,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onCreateSuccess (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onCreateSuccess (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The creation of an object failed.
@@ -47,7 +47,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onCreateFailure (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onCreateFailure (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The modification of an object succeeded.
@@ -59,7 +59,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onModifySuccess (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable String... aArgs);
+  void onModifySuccess (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable Object... aArgs);
 
   /**
    * The modification of an object failed.
@@ -71,7 +71,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onModifyFailure (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable String... aArgs);
+  void onModifyFailure (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable Object... aArgs);
 
   /**
    * The deletion of an object succeeded.
@@ -81,7 +81,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onDeleteSuccess (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onDeleteSuccess (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The deletion of an object failed.
@@ -91,7 +91,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onDeleteFailure (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onDeleteFailure (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The undeletion of an object succeeded.
@@ -101,7 +101,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onUndeleteSuccess (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onUndeleteSuccess (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The undeletion of an object failed.
@@ -111,7 +111,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onUndeleteFailure (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+  void onUndeleteFailure (@Nonnull ObjectType aObjectType, @Nullable Object... aArgs);
 
   /**
    * The execution of something succeeded.
@@ -121,7 +121,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onExecuteSuccess (@Nonnull String sWhat, @Nullable String... aArgs);
+  void onExecuteSuccess (@Nonnull String sWhat, @Nullable Object... aArgs);
 
   /**
    * The execution of something failed.
@@ -131,7 +131,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onExecuteFailure (@Nonnull String sWhat, @Nullable String... aArgs);
+  void onExecuteFailure (@Nonnull String sWhat, @Nullable Object... aArgs);
 
   /**
    * The execution of something on an object succeeded.
@@ -143,7 +143,7 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onExecuteSuccess (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable String... aArgs);
+  void onExecuteSuccess (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable Object... aArgs);
 
   /**
    * The execution of something on an object failed.
@@ -155,5 +155,5 @@ public interface IAuditor
    * @param aArgs
    *        Additional arguments
    */
-  void onExecuteFailure (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable String... aArgs);
+  void onExecuteFailure (@Nonnull ObjectType aObjectType, @Nonnull String sWhat, @Nullable Object... aArgs);
 }

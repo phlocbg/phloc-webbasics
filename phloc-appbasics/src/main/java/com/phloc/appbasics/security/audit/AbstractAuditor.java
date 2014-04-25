@@ -27,6 +27,8 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.type.ObjectType;
+import com.phloc.json2.impl.JsonArray;
+import com.phloc.json2.impl.JsonObject;
 
 /**
  * Abstract base class for interface {@link IAuditor}.
@@ -41,6 +43,16 @@ public abstract class AbstractAuditor implements IAuditor
   public AbstractAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
   {
     m_aUserIDProvider = ValueEnforcer.notNull (aUserIDProvider, "UserIDProvider");
+  }
+
+  /**
+   * @return <code>true</code> to create a Json string, <code>false</code> to
+   *         create a legacy comma separated list
+   */
+  @OverrideOnDemand
+  protected boolean useJsonNotation ()
+  {
+    return true;
   }
 
   /**
@@ -61,10 +73,22 @@ public abstract class AbstractAuditor implements IAuditor
 
   @Nonnull
   @OverrideOnDemand
-  protected String createAuditString (@Nonnull final String sObjectType, @Nullable final String [] aArgs)
+  protected String createAuditString (@Nonnull final String sObjectType, @Nullable final Object [] aArgs)
   {
+    if (useJsonNotation ())
+    {
+      // Get Json representation for easy evaluation afterwards
+      final JsonArray aData = new JsonArray ();
+      if (aArgs != null)
+        for (final Object aArg : aArgs)
+          aData.add (aArg);
+      return new JsonObject ().add (sObjectType, aData).getAsString ();
+    }
+
+    // Use regular formatting
     if (ArrayHelper.isEmpty (aArgs))
       return sObjectType;
+
     final StringBuilder aSB = new StringBuilder (sObjectType).append ('(');
     for (int i = 0; i < aArgs.length; ++i)
     {
@@ -75,20 +99,7 @@ public abstract class AbstractAuditor implements IAuditor
     return aSB.append (')').toString ();
   }
 
-  @Nonnull
-  @OverrideOnDemand
-  protected String createAuditStringWithWhat (@Nonnull final String sObjectType,
-                                              @Nonnull final String sWhat,
-                                              @Nullable final String [] aArgs)
-  {
-    final StringBuilder aSB = new StringBuilder (sObjectType).append ('(').append (sWhat);
-    if (aArgs != null)
-      for (final String sArg : aArgs)
-        aSB.append (',').append (sArg);
-    return aSB.append (')').toString ();
-  }
-
-  public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -97,7 +108,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
-  public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -108,27 +119,29 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onModifySuccess (@Nonnull final ObjectType aObjectType,
                                @Nonnull final String sWhat,
-                               @Nullable final String... aArgs)
+                               @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.MODIFY,
                       ESuccess.SUCCESS,
-                      createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
+                      createAuditString (aObjectType.getObjectTypeName (),
+                                         ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
   public void onModifyFailure (@Nonnull final ObjectType aObjectType,
                                @Nonnull final String sWhat,
-                               @Nullable final String... aArgs)
+                               @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.MODIFY,
                       ESuccess.FAILURE,
-                      createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
+                      createAuditString (aObjectType.getObjectTypeName (),
+                                         ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
-  public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -137,7 +150,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
-  public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -146,7 +159,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
-  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -155,7 +168,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
-  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
@@ -164,35 +177,37 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
-  public void onExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
+  public void onExecuteSuccess (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     _createAuditItem (EAuditActionType.EXECUTE, ESuccess.SUCCESS, createAuditString (sWhat, aArgs));
   }
 
-  public void onExecuteFailure (@Nonnull final String sWhat, @Nullable final String... aArgs)
+  public void onExecuteFailure (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     _createAuditItem (EAuditActionType.EXECUTE, ESuccess.FAILURE, createAuditString (sWhat, aArgs));
   }
 
   public void onExecuteSuccess (@Nonnull final ObjectType aObjectType,
                                 @Nonnull final String sWhat,
-                                @Nullable final String... aArgs)
+                                @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.EXECUTE,
                       ESuccess.SUCCESS,
-                      createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
+                      createAuditString (aObjectType.getObjectTypeName (),
+                                         ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
   public void onExecuteFailure (@Nonnull final ObjectType aObjectType,
                                 @Nonnull final String sWhat,
-                                @Nullable final String... aArgs)
+                                @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.EXECUTE,
                       ESuccess.FAILURE,
-                      createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
+                      createAuditString (aObjectType.getObjectTypeName (),
+                                         ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 }

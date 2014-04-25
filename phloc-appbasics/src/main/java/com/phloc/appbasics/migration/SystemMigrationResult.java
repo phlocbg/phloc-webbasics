@@ -32,20 +32,25 @@ import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
+/**
+ * Represents the result of a single system migration.
+ * 
+ * @author Philip Helger
+ */
 @Immutable
-public final class MigrationResult implements IHasID <String>, ISuccessIndicator
+public class SystemMigrationResult implements IHasID <String>, ISuccessIndicator
 {
-  private final String m_sID;
+  private final String m_sMigrationID;
   private final DateTime m_aExecutionDT;
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
 
-  MigrationResult (@Nonnull @Nonempty final String sID,
-                   @Nonnull final DateTime aExecutionDT,
-                   final boolean bSuccess,
-                   @Nullable final String sErrorMessage)
+  protected SystemMigrationResult (@Nonnull @Nonempty final String sMigrationID,
+                             @Nonnull final DateTime aExecutionDT,
+                             final boolean bSuccess,
+                             @Nullable final String sErrorMessage)
   {
-    m_sID = ValueEnforcer.notEmpty (sID, "ID");
+    m_sMigrationID = ValueEnforcer.notEmpty (sMigrationID, "MigrationID");
     m_aExecutionDT = ValueEnforcer.notNull (aExecutionDT, "ExecutionDT");
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
@@ -54,7 +59,7 @@ public final class MigrationResult implements IHasID <String>, ISuccessIndicator
   @Nonnull
   public String getID ()
   {
-    return m_sID;
+    return m_sMigrationID;
   }
 
   @Nonnull
@@ -84,10 +89,10 @@ public final class MigrationResult implements IHasID <String>, ISuccessIndicator
   {
     if (o == this)
       return true;
-    if (!(o instanceof MigrationResult))
+    if (!(o instanceof SystemMigrationResult))
       return false;
-    final MigrationResult rhs = (MigrationResult) o;
-    return m_sID.equals (rhs.m_sID) &&
+    final SystemMigrationResult rhs = (SystemMigrationResult) o;
+    return m_sMigrationID.equals (rhs.m_sMigrationID) &&
            m_aExecutionDT.equals (rhs.m_aExecutionDT) &&
            m_bSuccess == rhs.m_bSuccess &&
            EqualsUtils.equals (m_sErrorMessage, rhs.m_sErrorMessage);
@@ -96,7 +101,7 @@ public final class MigrationResult implements IHasID <String>, ISuccessIndicator
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sID)
+    return new HashCodeGenerator (this).append (m_sMigrationID)
                                        .append (m_aExecutionDT)
                                        .append (m_bSuccess)
                                        .append (m_sErrorMessage)
@@ -106,7 +111,7 @@ public final class MigrationResult implements IHasID <String>, ISuccessIndicator
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID)
+    return new ToStringGenerator (this).append ("ID", m_sMigrationID)
                                        .append ("executionDT", m_aExecutionDT)
                                        .append ("success", m_bSuccess)
                                        .append ("errorMsg", m_sErrorMessage)
@@ -114,14 +119,15 @@ public final class MigrationResult implements IHasID <String>, ISuccessIndicator
   }
 
   @Nonnull
-  public static MigrationResult createSuccess (@Nonnull @Nonempty final String sID)
+  public static SystemMigrationResult createSuccess (@Nonnull @Nonempty final String sMigrationID)
   {
-    return new MigrationResult (sID, PDTFactory.getCurrentDateTime (), true, null);
+    return new SystemMigrationResult (sMigrationID, PDTFactory.getCurrentDateTime (), true, null);
   }
 
   @Nonnull
-  public static MigrationResult createFailure (@Nonnull @Nonempty final String sID, @Nonnull final String sErrorMsg)
+  public static SystemMigrationResult createFailure (@Nonnull @Nonempty final String sMigrationID,
+                                               @Nonnull final String sErrorMsg)
   {
-    return new MigrationResult (sID, PDTFactory.getCurrentDateTime (), false, sErrorMsg);
+    return new SystemMigrationResult (sMigrationID, PDTFactory.getCurrentDateTime (), false, sErrorMsg);
   }
 }

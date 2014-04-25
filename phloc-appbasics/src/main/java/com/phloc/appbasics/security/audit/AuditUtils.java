@@ -105,7 +105,7 @@ public final class AuditUtils
     getAuditor ().onCreateSuccess (aObjectType);
   }
 
-  public static void onAuditCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onCreateSuccess (aObjectType, aArgs);
   }
@@ -118,7 +118,7 @@ public final class AuditUtils
     throw new UnsupportedOperationException ();
   }
 
-  public static void onAuditCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onCreateFailure (aObjectType, aArgs);
   }
@@ -133,7 +133,7 @@ public final class AuditUtils
 
   public static void onAuditModifySuccess (@Nonnull final ObjectType aObjectType,
                                            @Nonnull final String sWhat,
-                                           @Nullable final String... aArgs)
+                                           @Nullable final Object... aArgs)
   {
     getAuditor ().onModifySuccess (aObjectType, sWhat, aArgs);
   }
@@ -148,7 +148,7 @@ public final class AuditUtils
 
   public static void onAuditModifyFailure (@Nonnull final ObjectType aObjectType,
                                            @Nonnull final String sWhat,
-                                           @Nullable final String... aArgs)
+                                           @Nullable final Object... aArgs)
   {
     getAuditor ().onModifyFailure (aObjectType, sWhat, aArgs);
   }
@@ -161,7 +161,7 @@ public final class AuditUtils
     throw new UnsupportedOperationException ();
   }
 
-  public static void onAuditDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onDeleteSuccess (aObjectType, aArgs);
   }
@@ -174,7 +174,7 @@ public final class AuditUtils
     throw new UnsupportedOperationException ();
   }
 
-  public static void onAuditDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onDeleteFailure (aObjectType, aArgs);
   }
@@ -187,7 +187,7 @@ public final class AuditUtils
     throw new UnsupportedOperationException ();
   }
 
-  public static void onAuditUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onUndeleteSuccess (aObjectType, aArgs);
   }
@@ -200,31 +200,31 @@ public final class AuditUtils
     throw new UnsupportedOperationException ();
   }
 
-  public static void onAuditUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  public static void onAuditUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     getAuditor ().onUndeleteFailure (aObjectType, aArgs);
   }
 
-  public static void onAuditExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
+  public static void onAuditExecuteSuccess (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     getAuditor ().onExecuteSuccess (sWhat, aArgs);
   }
 
-  public static void onAuditExecuteFailure (@Nonnull final String sWhat, @Nullable final String... aArgs)
+  public static void onAuditExecuteFailure (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     getAuditor ().onExecuteFailure (sWhat, aArgs);
   }
 
   public static void onAuditExecuteSuccess (@Nonnull final ObjectType aObjectType,
                                             @Nonnull final String sWhat,
-                                            @Nullable final String... aArgs)
+                                            @Nullable final Object... aArgs)
   {
     getAuditor ().onExecuteSuccess (aObjectType, sWhat, aArgs);
   }
 
   public static void onAuditExecuteFailure (@Nonnull final ObjectType aObjectType,
                                             @Nonnull final String sWhat,
-                                            @Nullable final String... aArgs)
+                                            @Nullable final Object... aArgs)
   {
     getAuditor ().onExecuteFailure (aObjectType, sWhat, aArgs);
   }

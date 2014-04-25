@@ -19,6 +19,8 @@ package com.phloc.appbasics.config;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.migration.SystemMigrationResult;
+import com.phloc.appbasics.migration.SystemMigrationResultMicroTypeConverter;
 import com.phloc.appbasics.security.role.Role;
 import com.phloc.appbasics.security.role.RoleMicroTypeConverter;
 import com.phloc.appbasics.security.user.User;
@@ -39,6 +41,8 @@ public final class AppBasicsMicroTypeConverterRegistrarSPI implements IMicroType
 {
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
+    aRegistry.registerMicroElementTypeConverter (SystemMigrationResult.class,
+                                                 new SystemMigrationResultMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (Role.class, new RoleMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (User.class, new UserMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (UserGroup.class, new UserGroupMicroTypeConverter ());
