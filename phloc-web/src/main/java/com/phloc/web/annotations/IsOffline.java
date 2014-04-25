@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * 
  * @author Philip Helger
  */
-@Retention (RetentionPolicy.CLASS)
+@Retention (RetentionPolicy.RUNTIME)
 @Target ({ ElementType.TYPE })
 @Documented
 public @interface IsOffline
