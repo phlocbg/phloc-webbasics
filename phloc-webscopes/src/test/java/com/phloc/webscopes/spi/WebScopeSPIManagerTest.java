@@ -126,7 +126,7 @@ public final class WebScopeSPIManagerTest
     nPrevT = AbstractThrowingWebScopeSPI.getEnd ();
     ScopeManager.onGlobalEnd ();
     assertEquals (nPrev + 2, AbstractWebScopeSPI.getEnd ());
-    assertEquals (nPrev + 2, AbstractThrowingWebScopeSPI.getEnd ());
+    assertEquals (nPrevT + 2, AbstractThrowingWebScopeSPI.getEnd ());
   }
 
   @Test
