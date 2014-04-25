@@ -35,16 +35,16 @@ public class LoggingAuditorTest
     final ObjectType aOT = new ObjectType ("mock");
     AuditUtils.setAuditor (new LoggingAuditor (new MockCurrentUserIDProvider ("userid")));
     AuditUtils.onAuditCreateSuccess (aOT);
-    AuditUtils.onAuditCreateSuccess (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditModifySuccess (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditModifyFailure (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditDeleteSuccess (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditDeleteFailure (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditUndeleteSuccess (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditUndeleteFailure (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditExecuteSuccess ("spawn", "this", "is", "a", "test");
-    AuditUtils.onAuditExecuteFailure ("spawn", "this", "is", "a", "test");
-    AuditUtils.onAuditExecuteSuccess (aOT, "this", "is", "a", "test");
-    AuditUtils.onAuditExecuteFailure (aOT, "this", "is", "a", "test");
+    AuditUtils.onAuditCreateSuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditModifySuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditModifyFailure (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditDeleteSuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditDeleteFailure (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditUndeleteSuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditUndeleteFailure (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditExecuteSuccess ("spawn", "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditExecuteFailure ("spawn", "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditExecuteSuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    AuditUtils.onAuditExecuteFailure (aOT, "this", "is", Integer.valueOf (2), "a", "test");
   }
 }
