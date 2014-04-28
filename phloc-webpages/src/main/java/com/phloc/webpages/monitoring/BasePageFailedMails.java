@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.name.IHasDisplayText;
@@ -61,12 +62,15 @@ import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
+import com.phloc.html.hc.html.AbstractHCButton;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.web.smtp.IEmailAttachment;
 import com.phloc.web.smtp.IEmailData;
@@ -74,6 +78,7 @@ import com.phloc.web.smtp.IReadonlyEmailAttachmentList;
 import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -93,7 +98,10 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
     BUTTON_REFRESH ("Aktualisieren", "Refresh"),
+    BUTTON_DELETE ("Löschen", "Delete"),
+    BUTTON_RESEND ("Erneut versenden", "Resend"),
     BUTTON_RESEND_ALL ("Alle erneut versenden", "Resend all"),
+    BUTTON_DELETE_ALL ("Alle löschen", "Delete all"),
     MSG_ID ("ID", "ID"),
     MSG_ERROR_DT ("Fehler-Datum", "Error date"),
     MSG_SMTP_SETTINGS ("SMTP-Einstellungen", "SMTP settings"),
@@ -108,10 +116,12 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
     MSG_BODY ("Inhalt", "Body"),
     MSG_ATTACHMENTS ("Beilagen", "Attachments"),
     MSG_ERROR ("Fehlermeldung", "Error message"),
-    RESENT_NOT_FOUND ("Das E-Mail wurde nicht gefunden", "Failed to find the selected email"),
-    RESENT_SUCCESS ("Das E-Mail wurde erneut versendet.", "The email was scheduled for resending"),
-    RESENT_ALL_NONE ("Es wurden keine E-Mails für den erneuten Versand gefunden", "Found no failed mails for resending"),
-    RESENT_ALL_SUCCESS ("Es wurden {0} E-Mail(s) erneut versendet.", "{0} emails were scheduled for resending");
+    RESENT_SUCCESS ("Das E-Mail wurde erneut versendet.", "The email was scheduled for resending."),
+    RESENT_ALL_SUCCESS_1 ("Es wurde 1 E-Mail erneut versendet.", "1 email was scheduled for resending."),
+    RESENT_ALL_SUCCESS_N ("Es wurden {0} E-Mails erneut versendet.", "{0} emails were scheduled for resending."),
+    DELETE_SUCCESS ("Das E-Mail wurde erfolgreich gelöscht.", "The email was successfully deleted."),
+    DELETE_ALL_SUCCESS_1 ("Es wurde 1 E-Mail erfolgreich gelöscht.", "1 email was successfully deleted."),
+    DELETE_ALL_SUCCESS_N ("Es wurden {0} E-Mails erfolgreich gelöscht.", "{0} emails were successfully deleted.");
 
     @Nonnull
     private final ITextProvider m_aTP;
@@ -185,6 +195,25 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
     return m_aFailedMailQueue.getFailedMailOfID (sID);
   }
 
+  @Override
+  protected void modifyViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                    @Nonnull final FailedMailData aSelectedObject,
+                                    @Nonnull final IButtonToolbar <?> aToolbar)
+  {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+    aToolbar.addButton (EText.BUTTON_RESEND.getDisplayText (aDisplayLocale),
+                        aWPEC.getSelfHref ()
+                             .add (CHCParam.PARAM_ACTION, ACTION_RESEND)
+                             .add (CHCParam.PARAM_OBJECT, aSelectedObject.getID ()),
+                        EDefaultIcon.YES);
+    aToolbar.addButton (EText.BUTTON_DELETE.getDisplayText (aDisplayLocale),
+                        aWPEC.getSelfHref ()
+                             .add (CHCParam.PARAM_ACTION, ACTION_DELETE)
+                             .add (CHCParam.PARAM_OBJECT, aSelectedObject.getID ()),
+                        EDefaultIcon.DELETE);
+  }
+
   @Nullable
   private static IHCNode _getAsString (@Nonnull final List <? extends IEmailAddress> aList)
   {
@@ -224,26 +253,44 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
       aTable.createItemRow ()
             .setLabel (EText.MSG_EMAIL_TYPE.getDisplayText (aDisplayLocale))
             .setCtrl (aEmailData.getEmailType ().getID ());
+
       aTable.createItemRow ()
             .setLabel (EText.MSG_FROM.getDisplayText (aDisplayLocale))
             .setCtrl (aEmailData.getFrom ().getDisplayName ());
-      aTable.createItemRow ()
-            .setLabel (EText.MSG_REPLY_TO.getDisplayText (aDisplayLocale))
-            .setCtrl (_getAsString (aEmailData.getReplyTo ()));
+
+      final IHCNode aReplyTo = _getAsString (aEmailData.getReplyTo ());
+      if (aReplyTo != null)
+        aTable.createItemRow ().setLabel (EText.MSG_REPLY_TO.getDisplayText (aDisplayLocale)).setCtrl (aReplyTo);
+
       aTable.createItemRow ()
             .setLabel (EText.MSG_TO.getDisplayText (aDisplayLocale))
             .setCtrl (_getAsString (aEmailData.getTo ()));
-      aTable.createItemRow ()
-            .setLabel (EText.MSG_CC.getDisplayText (aDisplayLocale))
-            .setCtrl (_getAsString (aEmailData.getCc ()));
-      aTable.createItemRow ()
-            .setLabel (EText.MSG_BCC.getDisplayText (aDisplayLocale))
-            .setCtrl (_getAsString (aEmailData.getBcc ()));
+
+      final IHCNode aCc = _getAsString (aEmailData.getCc ());
+      if (aCc != null)
+        aTable.createItemRow ().setLabel (EText.MSG_CC.getDisplayText (aDisplayLocale)).setCtrl (aCc);
+
+      final IHCNode aBcc = _getAsString (aEmailData.getBcc ());
+      if (aBcc != null)
+        aTable.createItemRow ().setLabel (EText.MSG_BCC.getDisplayText (aDisplayLocale)).setCtrl (aBcc);
+
       aTable.createItemRow ()
             .setLabel (EText.MSG_SUBJECT.getDisplayText (aDisplayLocale))
             .setCtrl (aEmailData.getSubject ());
-      aTable.createItemRow ().setLabel (EText.MSG_BODY.getDisplayText (aDisplayLocale)).setCtrl (aEmailData.getBody ());
 
+      List <? extends IHCNode> aBody = null;
+      switch (aEmailData.getEmailType ())
+      {
+        case TEXT:
+          aBody = HCUtils.nl2divList (aEmailData.getBody ());
+          break;
+        case HTML:
+          aBody = ContainerHelper.newList (new HCTextNode (aEmailData.getBody ()));
+          break;
+      }
+      aTable.createItemRow ().setLabel (EText.MSG_BODY.getDisplayText (aDisplayLocale)).setCtrl (aBody);
+
+      // Show attachment details
       final IReadonlyEmailAttachmentList aAttachments = aEmailData.getAttachments ();
       if (aAttachments != null && !aAttachments.isEmpty ())
       {
@@ -290,44 +337,70 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
+  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nonnull final FailedMailData aSelectedObject)
+  {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+    // Delete a single failed mail without querying
+    if (m_aFailedMailQueue.remove (aSelectedObject.getID ()) != null)
+    {
+      s_aLogger.info ("Deleted single failed mail with ID " + aSelectedObject.getID () + "!");
+      aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+    }
+    return true;
+  }
+
+  @Override
   protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
                                          @Nullable final FailedMailData aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    if (aWPEC.hasAction (ACTION_RESEND) && aSelectedObject != null)
+    if (aWPEC.hasAction (ACTION_DELETE_ALL))
     {
-      final FailedMailData aFailedMailData = m_aFailedMailQueue.remove (aSelectedObject.getID ());
-      if (aFailedMailData == null)
+      // Delete all failed mails
+      final List <FailedMailData> aFailedMails = m_aFailedMailQueue.removeAll ();
+      if (!aFailedMails.isEmpty ())
       {
-        aNodeList.addChild (getStyler ().createInfoBox (EText.RESENT_NOT_FOUND.getDisplayText (aDisplayLocale)));
-      }
-      else
-      {
-        s_aLogger.info ("Trying to resend single failed mail with ID " + aFailedMailData.getID () + "!");
-        ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+        s_aLogger.info ("Deleted " + aFailedMails.size () + " failed mails!");
+        final String sSuccessMsg = aFailedMails.size () == 1 ? EText.DELETE_ALL_SUCCESS_1.getDisplayText (aDisplayLocale)
+                                                            : EText.DELETE_ALL_SUCCESS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                 Integer.toString (aFailedMails.size ()));
+        aNodeList.addChild (getStyler ().createSuccessBox (sSuccessMsg));
       }
     }
     else
-      if (aWPEC.hasAction (ACTION_RESEND_ALL))
+      if (aWPEC.hasAction (ACTION_RESEND) && aSelectedObject != null)
       {
-        final List <FailedMailData> aFailedMails = m_aFailedMailQueue.removeAll ();
-        if (aFailedMails.isEmpty ())
+        // Resend a single failed mail
+        final FailedMailData aFailedMailData = m_aFailedMailQueue.remove (aSelectedObject.getID ());
+        if (aFailedMailData != null)
         {
-          aNodeList.addChild (getStyler ().createInfoBox (EText.RESENT_ALL_NONE.getDisplayText (aDisplayLocale)));
-        }
-        else
-        {
-          s_aLogger.info ("Trying to resend " + aFailedMails.size () + " failed mails!");
-          for (final FailedMailData aFailedMailData : aFailedMails)
-            ScopedMailAPI.getInstance ()
-                         .queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.RESENT_ALL_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                              Integer.toString (aFailedMails.size ()))));
+          s_aLogger.info ("Trying to resend single failed mail with ID " + aFailedMailData.getID () + "!");
+          ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
+          aNodeList.addChild (getStyler ().createSuccessBox (EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
         }
       }
+      else
+        if (aWPEC.hasAction (ACTION_RESEND_ALL))
+        {
+          // Resend all failed mails
+          final List <FailedMailData> aFailedMails = m_aFailedMailQueue.removeAll ();
+          if (!aFailedMails.isEmpty ())
+          {
+            s_aLogger.info ("Trying to resend " + aFailedMails.size () + " failed mails!");
+            for (final FailedMailData aFailedMailData : aFailedMails)
+              ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (),
+                                                      aFailedMailData.getEmailData ());
+            final String sSuccessMsg = aFailedMails.size () == 1 ? EText.RESENT_ALL_SUCCESS_1.getDisplayText (aDisplayLocale)
+                                                                : EText.RESENT_ALL_SUCCESS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                     Integer.toString (aFailedMails.size ()));
+            aNodeList.addChild (getStyler ().createSuccessBox (sSuccessMsg));
+          }
+        }
     return true;
   }
 
@@ -338,10 +411,17 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
+    final boolean bDisabled = m_aFailedMailQueue.getAllFailedMails ().isEmpty ();
     final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aToolbar.addButton (EText.BUTTON_RESEND_ALL.getDisplayText (aDisplayLocale),
-                        aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_RESEND_ALL));
+                        aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_RESEND_ALL),
+                        EDefaultIcon.YES);
+    ((AbstractHCButton <?>) aToolbar.getLastChild ()).setDisabled (bDisabled);
+    aToolbar.addButton (EText.BUTTON_DELETE_ALL.getDisplayText (aDisplayLocale),
+                        aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL),
+                        EDefaultIcon.DELETE);
+    ((AbstractHCButton <?>) aToolbar.getLastChild ()).setDisabled (bDisabled);
     aNodeList.addChild (aToolbar);
 
     final IHCTable <?> aTable = getStyler ().createTable (new HCCol (70),
