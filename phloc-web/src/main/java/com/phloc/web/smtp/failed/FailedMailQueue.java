@@ -158,6 +158,27 @@ public class FailedMailQueue
     }
   }
 
+  @Nonnegative
+  @MustBeLocked (ELockType.READ)
+  protected int internalGetFailedMailCount ()
+  {
+    return m_aMap.size ();
+  }
+
+  @Nonnegative
+  public int getFailedMailCount ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return internalGetFailedMailCount ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   @MustBeLocked (ELockType.READ)
