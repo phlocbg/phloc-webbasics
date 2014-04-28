@@ -30,6 +30,7 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
@@ -51,6 +52,12 @@ public final class ObjectLockManager extends GlobalSingleton implements ILockMan
   public static ObjectLockManager getInstance ()
   {
     return getGlobalSingleton (ObjectLockManager.class);
+  }
+
+  @Nonnull
+  public DefaultLockManager <String> getDefaultLockMgr ()
+  {
+    return m_aMgr;
   }
 
   @Nullable
@@ -170,5 +177,11 @@ public final class ObjectLockManager extends GlobalSingleton implements ILockMan
   public Set <String> getAllLockedObjectsOfUser (@Nullable final String sUserID)
   {
     return m_aMgr.getAllLockedObjectsOfUser (sUserID);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("mgr", m_aMgr).toString ();
   }
 }

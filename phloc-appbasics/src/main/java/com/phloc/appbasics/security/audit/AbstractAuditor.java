@@ -38,16 +38,16 @@ import com.phloc.json2.impl.JsonObject;
 @Immutable
 public abstract class AbstractAuditor implements IAuditor
 {
-  private ICurrentUserIDProvider m_aUserIDProvider;
+  private ICurrentUserIDProvider m_aCurrentUserIDProvider;
 
-  public AbstractAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
+  public AbstractAuditor (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
-    setUserIDProvider (aUserIDProvider);
+    setCurrentUserIDProvider (aCurrentUserIDProvider);
   }
 
-  public final void setUserIDProvider (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
+  public final void setCurrentUserIDProvider (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
-    m_aUserIDProvider = ValueEnforcer.notNull (aUserIDProvider, "UserIDProvider");
+    m_aCurrentUserIDProvider = ValueEnforcer.notNull (aCurrentUserIDProvider, "CurrentUserIDProvider");
   }
 
   /**
@@ -72,7 +72,7 @@ public abstract class AbstractAuditor implements IAuditor
                                  @Nonnull final ESuccess eSuccess,
                                  @Nonnull final String sAction)
   {
-    final AuditItem aAuditItem = new AuditItem (m_aUserIDProvider.getCurrentUserID (), eType, eSuccess, sAction);
+    final AuditItem aAuditItem = new AuditItem (m_aCurrentUserIDProvider.getCurrentUserID (), eType, eSuccess, sAction);
     handleAuditItem (aAuditItem);
   }
 

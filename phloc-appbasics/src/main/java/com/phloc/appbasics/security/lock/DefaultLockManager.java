@@ -28,6 +28,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.joda.time.DateTime;
@@ -59,14 +60,42 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultLockManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final ICurrentUserIDProvider m_aCurrentUserIDProvider;
+  @GuardedBy ("m_aRWLock")
+  private ICurrentUserIDProvider m_aCurrentUserIDProvider;
 
   // Key: lockedObjectID, value: lock-info
   private final Map <IDTYPE, ILockInfo> m_aLockedObjs = new HashMap <IDTYPE, ILockInfo> ();
 
   public DefaultLockManager (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
-    m_aCurrentUserIDProvider = ValueEnforcer.notNull (aCurrentUserIDProvider, "CurrentUserIDProvider");
+    setCurrentUserIDProvider (aCurrentUserIDProvider);
+  }
+
+  public final void setCurrentUserIDProvider (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aCurrentUserIDProvider = ValueEnforcer.notNull (aCurrentUserIDProvider, "CurrentUserIDProvider");
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  private String _getCurrentUserID ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aCurrentUserIDProvider.getCurrentUserID ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nullable
@@ -102,7 +131,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   {
     ValueEnforcer.notNull (aObjID, "ObjectID");
 
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return lockObject (aObjID, sCurrentUserID);
   }
 
@@ -181,7 +210,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   {
     ValueEnforcer.notNull (aObjID, "ObjectID");
 
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return lockObjectAndUnlockAllOthers (aObjID, sCurrentUserID);
   }
 
@@ -198,7 +227,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   @Nonnull
   public final EChange unlockObject (@Nonnull final IDTYPE aObjID)
   {
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     if (StringHelper.hasNoText (sCurrentUserID))
       return EChange.UNCHANGED;
 
@@ -262,7 +291,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   @ReturnsMutableCopy
   public final List <IDTYPE> unlockAllObjectsOfCurrentUserExcept (@Nullable final Set <IDTYPE> aObjectsToKeepLocked)
   {
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return unlockAllObjectsOfUserExcept (sCurrentUserID, aObjectsToKeepLocked);
   }
 
@@ -339,7 +368,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
       // Object is not locked at all
       return false;
     }
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return sLockUserID.equals (sCurrentUserID);
   }
 
@@ -351,7 +380,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
       // Object is not locked at all
       return false;
     }
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return !sLockUser.equals (sCurrentUserID);
   }
 
@@ -379,7 +408,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   @ReturnsMutableCopy
   public Set <IDTYPE> getAllLockedObjectsOfCurrentUser ()
   {
-    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = _getCurrentUserID ();
     return getAllLockedObjectsOfUser (sCurrentUserID);
   }
 

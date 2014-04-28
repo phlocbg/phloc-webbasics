@@ -27,6 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
@@ -83,5 +84,11 @@ public final class GlobalLocaleManager extends GlobalSingleton implements ILocal
   public boolean isSupportedLocale (@Nullable final Locale aLocale)
   {
     return m_aProxy.isSupportedLocale (aLocale);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("proxy", m_aProxy).toString ();
   }
 }

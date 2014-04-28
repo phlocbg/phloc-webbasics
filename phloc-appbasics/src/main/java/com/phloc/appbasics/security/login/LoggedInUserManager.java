@@ -742,8 +742,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("loggedInUsers", m_aLoggedInUsers)
-                            .append ("userLoginCallbacks", m_aUserLoginCallbacks)
-                            .append ("userLogoutCallbacks", m_aUserLogoutCallbacks)
+                            .appendIfNotEmpty ("userLoginCallbacks", m_aUserLoginCallbacks)
+                            .appendIfNotEmpty ("userLogoutCallbacks", m_aUserLogoutCallbacks)
                             .toString ();
   }
 }

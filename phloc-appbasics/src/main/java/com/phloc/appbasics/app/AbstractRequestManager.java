@@ -29,6 +29,7 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.scopes.domain.ISessionScope;
@@ -46,9 +47,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public abstract class AbstractRequestManager implements IRequestManager
 {
-  @Nonnull
   private String m_sRequestParamMenuItem = DEFAULT_REQUEST_PARAMETER_MENUITEM;
-  @Nonnull
   private String m_sRequestParamNameLocale = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
 
   public AbstractRequestManager ()
@@ -203,5 +202,13 @@ public abstract class AbstractRequestManager implements IRequestManager
   public String getRequestDisplayLanguage ()
   {
     return getRequestDisplayLocale ().getLanguage ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("requestParamMenuItem", m_sRequestParamMenuItem)
+                                       .append ("requestParamNameLocale", m_sRequestParamNameLocale)
+                                       .toString ();
   }
 }

@@ -32,6 +32,7 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.singleton.GlobalSingleton;
@@ -182,5 +183,11 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   public String getRequestDisplayLanguage ()
   {
     return m_aRM.getRequestDisplayLanguage ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("rm", m_aRM).toString ();
   }
 }
