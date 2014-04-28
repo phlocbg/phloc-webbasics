@@ -43,9 +43,11 @@ import com.phloc.masterdata.currency.CurrencyUtils;
 import com.phloc.masterdata.currency.ECurrency;
 import com.phloc.masterdata.locale.ContinentUtils;
 import com.phloc.masterdata.locale.EContinent;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
+import com.phloc.webctrls.famfam.EFamFamCSSPathProvider;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
@@ -174,5 +176,7 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
                .setComparator (new ComparatorTableInteger (aDisplayLocale));
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
+
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EFamFamCSSPathProvider.FLAGS);
   }
 }

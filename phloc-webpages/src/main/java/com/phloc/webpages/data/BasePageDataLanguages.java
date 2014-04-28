@@ -43,8 +43,10 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.famfam.EFamFamCSSPathProvider;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
@@ -150,5 +152,7 @@ public class BasePageDataLanguages extends AbstractWebPageExt
     aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
+
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EFamFamCSSPathProvider.FLAGS);
   }
 }
