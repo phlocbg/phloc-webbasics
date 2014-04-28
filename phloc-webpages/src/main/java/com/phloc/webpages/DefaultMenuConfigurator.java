@@ -29,13 +29,16 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
+import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
+import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webpages.data.BasePageDataCountries;
 import com.phloc.webpages.data.BasePageDataCurrencies;
 import com.phloc.webpages.data.BasePageDataLanguages;
 import com.phloc.webpages.data.BasePageDataTimeZones;
 import com.phloc.webpages.monitoring.BasePageAudit;
+import com.phloc.webpages.monitoring.BasePageFailedMails;
 import com.phloc.webpages.monitoring.BasePageLoginInfo;
 import com.phloc.webpages.monitoring.BasePageScopes;
 import com.phloc.webpages.monitoring.BasePageSessions;
@@ -61,6 +64,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_SECURITY_ROLE = "admin_security_role";
   public static final String MENU_ADMIN_MONITORING = "admin_monitoring";
   public static final String MENU_ADMIN_MONITORING_AUDIT = "admin_monitoring_audit";
+  public static final String MENU_ADMIN_MONITORING_FAILEDMAILS = "admin_monitoring_failedmails";
   public static final String MENU_ADMIN_MONITORING_LOGININFO = "admin_monitoring_logininfo";
   public static final String MENU_ADMIN_MONITORING_SCOPES = "admin_monitoring_scopes";
   public static final String MENU_ADMIN_MONITORING_SESSIONS = "admin_monitoring_sessions";
@@ -90,12 +94,29 @@ public final class DefaultMenuConfigurator
                                                   @Nullable final IFilter <IMenuObject> aDisplayFilter,
                                                   @Nonnull final IAuditManager aAuditManager)
   {
+    return addMonitoringItems (aMenuTree,
+                               aParent,
+                               aDisplayFilter,
+                               aAuditManager,
+                               MetaSystemManager.getFailedMailQueue ());
+  }
+
+  @Nonnull
+  public static IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
+                                                  @Nonnull final IMenuItem aParent,
+                                                  @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                  @Nonnull final IAuditManager aAuditManager,
+                                                  @Nonnull final FailedMailQueue aFailedMailQueue)
+  {
     final IMenuItemPage aAdminMonitoring = aMenuTree.createItem (aParent,
                                                                  new PageShowChildren (MENU_ADMIN_MONITORING,
                                                                                        EWebPageText.PAGE_NAME_MONITORING.getAsMLT (),
                                                                                        aMenuTree))
                                                     .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring, new BasePageAudit (MENU_ADMIN_MONITORING_AUDIT, aAuditManager))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminMonitoring,
+                          new BasePageFailedMails (MENU_ADMIN_MONITORING_FAILEDMAILS, aFailedMailQueue))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring, new BasePageLoginInfo (MENU_ADMIN_MONITORING_LOGININFO))
              .setDisplayFilter (aDisplayFilter);

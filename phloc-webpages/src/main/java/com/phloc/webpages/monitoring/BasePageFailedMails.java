@@ -1,0 +1,276 @@
+/**
+ * Copyright (C) 2006-2014 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.webpages.monitoring;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.name.IHasDisplayTextWithArgs;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
+import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.impl.TextProvider;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.IHCTable;
+import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCForm;
+import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.validation.error.FormErrors;
+import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.failed.FailedMailData;
+import com.phloc.web.smtp.failed.FailedMailQueue;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
+import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
+import com.phloc.webpages.AbstractWebPageFormExt;
+import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.smtp.ScopedMailAPI;
+
+/**
+ * Show all failed mails.
+ * 
+ * @author Philip Helger
+ */
+public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
+{
+  @Translatable
+  protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
+  {
+    BUTTON_REFRESH ("Aktualisieren", "Refresh"),
+    BUTTON_RESEND_ALL ("Alle erneut versenden", "Resend all"),
+    MSG_ID ("ID", "ID"),
+    MSG_ERROR_DT ("Fehler-Datum", "Error date"),
+    MSG_SMTP_SETTINGS ("SMTP-Einstellungen", "SMTP settings"),
+    MSG_SUBJECT ("Betreff", "Subject"),
+    MSG_SENDING_DT ("Sendedatum", "Sending date"),
+    MSG_FROM ("Von", "From"),
+    MSG_TO ("An", "To"),
+    MSG_CC ("Cc", "Cc"),
+    MSG_BCC ("Bcc", "Bcc"),
+    MSG_ERROR ("Fehlermeldung", "Error message"),
+    RESENT_NONE ("Es wurden keine E-Mails zum erneuten Versand gefunden", "Found no failed mails for resending"),
+    RESENT_SUCCESS ("Es wurden {0} E-Mail(s) erneut versendet.", "{0} emails were scheduled for resending");
+
+    @Nonnull
+    private final ITextProvider m_aTP;
+
+    private EText (@Nonnull final String sDE, @Nonnull final String sEN)
+    {
+      m_aTP = TextProvider.create_DE_EN (sDE, sEN);
+    }
+
+    @Nullable
+    public String getDisplayText (@Nonnull final Locale aContentLocale)
+    {
+      return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
+    }
+
+    @Nullable
+    public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
+    {
+      return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
+    }
+  }
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (BasePageFailedMails.class);
+  private static final String ACTION_RESEND_ALL = "resend-all";
+
+  private final FailedMailQueue m_aFailedMailQueue;
+
+  public BasePageFailedMails (@Nonnull @Nonempty final String sID, @Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    super (sID, EWebPageText.PAGE_NAME_MONITORING_FAILED_MAILS.getAsMLT ());
+    m_aFailedMailQueue = ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
+  }
+
+  public BasePageFailedMails (@Nonnull @Nonempty final String sID,
+                              @Nonnull final String sName,
+                              @Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    super (sID, sName);
+    m_aFailedMailQueue = ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
+  }
+
+  public BasePageFailedMails (@Nonnull @Nonempty final String sID,
+                              @Nonnull final String sName,
+                              @Nullable final String sDescription,
+                              @Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    super (sID, sName, sDescription);
+    m_aFailedMailQueue = ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
+  }
+
+  public BasePageFailedMails (@Nonnull @Nonempty final String sID,
+                              @Nonnull final IReadonlyMultiLingualText aName,
+                              @Nullable final IReadonlyMultiLingualText aDescription,
+                              @Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    super (sID, aName, aDescription);
+    m_aFailedMailQueue = ValueEnforcer.notNull (aFailedMailQueue, "FailedMailQueue");
+  }
+
+  @Override
+  protected boolean isEditAllowed (@Nullable final FailedMailData aSelectedObject)
+  {
+    return false;
+  }
+
+  @Override
+  @Nullable
+  protected FailedMailData getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  {
+    return m_aFailedMailQueue.getFailedMailOfID (sID);
+  }
+
+  @Override
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                     @Nonnull final FailedMailData aSelectedObject)
+  {}
+
+  @Override
+  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+                                                 @Nullable final FailedMailData aSelectedObject,
+                                                 @Nonnull final FormErrors aFormErrors,
+                                                 final boolean bEdit)
+  {
+    throw new UnsupportedOperationException ();
+  }
+
+  @Override
+  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+                                @Nullable final FailedMailData aSelectedObject,
+                                @Nonnull final HCForm aForm,
+                                final boolean bEdit,
+                                final boolean bCopy,
+                                @Nonnull final FormErrors aFormErrors)
+  {
+    throw new UnsupportedOperationException ();
+  }
+
+  @Override
+  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nullable final FailedMailData aSelectedObject)
+  {
+    if (aWPEC.hasAction (ACTION_RESEND_ALL))
+    {
+      final HCNodeList aNodeList = aWPEC.getNodeList ();
+      final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+      final List <FailedMailData> aFailedMails = m_aFailedMailQueue.removeAll ();
+      if (aFailedMails.isEmpty ())
+      {
+        aNodeList.addChild (getStyler ().createInfoBox (EText.RESENT_NONE.getDisplayText (aDisplayLocale)));
+      }
+      else
+      {
+        s_aLogger.info ("Trying to resend " + aFailedMails.size () + " failed mails!");
+        for (final FailedMailData aFailedMailData : aFailedMails)
+          ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                        Integer.toString (aFailedMails.size ()))));
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+    // Refresh button
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
+    aToolbar.addButton (EText.BUTTON_RESEND_ALL.getDisplayText (aDisplayLocale),
+                        aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_RESEND_ALL));
+    aNodeList.addChild (aToolbar);
+
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (70),
+                                                          new HCCol (120),
+                                                          new HCCol (120),
+                                                          HCCol.star (),
+                                                          HCCol.star ()).setID (getID ());
+    aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
+                                     EText.MSG_ERROR_DT.getDisplayText (aDisplayLocale),
+                                     EText.MSG_SMTP_SETTINGS.getDisplayText (aDisplayLocale),
+                                     EText.MSG_SUBJECT.getDisplayText (aDisplayLocale),
+                                     EText.MSG_ERROR.getDisplayText (aDisplayLocale));
+
+    for (final FailedMailData aItem : m_aFailedMailQueue.getAllFailedMails ())
+    {
+      final ISMTPSettings aSMTPSettings = aItem.getSMTPSettings ();
+      final ISimpleURL aViewURL = createViewURL (aItem);
+
+      final HCRow aRow = aTable.addBodyRow ();
+      aRow.addCell (new HCA (aViewURL).addChild (aItem.getID ()));
+      aRow.addCell (PDTToString.getAsString (aItem.getErrorDateTime (), aDisplayLocale));
+
+      String sSMTP = aSMTPSettings.getHostName () + ":" + aSMTPSettings.getPort ();
+      if (StringHelper.hasText (aSMTPSettings.getUserName ()))
+        sSMTP = aSMTPSettings.getUserName () + "@" + sSMTP;
+      aRow.addCell (sSMTP);
+      aRow.addCell (aItem.getEmailData ().getSubject ());
+      aRow.addCell (aItem.getError ().getMessage ());
+    }
+
+    aNodeList.addChild (aTable);
+
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    aDataTables.getOrCreateColumnOfTarget (1)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableDateTime (aDisplayLocale));
+    aDataTables.setInitialSorting (0, ESortOrder.DESCENDING);
+    aNodeList.addChild (aDataTables);
+  }
+}

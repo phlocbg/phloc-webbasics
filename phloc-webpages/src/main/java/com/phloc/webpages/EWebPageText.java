@@ -47,6 +47,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   LOCKING_OTHER_USER ("einem anderen Benutzer", "another user"),
   PAGE_NAME_MONITORING ("Überwachung", "Monitoring"),
   PAGE_NAME_MONITORING_AUDIT ("Audit-Einträge", "Audit items"),
+  PAGE_NAME_MONITORING_FAILED_MAILS ("Ungesendete E-Mails", "Failed mails"),
   PAGE_NAME_MONITORING_LOGIN_INFO ("Angemeldete Benutzer", "Logged in users"),
   PAGE_NAME_MONITORING_SCOPES ("Kontexte", "Scopes"),
   PAGE_NAME_MONITORING_SESSIONS ("Sessions", "Sessions"),

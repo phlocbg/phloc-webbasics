@@ -59,6 +59,7 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
@@ -75,6 +76,7 @@ public class BasePageAudit extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
+    BUTTON_REFRESH ("Aktualisieren", "Refresh"),
     MSG_DATE ("Datum", "Date"),
     MSG_USER ("Benutzer", "User"),
     MSG_TYPE ("Typ", "Type"),
@@ -142,7 +144,13 @@ public class BasePageAudit extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (180),
+
+    // Refresh button
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
+    aNodeList.addChild (aToolbar);
+
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (140),
                                                           new HCCol (120),
                                                           new HCCol (60),
                                                           new HCCol (60),
@@ -162,7 +170,6 @@ public class BasePageAudit extends AbstractWebPageExt
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
       aRow.addCell (getActionString (aItem));
     }
-
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);

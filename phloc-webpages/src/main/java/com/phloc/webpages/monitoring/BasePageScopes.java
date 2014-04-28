@@ -41,6 +41,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
@@ -58,8 +59,9 @@ public class BasePageScopes extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
+    BUTTON_REFRESH ("Aktualisieren", "Refresh"),
     MSG_GLOBAL_SCOPE ("Globaler Kontext ''{0}''", "Global scope ''{0}''"),
-    MSG_APPLICATION_SCOPE ("Kontext ''{0}''", "App scope ''{0}''"),
+    MSG_APPLICATION_SCOPE ("Application Kontext ''{0}''", "Application scope ''{0}''"),
     MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
     MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
     MSG_SCOPE_IN_DESTRUCTION ("Kontext in Zerstörung?", "Scope in destruction?"),
@@ -205,6 +207,11 @@ public class BasePageScopes extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final IGlobalWebScope aGlobalScope = WebScopeManager.getGlobalScope ();
+
+    // Refresh button
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
+    aNodeList.addChild (aToolbar);
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
     // Global scope

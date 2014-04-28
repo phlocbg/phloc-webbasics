@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
@@ -33,18 +34,22 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
@@ -60,8 +65,11 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
+    BUTTON_REFRESH ("Aktualisieren", "Refresh"),
+    MSG_SESSION ("Session Kontext", "Session scope"),
+    MSG_SESSION_APPLICATION_SCOPE ("Session Application Kontext ''{0}''", "Session app scope ''{0}''"),
     MSG_ID ("ID", "ID"),
-    MSG_SCOPE_ID ("Session ID", "Session ID"),
+    MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
     MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
     MSG_SCOPE_IN_DESTRUCTION ("Kontext in Zerstörung?", "Scope in destruction?"),
     MSG_SCOPE_DESTROYED ("Kontext zerstört?", "Scope destroyed?"),
@@ -127,14 +135,12 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     return false;
   }
 
-  @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final ISessionScope aScope)
+  private IHCNode _getSessionScopeInfo (@Nonnull final ISessionScope aScope, @Nonnull final Locale aDisplayLocale)
   {
-    final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final HCNodeList ret = new HCNodeList ();
 
-    final IHCTableFormView <?> aTableScope = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (220),
-                                                                                                            HCCol.star ()));
+    final IHCTableFormView <?> aTableScope = ret.addAndReturnChild (getStyler ().createTableFormView (new HCCol (220),
+                                                                                                      HCCol.star ()));
     aTableScope.createItemRow ()
                .setLabel (EText.MSG_SCOPE_ID.getDisplayText (aDisplayLocale))
                .setCtrl (aScope.getID ());
@@ -156,7 +162,49 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
 
     // All scope attributes
     final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
-                                                         .setID ("scope-" + aScope.getID ());
+                                                         .setID ("sessionscope-" + aScope.getID ());
+    aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_VALUE.getDisplayText (aDisplayLocale));
+    for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
+      aTableAttrs.addBodyRow ()
+                 .addCell (aEntry.getKey ())
+                 .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
+    ret.addChild (aTableAttrs);
+
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
+    ret.addChild (aDataTables);
+
+    return ret;
+  }
+
+  @Nonnull
+  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final ISessionApplicationScope aScope,
+                                                   @Nonnull final Locale aDisplayLocale)
+  {
+    final HCNodeList aNodeList = new HCNodeList ();
+
+    final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_ID.getDisplayText (aDisplayLocale))
+               .setCtrl (aScope.getID ());
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_VALID.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isValid (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_IN_DESTRUCTION.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isInDestruction (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_DESTROYED.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isDestroyed (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_ATTRS.getDisplayText (aDisplayLocale))
+               .setCtrl (Integer.toString (aScope.getAttributeCount ()));
+    aNodeList.addChild (aTableScope);
+
+    // All scope attributes
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
+                                                         .setID ("sessionappscope" + aScope.getID ());
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
@@ -168,6 +216,29 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
+
+    return aNodeList;
+  }
+
+  @Override
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final ISessionScope aScope)
+  {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+    // Refresh button
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aScope));
+    aNodeList.addChild (aToolbar);
+
+    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale), _getSessionScopeInfo (aScope, aDisplayLocale));
+    for (final ISessionApplicationScope aSessionAppScope : ContainerHelper.getSortedByKey (aScope.getAllSessionApplicationScopes ())
+                                                                          .values ())
+      aTabBox.addTab (EText.MSG_SESSION_APPLICATION_SCOPES.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                   aSessionAppScope.getID ()),
+                      _getSessionApplicationScopeInfo (aSessionAppScope, aDisplayLocale));
+    aNodeList.addChild (aTabBox);
   }
 
   @Override
@@ -195,6 +266,11 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+
+    // Refresh button
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
+    aNodeList.addChild (aToolbar);
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), createActionCol (1)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),

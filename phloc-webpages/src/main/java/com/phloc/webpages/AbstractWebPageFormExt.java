@@ -37,7 +37,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.mgr.MetaSystemManager;
 
 /**
- * Abstract base class for a web page that supports locking etc..
+ * Abstract base class for a web page that supports locking etc.
  * 
  * @author Philip Helger
  * @param <DATATYPE>

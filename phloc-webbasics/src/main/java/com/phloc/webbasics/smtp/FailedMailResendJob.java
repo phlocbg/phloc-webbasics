@@ -31,8 +31,8 @@ import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.schedule.job.AbstractScopeAwareJob;
 import com.phloc.schedule.quartz.GlobalQuartzScheduler;
 import com.phloc.web.smtp.failed.FailedMailData;
@@ -53,8 +53,7 @@ public class FailedMailResendJob extends AbstractScopeAwareJob
 
   protected static void setApplicationScopeID (@Nonnull @Nonempty final String sApplicationID)
   {
-    if (StringHelper.hasNoText (sApplicationID))
-      throw new IllegalStateException ("No applicationID present!");
+    ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
     if (s_sAppID != null)
       throw new IllegalStateException ("This job is already scheduled!");
 
@@ -81,8 +80,8 @@ public class FailedMailResendJob extends AbstractScopeAwareJob
 
   public static void scheduleMe (@Nonnull @Nonempty final String sApplicationID, @Nonnegative final int nPollingMinutes)
   {
-    if (nPollingMinutes <= 0)
-      throw new IllegalArgumentException ("Polling minutes must be > 0!");
+    ValueEnforcer.isGT0 (nPollingMinutes, "PollingMinutes");
+
     setApplicationScopeID (sApplicationID);
     GlobalQuartzScheduler.getInstance ()
                          .scheduleJob (FailedMailResendJob.class.getName (),
