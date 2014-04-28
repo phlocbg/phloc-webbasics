@@ -301,7 +301,8 @@ public final class MailAPI
         if (bSendVendorOnlyMails)
         {
           // Add special debug prefix
-          aEmailData.setSubject (DEBUG_SUBJECT_PREFIX + aEmailData.getSubject ());
+          if (!StringHelper.startsWith (aEmailData.getSubject (), DEBUG_SUBJECT_PREFIX))
+            aEmailData.setSubject (DEBUG_SUBJECT_PREFIX + aEmailData.getSubject ());
           s_aLogger.info ("Sending only-to-vendor mail in debug version:\n" + aSMTPSettings + "\n" + aEmailData);
         }
 
