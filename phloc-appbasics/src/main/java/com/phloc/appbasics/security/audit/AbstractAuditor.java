@@ -38,9 +38,14 @@ import com.phloc.json2.impl.JsonObject;
 @Immutable
 public abstract class AbstractAuditor implements IAuditor
 {
-  private final ICurrentUserIDProvider m_aUserIDProvider;
+  private ICurrentUserIDProvider m_aUserIDProvider;
 
   public AbstractAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
+  {
+    setUserIDProvider (aUserIDProvider);
+  }
+
+  public final void setUserIDProvider (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
   {
     m_aUserIDProvider = ValueEnforcer.notNull (aUserIDProvider, "UserIDProvider");
   }
