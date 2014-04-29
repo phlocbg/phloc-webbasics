@@ -41,14 +41,23 @@ function serverLogInit(uri,key,debugMode,setWindowOnerror) {
 }
 
 /**
+ * @returns <code>true</code> if server logging is enabled, <code>false</code> if not.
+ */
+function serverLogEnabled(){
+  return g_sServerLogURI && g_sServerLogKey;
+}
+
+/**
  * Do a server log call.
  * @param severity Message severity. Number or string.
  * @param message Main message. Should be a string.
  */
 function serverLog(severity,message){
-  if (g_sServerLogURI && g_sServerLogKey) {
+  if (serverLogEnabled()) {
     var img = new Image ();
-    img.src = g_sServerLogURI + "?severity=" + encodeURIComponent(severity)
+    // Check if the server log URI already contains a "?"
+    var firstSep = g_sServerLogURI.indexOf("?") >=0 ? "&" : "?";
+    img.src = g_sServerLogURI + firstSep + "severity=" + encodeURIComponent(severity)
                               + "&message=" + encodeURIComponent(message)
                               + "&key=" + encodeURIComponent(g_sServerLogKey);
   }
@@ -70,10 +79,13 @@ function addExceptionHandlers(object) {
     var name, method;
     for (name in object) {
       method = object[name];
+      // Check if it is a function (or method)
       if (typeof method == "function") {
+        // Replace function with a wrapper function :)
         object[name] = function(name, method) {
           return function() {
             try {
+              // Call original method
               return method.apply(this, arguments);
             }
             catch (ex) {
@@ -83,6 +95,7 @@ function addExceptionHandlers(object) {
         }(name, method);
       }
     }
+    // Remember that exception handlers were already added
     object._exceptionHandlersAdded = true;    
   }
 }
