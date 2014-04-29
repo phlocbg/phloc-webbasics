@@ -25,13 +25,13 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroContainer;
 import com.phloc.commons.microdom.utils.MicroWalker;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.parser.XHTMLParser;
@@ -48,8 +48,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 public abstract class AbstractPageViewExternal extends AbstractWebPageExt
 {
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  @Nonnull
-  protected final IReadableResource m_aResource;
+
   @GuardedBy ("m_aRWLock")
   private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
 
@@ -73,30 +72,14 @@ public abstract class AbstractPageViewExternal extends AbstractWebPageExt
     return ret;
   }
 
-  public AbstractPageViewExternal (@Nonnull @Nonempty final String sID,
-                                   @Nonnull final String sName,
-                                   @Nonnull final IReadableResource aResource)
+  public AbstractPageViewExternal (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
-    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
   }
 
-  public AbstractPageViewExternal (@Nonnull @Nonempty final String sID,
-                                   @Nonnull final IReadonlyMultiLingualText aName,
-                                   @Nonnull final IReadableResource aResource)
+  public AbstractPageViewExternal (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
-    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
-  }
-
-  /**
-   * @return The resource to be read as specified in the constructor. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  public final IReadableResource getResource ()
-  {
-    return m_aResource;
   }
 
   /**
@@ -149,4 +132,10 @@ public abstract class AbstractPageViewExternal extends AbstractWebPageExt
    * @see #setReadEveryTime(boolean)
    */
   public abstract void updateFromResource ();
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("readEveryTime", m_bReadEveryTime).toString ();
+  }
 }

@@ -21,31 +21,35 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.microdom.IMicroContainer;
 import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.impl.HCDOMWrapper;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
  * Renders a page with HTML code that is provided from an external resource
- * (e.g. for static pages)
- *
+ * (e.g. for static pages). The content of the page is language independent.
+ * 
  * @author Philip Helger
  */
 @ThreadSafe
 public class PageViewExternal extends AbstractPageViewExternal
 {
+  protected final IReadableResource m_aResource;
   @GuardedBy ("m_aRWLock")
   private IMicroContainer m_aParsedContent;
 
   /**
    * This callback is called after the HTML content was successfully read
-   *
+   * 
    * @param aCont
    *        The micro container containing all HTML elements contained in the
    *        resource specified in the constructor. Never <code>null</code>.
@@ -57,6 +61,7 @@ public class PageViewExternal extends AbstractPageViewExternal
   @Nonnull
   private IMicroContainer _readFromResource (@Nonnull final IReadableResource aResource)
   {
+    // Main read
     final IMicroContainer ret = readHTMLPageFragment (aResource);
 
     // Perform callback
@@ -68,8 +73,9 @@ public class PageViewExternal extends AbstractPageViewExternal
                            @Nonnull final String sName,
                            @Nonnull final IReadableResource aResource)
   {
-    super (sID, sName, aResource);
+    super (sID, sName);
 
+    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
     // Read once anyway to check if the resource is readable
     m_aParsedContent = _readFromResource (aResource);
   }
@@ -78,10 +84,21 @@ public class PageViewExternal extends AbstractPageViewExternal
                            @Nonnull final IReadonlyMultiLingualText aName,
                            @Nonnull final IReadableResource aResource)
   {
-    super (sID, aName, aResource);
+    super (sID, aName);
 
+    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
     // Read once anyway to check if the resource is readable
     m_aParsedContent = _readFromResource (aResource);
+  }
+
+  /**
+   * @return The resource to be read as specified in the constructor. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public final IReadableResource getResource ()
+  {
+    return m_aResource;
   }
 
   /**
@@ -105,7 +122,7 @@ public class PageViewExternal extends AbstractPageViewExternal
   /**
    * Re-read the content from the underlying resource. This only makes sense, if
    * {@link #isReadEveryTime()} is <code>false</code>.
-   *
+   * 
    * @see #isReadEveryTime()
    * @see #setReadEveryTime(boolean)
    */
@@ -126,19 +143,29 @@ public class PageViewExternal extends AbstractPageViewExternal
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
     final boolean bReadFromResource = isReadEveryTime ();
 
-    final IMicroNode aElement;
+    final IMicroNode aNode;
     m_aRWLock.readLock ().lock ();
     try
     {
-      aElement = bReadFromResource ? _readFromResource (m_aResource) : m_aParsedContent;
+      aNode = bReadFromResource ? _readFromResource (m_aResource) : m_aParsedContent;
     }
     finally
     {
       m_aRWLock.readLock ().unlock ();
     }
 
-    aWPEC.getNodeList ().addChild (new HCDOMWrapper (aElement));
+    aNodeList.addChild (new HCDOMWrapper (aNode));
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("resource", m_aResource)
+                            .append ("parsedContent", m_aParsedContent)
+                            .toString ();
   }
 }

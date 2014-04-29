@@ -26,8 +26,6 @@ import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ISimpleMultiLingualText;
-import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 
@@ -73,8 +71,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_DATA_TIMEZONES ("Zeitzonen", "Time zones"),
   PAGE_NAME_CHANGE_PASSWORD ("Passwort ändern", "Change password");
 
-  @Nonnull
-  private final ISimpleMultiLingualText m_aTP;
+  private final TextProvider m_aTP;
 
   private EWebPageText (@Nonnull final String sDE, @Nonnull final String sEN)
   {
@@ -84,7 +81,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   @Nonnull
   public IReadonlyMultiLingualText getAsMLT ()
   {
-    return new ReadonlyMultiLingualText (m_aTP);
+    return m_aTP;
   }
 
   @Nullable
