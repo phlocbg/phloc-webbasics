@@ -67,6 +67,26 @@
       $(this).prop('checked', bChecked);
     });
   };
+  
+  // Source: http://stackoverflow.com/questions/2830542/prevent-double-submission-of-forms-in-jquery
+  // jQuery plugin to prevent double submission of forms
+  $.fn.preventDoubleSubmission = function() {
+    $(this).on('submit',function(e){
+      var $form = $(this);
+      if ($form.data('submitted') === true) {
+        // Previously submitted - don't submit again
+        e.preventDefault();
+      } else {
+        // Mark it so that the next submit can be ignored
+        $form.data('submitted', true);
+        // Disable all reset and submit buttons within the form
+        $(':reset,:submit', $form).attr('disabled', 'disabled');
+      }
+    });
+
+    // Keep chainability
+    return this;
+  };
 })(jQuery);
 
 // Set a default AJAX error handler
