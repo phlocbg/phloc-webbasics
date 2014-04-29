@@ -30,6 +30,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorString;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -65,6 +66,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
     MSG_PROPERTIES ("Request-Eigenschaften", "Request properties"),
     MSG_ATTRIBUTES ("Request-Attribute", "Request attributes"),
     MSG_NAME ("Name", "Name"),
+    MSG_TYPE ("Typ", "Type"),
     MSG_VALUE ("Wert", "Value"),
     MSG_DETAILS ("Details", "Details");
 
@@ -188,15 +190,21 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // Request attributes
     {
-      final IHCTableFormView <?> aTable = getStyler ().createTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+      final IHCTableFormView <?> aTable = getStyler ().createTableFormView (new HCCol (nFirstColWidth),
+                                                                            HCCol.star (),
+                                                                            HCCol.star ());
       aTable.setID (getID () + "$attrs");
       aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                       EText.MSG_TYPE.getDisplayText (aDisplayLocale),
                                        EText.MSG_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aRequestScope.getAllAttributes (),
                                                                                      new ComparatorString (aDisplayLocale))
                                                                     .entrySet ())
       {
-        aTable.addBodyRow ().addCell (aEntry.getKey ()).addCell (String.valueOf (aEntry.getValue ()));
+        aTable.addBodyRow ()
+              .addCell (aEntry.getKey ())
+              .addCell (CGStringHelper.getClassLocalName (aEntry.getValue ()))
+              .addCell (String.valueOf (aEntry.getValue ()));
       }
       aTabBox.addTab (EText.MSG_ATTRIBUTES.getDisplayText (aDisplayLocale), aTable);
     }
