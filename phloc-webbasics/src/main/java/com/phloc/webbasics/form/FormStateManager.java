@@ -20,14 +20,19 @@ package com.phloc.webbasics.form;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
@@ -35,11 +40,15 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.singleton.SessionWebSingleton;
 
+@ThreadSafe
 public class FormStateManager extends SessionWebSingleton
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (FormStateManager.class);
 
+  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
   private final Map <String, FormState> m_aMap = new HashMap <String, FormState> ();
+  @GuardedBy ("m_aRWLock")
   private boolean m_bAtLeastOnceAFormState = false;
 
   @Deprecated
@@ -55,10 +64,19 @@ public class FormStateManager extends SessionWebSingleton
 
   public void saveFormState (@Nonnull final FormState aFormState)
   {
-    if (aFormState == null)
-      throw new NullPointerException ("formState");
-    m_aMap.put (aFormState.getFlowID (), aFormState);
-    m_bAtLeastOnceAFormState = true;
+    ValueEnforcer.notNull (aFormState, "FormState");
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aMap.put (aFormState.getFlowID (), aFormState);
+      m_bAtLeastOnceAFormState = true;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+
     if (GlobalDebug.isDebugMode ())
       s_aLogger.info ("Saved form state: " + aFormState.toString ());
     else
@@ -67,39 +85,87 @@ public class FormStateManager extends SessionWebSingleton
 
   public boolean containedOnceAFormState ()
   {
-    return m_bAtLeastOnceAFormState;
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_bAtLeastOnceAFormState;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   public boolean containsAnySavedFormState ()
   {
-    return !m_aMap.isEmpty ();
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return !m_aMap.isEmpty ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nullable
   public FormState getFormStateOfID (@Nullable final String sFlowID)
   {
-    return m_aMap.get (sFlowID);
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aMap.get (sFlowID);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public Collection <FormState> getAllFormStates ()
   {
-    return ContainerHelper.newList (m_aMap.values ());
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (m_aMap.values ());
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnull
   public EChange deleteFormState (@Nonnull final String sFlowID)
   {
-    return EChange.valueOf (m_aMap.remove (sFlowID) != null);
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      return EChange.valueOf (m_aMap.remove (sFlowID) != null);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nonnull
   public EChange deleteAllFormStates ()
   {
-    if (m_aMap.isEmpty ())
-      return EChange.UNCHANGED;
-    m_aMap.clear ();
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (m_aMap.isEmpty ())
+        return EChange.UNCHANGED;
+      m_aMap.clear ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
     return EChange.CHANGED;
   }
 
