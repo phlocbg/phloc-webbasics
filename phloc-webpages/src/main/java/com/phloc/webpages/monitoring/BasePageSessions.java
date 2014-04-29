@@ -27,6 +27,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -76,6 +77,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     MSG_SESSION_APPLICATION_SCOPES ("Session Application Kontexte", "Session application scopes"),
     MSG_SCOPE_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
+    MSG_TYPE ("Typ", "Type"),
     MSG_VALUE ("Wert", "Value");
 
     private final ITextProvider m_aTP;
@@ -161,13 +163,17 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                .setCtrl (Integer.toString (aScope.getAttributeCount ()));
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
-                                                         .setID ("sessionscope-" + aScope.getID ());
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (),
+                                                                               HCCol.star (),
+                                                                               HCCol.star ()).setID ("sessionscope-" +
+                                                                                                     aScope.getID ());
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_TYPE.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
       aTableAttrs.addBodyRow ()
                  .addCell (aEntry.getKey ())
+                 .addCell (CGStringHelper.getClassLocalName (aEntry.getValue ()))
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     ret.addChild (aTableAttrs);
 
@@ -203,13 +209,17 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     aNodeList.addChild (aTableScope);
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
-                                                         .setID ("sessionappscope" + aScope.getID ());
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (),
+                                                                               HCCol.star (),
+                                                                               HCCol.star ()).setID ("sessionappscope" +
+                                                                                                     aScope.getID ());
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_TYPE.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
       aTableAttrs.addBodyRow ()
                  .addCell (aEntry.getKey ())
+                 .addCell (CGStringHelper.getClassLocalName (aEntry.getValue ()))
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 

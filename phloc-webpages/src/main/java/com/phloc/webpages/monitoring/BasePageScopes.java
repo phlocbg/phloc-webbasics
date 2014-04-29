@@ -27,6 +27,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -69,6 +70,7 @@ public class BasePageScopes extends AbstractWebPageExt
     MSG_APPLICATION_SCOPES ("Application Kontexte", "Application scopes"),
     MSG_SCOPE_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
+    MSG_TYPE ("Typ", "Type"),
     MSG_VALUE ("Wert", "Value");
 
     private final ITextProvider m_aTP;
@@ -142,13 +144,16 @@ public class BasePageScopes extends AbstractWebPageExt
     aNodeList.addChild (aTableScope);
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
-                                                         .setID ("globalscope");
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (),
+                                                                               HCCol.star (),
+                                                                               HCCol.star ()).setID ("globalscope");
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_TYPE.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
       aTableAttrs.addBodyRow ()
                  .addCell (aEntry.getKey ())
+                 .addCell (CGStringHelper.getClassLocalName (aEntry.getValue ()))
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
@@ -184,13 +189,17 @@ public class BasePageScopes extends AbstractWebPageExt
     aNodeList.addChild (aTableScope);
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
-                                                         .setID ("appscope" + aScope.getID ());
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (),
+                                                                               HCCol.star (),
+                                                                               HCCol.star ()).setID ("appscope" +
+                                                                                                     aScope.getID ());
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_TYPE.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
       aTableAttrs.addBodyRow ()
                  .addCell (aEntry.getKey ())
+                 .addCell (CGStringHelper.getClassLocalName (aEntry.getValue ()))
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
@@ -217,6 +226,7 @@ public class BasePageScopes extends AbstractWebPageExt
     // Global scope
     aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aGlobalScope.getID ()),
                     _getGlobalScopeInfo (aGlobalScope, aDisplayLocale));
+
     // Application scopes
     for (final IApplicationScope aAppScope : ContainerHelper.getSortedByKey (aGlobalScope.getAllApplicationScopes ())
                                                             .values ())
