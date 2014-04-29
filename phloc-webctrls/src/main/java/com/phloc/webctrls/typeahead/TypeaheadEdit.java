@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.url.ISimpleURL;
@@ -58,14 +59,10 @@ public class TypeaheadEdit implements IHCNodeBuilder
                         @Nonnull final ISimpleURL aAjaxInvocationURL,
                         @Nonnull final Locale aDisplayLocale)
   {
-    if (aRFEdit == null)
-      throw new NullPointerException ("RequestFieldEdit");
-    if (aRFHidden == null)
-      throw new NullPointerException ("RequestFieldHidden");
-    if (aAjaxInvocationURL == null)
-      throw new NullPointerException ("AjaxInvocationURL");
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("DisplayLocale");
+    ValueEnforcer.notNull (aRFEdit, "RequestFieldEdit");
+    ValueEnforcer.notNull (aRFHidden, "RequestFieldHidden");
+    ValueEnforcer.notNull (aAjaxInvocationURL, "AjaxInvocationURL");
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
 
     m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
                                   .setPlaceholder (ETypeaheadText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
