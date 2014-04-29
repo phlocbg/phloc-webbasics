@@ -34,11 +34,13 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.bootstrap3.inputgroup.BootstrapInputGroup;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
@@ -64,7 +66,7 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * By default it is a date selector only. If you want to have times as well, you
  * call {@link #setMinView(EDateTimePickerViewType)} with the type
  * {@link EDateTimePickerViewType#HOUR}.
- *
+ * 
  * @author Philip Helger
  */
 public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
@@ -126,8 +128,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
                                   @Nullable final String sValue,
                                   @Nonnull final Locale aDisplayLocale)
   {
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("DisplayLocale");
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+
     m_sContainerID = GlobalIDFactory.getNewStringID ();
     m_aEdit = new HCEdit (sName, sValue).setPlaceholder ("");
     m_aDisplayLocale = aDisplayLocale;
@@ -137,6 +139,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
                                                                             .getFirstDayOfWeek ());
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
+    // Default to end date + 1 year
+    setEndDate (PDTFactory.getCurrentLocalDate ().plusYears (1));
   }
 
   /**
