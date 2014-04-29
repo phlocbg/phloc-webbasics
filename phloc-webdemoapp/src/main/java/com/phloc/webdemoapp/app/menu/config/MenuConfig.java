@@ -55,6 +55,7 @@ public final class MenuConfig
       DefaultMenuConfigurator.addSecurityItems (aMenuTree, aAdmin, aFilterSuperUser, CDemoApp.DEFAULT_LOCALE);
       DefaultMenuConfigurator.addMonitoringItems (aMenuTree, aAdmin, aFilterSuperUser, MetaSystemManager.getAuditMgr ());
       DefaultMenuConfigurator.addSysInfoItems (aMenuTree, aAdmin, aFilterSuperUser);
+      DefaultMenuConfigurator.addDataItems (aMenuTree, aAdmin, aFilterSuperUser);
       DefaultMenuConfigurator.addSettingsItems (aMenuTree,
                                                 aAdmin,
                                                 aFilterSuperUser,
