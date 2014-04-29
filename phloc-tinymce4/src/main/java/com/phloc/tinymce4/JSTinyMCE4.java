@@ -18,6 +18,7 @@
 package com.phloc.tinymce4;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -30,6 +31,7 @@ import com.phloc.html.js.builder.JSRef;
  * 
  * @author Philip Helger
  */
+@Immutable
 public final class JSTinyMCE4
 {
   @SuppressWarnings ("unused")
