@@ -46,6 +46,7 @@ public enum EDateTimePickerDayOfWeek
     m_nJSValue = nJSValue;
   }
 
+  @Nonnegative
   public int getJSValue ()
   {
     return m_nJSValue;
@@ -75,9 +76,9 @@ public enum EDateTimePickerDayOfWeek
   }
 
   @Nullable
-  public static EDateTimePickerDayOfWeek getFromJavaValueOrNull (final int nJodaValue)
+  public static EDateTimePickerDayOfWeek getFromJavaValueOrNull (final int nCalendarValue)
   {
-    switch (nJodaValue)
+    switch (nCalendarValue)
     {
       case Calendar.MONDAY:
         return MONDAY;

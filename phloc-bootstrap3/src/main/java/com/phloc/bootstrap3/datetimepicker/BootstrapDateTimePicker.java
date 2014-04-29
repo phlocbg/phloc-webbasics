@@ -138,6 +138,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
       s_aLogger.warn ("Unsupported EDateTimePickerLanguage provided: " + aDisplayLocale);
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
                                                                             .getFirstDayOfWeek ());
+    // Use the calendar icon as default prefix
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
     // Default to end date + 1 year
     setEndDate (PDTFactory.getCurrentLocalDate ().plusYears (1));
