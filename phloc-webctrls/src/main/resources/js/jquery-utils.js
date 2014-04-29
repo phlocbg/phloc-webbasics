@@ -80,7 +80,7 @@
         // Mark it so that the next submit can be ignored
         $form.data('submitted', true);
         // Disable all reset and submit buttons within the form
-        $(':reset,:submit', $form).attr('disabled', 'disabled');
+        $(':reset,:submit', $form).disable();
       }
     });
 

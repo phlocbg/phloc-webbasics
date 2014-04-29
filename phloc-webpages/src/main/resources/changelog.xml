@@ -20,6 +20,26 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webpages">
+  <entry date="2014-04-29" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-commons 4.3.1</text>
+    </change>
+  </entry>
+  <entry date="2014-04-29" category="feature" action="update">
+    <change>
+      <text locale="en">Added data type on all scope attribute listings</text>
+    </change>
+  </entry>
+  <entry date="2014-04-28" category="feature" action="update">
+    <change>
+      <text locale="en">Extended session scope page to also list all session application scopes</text>
+    </change>
+  </entry>
+  <entry date="2014-04-28" category="feature" action="add">
+    <change>
+      <text locale="en">Added new page with all failed mails</text>
+    </change>
+  </entry>
   <release date="2014-04-15" version="1.1.1" />
   <entry date="2014-04-15" category="feature" action="add">
     <change>
