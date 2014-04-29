@@ -19,6 +19,7 @@ package com.phloc.bootstrap3.form;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
@@ -31,6 +32,7 @@ import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
 
+@NotThreadSafe
 public class BootstrapFormGroup
 {
   private HCLabel m_aLabel;

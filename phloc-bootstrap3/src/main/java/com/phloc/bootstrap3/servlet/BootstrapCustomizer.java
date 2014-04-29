@@ -20,6 +20,7 @@ package com.phloc.bootstrap3.servlet;
 import javax.annotation.Nonnull;
 
 import com.phloc.bootstrap3.BootstrapHelper;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.version.Version;
 import com.phloc.css.ECSSUnit;
@@ -37,9 +38,7 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
 
   public BootstrapCustomizer (@Nonnull final Version aBootstrapVersion)
   {
-    if (aBootstrapVersion == null)
-      throw new NullPointerException ("bootstrapVersion");
-    m_aBootstrapVersion = aBootstrapVersion;
+    m_aBootstrapVersion = ValueEnforcer.notNull (aBootstrapVersion, "BootstrapVersion");
   }
 
   @Nonnull

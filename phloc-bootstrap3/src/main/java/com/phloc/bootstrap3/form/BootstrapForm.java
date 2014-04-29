@@ -49,6 +49,7 @@ import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
+import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
 public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
@@ -350,7 +351,11 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
               // Only check for null, so that empty string overrides this
               // default behaviour
               if (aEdit.getPlaceholder () == null)
-                aEdit.setPlaceholder (aLabel.getPlainText ());
+              {
+                // Trim eventually trailing ":" from string
+                final String sNewPlaceholder = StringHelper.trimEnd (aLabel.getPlainText (), HCFormLabelUtils.LABEL_END);
+                aEdit.setPlaceholder (sNewPlaceholder);
+              }
             }
           }
 
