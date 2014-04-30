@@ -17,6 +17,7 @@
  */
 package com.phloc.webpages;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -51,7 +52,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 public class PageViewExternalMultiLingual extends AbstractPageViewExternal
 {
   @NotThreadSafe
-  private static final class ContentPerLocale
+  private static final class ContentPerLocale implements Serializable
   {
     private final IReadableResource m_aResource;
     private IMicroContainer m_aCont;
