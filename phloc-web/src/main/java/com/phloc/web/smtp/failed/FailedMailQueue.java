@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp.failed;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @ThreadSafe
-public class FailedMailQueue
+public class FailedMailQueue implements Serializable
 {
   private static final IStatisticsHandlerCounter s_aStatsCountAdd = StatisticsManager.getCounterHandler (FailedMailQueue.class.getName () +
                                                                                                          "$add");

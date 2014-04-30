@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp.failed;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -41,7 +42,7 @@ import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.ISMTPSettings;
 
 @Immutable
-public final class FailedMailData implements ITypedObject <String>
+public final class FailedMailData implements ITypedObject <String>, Serializable
 {
   public static final ObjectType TYPE_FAILEDMAIL = new ObjectType ("failedmail");
 
