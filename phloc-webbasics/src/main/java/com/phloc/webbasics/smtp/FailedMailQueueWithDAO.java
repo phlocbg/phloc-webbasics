@@ -101,7 +101,7 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
     }
   }
 
-  private final FMQDAO m_aDAO;
+  private final transient FMQDAO m_aDAO;
 
   public FailedMailQueueWithDAO (@Nullable final String sFilename)
   {
