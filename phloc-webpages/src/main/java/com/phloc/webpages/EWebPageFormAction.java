@@ -17,18 +17,46 @@
  */
 package com.phloc.webpages;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.html.hc.CHCParam;
+
 /**
  * Determines the different form actions to be handled in
  * {@link AbstractWebPageForm}.
  * 
  * @author Philip Helger
  */
-public enum EWebPageFormAction
+public enum EWebPageFormAction implements IHasID <String>
 {
-  VIEW,
-  CREATE,
-  EDIT,
-  COPY,
-  DELETE,
-  UNDELETE;
+  VIEW (CHCParam.ACTION_VIEW),
+  CREATE (CHCParam.ACTION_CREATE),
+  EDIT (CHCParam.ACTION_EDIT),
+  COPY ("copy"),
+  DELETE (CHCParam.ACTION_DELETE),
+  UNDELETE ("undelete");
+
+  private final String m_sID;
+
+  private EWebPageFormAction (@Nonnull @Nonempty final String sID)
+  {
+    m_sID = sID;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID ()
+  {
+    return m_sID;
+  }
+
+  @Nullable
+  public static EWebPageFormAction getFromIDOrNull (@Nullable final String sID)
+  {
+    return EnumHelper.getFromIDOrNull (EWebPageFormAction.class, sID);
+  }
 }
