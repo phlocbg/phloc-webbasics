@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -96,7 +97,7 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
   /**
    * Counter used in unique identifier generation.
    */
-  private static int s_nCounter = 0;
+  private static final AtomicInteger s_nCounter = new AtomicInteger (0);
 
   /**
    * The name of the form field as provided by the browser.
@@ -560,14 +561,11 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
    * 
    * @return A String with the non-random looking instance identifier.
    */
+  @Nonnull
   private static String _getUniqueId ()
   {
     final int limit = 100000000;
-    int current;
-    synchronized (DiskFileItem.class)
-    {
-      current = s_nCounter++;
-    }
+    final int current = s_nCounter.getAndIncrement ();
     String id = Integer.toString (current);
 
     // If you manage to get more than 100 million of ids, you'll
