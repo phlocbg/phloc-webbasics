@@ -30,8 +30,6 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EDataTablesCSSPathProvider implements ICSSPathProvider
 {
-  DATATABLES_1_9 ("datatables/194/css/jquery.dataTables.css"),
-  DATATABLES_THEMEROLLER_1_9 ("datatables/194/css/jquery.dataTables_themeroller.css"),
   DATATABLES_1_10 ("datatables/1.10/css/jquery.dataTables.css"),
   DATATABLES_THEMEROLLER_1_10 ("datatables/1.10/css/jquery.dataTables_themeroller.css"),
   EXTRAS_FIXED_HEADER ("datatables/FixedHeader-2.1.1/dataTables.fixedHeader.css"),
