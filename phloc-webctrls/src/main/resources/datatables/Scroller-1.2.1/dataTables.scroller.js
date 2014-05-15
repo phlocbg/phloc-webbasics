@@ -1,11 +1,11 @@
-/*! Scroller 1.2.0
+/*! Scroller 1.2.1
  * 2011-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     Scroller
  * @description Virtual rendering for DataTables
- * @version     1.2.0
+ * @version     1.2.1
  * @file        dataTables.scroller.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -189,7 +189,13 @@ var Scroller = function ( oDTSettings, oOpts ) {
 		topRowFloat: 0,
 		scrollDrawDiff: null
 	};
+
+	// @todo The defaults should extend a `c` property and the internal settings
+	// only held in the `s` property. At the moment they are mixed
 	this.s = $.extend( this.s, Scroller.oDefaults, oOpts );
+
+	// Workaround for row height being read from height object (see above comment)
+	this.s.heights.row = this.s.rowHeight;
 
 	/**
 	 * DOM elements used by the class instance
@@ -566,7 +572,7 @@ Scroller.prototype = /** @lends Scroller.prototype */{
 		 * a DataTables redraw
 		 */
 		if ( iScrollTop < this.s.redrawTop || iScrollTop > this.s.redrawBottom ) {
-			var preRows = ((this.s.displayBuffer-1)/2) * this.s.viewportRows;
+			var preRows = Math.ceil( ((this.s.displayBuffer-1)/2) * this.s.viewportRows );
 
 			if ( Math.abs( iScrollTop - this.s.lastScrollTop ) > heights.viewport || this.s.ani ) {
 				iTopRow = parseInt(this._domain( 'physicalToVirtual', iScrollTop ) / heights.row, 10) - preRows;
@@ -830,7 +836,8 @@ Scroller.prototype = /** @lends Scroller.prototype */{
 	 */
 	"_fnCalcRowHeight": function ()
 	{
-		var nTable = this.s.dt.nTable.cloneNode( false );
+		var origTable = this.s.dt.nTable;
+		var nTable = origTable.cloneNode( false );
 		var tbody = $('<tbody/>').appendTo( nTable );
 		var container = $(
 			'<div class="'+this.s.dt.oClasses.sWrapper+' DTS">'+
@@ -842,14 +849,14 @@ Scroller.prototype = /** @lends Scroller.prototype */{
 
 		// Want 3 rows in the sizing table so :first-child and :last-child
 		// CSS styles don't come into play - take the size of the middle row
-		$('tbody tr:lt(4)', this.s.dt.nTable).clone().appendTo( tbody );
+		$('tbody tr:lt(4)', origTable).clone().appendTo( tbody );
 		while( $('tr', tbody).length < 3 ) {
 			tbody.append( '<tr><td>&nbsp;</td></tr>' );
 		}
 
 		$('div.'+this.s.dt.oClasses.sScrollBody, container).append( nTable );
 
-		container.appendTo( 'body' );
+		container.appendTo( this.s.dt.nHolding );
 		this.s.heights.row = $('tr', tbody).eq(1).outerHeight();
 		container.remove();
 	},
@@ -1079,7 +1086,7 @@ Scroller.oDefaults = Scroller.defaults;
  *  @name      Scroller.version
  *  @static
  */
-Scroller.version = "1.2.0";
+Scroller.version = "1.2.1";
 
 
 

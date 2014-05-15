@@ -32,10 +32,10 @@ public enum EDataTablesCSSPathProvider implements ICSSPathProvider
 {
   DATATABLES_1_9 ("datatables/194/css/jquery.dataTables.css"),
   DATATABLES_THEMEROLLER_1_9 ("datatables/194/css/jquery.dataTables_themeroller.css"),
-  DATATABLES_1_10 ("datatables/1.10.rc1/css/jquery.dataTables.css"),
-  DATATABLES_THEMEROLLER_1_10 ("datatables/1.10.rc1/css/jquery.dataTables_themeroller.css"),
-  EXTRAS_FIXED_HEADER_210 ("datatables/FixedHeader-2.1.0/dataTables.fixedHeader.css"),
-  EXTRAS_SCROLLER_120 ("datatables/Scroller-1.2.0/dataTables.scroller.css");
+  DATATABLES_1_10 ("datatables/1.10/css/jquery.dataTables.css"),
+  DATATABLES_THEMEROLLER_1_10 ("datatables/1.10/css/jquery.dataTables_themeroller.css"),
+  EXTRAS_FIXED_HEADER ("datatables/FixedHeader-2.1.1/dataTables.fixedHeader.css"),
+  EXTRAS_SCROLLER ("datatables/Scroller-1.2.1/dataTables.scroller.css");
 
   private final String m_sPath;
 

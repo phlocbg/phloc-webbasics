@@ -77,8 +77,6 @@ import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData;
 import com.phloc.webctrls.js.JSJQueryUtils;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public class DataTables implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_GENERATE_ON_DOCUMENT_READY = false;
@@ -93,9 +91,6 @@ public class DataTables implements IHCNodeBuilder
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
   public static final boolean DEFAULT_USE_FIXED_HEADER = false;
-
-  @SuppressFBWarnings ("MS_SHOULD_BE_FINAL")
-  public static boolean USE_V19 = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
   private static boolean s_bDefaultGenerateOnDocumentReady = DEFAULT_GENERATE_ON_DOCUMENT_READY;
@@ -739,8 +734,8 @@ public class DataTables implements IHCNodeBuilder
     registerExternalResources ();
     if (m_bUseFixedHeader)
     {
-      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_FIXED_HEADER_210);
-      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_FIXED_HEADER_210);
+      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_FIXED_HEADER);
+      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_FIXED_HEADER);
     }
     onRegisterExternalResources ();
 
@@ -1083,15 +1078,7 @@ public class DataTables implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    if (USE_V19)
-    {
-      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_1_9);
-      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_1_9);
-    }
-    else
-    {
-      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_1_10);
-      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_1_10);
-    }
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_1_10);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_1_10);
   }
 }

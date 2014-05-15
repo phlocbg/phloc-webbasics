@@ -48,11 +48,11 @@ public enum EWebCtrlsJSPathProvider implements IJSPathProvider
   /** JQuery 1.10 */
   JQUERY_1_10 ("jquery/jquery-1.10.2.js", true),
   /** JQuery 1.11 */
-  JQUERY_1_11 ("jquery/jquery-1.11.0.js", true),
+  JQUERY_1_11 ("jquery/jquery-1.11.1.js", true),
   /** JQuery 2.0 */
   JQUERY_2_0 ("jquery/jquery-2.0.3.js", true),
   /** JQuery 2.1 */
-  JQUERY_2_1 ("jquery/jquery-2.1.0.js", true);
+  JQUERY_2_1 ("jquery/jquery-2.1.1.js", true);
 
   private final String m_sPath;
   private final boolean m_bCanBeBundled;
