@@ -30,6 +30,7 @@
   <version>3.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-webbasics</name>
+  <description>Library with basic business objects required by Java web application</description>
   <url>http://repo.phloc.com/apidocs/phloc-webbasics/${project.version}</url>
  
   <licenses>
