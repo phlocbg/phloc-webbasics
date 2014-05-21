@@ -22,14 +22,15 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.7</version>
+    <version>23.1</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-report</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-report</name>
+  <description>Library for creating nicely layouted PDF documents based on PDFBox</description>
   <url>http://repo.phloc.com/apidocs/phloc-report/${project.version}</url>
  
   <licenses>
@@ -61,39 +62,6 @@
     </developer>
   </developers>
   
-  <repositories>
-    <repository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>  
-
-  <distributionManagement>
-    <repository>
-      <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
-    </repository>
-  </distributionManagement>
-  
   <properties>
     <pdfbox.version>1.8.5</pdfbox.version>
   </properties>
@@ -102,7 +70,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>4.3.1</version>
+      <version>4.3.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
@@ -117,7 +85,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-fonts</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
