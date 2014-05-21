@@ -40,10 +40,12 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  * 
  * @author Philip Helger
  */
-public class MailingDeadlockListener implements IThreadDeadlockListener {
+public class MailingDeadlockListener implements IThreadDeadlockListener
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailingDeadlockListener.class);
 
-  private static String _getAsString (@Nonnull final ThreadDeadlockInfo aTDI) {
+  private static String _getAsString (@Nonnull final ThreadDeadlockInfo aTDI)
+  {
     // Always ends with a newline char
     String sTI = aTDI.getThreadInfo ().toString ();
     final StackTraceElement [] aSTE = aTDI.getStackTrace ();
@@ -52,7 +54,8 @@ public class MailingDeadlockListener implements IThreadDeadlockListener {
     return sTI;
   }
 
-  public void onDeadlockDetected (@Nonnull @Nonempty final ThreadDeadlockInfo [] aDeadlockedThreads) {
+  public void onDeadlockDetected (@Nonnull @Nonempty final ThreadDeadlockInfo [] aDeadlockedThreads)
+  {
     s_aLogger.warn ("Deadlock of " + ArrayHelper.getSize (aDeadlockedThreads) + " threads detected!");
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (InternalErrorHandler.fillInternalErrorMetaData (null, null, null).getAsString ());

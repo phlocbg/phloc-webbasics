@@ -47,19 +47,23 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  * @author Philip Helger
  */
 @DisallowConcurrentExecution
-public final class CheckDiskUsableSpaceJob extends AbstractScopeAwareJob {
+public final class CheckDiskUsableSpaceJob extends AbstractScopeAwareJob
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (CheckDiskUsableSpaceJob.class);
 
   @Override
-  protected String getApplicationScopeID (final JobDataMap aJobDataMap) {
+  protected String getApplicationScopeID (final JobDataMap aJobDataMap)
+  {
     return CSystemMonitor.APP_ID;
   }
 
   @Override
-  protected void onExecute (final JobExecutionContext aContext) throws JobExecutionException {
+  protected void onExecute (final JobExecutionContext aContext) throws JobExecutionException
+  {
     final File fBaseDir = WebFileIO.getBasePathFile ();
     final long nUsableSpace = fBaseDir.getUsableSpace ();
-    if (nUsableSpace < CGlobal.BYTES_PER_GIGABYTE) {
+    if (nUsableSpace < CGlobal.BYTES_PER_GIGABYTE)
+    {
       final String sUsableFormatted = SizeHelper.getSizeHelperOfLocale (CGlobal.LOCALE_FIXED_NUMBER_FORMAT)
                                                 .getAsMatching (nUsableSpace, 1);
       s_aLogger.warn ("File system has less than 1GB of usable space: " + sUsableFormatted);
@@ -79,7 +83,8 @@ public final class CheckDiskUsableSpaceJob extends AbstractScopeAwareJob {
   /**
    * Call this method to schedule the check disk usage job initially.
    */
-  public static void schedule () {
+  public static void schedule ()
+  {
     GlobalQuartzScheduler.getInstance ()
                          .scheduleJob (CheckDiskUsableSpaceJob.class.getName (),
                                        TriggerBuilder.newTrigger ()

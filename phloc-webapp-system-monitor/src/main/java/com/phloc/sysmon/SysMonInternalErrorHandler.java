@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.dao.impl.AbstractDAO;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.schedule.job.AbstractScopeAwareJob;
+import com.phloc.schedule.job.AbstractJob;
 import com.phloc.schedule.job.IJobExceptionHandler;
 import com.phloc.webbasics.action.servlet.AbstractActionServlet;
 import com.phloc.webbasics.ajax.servlet.AbstractAjaxServlet;
@@ -37,29 +37,33 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public final class SysMonInternalErrorHandler extends AbstractErrorCallback implements IJobExceptionHandler {
+public final class SysMonInternalErrorHandler extends AbstractErrorCallback implements IJobExceptionHandler
+{
   @Override
   protected void onError (@Nonnull final Throwable t,
                           @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                          @Nonnull @Nonempty final String sErrorCode) {
+                          @Nonnull @Nonempty final String sErrorCode)
+  {
     final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
     InternalErrorHandler.handleInternalError (null, t, aRequestScope, sErrorCode, null, aDisplayLocale, true);
   }
 
   public void onScheduledJobException (@Nonnull final Throwable t,
                                        @Nonnull final String sJobClassName,
-                                       final boolean bIsLongRunning) {
+                                       final boolean bIsLongRunning)
+  {
     onError (t, null, "Error executing" + (bIsLongRunning ? " long running" : "") + " job " + sJobClassName);
   }
 
-  public static void doSetup () {
+  public static void doSetup ()
+  {
     // Set global internal error handlers
     final SysMonInternalErrorHandler aIntErrHdl = new SysMonInternalErrorHandler ();
     AbstractAjaxServlet.setCustomExceptionHandler (aIntErrHdl);
     AbstractActionServlet.setCustomExceptionHandler (aIntErrHdl);
     AbstractDAO.setCustomExceptionHandlerRead (aIntErrHdl);
     AbstractDAO.setCustomExceptionHandlerWrite (aIntErrHdl);
-    AbstractScopeAwareJob.setCustomExceptionHandler (aIntErrHdl);
+    AbstractJob.setCustomExceptionHandler (aIntErrHdl);
     InternalErrorHandler.setSMTPSenderAddress (SysMonConfig.getEmailSender ());
     InternalErrorHandler.setSMTPReceiverAddresses (SysMonConfig.getEmailReceivers ());
     InternalErrorHandler.setSMTPSettings (SysMonConfig.getSMTPSettings ());

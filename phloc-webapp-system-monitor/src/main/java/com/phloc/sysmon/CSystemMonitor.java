@@ -22,8 +22,10 @@ package com.phloc.sysmon;
  * 
  * @author Philip Helger
  */
-public final class CSystemMonitor {
+public final class CSystemMonitor
+{
   public static final String APP_ID = "system-monitor";
 
-  private CSystemMonitor () {}
+  private CSystemMonitor ()
+  {}
 }

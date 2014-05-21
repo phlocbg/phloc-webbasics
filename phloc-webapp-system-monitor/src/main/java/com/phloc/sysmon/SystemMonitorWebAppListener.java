@@ -36,34 +36,41 @@ import com.phloc.webbasics.smtp.FailedMailResendJob;
  * 
  * @author Philip Helger
  */
-public final class SystemMonitorWebAppListener extends WebAppListener {
+public final class SystemMonitorWebAppListener extends WebAppListener
+{
   @Override
-  protected String getInitParameterTrace (@Nonnull final ServletContext aSC) {
+  protected String getInitParameterTrace (@Nonnull final ServletContext aSC)
+  {
     return SysMonConfig.getGlobalTrace ();
   }
 
   @Override
-  protected String getInitParameterDebug (@Nonnull final ServletContext aSC) {
+  protected String getInitParameterDebug (@Nonnull final ServletContext aSC)
+  {
     return SysMonConfig.getGlobalDebug ();
   }
 
   @Override
-  protected String getInitParameterProduction (@Nonnull final ServletContext aSC) {
+  protected String getInitParameterProduction (@Nonnull final ServletContext aSC)
+  {
     return SysMonConfig.getGlobalProduction ();
   }
 
   @Override
-  protected String getDataPath (@Nonnull final ServletContext aSC) {
+  protected String getDataPath (@Nonnull final ServletContext aSC)
+  {
     return SysMonConfig.getDataPath ();
   }
 
   @Override
-  protected boolean shouldCheckFileAccess (@Nonnull final ServletContext aSC) {
+  protected boolean shouldCheckFileAccess (@Nonnull final ServletContext aSC)
+  {
     return false;
   }
 
   @Override
-  protected void afterContextInitialized (@Nonnull final ServletContext aSC) {
+  protected void afterContextInitialized (@Nonnull final ServletContext aSC)
+  {
     // JUL to SLF4J
     SLF4JBridgeHandler.removeHandlersForRootLogger ();
     SLF4JBridgeHandler.install ();

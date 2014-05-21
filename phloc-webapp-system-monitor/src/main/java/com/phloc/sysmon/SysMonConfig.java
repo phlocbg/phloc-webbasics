@@ -40,39 +40,47 @@ import com.phloc.web.smtp.impl.SMTPSettings;
  * 
  * @author Philip Helger
  */
-public class SysMonConfig extends GlobalSingleton {
+public class SysMonConfig extends GlobalSingleton
+{
   private static final ISettings s_aSettings;
 
-  static {
+  static
+  {
     s_aSettings = new SettingsPersistenceProperties ().readSettings (new ClassPathResource ("sysmon.properties"));
   }
 
   @Deprecated
   @UsedViaReflection
-  private SysMonConfig () {}
+  private SysMonConfig ()
+  {}
 
   @Nullable
-  public static String getGlobalTrace () {
+  public static String getGlobalTrace ()
+  {
     return s_aSettings.getStringValue ("global.trace");
   }
 
   @Nullable
-  public static String getGlobalDebug () {
+  public static String getGlobalDebug ()
+  {
     return s_aSettings.getStringValue ("global.debug");
   }
 
   @Nullable
-  public static String getGlobalProduction () {
+  public static String getGlobalProduction ()
+  {
     return s_aSettings.getStringValue ("global.production");
   }
 
   @Nullable
-  public static String getDataPath () {
+  public static String getDataPath ()
+  {
     return s_aSettings.getStringValue ("global.datapath");
   }
 
   @Nullable
-  public static IEmailAddress getEmailSender () {
+  public static IEmailAddress getEmailSender ()
+  {
     final String sFrom = s_aSettings.getStringValue ("email.from");
     if (StringHelper.hasText (sFrom))
       return new EmailAddress (sFrom);
@@ -80,9 +88,11 @@ public class SysMonConfig extends GlobalSingleton {
   }
 
   @Nullable
-  public static List <IEmailAddress> getEmailReceivers () {
+  public static List <IEmailAddress> getEmailReceivers ()
+  {
     final String sTo = s_aSettings.getStringValue ("email.to");
-    if (StringHelper.hasText (sTo)) {
+    if (StringHelper.hasText (sTo))
+    {
       final List <IEmailAddress> ret = new ArrayList <IEmailAddress> ();
       for (final String sPart : StringHelper.getExploded (',', sTo))
         ret.add (new EmailAddress (sPart));
@@ -92,7 +102,8 @@ public class SysMonConfig extends GlobalSingleton {
   }
 
   @Nonnull
-  public static SMTPSettings getSMTPSettings () {
+  public static SMTPSettings getSMTPSettings ()
+  {
     return new SMTPSettings (s_aSettings.getStringValue ("smtp.hostname", "brzmg-fb00.brz.gv.at"),
                              s_aSettings.getIntValue ("smtp.port", CWeb.DEFAULT_PORT_SMTP),
                              s_aSettings.getStringValue ("smtp.username", null),

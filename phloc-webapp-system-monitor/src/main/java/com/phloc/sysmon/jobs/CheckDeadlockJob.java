@@ -35,14 +35,17 @@ import com.phloc.sysmon.CSystemMonitor;
  * @author Philip Helger
  */
 @DisallowConcurrentExecution
-public final class CheckDeadlockJob extends AbstractScopeAwareJob {
+public final class CheckDeadlockJob extends AbstractScopeAwareJob
+{
   @Override
-  protected String getApplicationScopeID (final JobDataMap aJobDataMap) {
+  protected String getApplicationScopeID (final JobDataMap aJobDataMap)
+  {
     return CSystemMonitor.APP_ID;
   }
 
   @Override
-  protected void onExecute (final JobExecutionContext aContext) throws JobExecutionException {
+  protected void onExecute (final JobExecutionContext aContext) throws JobExecutionException
+  {
     final ThreadDeadlockDetector aTDD = new ThreadDeadlockDetector ();
     aTDD.addListener (new MailingDeadlockListener ());
     aTDD.run ();
@@ -51,7 +54,8 @@ public final class CheckDeadlockJob extends AbstractScopeAwareJob {
   /**
    * Call this method to schedule the check disk usage job initially.
    */
-  public static void schedule () {
+  public static void schedule ()
+  {
     GlobalQuartzScheduler.getInstance ()
                          .scheduleJob (CheckDeadlockJob.class.getName (),
                                        TriggerBuilder.newTrigger ()

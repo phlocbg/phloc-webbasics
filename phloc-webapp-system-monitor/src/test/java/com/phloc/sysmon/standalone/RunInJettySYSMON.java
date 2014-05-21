@@ -37,11 +37,13 @@ import com.phloc.commons.SystemProperties;
  * @author com.phloc.pdaf.creator.webdescriptor.ExportWebAppAsJetty7
  */
 @Immutable
-public final class RunInJettySYSMON {
+public final class RunInJettySYSMON
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (RunInJettySYSMON.class);
   private static final String RESOURCE_PREFIX = "target/webapp-classes";
 
-  public static void main (final String... args) throws Exception {
+  public static void main (final String... args) throws Exception
+  {
     if (System.getSecurityManager () != null)
       throw new IllegalStateException ("Security Manager is set but not supported - aborting!");
 
@@ -80,12 +82,14 @@ public final class RunInJettySYSMON {
     new JettyMonitor ().start ();
     // Starting the engines:
     aServer.start ();
-    if (aCtx.isFailed ()) {
+    if (aCtx.isFailed ())
+    {
       s_aLogger.error ("Failed to start server - stopping server!");
       aServer.stop ();
       s_aLogger.error ("Failed to start server - stopped server!");
     }
-    else {
+    else
+    {
       // Running the server!
       aServer.join ();
     }
