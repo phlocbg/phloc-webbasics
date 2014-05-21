@@ -30,6 +30,7 @@
   <version>5.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-web</name>
+  <description>Library with basic web functionality</description>
   <url>http://repo.phloc.com/apidocs/phloc-web/${project.version}</url>
  
   <licenses>
