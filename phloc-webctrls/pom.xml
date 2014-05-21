@@ -142,7 +142,10 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>com.phloc.webctrls.*</Export-Package>
+            <Export-Package>
+              com.phloc.webctrls.*,
+              com.phloc.webpages.*
+            </Export-Package>
           </instructions>
         </configuration>
       </plugin>
