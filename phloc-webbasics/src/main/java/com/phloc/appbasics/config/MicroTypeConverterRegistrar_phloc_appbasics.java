@@ -37,7 +37,7 @@ import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
  * @author Philip Helger
  */
 @IsSPIImplementation
-public final class AppBasicsMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
+public final class MicroTypeConverterRegistrar_phloc_appbasics implements IMicroTypeConverterRegistrarSPI
 {
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {

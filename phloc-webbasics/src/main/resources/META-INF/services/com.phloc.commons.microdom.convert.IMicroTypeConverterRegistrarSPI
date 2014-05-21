@@ -1,2 +1,2 @@
-com.phloc.appbasics.config.AppBasicsMicroTypeConverterRegistrarSPI
+com.phloc.appbasics.config.MicroTypeConverterRegistrar_phloc_appbasics
 com.phloc.webbasics.config.MicroTypeConverterRegistrar_phloc_webbasics
