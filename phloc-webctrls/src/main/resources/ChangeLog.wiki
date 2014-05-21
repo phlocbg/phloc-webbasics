@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>5/21/14</td><td colspan="4">_Release *2.0.0*_</td></tr>
+<tr><td>5/21/14</td><td>change</td><td>tech</td><td></td><td>Prepared for Maven central release</td></tr>
+<tr><td>5/21/14</td><td>remove</td><td>tech</td><td></td><td>Integrated [http://code.google.com/p/phloc-webbasics phloc-webpages] into this library</td></tr>
 <tr><td>5/15/14</td><td>remove</td><td>tech</td><td></td><td>Removed DataTables 1.9.4 support</td></tr>
 <tr><td>5/15/14</td><td>update</td><td>tech</td><td></td><td>Updated to DataTables 1.10, Fixed-Header 2.1.1 and Scroller 1.2.1</td></tr>
 <tr><td>5/15/14</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.11.1 and 2.1.1</td></tr>
