@@ -20,16 +20,16 @@
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-scopes:6.1.8" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-web:5.3.7" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-webscopes:6.2.7" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-appbasics:2.6.8" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-webbasics:2.2.8" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-webscopes:6.2.8" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-appbasics:2.6.10" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-webbasics:2.2.9" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-json:2.5.3" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-json2:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-css:3.7.1" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-html:3.13.4" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-css:3.7.3" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-html:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-schedule:1.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz:2.2.1" level="project" />
