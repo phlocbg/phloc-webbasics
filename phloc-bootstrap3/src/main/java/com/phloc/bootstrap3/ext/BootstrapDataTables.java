@@ -26,7 +26,6 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webctrls.datatables.EDataTablesPaginationType;
 
 public class BootstrapDataTables extends DataTables
 {
@@ -42,8 +41,6 @@ public class BootstrapDataTables extends DataTables
       ((AbstractBootstrapTable <?>) aTable).setHover (true);
     }
     setDom (DEFAULT_DOM);
-    if (DataTables.USE_V19)
-      setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
   }
 
   @Override
