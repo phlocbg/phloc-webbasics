@@ -30,6 +30,7 @@
   <version>1.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-schedule</name>
+  <description>Library for easy scheduling of jobs using Quartz</description>
   <url>http://repo.phloc.com/apidocs/phloc-schedule/${project.version}</url>
  
   <licenses>
