@@ -20,8 +20,11 @@ package com.phloc.webbasics.config;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
+import com.phloc.commons.thirdparty.ELicense;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.IThirdPartyModuleProviderSPI;
+import com.phloc.commons.thirdparty.ThirdPartyModule;
+import com.phloc.commons.version.Version;
 import com.phloc.web.config.ThirdPartyModuleProvider_phloc_web;
 
 /**
@@ -35,9 +38,25 @@ public final class ThirdPartyModuleProvider_phloc_webbasics implements IThirdPar
 {
   public static final IThirdPartyModule JAVAX_MAIL = ThirdPartyModuleProvider_phloc_web.JAVAX_MAIL.getAsNonOptionalCopy ();
 
+  public static final IThirdPartyModule JSCH = ThirdPartyModuleProvider_phloc_web.JSCH.getAsOptionalCopy ();
+
+  public static final IThirdPartyModule COMMONS_NET = new ThirdPartyModule ("Apache Commons Net",
+                                                                            "Apache",
+                                                                            ELicense.APACHE2,
+                                                                            new Version (3, 3, 0),
+                                                                            "http://commons.apache.org/net/",
+                                                                            true);
+
+  public static final IThirdPartyModule OPEN_CSV = new ThirdPartyModule ("OpenCSV",
+                                                                         "Glen Smith",
+                                                                         ELicense.APACHE2,
+                                                                         new Version (2, 3),
+                                                                         "http://opencsv.sourceforge.net/",
+                                                                         true);
+
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
   {
-    return new IThirdPartyModule [] { JAVAX_MAIL };
+    return new IThirdPartyModule [] { JAVAX_MAIL, JSCH, COMMONS_NET, OPEN_CSV };
   }
 }
