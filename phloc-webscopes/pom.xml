@@ -30,6 +30,7 @@
   <version>6.4.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-webscopes</name>
+  <description>Library for handling scopes in web applications</description>
   <url>http://repo.phloc.com/apidocs/phloc-webscopes/${project.version}</url>
      
   <licenses>
