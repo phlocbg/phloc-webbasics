@@ -11,6 +11,7 @@
   <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-fileupload</name>
+  <description>Library for extended file upload handling in web applications</description>
   <url>http://repo.phloc.com/apidocs/phloc-fileupload/${project.version}</url>
  
   <licenses>
