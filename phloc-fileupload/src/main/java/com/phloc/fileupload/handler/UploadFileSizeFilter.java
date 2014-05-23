@@ -17,28 +17,23 @@
  */
 package com.phloc.fileupload.handler;
 
-
 public class UploadFileSizeFilter implements IUploadFileSizeFilter
 {
   private static final long serialVersionUID = 609798685438707770L;
   private final long m_nMaxBytes;
-  
+
   public UploadFileSizeFilter (final long nMaxBytes)
   {
-    this.m_nMaxBytes = nMaxBytes;
+    m_nMaxBytes = nMaxBytes;
   }
-  
-  @Override
+
   public boolean matchesFilter (final Long aSizeInBytes)
   {
-    return this.m_nMaxBytes < 0 ||
-           aSizeInBytes == null ||
-           aSizeInBytes.longValue () < this.m_nMaxBytes;
+    return m_nMaxBytes < 0 || aSizeInBytes == null || aSizeInBytes.longValue () < this.m_nMaxBytes;
   }
-  
-  @Override
+
   public long getMaxBytes ()
   {
-    return this.m_nMaxBytes;
+    return m_nMaxBytes;
   }
 }

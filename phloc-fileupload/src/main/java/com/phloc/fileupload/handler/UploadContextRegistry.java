@@ -26,15 +26,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.webscopes.singleton.SessionApplicationWebSingleton;
 
 @ThreadSafe
 public final class UploadContextRegistry extends SessionApplicationWebSingleton
 {
   private static final long serialVersionUID = 5177051956289929072L;
+
   private final ReadWriteLock m_aLock = new ReentrantReadWriteLock ();
   private final Map <String, UploadContext> m_aContexts = new HashMap <String, UploadContext> ();
 
@@ -55,50 +56,45 @@ public final class UploadContextRegistry extends SessionApplicationWebSingleton
   @Nullable
   public UploadContext getContext (@Nullable final String sID)
   {
-    this.m_aLock.readLock ().lock ();
+    m_aLock.readLock ().lock ();
     try
     {
-      return this.m_aContexts.get (sID);
+      return m_aContexts.get (sID);
     }
     finally
     {
-      this.m_aLock.readLock ().unlock ();
+      m_aLock.readLock ().unlock ();
     }
   }
 
   public void setContext (@Nonnull @Nonempty final String sID, @Nonnull final UploadContext aContext)
   {
-    if (StringHelper.hasNoText (sID))
-    {
-      throw new IllegalArgumentException ("id"); //$NON-NLS-1$
-    }
-    if (aContext == null)
-    {
-      throw new NullPointerException ("upload context"); //$NON-NLS-1$
-    }
-    this.m_aLock.writeLock ().lock ();
+    ValueEnforcer.notEmpty (sID, "id"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aContext, "upload context"); //$NON-NLS-1$
+
+    m_aLock.writeLock ().lock ();
     try
     {
       // we do not care for overwriting
-      this.m_aContexts.put (sID, aContext);
+      m_aContexts.put (sID, aContext);
     }
     finally
     {
-      this.m_aLock.writeLock ().unlock ();
+      m_aLock.writeLock ().unlock ();
     }
   }
 
   @Override
   protected void onDestroy () throws Exception
   {
-    this.m_aLock.writeLock ().lock ();
+    m_aLock.writeLock ().lock ();
     try
     {
-      this.m_aContexts.clear ();
+      m_aContexts.clear ();
     }
     finally
     {
-      this.m_aLock.writeLock ().unlock ();
+      m_aLock.writeLock ().unlock ();
     }
   }
 }

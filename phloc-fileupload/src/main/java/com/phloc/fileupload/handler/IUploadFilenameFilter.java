@@ -17,25 +17,25 @@
  */
 package com.phloc.fileupload.handler;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.filter.IFilter;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.filter.ISerializableFilter;
 import com.phloc.commons.name.IHasDisplayText;
 
-public interface IUploadFilenameFilter extends IFilter <String>, Serializable
+public interface IUploadFilenameFilter extends ISerializableFilter <String>
 {
   @Nonnull
   @Nonempty
   String getErrorCode ();
-  
+
   @Nonnull
   IHasDisplayText getErrorMessage ();
-  
-  @Nullable
+
+  @Nonnull
+  @ReturnsMutableCopy
   List <String> getErrorArguments ();
 }

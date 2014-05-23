@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.io.file.FileUtils;
@@ -38,11 +39,11 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.misc.SizeHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.CWebCharset;
+import com.phloc.web.fileupload.AbstractFileUploadBase.FileSizeLimitExceededException;
 import com.phloc.web.fileupload.FileUploadException;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.fileupload.IFileItemFactory;
 import com.phloc.web.fileupload.IProgressListener;
-import com.phloc.web.fileupload.AbstractFileUploadBase.FileSizeLimitExceededException;
 import com.phloc.web.fileupload.io.DiskFileItemFactory;
 import com.phloc.web.fileupload.servlet.ServletFileUpload;
 import com.phloc.web.mock.MockHttpServletRequest;
@@ -78,12 +79,12 @@ public final class FileUploadHelper
     @Override
     protected void onDestroy ()
     {
-      this.m_aFactory.deleteAllTemporaryFiles ();
+      m_aFactory.deleteAllTemporaryFiles ();
     }
 
     public void setRepository (@Nullable final File aRepository)
     {
-      this.m_aFactory.setRepository (aRepository);
+      m_aFactory.setRepository (aRepository);
     }
 
     @Nonnull
@@ -92,13 +93,13 @@ public final class FileUploadHelper
                                  final boolean bIsFormField,
                                  final String sFileName)
     {
-      return this.m_aFactory.createItem (sFieldName, sContentType, bIsFormField, sFileName);
+      return m_aFactory.createItem (sFieldName, sContentType, bIsFormField, sFileName);
     }
 
     @Nonnull
     public List <File> getAllTemporaryFiles ()
     {
-      return this.m_aFactory.getAllTemporaryFiles ();
+      return m_aFactory.getAllTemporaryFiles ();
     }
   }
 
@@ -231,18 +232,10 @@ public final class FileUploadHelper
                                        @Nonnull final String sBaseName,
                                        @Nonnull final String sExt)
   {
-    if (aBaseDir == null)
-    {
-      throw new NullPointerException ("baseDir"); //$NON-NLS-1$
-    }
-    if (sBaseName == null)
-    {
-      throw new NullPointerException ("baseName"); //$NON-NLS-1$
-    }
-    if (sExt == null)
-    {
-      throw new NullPointerException ("extension"); //$NON-NLS-1$
-    }
+    ValueEnforcer.notNull (aBaseDir, "BaseDir"); //$NON-NLS-1$
+    ValueEnforcer.notNull (sBaseName, "BaseName"); //$NON-NLS-1$
+    ValueEnforcer.notNull (sExt, "extension"); //$NON-NLS-1$
+
     try
     {
       // Anything to upload?
@@ -290,10 +283,7 @@ public final class FileUploadHelper
   @Nonnull
   public static String getUnifiedFilename (@Nonnull final IFileItem aFileItem)
   {
-    if (aFileItem == null)
-    {
-      throw new NullPointerException ("fileItem"); //$NON-NLS-1$
-    }
+    ValueEnforcer.notNull (aFileItem, "fileItem"); //$NON-NLS-1$
 
     final String sFileName = aFileItem.getName ();
     if (StringHelper.hasNoText (sFileName))

@@ -26,6 +26,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.state.ESuccess;
@@ -49,18 +51,10 @@ public final class UploadPostProcessingResult implements ISuccessIndicator, IHas
                                      @Nullable final Object [] aMessageArgs,
                                      final boolean bReplaceMainSuccessMessage)
   {
-    if (eSuccess == null)
-    {
-      throw new NullPointerException ("success");
-    }
-    if (aMessage == null)
-    {
-      throw new NullPointerException ("message");
-    }
-    if (sResultCode == null)
-    {
-      throw new NullPointerException ("sResultCode");
-    }
+    ValueEnforcer.notNull (eSuccess, "Success");
+    ValueEnforcer.notNull (aMessage, "Message");
+    ValueEnforcer.notNull (sResultCode, "ResultCode");
+
     m_eSuccess = eSuccess;
     m_aMessage = aMessage;
     m_sResultCode = sResultCode;
@@ -108,16 +102,14 @@ public final class UploadPostProcessingResult implements ISuccessIndicator, IHas
    * @return Any possible message arguments that can be used in constructing a
    *         custom UI message (see also {@link #getResultCode()})
    */
+  @Nonnull
+  @ReturnsMutableCopy
   public List <String> getResultArgs ()
   {
     final List <String> aArgs = new ArrayList <String> ();
     if (!ArrayHelper.isEmpty (m_aMessageArgs))
-    {
       for (final Object aArg : m_aMessageArgs)
-      {
         aArgs.add (TypeConverter.convertIfNecessary (aArg, String.class));
-      }
-    }
     return aArgs;
   }
 

@@ -22,10 +22,10 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 
@@ -46,30 +46,30 @@ public enum EFileUploadText implements IHasDisplayText, IHasDisplayTextWithArgs
   PROGRESS_DESC_DONE ("Fertig!", "Done!"),
   PROGRESS_MSG_SUCCESS ("Die Datei ''{0}'' wurde erfolgreich hochgeladen.", "The file ''{0}'' was successfully uploaded.");
 
-  private final ITextProvider m_aTP;
+  private final TextProvider m_aTP;
 
   private EFileUploadText (@Nonnull final String sDE, @Nonnull final String sEN)
   {
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }
 
-  @Override
   @Nullable
   public String getDisplayText (@Nonnull final Locale aContentLocale)
   {
-    return DefaultTextResolver.getText (this, this.m_aTP, aContentLocale);
+    return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }
 
-  @Override
   @Nullable
   public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
   {
-    return DefaultTextResolver.getTextWithArgs (this, this.m_aTP, aContentLocale, aArgs);
+    return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
   }
 
   /**
    * @return The name of the string property
    */
+  @Nonnull
+  @Nonempty
   public String getStringPropertyName ()
   {
     return name ();

@@ -20,11 +20,11 @@ package com.phloc.fileupload.handler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.string.StringHelper;
 
-public final class UploadConstantMimeTypeFilter implements IUploadMimeTypeFilter
+public class UploadConstantMimeTypeFilter implements IUploadMimeTypeFilter
 {
   private static final long serialVersionUID = 5091055422688527769L;
   private final IMimeType m_aMimeType;
@@ -33,27 +33,21 @@ public final class UploadConstantMimeTypeFilter implements IUploadMimeTypeFilter
   public UploadConstantMimeTypeFilter (@Nonnull final IMimeType aMimeType,
                                        @Nonnull @Nonempty final String sErrorMessageType)
   {
-    if (aMimeType == null)
-    {
-      throw new NullPointerException ("mimeType"); //$NON-NLS-1$
-    }
-    if (StringHelper.hasNoText (sErrorMessageType))
-    {
-      throw new IllegalArgumentException ("errorMessageType"); //$NON-NLS-1$
-    }
-    this.m_aMimeType = aMimeType;
-    this.m_sErrorMessageType = sErrorMessageType;
+    ValueEnforcer.notNull (aMimeType, "mimeType"); //$NON-NLS-1$
+    ValueEnforcer.notEmpty (sErrorMessageType, "ErrorMessageType"); //$NON-NLS-1$
+    m_aMimeType = aMimeType;
+    m_sErrorMessageType = sErrorMessageType;
   }
 
   public boolean matchesFilter (@Nullable final String sMimeType)
   {
-    return this.m_aMimeType.getAsString ().equals (sMimeType);
+    return m_aMimeType.getAsString ().equals (sMimeType);
   }
 
   @Nonnull
   @Nonempty
   public String getErrorMessageType ()
   {
-    return this.m_sErrorMessageType;
+    return m_sErrorMessageType;
   }
 }

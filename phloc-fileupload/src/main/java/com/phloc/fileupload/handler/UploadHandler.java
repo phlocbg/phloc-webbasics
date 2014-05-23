@@ -48,6 +48,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 public final class UploadHandler
 {
   public static final String PARAM_UPLOAD_ID = "uploadID";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (UploadHandler.class);
 
   private UploadHandler ()

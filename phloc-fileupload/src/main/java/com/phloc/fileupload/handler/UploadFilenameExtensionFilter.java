@@ -23,11 +23,12 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.string.StringHelper;
 
 public class UploadFilenameExtensionFilter implements IUploadFilenameFilter
 {
@@ -42,69 +43,47 @@ public class UploadFilenameExtensionFilter implements IUploadFilenameFilter
                                         @Nonnull final IHasDisplayText aErrorMessage,
                                         @Nullable final List <String> aErrorArguments)
   {
-    if (aValidExtensions == null)
-    {
-      throw new NullPointerException ("aValidExtensions"); //$NON-NLS-1$
-    }
+    ValueEnforcer.notNull (aValidExtensions, "ValidExtensions"); //$NON-NLS-1$
     for (final String sExtension : aValidExtensions)
-  {
-    if (sExtension.indexOf ('.') >= 0)
-      {
+      if (sExtension.indexOf ('.') >= 0)
         throw new IllegalArgumentException ("Extension may not contain a dot: " + sExtension); //$NON-NLS-1$
-      }
-    }
-    if (StringHelper.hasNoText (sErrorCode))
-    {
-      throw new IllegalArgumentException ("sErrorCode must not be null or empty!"); //$NON-NLS-1$
-    }
-    if (aErrorMessage == null)
-    {
-      throw new NullPointerException ("aErrorMessage"); //$NON-NLS-1$
-    }
-    this.m_aValidExtensions = ContainerHelper.newSet (aValidExtensions);
-    this.m_sErrorCode = sErrorCode;
-    this.m_aErrorMessage = aErrorMessage;
-    this.m_aErrorArguments = ContainerHelper.newList (aErrorArguments);
+    ValueEnforcer.notEmpty (sErrorCode, "ErrorCode must not be null or empty!"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aErrorMessage, "ErrorMessage"); //$NON-NLS-1$
+    m_aValidExtensions = ContainerHelper.newSet (aValidExtensions);
+    m_sErrorCode = sErrorCode;
+    m_aErrorMessage = aErrorMessage;
+    m_aErrorArguments = ContainerHelper.newList (aErrorArguments);
   }
 
-  @Override
   public boolean matchesFilter (final String sFilename)
   {
     // no limitation means everything is valid!
-    if (this.m_aValidExtensions.isEmpty ())
-    {
+    if (m_aValidExtensions.isEmpty ())
       return true;
-    }
-    for (final String sValidExtension : this.m_aValidExtensions)
-    {
-      if (sValidExtension.equalsIgnoreCase (FilenameHelper.getExtension (FilenameHelper.getSecureFilename (sFilename))))
-      {
+
+    final String sExt = FilenameHelper.getExtension (FilenameHelper.getSecureFilename (sFilename));
+    for (final String sValidExtension : m_aValidExtensions)
+      if (sValidExtension.equalsIgnoreCase (sExt))
         return true;
-      }
-    }
     return false;
   }
 
-  @Override
   @Nonnull
   @Nonempty
   public String getErrorCode ()
   {
-    return this.m_sErrorCode;
+    return m_sErrorCode;
   }
-  
-  @Override
+
   @Nonnull
-  @Nonempty
   public IHasDisplayText getErrorMessage ()
   {
-    return this.m_aErrorMessage;
+    return m_aErrorMessage;
   }
-  
-  @Override
-  @Nullable
+
+  @ReturnsMutableCopy
   public List <String> getErrorArguments ()
   {
-    return ContainerHelper.newList (this.m_aErrorArguments);
+    return ContainerHelper.newList (m_aErrorArguments);
   }
 }

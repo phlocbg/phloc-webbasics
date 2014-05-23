@@ -17,14 +17,12 @@
  */
 package com.phloc.fileupload.handler;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.filter.IFilter;
+import com.phloc.commons.filter.ISerializableFilter;
 
-public interface IUploadMimeTypeFilter extends IFilter <String>, Serializable
+public interface IUploadMimeTypeFilter extends ISerializableFilter <String>
 {
   @Nonnull
   @Nonempty

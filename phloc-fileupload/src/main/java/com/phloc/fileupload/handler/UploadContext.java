@@ -24,7 +24,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.DevelopersNote;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SMap;
@@ -41,6 +41,7 @@ import com.phloc.html.js.builder.JSAnonymousFunction;
 public class UploadContext implements Serializable
 {
   private static final long serialVersionUID = -3815678526665140941L;
+
   private File m_aUploadDirectory;
   private final IUploadPostProcessor m_aPostProcessor;
   private final ISimpleURL m_aUploadServletURL;
@@ -65,19 +66,10 @@ public class UploadContext implements Serializable
                         @Nonnull final ISimpleURL aUploadServletURL,
                         @Nonnull final ISimpleURL aSelfURL)
   {
-    if (aUploadDirectory == null)
-    {
-      throw new NullPointerException ("upload directory"); //$NON-NLS-1$
-    }
-    if (aUploadServletURL == null)
-    {
-      throw new NullPointerException ("upload servlet URL"); //$NON-NLS-1$
-    }
-    if (aSelfURL == null)
-    {
-      throw new NullPointerException ("self URL"); //$NON-NLS-1$
-    }
-    m_aUploadDirectory = aUploadDirectory;
+    ValueEnforcer.notNull (aUploadServletURL, "UploadServletURL"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aSelfURL, "SelfURL"); //$NON-NLS-1$
+
+    setUploadDirectory (aUploadDirectory);
     m_aPostProcessor = aPostProcessor;
     m_aUploadServletURL = aUploadServletURL;
     m_aSelfURL = aSelfURL;
@@ -135,10 +127,7 @@ public class UploadContext implements Serializable
 
   public void setUploadDirectory (@Nonnull final File aUploadDirectory)
   {
-    if (aUploadDirectory == null)
-    {
-      throw new NullPointerException ("upload directory"); //$NON-NLS-1$
-    }
+    ValueEnforcer.notNull (aUploadDirectory, "UploadDirectory"); //$NON-NLS-1$
     m_aUploadDirectory = aUploadDirectory;
   }
 
@@ -194,13 +183,6 @@ public class UploadContext implements Serializable
   public IUploadPostProcessor getPostProcessor ()
   {
     return m_aPostProcessor;
-  }
-
-  @Deprecated
-  @DevelopersNote ("typo")
-  public ISimpleURL getUploadServeltURL ()
-  {
-    return getUploadServletURL ();
   }
 
   public ISimpleURL getUploadServletURL ()

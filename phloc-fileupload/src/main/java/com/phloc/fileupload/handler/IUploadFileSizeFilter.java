@@ -17,11 +17,9 @@
  */
 package com.phloc.fileupload.handler;
 
-import java.io.Serializable;
+import com.phloc.commons.filter.ISerializableFilter;
 
-import com.phloc.commons.filter.IFilter;
-
-public interface IUploadFileSizeFilter extends IFilter <Long>, Serializable
+public interface IUploadFileSizeFilter extends ISerializableFilter <Long>
 {
   long getMaxBytes ();
 }
