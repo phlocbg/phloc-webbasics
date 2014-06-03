@@ -52,6 +52,8 @@ public class PLDINTest
         final PLVBox aWindow = new PLVBox ();
         aWindow.addRow (new PLSpacerY (42 * fMMToUnits));
         aWindow.addRow (new PLText ("Hr. MaxMustermann\nMusterstraße 15\nA-1010 Wien", r10).setMinSize (90 * fMMToUnits,
+                                                                                                        45 * fMMToUnits)
+                                                                                           .setMaxSize (90 * fMMToUnits,
                                                                                                         45 * fMMToUnits));
         aWindow.addRow (new PLSpacerY (12 * fMMToUnits));
         aHBox.addColumn (aWindow, WidthSpec.abs (90 * fMMToUnits));

@@ -51,6 +51,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractPLElement.class);
 
   private SizeSpec m_aMinSize = SizeSpec.SIZE0;
+  private SizeSpec m_aMaxSize = new SizeSpec (Float.MAX_VALUE, Float.MAX_VALUE);
   private boolean m_bPrepared = false;
   private SizeSpec m_aPreparedSize;
 
@@ -67,6 +68,19 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   public IMPLTYPE setMinSize (@Nonnegative final float fMinWidth, @Nonnegative final float fMinHeight)
   {
     m_aMinSize = new SizeSpec (fMinWidth, fMinHeight);
+    return thisAsT ();
+  }
+
+  @Nonnull
+  public SizeSpec getMaxSize ()
+  {
+    return m_aMaxSize;
+  }
+
+  @Nonnull
+  public IMPLTYPE setMaxSize (@Nonnegative final float fMaxWidth, @Nonnegative final float fMaxHeight)
+  {
+    m_aMaxSize = new SizeSpec (fMaxWidth, fMaxHeight);
     return thisAsT ();
   }
 
@@ -122,8 +136,13 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     ValueEnforcer.notNull (aPreparedSize, "PreparedSize");
 
     // Consider min size here
-    final float fRealWidth = Math.max (m_aMinSize.getWidth (), aPreparedSize.getWidth ());
-    final float fRealHeight = Math.max (m_aMinSize.getHeight (), aPreparedSize.getHeight ());
+    float fRealWidth = Math.max (m_aMinSize.getWidth (), aPreparedSize.getWidth ());
+    float fRealHeight = Math.max (m_aMinSize.getHeight (), aPreparedSize.getHeight ());
+
+    // Consider max size here
+    fRealWidth = Math.min (m_aMaxSize.getWidth (), fRealWidth);
+    fRealHeight = Math.min (m_aMaxSize.getHeight (), fRealHeight);
+
     m_bPrepared = true;
     m_aPreparedSize = new SizeSpec (fRealWidth, fRealHeight);
   }
@@ -238,6 +257,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("minSize", m_aMinSize)
+                            .append ("maxSize", m_aMaxSize)
                             .append ("prepared", m_bPrepared)
                             .appendIfNotNull ("preparedSize", m_aPreparedSize)
                             .toString ();
