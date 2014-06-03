@@ -41,7 +41,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Abstract layout element that supports rendering.
- *
+ * 
  * @author Philip Helger
  * @param <IMPLTYPE>
  *        The implementation type of this class.
@@ -50,15 +50,29 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractPLElement.class);
 
+  private SizeSpec m_aMinSize = SizeSpec.SIZE0;
   private boolean m_bPrepared = false;
   private SizeSpec m_aPreparedSize;
 
   public AbstractPLElement ()
   {}
 
+  @Nonnull
+  public SizeSpec getMinSize ()
+  {
+    return m_aMinSize;
+  }
+
+  @Nonnull
+  public IMPLTYPE setMinSize (@Nonnegative final float fMinWidth, @Nonnegative final float fMinHeight)
+  {
+    m_aMinSize = new SizeSpec (fMinWidth, fMinHeight);
+    return thisAsT ();
+  }
+
   /**
    * Throw an exception, if this object is already prepared.
-   *
+   * 
    * @throws IllegalStateException
    *         if already prepared
    */
@@ -92,7 +106,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   /**
    * The abstract method that must be implemented by all subclasses. It is
    * ensured that this method is called only once per instance!
-   *
+   * 
    * @param aCtx
    *        Preparation context. Never <code>null</code>.
    * @return The size of the rendered element without padding or margin. May not
@@ -103,9 +117,20 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   @Nonnull
   protected abstract SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException;
 
+  private final void _setPreparedSize (@Nonnull final SizeSpec aPreparedSize)
+  {
+    ValueEnforcer.notNull (aPreparedSize, "PreparedSize");
+
+    // Consider min size here
+    final float fRealWidth = Math.max (m_aMinSize.getWidth (), aPreparedSize.getWidth ());
+    final float fRealHeight = Math.max (m_aMinSize.getHeight (), aPreparedSize.getHeight ());
+    m_bPrepared = true;
+    m_aPreparedSize = new SizeSpec (fRealWidth, fRealHeight);
+  }
+
   /**
    * Prepare this element once for rendering.
-   *
+   * 
    * @param aCtx
    *        The preparation context
    * @return The net size of the rendered object without padding or margin. May
@@ -119,8 +144,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     checkNotPrepared ();
 
     // Do prepare
-    m_bPrepared = true;
-    m_aPreparedSize = onPrepare (aCtx);
+    _setPreparedSize (onPrepare (aCtx));
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Prepared object " + CGStringHelper.getClassLocalName (getClass ()));
 
@@ -144,14 +168,13 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     // Prepare only once!
     checkNotPrepared ();
 
-    m_aPreparedSize = ValueEnforcer.notNull (aPreparedSize, "PreparedSize");
-    m_bPrepared = true;
+    _setPreparedSize (aPreparedSize);
     return thisAsT ();
   }
 
   /**
    * Called after the page was created but before the content stream is created.
-   *
+   * 
    * @param aCtx
    *        The current page setup context. Never <code>null</code>.
    */
@@ -161,7 +184,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Abstract method to be implemented by subclasses.
-   *
+   * 
    * @param aCtx
    *        Rendering context
    * @throws IOException
@@ -171,7 +194,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Second step: perform.
-   *
+   * 
    * @param aCtx
    *        Rendering context
    * @throws IOException
@@ -214,6 +237,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
+                            .append ("minSize", m_aMinSize)
                             .append ("prepared", m_bPrepared)
                             .appendIfNotNull ("preparedSize", m_aPreparedSize)
                             .toString ();

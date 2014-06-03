@@ -23,6 +23,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -30,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class defines a size.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -44,7 +45,7 @@ public class SizeSpec
 
   /**
    * Constructor
-   *
+   * 
    * @param fWidth
    *        Width. Must be &ge; 0.
    * @param fHeight
@@ -52,10 +53,8 @@ public class SizeSpec
    */
   public SizeSpec (@Nonnegative final float fWidth, @Nonnegative final float fHeight)
   {
-    if (fWidth < 0)
-      throw new IllegalArgumentException ("Width");
-    if (fHeight < 0)
-      throw new IllegalArgumentException ("Height");
+    ValueEnforcer.isGE0 (fWidth, "Width");
+    ValueEnforcer.isGE0 (fHeight, "Height");
 
     m_fWidth = fWidth;
     m_fHeight = fHeight;
