@@ -20,7 +20,7 @@ package com.phloc.webctrls.custom.table;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.html.HCCol;
 
@@ -35,10 +35,9 @@ public final class ColumnDefinitionTyped extends ColumnDefinition
                                 @Nonnull final Class <?> aType)
   {
     super (sName, aCol, sFieldID);
-    if (StringHelper.hasNoText (sFieldID))
-      throw new IllegalArgumentException ("field ID cannot be empty for typed columns");
-    if (aType == null)
-      throw new NullPointerException ("aType");
+    // field ID cannot be empty for typed columns
+    ValueEnforcer.notEmpty (sFieldID, "FieldID");
+    ValueEnforcer.notNull (aType, "Type");
     m_aType = aType;
   }
 

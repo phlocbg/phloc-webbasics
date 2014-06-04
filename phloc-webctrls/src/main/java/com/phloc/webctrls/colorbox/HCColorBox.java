@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -56,16 +57,14 @@ public class HCColorBox implements IHCNodeBuilder
 
   public HCColorBox (@Nonnull final IJQuerySelector aSelector)
   {
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
+    ValueEnforcer.notNull (aSelector, "Selector");
     m_aElement = null;
     m_aSelector = aSelector;
   }
 
   public HCColorBox (@Nonnull final IHCElement <?> aElement)
   {
-    if (aElement == null)
-      throw new NullPointerException ("element");
+    ValueEnforcer.notNull (aElement, "Element");
     m_aElement = aElement;
     m_aSelector = null;
   }

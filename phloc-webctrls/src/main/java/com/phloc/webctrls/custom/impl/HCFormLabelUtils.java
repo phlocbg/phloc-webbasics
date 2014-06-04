@@ -19,6 +19,7 @@ package com.phloc.webctrls.custom.impl;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
@@ -62,10 +63,8 @@ public final class HCFormLabelUtils
   @Nonnull
   public static String getTextWithState (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
-    if (sText == null)
-      throw new NullPointerException ("text");
-    if (eType == null)
-      throw new NullPointerException ("type");
+    ValueEnforcer.notNull (sText, "Text");
+    ValueEnforcer.notNull (eType, "Type");
 
     // Trim optional trailing colon
     String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
@@ -79,10 +78,8 @@ public final class HCFormLabelUtils
   public static <T extends IHCNodeWithChildren <?>> T getNodeWithState (@Nonnull final T aNode,
                                                                         @Nonnull final ELabelType eType)
   {
-    if (aNode == null)
-      throw new NullPointerException ("node");
-    if (eType == null)
-      throw new NullPointerException ("type");
+    ValueEnforcer.notNull (aNode, "Node");
+    ValueEnforcer.notNull (eType, "Type");
 
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursiveContainsAtLeastOneTextNode (aNode))

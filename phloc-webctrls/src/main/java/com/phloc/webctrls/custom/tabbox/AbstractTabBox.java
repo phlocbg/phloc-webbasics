@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.GenericReflection;
@@ -147,8 +148,7 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
   @Nonnull
   public IMPLTYPE addTab (@Nonnull final Tab aTab, final boolean bActive)
   {
-    if (aTab == null)
-      throw new NullPointerException ("tab");
+    ValueEnforcer.notNull (aTab, "Tab");
 
     // Tab ID may be generated, if null was provided
     final String sTabID = aTab.getID ();

@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCCell;
@@ -55,8 +56,7 @@ public class ColumnDefinition implements Serializable
   {
     if (StringHelper.hasNoText (sFieldID) && aComparator != null)
       throw new IllegalArgumentException ("field ID cannot be empty for sortable columns");
-    if (aCol == null)
-      throw new NullPointerException ("col");
+    ValueEnforcer.notNull (aCol, "Col");
     m_sName = sName;
     m_aCol = aCol;
     m_sFieldID = sFieldID;
