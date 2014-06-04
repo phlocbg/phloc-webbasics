@@ -20,6 +20,7 @@ package com.phloc.webctrls.facebook.xfbml;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.regex.RegExHelper;
@@ -115,8 +116,7 @@ public class FBLike extends AbstractFBNode
                  @Nullable final String sRefInfo)
   {
     super ("like");
-    if (aURL == null)
-      throw new NullPointerException ("aURL must not be null!");
+    ValueEnforcer.notNull (aURL, "URL");
     m_aURL = aURL;
     m_bWithSendButton = bWithSendButton;
     m_aLayout = aLayout;

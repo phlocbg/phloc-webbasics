@@ -19,6 +19,7 @@ package com.phloc.webctrls.styler;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
@@ -45,8 +46,6 @@ public class WebPageStylerManager extends GlobalSingleton
 
   public void setStyler (@Nonnull final IWebPageStyler aStyler)
   {
-    if (aStyler == null)
-      throw new NullPointerException ("Styler");
-    m_aStyle = aStyler;
+    m_aStyle = ValueEnforcer.notNull (aStyler, "Styler");
   }
 }

@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -149,8 +150,7 @@ public class DataTables implements IHCNodeBuilder
    */
   public DataTables (@Nonnull final IHCTable <?> aTable)
   {
-    if (aTable == null)
-      throw new NullPointerException ("Table");
+    ValueEnforcer.notNull (aTable, "Table");
     if (!aTable.hasHeaderRows ())
       s_aLogger.warn ("Table does not have a header row, so DataTables may not be displayed correctly!");
     if (StringHelper.hasNoText (aTable.getID ()))
@@ -289,8 +289,7 @@ public class DataTables implements IHCNodeBuilder
   @Nonnull
   public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
   {
-    if (aColumn == null)
-      throw new NullPointerException ("column");
+    ValueEnforcer.notNull (aColumn, "Column");
 
     // Check if targets are unique!
     for (final int nTarget : aColumn.getAllTargets ())
@@ -307,8 +306,7 @@ public class DataTables implements IHCNodeBuilder
   @Nonnull
   public DataTables addAllColumns (@Nonnull final IHCTable <?> aTable)
   {
-    if (aTable == null)
-      throw new NullPointerException ("table");
+    ValueEnforcer.notNull (aTable, "Table");
 
     // Add all columns
     final HCColGroup aColGroup = aTable.getColGroup ();
@@ -581,9 +579,7 @@ public class DataTables implements IHCNodeBuilder
   @Nonnull
   public DataTables setServerFilterType (@Nonnull final EDataTablesFilterType eServerFilterType)
   {
-    if (eServerFilterType == null)
-      throw new NullPointerException ("serverFilterType");
-    m_eServerFilterType = eServerFilterType;
+    m_eServerFilterType = ValueEnforcer.notNull (eServerFilterType, "ServerFilterType");
     return this;
   }
 

@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
@@ -58,8 +59,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     RequestComparator (@Nonnull final ServerSortState aServerSortState)
     {
-      if (aServerSortState == null)
-        throw new NullPointerException ("ServerSortState");
+      ValueEnforcer.notNull (aServerSortState, "ServerSortState");
+
       m_aSortCols = aServerSortState.getSortCols ();
     }
 

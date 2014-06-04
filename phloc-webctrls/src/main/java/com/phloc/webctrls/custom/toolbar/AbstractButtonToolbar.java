@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.html.AbstractHCDiv;
@@ -50,9 +51,7 @@ public abstract class AbstractButtonToolbar <IMPLTYPE extends AbstractButtonTool
 
   public AbstractButtonToolbar (@Nonnull final SimpleURL aSelfHref)
   {
-    if (aSelfHref == null)
-      throw new NullPointerException ("selfHref");
-    m_aSelfHref = aSelfHref;
+    m_aSelfHref = ValueEnforcer.notNull (aSelfHref, "SelfHref");
   }
 
   @Nonnull

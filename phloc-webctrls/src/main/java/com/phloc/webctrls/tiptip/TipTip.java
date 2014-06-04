@@ -21,6 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
@@ -90,9 +91,7 @@ public final class TipTip implements IHCNodeBuilder
   @Nonnull
   public TipTip setType (@Nonnull final ETipType eType)
   {
-    if (eType == null)
-      throw new NullPointerException ("type");
-    m_eType = eType;
+    m_eType = ValueEnforcer.notNull (eType, "Type");
     return this;
   }
 

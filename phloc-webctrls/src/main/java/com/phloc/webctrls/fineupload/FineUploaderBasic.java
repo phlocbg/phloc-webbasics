@@ -27,6 +27,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -144,9 +145,7 @@ public class FineUploaderBasic
   @Nonnull
   public FineUploaderBasic setEndpoint (@Nonnull final ISimpleURL aRequestEndpoint)
   {
-    if (aRequestEndpoint == null)
-      throw new NullPointerException ("requestEndpoint");
-    m_aRequestEndpoint = aRequestEndpoint;
+    m_aRequestEndpoint = ValueEnforcer.notNull (aRequestEndpoint, "RequestEndpoint");
     return this;
   }
 
@@ -203,10 +202,9 @@ public class FineUploaderBasic
   @Nonnull
   public FineUploaderBasic addParam (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue)
   {
-    if (StringHelper.hasNoText (sKey))
-      throw new IllegalArgumentException ("key");
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sKey, "Key");
+    ValueEnforcer.notNull (sValue, "Value");
+
     m_aRequestParams.put (sKey, sValue);
     return this;
   }
@@ -289,10 +287,9 @@ public class FineUploaderBasic
   @Nonnull
   public FineUploaderBasic addCustomHeader (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue)
   {
-    if (StringHelper.hasNoText (sKey))
-      throw new IllegalArgumentException ("key");
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sKey, "Key");
+    ValueEnforcer.notNull (sValue, "Value");
+
     m_aRequestCustomHeaders.put (sKey, sValue);
     return this;
   }

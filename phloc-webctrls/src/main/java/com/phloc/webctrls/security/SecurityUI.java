@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
@@ -52,6 +53,21 @@ public final class SecurityUI
   }
 
   /**
+   * Get the display name of the guest user in the specified locale.
+   * 
+   * @param aDisplayLocale
+   *        The locale to be used. May not be <code>null</code>.
+   * @return <code>null</code> if no translation is present.
+   */
+  @Nullable
+  public static String getGuestUserDisplayName (@Nonnull final Locale aDisplayLocale)
+  {
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+
+    return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
+  }
+
+  /**
    * Get the display name of the user.
    * 
    * @param sUserID
@@ -66,7 +82,8 @@ public final class SecurityUI
   public static String getUserDisplayName (@Nullable final String sUserID, @Nonnull final Locale aDisplayLocale)
   {
     if (StringHelper.hasNoText (sUserID))
-      return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
+      return getGuestUserDisplayName (aDisplayLocale);
+
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
     return aUser == null ? sUserID : getUserDisplayName (aUser, aDisplayLocale);
   }
@@ -86,10 +103,9 @@ public final class SecurityUI
   @Nullable
   public static String getUserDisplayName (@Nullable final IUser aUser, @Nonnull final Locale aDisplayLocale)
   {
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("DisplayLocale");
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
     if (aUser == null)
-      return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
+      return getGuestUserDisplayName (aDisplayLocale);
 
     String ret = aUser.getDisplayName ();
     if (StringHelper.hasNoText (ret))

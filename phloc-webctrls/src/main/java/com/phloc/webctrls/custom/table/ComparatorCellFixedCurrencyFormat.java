@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.masterdata.currency.ECurrency;
 
 /**
@@ -37,9 +38,7 @@ public final class ComparatorCellFixedCurrencyFormat extends ComparatorCellDoubl
   public ComparatorCellFixedCurrencyFormat (@Nonnull final Locale aLocale, @Nonnull final ECurrency eCurrency)
   {
     super (aLocale);
-    if (eCurrency == null)
-      throw new NullPointerException ("currency");
-    m_eCurrency = eCurrency;
+    m_eCurrency = ValueEnforcer.notNull (eCurrency, "Currency");
   }
 
   @Override

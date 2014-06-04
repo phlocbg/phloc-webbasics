@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
@@ -173,9 +174,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   public BasePageSettingsSMTP (@Nonnull final NamedSMTPSettingsManager aMgr, @Nonnull @Nonempty final String sID)
   {
     super (sID, EWebPageText.PAGE_NAME_SETTINGS_SMTP.getAsMLT ());
-    if (aMgr == null)
-      throw new NullPointerException ("NamedSMTPSettingsManager");
-    m_aMgr = aMgr;
+    m_aMgr = ValueEnforcer.notNull (aMgr, "NamedSMTPSettingsManager");
   }
 
   public BasePageSettingsSMTP (@Nonnull final NamedSMTPSettingsManager aMgr,
@@ -183,9 +182,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
                                @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
-    if (aMgr == null)
-      throw new NullPointerException ("NamedSMTPSettingsManager");
-    m_aMgr = aMgr;
+    m_aMgr = ValueEnforcer.notNull (aMgr, "NamedSMTPSettingsManager");
   }
 
   public BasePageSettingsSMTP (@Nonnull final NamedSMTPSettingsManager aMgr,
@@ -194,9 +191,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
                                @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
-    if (aMgr == null)
-      throw new NullPointerException ("NamedSMTPSettingsManager");
-    m_aMgr = aMgr;
+    m_aMgr = ValueEnforcer.notNull (aMgr, "NamedSMTPSettingsManager");
   }
 
   public BasePageSettingsSMTP (@Nonnull final NamedSMTPSettingsManager aMgr,
@@ -205,9 +200,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
                                @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
-    if (aMgr == null)
-      throw new NullPointerException ("NamedSMTPSettingsManager");
-    m_aMgr = aMgr;
+    m_aMgr = ValueEnforcer.notNull (aMgr, "NamedSMTPSettingsManager");
   }
 
   @Override

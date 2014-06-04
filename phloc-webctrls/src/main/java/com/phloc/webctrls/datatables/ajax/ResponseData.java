@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
@@ -69,10 +70,8 @@ final class ResponseData implements IJsonProvider
                 @Nonnull final List <Map <String, String>> aData,
                 @Nonnull final IHCSpecialNodes aSpecialNodes)
   {
-    if (aData == null)
-      throw new NullPointerException ("Data");
-    if (aSpecialNodes == null)
-      throw new NullPointerException ("SpecialNodes");
+    ValueEnforcer.notNull (aData, "Data");
+    ValueEnforcer.notNull (aSpecialNodes, "SpecialNodes");
     m_nTotalRecords = nTotalRecords;
     m_nTotalDisplayRecords = nTotalDisplayRecords;
     m_nEcho = nEcho;

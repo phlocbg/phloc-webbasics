@@ -23,6 +23,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
@@ -47,9 +48,7 @@ public class ComparatorTableBigDecimal extends AbstractComparatorTable
   public ComparatorTableBigDecimal (@Nullable final IFormatter aFormatter, @Nonnull final Locale aParseLocale)
   {
     super (aFormatter);
-    if (aParseLocale == null)
-      throw new NullPointerException ("parseLocale");
-    m_aParseLocale = aParseLocale;
+    m_aParseLocale = ValueEnforcer.notNull (aParseLocale, "ParseLocale");
   }
 
   @Nonnull

@@ -25,6 +25,7 @@ import java.util.Locale;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.compare.ReverseComparator;
@@ -51,10 +52,10 @@ final class ServerSortState implements Serializable
                    @Nonnull final RequestDataSortColumn [] aSortCols,
                    @Nonnull final Locale aDisplayLocale)
   {
-    if (aServerData == null)
-      throw new NullPointerException ("serverData");
-    if (aSortCols == null)
-      throw new NullPointerException ("sortCols");
+    ValueEnforcer.notNull (aServerData, "ServerData");
+    ValueEnforcer.notNull (aSortCols, "SortColumns");
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+
     m_aSortState = aSortCols;
 
     // Extract the comparators for all sort columns

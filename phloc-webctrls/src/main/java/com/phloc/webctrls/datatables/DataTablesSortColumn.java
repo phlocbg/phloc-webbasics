@@ -20,6 +20,7 @@ package com.phloc.webctrls.datatables;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.JSArray;
@@ -36,10 +37,8 @@ public final class DataTablesSortColumn
 
   public DataTablesSortColumn (@Nonnegative final int nIndex, @Nonnull final ESortOrder eSortOrder)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("index");
-    if (eSortOrder == null)
-      throw new NullPointerException ("sortOrder");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (eSortOrder, "SortOrder");
     m_nIndex = nIndex;
     m_eSortOrder = eSortOrder;
   }

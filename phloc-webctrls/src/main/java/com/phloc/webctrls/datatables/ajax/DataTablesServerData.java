@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.string.StringHelper;
@@ -61,10 +62,7 @@ public final class DataTablesServerData implements IHasUIState
 
     private ColumnData (@Nonnull final Comparator <String> aComparator)
     {
-      if (aComparator == null)
-        throw new NullPointerException ("comparator");
-
-      m_aComparator = aComparator;
+      m_aComparator = ValueEnforcer.notNull (aComparator, "Comparator");
     }
 
     @Nonnull
@@ -93,14 +91,10 @@ public final class DataTablesServerData implements IHasUIState
                                @Nonnull final Locale aDisplayLocale,
                                @Nonnull final EDataTablesFilterType eFilterType)
   {
-    if (aTable == null)
-      throw new NullPointerException ("table");
-    if (aColumns == null)
-      throw new NullPointerException ("columns");
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("displayLocale");
-    if (eFilterType == null)
-      throw new NullPointerException ("searchType");
+    ValueEnforcer.notNull (aTable, "Table");
+    ValueEnforcer.notNull (aColumns, "Columns");
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+    ValueEnforcer.notNull (eFilterType, "FilterType");
 
     // Column data
     final int nColumnCount = aTable.getColumnCount ();
@@ -160,9 +154,7 @@ public final class DataTablesServerData implements IHasUIState
 
   public void setServerSortState (@Nonnull final ServerSortState aServerSortState)
   {
-    if (aServerSortState == null)
-      throw new NullPointerException ("serverSortState");
-    m_aServerSortState = aServerSortState;
+    m_aServerSortState = ValueEnforcer.notNull (aServerSortState, "ServerSortState");
   }
 
   @Nonnegative
@@ -178,10 +170,9 @@ public final class DataTablesServerData implements IHasUIState
     return m_aRows;
   }
 
-  public void sortAllRows (@Nonnull final Comparator <DataTablesServerDataRow> aComp)
+  public void sortAllRows (@Nonnull final Comparator <? super DataTablesServerDataRow> aComp)
   {
-    if (aComp == null)
-      throw new NullPointerException ("comp");
+    ValueEnforcer.notNull (aComp, "Comparator");
 
     Collections.sort (m_aRows, aComp);
   }

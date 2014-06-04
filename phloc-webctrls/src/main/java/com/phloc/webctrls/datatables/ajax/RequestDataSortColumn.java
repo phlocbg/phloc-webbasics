@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -88,9 +89,7 @@ final class RequestDataSortColumn implements Serializable
 
   public void setComparator (@Nonnull final Comparator <String> aComparator)
   {
-    if (aComparator == null)
-      throw new NullPointerException ("comparator");
-    m_aComparator = aComparator;
+    m_aComparator = ValueEnforcer.notNull (aComparator, "Comparator");
   }
 
   @Override

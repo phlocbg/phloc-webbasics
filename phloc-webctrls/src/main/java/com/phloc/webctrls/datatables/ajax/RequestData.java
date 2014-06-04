@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
@@ -50,10 +51,8 @@ final class RequestData
                @Nonnull final RequestDataSortColumn [] aSortColumns,
                final int nEcho)
   {
-    if (aSortColumns == null)
-      throw new NullPointerException ("sortCols");
-    if (aColumnData == null)
-      throw new NullPointerException ("columnData");
+    ValueEnforcer.notNull (aSortColumns, "SortColumns");
+    ValueEnforcer.notNull (aColumnData, "ColumnData");
     if (ContainerHelper.containsAnyNullElement (aColumnData))
       throw new IllegalArgumentException ("ColumnData may not contain null elements");
     m_nDisplayStart = nDisplayStart;

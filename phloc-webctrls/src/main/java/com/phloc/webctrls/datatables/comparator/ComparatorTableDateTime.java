@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTUtils;
@@ -59,9 +60,7 @@ public class ComparatorTableDateTime extends AbstractComparatorTable
                                   @Nonnull final SerializableDateTimeFormatter aDTFormatter)
   {
     super (aFormatter);
-    if (aDTFormatter == null)
-      throw new NullPointerException ("formatter");
-    m_aDTFormatter = aDTFormatter;
+    m_aDTFormatter = ValueEnforcer.notNull (aDTFormatter, "DTFormatter");
   }
 
   @Nonnull

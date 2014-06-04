@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractNumericComparator;
 import com.phloc.commons.locale.LocaleFormatter;
@@ -43,8 +44,7 @@ public class ComparatorCellDouble extends AbstractNumericComparator <IHCCell <?>
                                @Nullable final String sCommonPrefix,
                                @Nullable final String sCommonSuffix)
   {
-    if (aParseLocale == null)
-      throw new NullPointerException ("locale");
+    ValueEnforcer.notNull (aParseLocale, "ParseLocale");
     m_aLocale = aParseLocale;
     m_sCommonPrefix = sCommonPrefix;
     m_sCommonSuffix = sCommonSuffix;

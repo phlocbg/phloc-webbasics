@@ -31,11 +31,11 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.cache.AbstractNotifyingCache;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorStringLongestFirst;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
 
@@ -51,8 +51,7 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   @Nonnull
   public DateFormatBuilder append (@Nonnull final EDateTimeFormatToken eToken)
   {
-    if (eToken == null)
-      throw new NullPointerException ("token");
+    ValueEnforcer.notNull (eToken, "Token");
     m_aList.add (eToken);
     return this;
   }
@@ -60,8 +59,8 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   @Nonnull
   public DateFormatBuilder append (@Nonnull @Nonempty final String sText)
   {
-    if (StringHelper.hasNoText (sText))
-      throw new IllegalArgumentException ("text");
+    ValueEnforcer.notEmpty (sText, "Text");
+
     final int nLen = sText.length ();
     for (int i = 0; i < nLen; ++i)
     {
@@ -150,9 +149,7 @@ public final class DateFormatBuilder implements IDateFormatBuilder
 
     public Searcher (@Nonnull final String sRest)
     {
-      if (sRest == null)
-        throw new NullPointerException ("rest");
-      m_sRest = sRest;
+      m_sRest = ValueEnforcer.notNull (sRest, "Rest");
     }
 
     public boolean hasMore ()
@@ -203,8 +200,7 @@ public final class DateFormatBuilder implements IDateFormatBuilder
     @SuppressFBWarnings ("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
     protected DateFormatBuilder getValueToCache (@Nullable final String sJavaPattern)
     {
-      if (sJavaPattern == null)
-        throw new NullPointerException ("JavaPattern");
+      ValueEnforcer.notNull (sJavaPattern, "JavaPattern");
 
       // Do parsing
       final DateFormatBuilder aDFB = new DateFormatBuilder ();
@@ -229,8 +225,8 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   @Nonnull
   public static IDateFormatBuilder fromJavaPattern (@Nonnull final String sJavaPattern)
   {
-    if (StringHelper.hasNoText (sJavaPattern))
-      throw new IllegalArgumentException ("JavaPattern");
+    ValueEnforcer.notEmpty (sJavaPattern, "JavaPattern");
+
     return s_aCache.getFromCache (sJavaPattern);
   }
 }

@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.string.StringHelper;
@@ -67,8 +68,7 @@ public class ComparatorCellDateTime extends AbstractComparator <IHCCell <?>>
                                  @Nullable final String sCommonPrefix,
                                  @Nullable final String sCommonSuffix)
   {
-    if (aFormatter == null)
-      throw new NullPointerException ("formatter");
+    ValueEnforcer.notNull (aFormatter, "Formatter");
     m_aFormatter = aFormatter;
     m_sCommonPrefix = sCommonPrefix;
     m_sCommonSuffix = sCommonSuffix;

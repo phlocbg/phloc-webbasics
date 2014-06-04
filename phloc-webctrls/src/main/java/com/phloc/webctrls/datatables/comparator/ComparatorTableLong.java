@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.CompareUtils;
 import com.phloc.commons.format.IFormatter;
@@ -40,9 +41,7 @@ public class ComparatorTableLong extends AbstractComparatorTable
   public ComparatorTableLong (@Nullable final IFormatter aFormatter, @Nonnull final Locale aParseLocale)
   {
     super (aFormatter);
-    if (aParseLocale == null)
-      throw new NullPointerException ("locale");
-    m_aParseLocale = aParseLocale;
+    m_aParseLocale = ValueEnforcer.notNull (aParseLocale, "ParseLocale");
   }
 
   @Nonnull

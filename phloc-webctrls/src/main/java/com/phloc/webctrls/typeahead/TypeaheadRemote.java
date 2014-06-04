@@ -23,10 +23,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.ETriState;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
@@ -80,15 +80,15 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
    */
   public TypeaheadRemote (@Nonnull final ISimpleURL aURL)
   {
-    if (aURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (aURL, "URL");
+
     m_aURL = new SimpleURL (aURL);
   }
 
   public TypeaheadRemote (@Nonnull final TypeaheadRemote aOther)
   {
-    if (aOther == null)
-      throw new NullPointerException ("Other");
+    ValueEnforcer.notNull (aOther, "Other");
+
     m_aURL = aOther.m_aURL.getClone ();
     m_sDataType = aOther.m_sDataType;
     m_eCache = aOther.m_eCache;
@@ -122,9 +122,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
   @Nonnull
   public TypeaheadRemote setDataType (@Nonnull @Nonempty final String sDataType)
   {
-    if (StringHelper.hasNoText (sDataType))
-      throw new IllegalArgumentException ("dataType");
-    m_sDataType = sDataType;
+    m_sDataType = ValueEnforcer.notEmpty (sDataType, "DataType");
     return this;
   }
 
@@ -164,9 +162,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
   @Nonnull
   public TypeaheadRemote setCache (@Nonnull final ETriState eCache)
   {
-    if (eCache == null)
-      throw new NullPointerException ("Cache");
-    m_eCache = eCache;
+    m_eCache = ValueEnforcer.notNull (eCache, "Cache");
     return this;
   }
 
@@ -270,9 +266,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
   @Nonnull
   public TypeaheadRemote setRateLimitFn (@Nonnull final ETypeaheadRemoteRateLimitFunction eRateLimitFn)
   {
-    if (eRateLimitFn == null)
-      throw new NullPointerException ("rateLimitFn");
-    m_eRateLimitFn = eRateLimitFn;
+    m_eRateLimitFn = ValueEnforcer.notNull (eRateLimitFn, "RateLimitFunction");
     return this;
   }
 
@@ -298,9 +292,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
   @Nonnull
   public TypeaheadRemote setRateLimitWait (@Nonnegative final int nRateLimitWait)
   {
-    if (nRateLimitWait < 1)
-      throw new IllegalArgumentException ("RateLimitWait is too small: " + nRateLimitWait);
-    m_nRateLimitWait = nRateLimitWait;
+    m_nRateLimitWait = ValueEnforcer.isGT0 (nRateLimitWait, "RateLimitWait");
     return this;
   }
 
@@ -325,9 +317,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
   @Nonnull
   public TypeaheadRemote setMaxParallelRequests (@Nonnegative final int nMaxParallelRequests)
   {
-    if (nMaxParallelRequests < 1)
-      throw new IllegalArgumentException ("MaxParallelRequests is too small: " + nMaxParallelRequests);
-    m_nMaxParallelRequests = nMaxParallelRequests;
+    m_nMaxParallelRequests = ValueEnforcer.isGT0 (nMaxParallelRequests, "MaxParallelRequests");
     return this;
   }
 

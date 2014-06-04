@@ -20,6 +20,7 @@ package com.phloc.webctrls.fineupload;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.IHCElement;
@@ -46,9 +47,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
 
   public HCFineUploaderBasic (@Nonnull final FineUploaderBasic aUploader)
   {
-    if (aUploader == null)
-      throw new NullPointerException ("uploader");
-    m_aUploader = aUploader;
+    m_aUploader = ValueEnforcer.notNull (aUploader, "Uploader");
   }
 
   /**
@@ -57,7 +56,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
    * 
    * @param aButton
    *        The button object to use. May be <code>null</code>.
-   * @return thsi
+   * @return this
    */
   @Nonnull
   public HCFineUploaderBasic setButtonToUse (@Nullable final IHCElement <?> aButton)

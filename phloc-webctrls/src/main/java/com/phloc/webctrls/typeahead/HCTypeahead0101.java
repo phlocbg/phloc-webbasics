@@ -24,7 +24,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.WorkInProgress;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.css.DefaultCSSClassProvider;
@@ -41,6 +43,7 @@ import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
+@WorkInProgress
 public class HCTypeahead0101 implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_AUTOSELECT = false;
@@ -74,9 +77,7 @@ public class HCTypeahead0101 implements IHCNodeBuilder
 
   public HCTypeahead0101 (@Nonnull final IJSExpression aSelector)
   {
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
-    m_aSelector = aSelector;
+    m_aSelector = ValueEnforcer.notNull (aSelector, "Selector");
   }
 
   @Nonnull
@@ -136,8 +137,8 @@ public class HCTypeahead0101 implements IHCNodeBuilder
   @Nonnull
   public HCTypeahead0101 addDataset (@Nonnull final TypeaheadDataset aDataset)
   {
-    if (aDataset == null)
-      throw new NullPointerException ("dataset");
+    ValueEnforcer.notNull (aDataset, "Dataset");
+
     m_aDatasets.add (aDataset);
     return this;
   }

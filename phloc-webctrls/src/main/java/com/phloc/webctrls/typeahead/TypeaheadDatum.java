@@ -24,9 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
@@ -75,10 +75,8 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
    */
   public TypeaheadDatum (@Nonnull final String sValue, @Nonnull final String... aTokens)
   {
-    if (sValue == null)
-      throw new NullPointerException ("value");
-    if (ArrayHelper.isEmpty (aTokens))
-      throw new IllegalArgumentException ("tokens");
+    ValueEnforcer.notNull (sValue, "Value");
+    ValueEnforcer.notEmpty (aTokens, "Tokens");
     m_sValue = sValue;
     m_aTokens = ContainerHelper.newList (aTokens);
   }
@@ -93,10 +91,8 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
    */
   public TypeaheadDatum (@Nonnull final String sValue, @Nonnull final Collection <String> aTokens)
   {
-    if (sValue == null)
-      throw new NullPointerException ("value");
-    if (ContainerHelper.isEmpty (aTokens))
-      throw new IllegalArgumentException ("tokens");
+    ValueEnforcer.notNull (sValue, "Value");
+    ValueEnforcer.notEmpty (aTokens, "Tokens");
     m_sValue = sValue;
     m_aTokens = ContainerHelper.newList (aTokens);
   }

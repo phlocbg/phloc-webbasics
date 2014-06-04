@@ -24,6 +24,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -64,9 +65,7 @@ public class HCTypeahead implements IHCNodeBuilder
 
   public HCTypeahead (@Nonnull final IJSExpression aSelector)
   {
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
-    m_aSelector = aSelector;
+    m_aSelector = ValueEnforcer.notNull (aSelector, "Selector");
   }
 
   @Nonnull
@@ -78,8 +77,8 @@ public class HCTypeahead implements IHCNodeBuilder
   @Nonnull
   public HCTypeahead addDataset (@Nonnull final TypeaheadDataset aDataset)
   {
-    if (aDataset == null)
-      throw new NullPointerException ("dataset");
+    ValueEnforcer.notNull (aDataset, "Dataset");
+
     m_aDatasets.add (aDataset);
     return this;
   }

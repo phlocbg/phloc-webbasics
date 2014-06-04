@@ -23,6 +23,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
@@ -55,8 +56,7 @@ public class ActionExecutorDataTablesI18N extends AbstractActionExecutor
 
   public ActionExecutorDataTablesI18N (@Nonnull final Locale aDefaultLocale)
   {
-    if (aDefaultLocale == null)
-      throw new NullPointerException ("defaultLocale");
+    ValueEnforcer.notNull (aDefaultLocale, "DefaultLocale");
     if (StringHelper.hasNoText (aDefaultLocale.getLanguage ()))
       throw new IllegalArgumentException ("defaultLocale muts have a language: " + aDefaultLocale);
     m_aDefaultLocale = aDefaultLocale;

@@ -20,6 +20,7 @@ package com.phloc.webctrls.typeahead;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
@@ -95,8 +96,7 @@ public class TypeaheadEditSelection
                                                                       @Nullable final String sEditFieldName,
                                                                       @Nullable final String sHiddenFieldName)
   {
-    if (aWPEC == null)
-      throw new NullPointerException ("WPEC");
+    ValueEnforcer.notNull (aWPEC, "WPEC");
 
     String sEditValue = aWPEC.getAttr (sEditFieldName);
     String sHiddenFieldValue = aWPEC.getAttr (sHiddenFieldName);

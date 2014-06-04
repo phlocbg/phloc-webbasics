@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
@@ -56,15 +57,13 @@ public class TypeaheadPrefetch implements ICloneable <TypeaheadPrefetch>
    */
   public TypeaheadPrefetch (@Nonnull final ISimpleURL aURL)
   {
-    if (aURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (aURL, "URL");
     m_aURL = new SimpleURL (aURL);
   }
 
   public TypeaheadPrefetch (@Nonnull final TypeaheadPrefetch aOther)
   {
-    if (aOther == null)
-      throw new NullPointerException ("Other");
+    ValueEnforcer.notNull (aOther, "Other");
     m_aURL = aOther.m_aURL.getClone ();
     m_nTTL = aOther.m_nTTL;
     m_aFilter = aOther.m_aFilter;

@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -70,9 +71,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
      */
     protected Finder (@Nonnull final Locale aSortLocale)
     {
-      if (aSortLocale == null)
-        throw new NullPointerException ("sortLocale");
-      m_aSortLocale = aSortLocale;
+      m_aSortLocale = ValueEnforcer.notNull (aSortLocale, "SortLocale");
     }
 
     /**
