@@ -454,7 +454,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * 
    * @param aURL
    *        the url to be encoded. May not be <code>null</code>.
-   * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
+   * @return the encoded URL if encoding is needed. Never <code>null</code>.
    */
   @Nonnull
   ISimpleURL encodeURL (@Nonnull ISimpleURL aURL);
@@ -495,7 +495,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * 
    * @param aURL
    *        the url to be encoded. May not be <code>null</code>.
-   * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
+   * @return the encoded URL if encoding is needed. Never <code>null</code>.
    * @see #encodeURL(String)
    */
   @Nonnull

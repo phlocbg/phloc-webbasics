@@ -508,9 +508,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   public ISimpleURL encodeURL (@Nonnull final ISimpleURL aURL)
   {
     ValueEnforcer.notNull (aURL, "URL");
-    final String sURL = aURL.getAsString ();
-    final String sEncodedURL = encodeURL (sURL);
-    return sURL.equals (sEncodedURL) ? aURL : new SimpleURL (sEncodedURL);
+
+    // Encode only the path and copy params and anchor
+    return new SimpleURL (encodeURL (aURL.getPath ()), aURL.getAllParams (), aURL.getAnchor ());
   }
 
   @Nonnull
@@ -523,9 +523,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   public ISimpleURL encodeRedirectURL (@Nonnull final ISimpleURL aURL)
   {
     ValueEnforcer.notNull (aURL, "URL");
-    final String sURL = aURL.getAsString ();
-    final String sEncodedURL = encodeRedirectURL (sURL);
-    return sURL.equals (sEncodedURL) ? aURL : new SimpleURL (sEncodedURL);
+
+    // Encode only the path and copy params and anchor
+    return new SimpleURL (encodeRedirectURL (aURL.getPath ()), aURL.getAllParams (), aURL.getAnchor ());
   }
 
   public boolean areCookiesEnabled ()
