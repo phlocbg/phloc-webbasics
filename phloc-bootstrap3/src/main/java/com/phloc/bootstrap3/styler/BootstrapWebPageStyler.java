@@ -39,6 +39,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class BootstrapWebPageStyler extends SimpleWebPageStyler
 {
@@ -94,7 +95,8 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                      @Nonnull final IHCTable <?> aTable,
                                                       @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapDataTables ret = new BootstrapDataTables (aTable);

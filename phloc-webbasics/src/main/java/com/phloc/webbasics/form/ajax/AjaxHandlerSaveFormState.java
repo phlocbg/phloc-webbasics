@@ -84,6 +84,6 @@ public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
     // Leave action and object
 
     saveFormState (sPageID, sFlowID, aFieldCont);
-    return AjaxDefaultResponse.createSuccess ();
+    return AjaxDefaultResponse.createSuccess (aRequestScope);
   }
 }

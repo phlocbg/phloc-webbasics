@@ -48,6 +48,7 @@ import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.UITextFormatter;
 import com.phloc.webscopes.domain.IGlobalWebScope;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
@@ -118,7 +119,9 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getGlobalScopeInfo (@Nonnull final IGlobalWebScope aScope, @Nonnull final Locale aDisplayLocale)
+  private IHCNode _getGlobalScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                       @Nonnull final IGlobalWebScope aScope,
+                                       @Nonnull final Locale aDisplayLocale)
   {
     final HCNodeList aNodeList = new HCNodeList ();
 
@@ -157,7 +160,7 @@ public class BasePageScopes extends AbstractWebPageExt
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -165,7 +168,8 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getApplicationScopeInfo (@Nonnull final IApplicationScope aScope,
+  private IHCNode _getApplicationScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                            @Nonnull final IApplicationScope aScope,
                                             @Nonnull final Locale aDisplayLocale)
   {
     final HCNodeList aNodeList = new HCNodeList ();
@@ -203,7 +207,7 @@ public class BasePageScopes extends AbstractWebPageExt
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -214,6 +218,7 @@ public class BasePageScopes extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final IGlobalWebScope aGlobalScope = WebScopeManager.getGlobalScope ();
 
@@ -225,13 +230,13 @@ public class BasePageScopes extends AbstractWebPageExt
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
     // Global scope
     aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aGlobalScope.getID ()),
-                    _getGlobalScopeInfo (aGlobalScope, aDisplayLocale));
+                    _getGlobalScopeInfo (aRequestScope, aGlobalScope, aDisplayLocale));
 
     // Application scopes
     for (final IApplicationScope aAppScope : ContainerHelper.getSortedByKey (aGlobalScope.getAllApplicationScopes ())
                                                             .values ())
       aTabBox.addTab (EText.MSG_APPLICATION_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aAppScope.getID ()),
-                      _getApplicationScopeInfo (aAppScope, aDisplayLocale));
+                      _getApplicationScopeInfo (aRequestScope, aAppScope, aDisplayLocale));
 
     aNodeList.addChild (aTabBox);
   }

@@ -253,7 +253,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     if (StringHelper.hasNoTextAfterTrim (sOriginalQuery))
     {
       // May happen when the user enters "  " (only spaces)
-      return AjaxDefaultResponse.createSuccess (new JsonObject ());
+      return AjaxDefaultResponse.createSuccess (aRequestScope, new JsonObject ());
     }
 
     // Create the main Finder object

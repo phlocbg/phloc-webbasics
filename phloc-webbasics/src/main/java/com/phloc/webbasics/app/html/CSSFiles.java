@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -45,7 +46,6 @@ import com.phloc.commons.microdom.reader.XMLListHandler;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.css.CSSFilenameHelper;
 import com.phloc.css.media.ECSSMedium;
@@ -73,18 +73,15 @@ public class CSSFiles
   {
     private final String m_sCondComment;
     private final String m_sPath;
-    private final SimpleURL m_aURL;
     private final List <ECSSMedium> m_aMedia;
 
     public CSSItem (@Nullable final String sCondComment,
                     @Nonnull @Nonempty final String sPath,
                     @Nullable final Collection <ECSSMedium> aMedia)
     {
-      if (StringHelper.hasNoText (sPath))
-        throw new IllegalArgumentException ("path");
+      ValueEnforcer.notEmpty (sPath, "Path");
       m_sCondComment = sCondComment;
       m_sPath = GlobalDebug.isDebugMode () ? sPath : CSSFilenameHelper.getMinifiedCSSFilename (sPath);
-      m_aURL = LinkUtils.getURLWithContext (m_sPath);
       m_aMedia = ContainerHelper.newList (aMedia);
     }
 
@@ -107,9 +104,9 @@ public class CSSFiles
     }
 
     @Nonnull
-    public ISimpleURL getAsURL ()
+    public SimpleURL getAsURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
-      return m_aURL;
+      return LinkUtils.getURLWithContext (aRequestScope, m_sPath);
     }
 
     @Nonnull
@@ -123,7 +120,7 @@ public class CSSFiles
     public IHCNode getAsNode (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
       // Ensure that it works without cookies
-      final HCLink aLink = HCLink.createCSSLink (aRequestScope.encodeURL (m_aURL));
+      final HCLink aLink = HCLink.createCSSLink (getAsURL (aRequestScope));
       if (m_aMedia != null)
         for (final ECSSMedium eMedium : m_aMedia)
           aLink.addMedium (eMedium);

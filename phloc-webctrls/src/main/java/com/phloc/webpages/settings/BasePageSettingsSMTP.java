@@ -80,6 +80,7 @@ import com.phloc.webctrls.famfam.EFamFamIcon;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSettings>
@@ -598,6 +599,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
@@ -642,7 +644,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (3).setSortable (false).addClass (CSS_CLASS_ACTION_COL);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

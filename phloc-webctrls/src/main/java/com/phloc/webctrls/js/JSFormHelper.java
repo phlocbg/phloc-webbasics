@@ -31,6 +31,7 @@ import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.webbasics.ajax.IAjaxFunction;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Java JavaScript wrapper for form.js
@@ -78,10 +79,11 @@ public final class JSFormHelper
   }
 
   @Nonnull
-  public static JSInvocation updateElementViaAjax (@Nonnull @Nonempty final String sFieldID,
+  public static JSInvocation updateElementViaAjax (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull @Nonempty final String sFieldID,
                                                    @Nonnull final IAjaxFunction aUpdateCallURL)
   {
-    return updateElementViaAjax (sFieldID, aUpdateCallURL.getInvocationURI ());
+    return updateElementViaAjax (sFieldID, aUpdateCallURL.getInvocationURI (aRequestScope));
   }
 
   @Nonnull
@@ -107,14 +109,16 @@ public final class JSFormHelper
   }
 
   @Nonnull
-  public static JSAssocArray createUpdateParam (@Nonnull @Nonempty final String sFieldID,
+  public static JSAssocArray createUpdateParam (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                @Nonnull @Nonempty final String sFieldID,
                                                 @Nonnull final IAjaxFunction aUpdateCallURL)
   {
-    return new JSAssocArray ().add ("id", sFieldID).add ("url", aUpdateCallURL.getInvocationURI ());
+    return new JSAssocArray ().add ("id", sFieldID).add ("url", aUpdateCallURL.getInvocationURI (aRequestScope));
   }
 
   @Nonnull
-  public static JSInvocation saveFormData (@Nonnull @Nonempty final String sFormID,
+  public static JSInvocation saveFormData (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                           @Nonnull @Nonempty final String sFormID,
                                            @Nonnull @Nonempty final String sFieldPrefix,
                                            @Nonnull @Nonempty final String sPageID,
                                            @Nonnull final IAjaxFunction aSaveCallURL,
@@ -125,7 +129,7 @@ public final class JSFormHelper
                            .arg (sFormID)
                            .arg (sFieldPrefix)
                            .arg (sPageID)
-                           .arg (aSaveCallURL.getInvocationURI ())
+                           .arg (aSaveCallURL.getInvocationURI (aRequestScope))
                            .arg (aSuccessUpdates)
                            .arg (aErrorUpdates);
   }

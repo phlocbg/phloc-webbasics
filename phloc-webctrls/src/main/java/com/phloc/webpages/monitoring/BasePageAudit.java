@@ -65,6 +65,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Show audit items.
@@ -143,6 +144,7 @@ public class BasePageAudit extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
@@ -172,7 +174,7 @@ public class BasePageAudit extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (0)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

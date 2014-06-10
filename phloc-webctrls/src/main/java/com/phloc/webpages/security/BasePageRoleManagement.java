@@ -60,6 +60,7 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
 {
@@ -296,6 +297,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
@@ -331,7 +333,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (2).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

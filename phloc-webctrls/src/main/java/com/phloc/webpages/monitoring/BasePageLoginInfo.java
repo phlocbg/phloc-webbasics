@@ -60,6 +60,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Show information on all logged in users.
@@ -158,6 +159,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
                                      @Nonnull final LoginInfo aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
@@ -196,7 +198,9 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
         aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
 
-      final DataTables aDataTables = getStyler ().createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
+      final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope,
+                                                                           aCustomAttrTable,
+                                                                           aDisplayLocale);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 
       aTable.createItemRow ()
@@ -292,6 +296,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
@@ -334,7 +339,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

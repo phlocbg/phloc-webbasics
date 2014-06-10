@@ -85,6 +85,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
@@ -408,6 +409,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
@@ -451,7 +453,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

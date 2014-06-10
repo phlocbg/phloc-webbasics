@@ -50,6 +50,7 @@ import com.phloc.webctrls.famfam.EFamFamCSSPathProvider;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with all available locales
@@ -107,6 +108,7 @@ public class BasePageDataLanguages extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IMultiMapListBased <String, Locale> aMapLanguageToLocale = new MultiHashMapArrayListBased <String, Locale> ();
@@ -148,7 +150,7 @@ public class BasePageDataLanguages extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

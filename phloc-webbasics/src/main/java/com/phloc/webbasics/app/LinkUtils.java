@@ -43,11 +43,12 @@ import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Misc utilities to create link URLs.
- *
+ * 
  * @author Philip Helger
  */
 @ThreadSafe
@@ -64,7 +65,7 @@ public final class LinkUtils
   /**
    * The default path to the stream servlet. If this is different in you
    * application you may not use the methods that refer to this path!
-   *
+   * 
    * @deprecated Use {@link #getStreamServletPath()} instead
    */
   @Deprecated
@@ -81,8 +82,7 @@ public final class LinkUtils
 
   public static void setStreamServletName (@Nonnull @Nonempty final String sStreamServletName)
   {
-    if (StringHelper.hasNoText (sStreamServletName))
-      throw new IllegalArgumentException ("StreamServletName");
+    ValueEnforcer.notEmpty (sStreamServletName, "StreamServletName");
     if (!RegExHelper.stringMatchesPattern (STREAM_SERVLET_NAME_REGEX, sStreamServletName))
       throw new IllegalArgumentException ("Invalid StreamServletName '" +
                                           sStreamServletName +
@@ -131,9 +131,8 @@ public final class LinkUtils
   }
 
   @Nonnull
-  private static String _getURIWithContext (@Nonnull final String sHRef)
+  private static String _getURIWithContext (@Nonnull final String sContextPath, @Nonnull final String sHRef)
   {
-    final String sContextPath = WebScopeManager.getGlobalScope ().getContextPath ();
     if (StringHelper.hasText (sContextPath) && sHRef.startsWith (sContextPath))
     {
       s_aLogger.warn ("The passed href '" + sHRef + "' already contains the context path '" + sContextPath + "'!");
@@ -150,7 +149,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -158,22 +157,26 @@ public final class LinkUtils
    *         <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static String getURIWithContext (@Nonnull final String sHRef)
   {
-    if (sHRef == null)
-      throw new NullPointerException ("HRef");
+    ValueEnforcer.notNull (sHRef, "HRef");
 
     // If known protocol, keep it
     if (URLProtocolRegistry.hasKnownProtocol (sHRef))
       return sHRef;
 
-    return _getURIWithContext (sHRef);
+    final String sContextPath = WebScopeManager.getGlobalScope ().getContextPath ();
+    return _getURIWithContext (sContextPath, sHRef);
   }
 
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -181,15 +184,61 @@ public final class LinkUtils
    *         <code>null</code>.
    */
   @Nonnull
-  public static SimpleURL getURLWithContext (@Nonnull final String sHRef)
+  public static String getURIWithContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                          @Nonnull final String sHRef)
   {
-    return getURLWithContext (sHRef, null);
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    ValueEnforcer.notNull (sHRef, "HRef");
+
+    // If known protocol, keep it
+    if (URLProtocolRegistry.hasKnownProtocol (sHRef))
+      return sHRef;
+
+    final String sContextPath = aRequestScope.getContextPath ();
+    return aRequestScope.encodeURL (_getURIWithContext (sContextPath, sHRef));
   }
 
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
+   * @param sHRef
+   *        The href to be extended. May not be <code>null</code>.
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @Deprecated
+  public static SimpleURL getURLWithContext (@Nonnull final String sHRef)
+  {
+    return getURLWithContext (sHRef, (Map <String, String>) null);
+  }
+
+  /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sHRef
+   *        The href to be extended. May not be <code>null</code>.
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getURLWithContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull final String sHRef)
+  {
+    return getURLWithContext (aRequestScope, sHRef, (Map <String, String>) null);
+  }
+
+  /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @param aParams
@@ -205,9 +254,33 @@ public final class LinkUtils
   }
 
   /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sHRef
+   *        The href to be extended. May not be <code>null</code>.
+   * @param aParams
+   *        Optional parameter map. May be <code>null</code>.
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getURLWithContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull final String sHRef,
+                                             @Nullable final Map <String, String> aParams)
+  {
+    final String sURIWithContext = getURIWithContext (aRequestScope, sHRef);
+    return new SimpleURL (sURIWithContext, aParams);
+  }
+
+  /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -215,19 +288,51 @@ public final class LinkUtils
    *         otherwise. Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static String getURIWithServerAndContext (@Nonnull final String sHRef)
   {
     // If known protocol, keep it
     if (URLProtocolRegistry.hasKnownProtocol (sHRef))
       return sHRef;
 
-    return WebScopeManager.getRequestScope ().getFullServerPath () + _getURIWithContext (sHRef);
+    final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScope ();
+    final String sContextPath = aRequestScope.getContextPath ();
+    return aRequestScope.getFullServerPath () + _getURIWithContext (sContextPath, sHRef);
   }
 
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sHRef
+   *        The href to be extended. May not be <code>null</code>.
+   * @return Either the original href if already absolute or
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise. Never <code>null</code>.
+   */
+  @Nonnull
+  public static String getURIWithServerAndContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final String sHRef)
+  {
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    ValueEnforcer.notNull (sHRef, "HRef");
+
+    // If known protocol, keep it
+    if (URLProtocolRegistry.hasKnownProtocol (sHRef))
+      return sHRef;
+
+    final String sContextPath = aRequestScope.getContextPath ();
+    final String sURI = aRequestScope.getFullServerPath () + _getURIWithContext (sContextPath, sHRef);
+    return aRequestScope.encodeURL (sURI);
+  }
+
+  /**
+   * Prefix the passed href with the absolute server + context path in case the
+   * passed href has no protocol yet.
+   * 
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -235,15 +340,19 @@ public final class LinkUtils
    *         otherwise.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getURLWithServerAndContext (@Nonnull final String sHRef)
   {
-    return getURLWithServerAndContext (sHRef, null);
+    return getURLWithServerAndContext (sHRef, (Map <String, String>) null);
   }
 
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -251,6 +360,24 @@ public final class LinkUtils
    *         otherwise.
    */
   @Nonnull
+  public static SimpleURL getURLWithServerAndContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                      @Nonnull final String sHRef)
+  {
+    return getURLWithServerAndContext (aRequestScope, sHRef, (Map <String, String>) null);
+  }
+
+  /**
+   * Prefix the passed href with the absolute server + context path in case the
+   * passed href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise.
+   */
+  @Nonnull
+  @Deprecated
   public static SimpleURL getURLWithServerAndContext (@Nonnull final String sHRef,
                                                       @Nullable final Map <String, String> aParams)
   {
@@ -258,8 +385,30 @@ public final class LinkUtils
   }
 
   /**
+   * Prefix the passed href with the absolute server + context path in case the
+   * passed href has no protocol yet.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise.
+   */
+  @Nonnull
+  public static SimpleURL getURLWithServerAndContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                      @Nonnull final String sHRef,
+                                                      @Nullable final Map <String, String> aParams)
+  {
+    final String sURI = getURIWithServerAndContext (aRequestScope, sHRef);
+    return new SimpleURL (sURI, aParams);
+  }
+
+  /**
    * Get a link to the specified menu item.
-   *
+   * 
    * @param aMenuObject
    *        The menu object to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -277,7 +426,7 @@ public final class LinkUtils
 
   /**
    * Get a link to the specified menu item.
-   *
+   * 
    * @param sMenuItemID
    *        The ID of the menu item to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -291,7 +440,7 @@ public final class LinkUtils
 
   /**
    * Get a link to the specified menu item.
-   *
+   * 
    * @param sMenuItemID
    *        The ID of the menu item to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -300,6 +449,7 @@ public final class LinkUtils
   public static SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
     ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
+
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
     return _getLinkToMenuItem (aARM, sMenuItemID);
   }
@@ -309,10 +459,40 @@ public final class LinkUtils
    *         <code>/</code> or <code>/context</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getHomeLink ()
   {
     final String sContextPath = WebScopeManager.getGlobalScope ().getContextPath ();
     return new SimpleURL (sContextPath.length () == 0 ? "/" : sContextPath);
+  }
+
+  /**
+   * @return A link to the start page without any session ID. Never
+   *         <code>null</code>. E.g. <code>/</code> or <code>/context</code>.
+   *         This is useful for logout links.
+   */
+  @Nonnull
+  public static SimpleURL getHomeLinkWithoutSession ()
+  {
+    final String sContextPath = WebScopeManager.getGlobalScope ().getContextPath ();
+    return new SimpleURL (sContextPath.length () == 0 ? "/" : sContextPath);
+  }
+
+  /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @return A link to the start page. Never <code>null</code>. E.g.
+   *         <code>/</code> or <code>/context</code>.
+   */
+  @Nonnull
+  public static SimpleURL getHomeLink (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+
+    final String sContextPath = aRequestScope.getContextPath ();
+    final String sURI = sContextPath.length () == 0 ? "/" : sContextPath;
+    return new SimpleURL (aRequestScope.encodeURL (sURI));
   }
 
   /**
@@ -322,12 +502,12 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getSelfHref ()
   {
-    return getSelfHref (null);
+    return getSelfHref ((Map <String, String>) null);
   }
 
   /**
    * Get the URL to the current page with the provided set of parameter.
-   *
+   * 
    * @param aParams
    *        The optional request parameters to be used. May be <code>null</code>
    *        or empty.
@@ -375,7 +555,7 @@ public final class LinkUtils
    * Get the default URL to stream the passed URL. It is assumed that the
    * servlet is located under the path "/stream". Because of the logic of the
    * stream servlet, no parameter are assumed.
-   *
+   * 
    * @param sURL
    *        The URL to be streamed. If it does not start with a slash ("/") one
    *        is prepended automatically. If the URL already has a protocol, it is
@@ -385,11 +565,10 @@ public final class LinkUtils
    * @see #DEFAULT_STREAM_SERVLET_PATH
    */
   @Nonnull
-  @ReturnsMutableCopy
+  @Deprecated
   public static ISimpleURL getStreamURL (@Nonnull @Nonempty final String sURL)
   {
-    if (StringHelper.hasNoText (sURL))
-      throw new IllegalArgumentException ("URL");
+    ValueEnforcer.notEmpty (sURL, "URL");
 
     // If the URL is absolute, use it
     if (URLProtocolRegistry.hasKnownProtocol (sURL))
@@ -399,5 +578,38 @@ public final class LinkUtils
     if (!StringHelper.startsWith (sURL, '/'))
       sPrefix += '/';
     return getURLWithContext (sPrefix + sURL);
+  }
+
+  /**
+   * Get the default URL to stream the passed URL. It is assumed that the
+   * servlet is located under the path "/stream". Because of the logic of the
+   * stream servlet, no parameter are assumed.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sURL
+   *        The URL to be streamed. If it does not start with a slash ("/") one
+   *        is prepended automatically. If the URL already has a protocol, it is
+   *        returned unchanged. May neither be <code>null</code> nor empty.
+   * @return The URL incl. the context to be stream. E.g.
+   *         <code>/<i>webapp-context</i>/stream/<i>URL</i></code>.
+   * @see #DEFAULT_STREAM_SERVLET_PATH
+   */
+  @Nonnull
+  public static ISimpleURL getStreamURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                         @Nonnull @Nonempty final String sURL)
+  {
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    ValueEnforcer.notEmpty (sURL, "URL");
+
+    // If the URL is absolute, use it
+    if (URLProtocolRegistry.hasKnownProtocol (sURL))
+      return new ReadonlySimpleURL (sURL);
+
+    final StringBuilder aPrefix = new StringBuilder (getStreamServletPath ());
+    if (!StringHelper.startsWith (sURL, '/'))
+      aPrefix.append ('/');
+    return getURLWithContext (aRequestScope, aPrefix.append (sURL).toString ());
   }
 }

@@ -25,10 +25,12 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.resource.js.IJSPathProvider;
+import com.phloc.webbasics.IWebURIToURLConverter;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -109,6 +111,9 @@ public final class PerRequestJSIncludes
   /**
    * Get all JS includes registered for this path with the specified converter.
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aConverter
    *        The converter from the realtive URI path (e.g.
    *        "autonumeric/autonumeric.css") to the final URL to be used (e.g.
@@ -122,17 +127,18 @@ public final class PerRequestJSIncludes
    */
   @Nonnull
   @ReturnsMutableCopy
-  public static List <ISimpleURL> getAllRegisteredJSIncludeURLsForThisRequest (@Nonnull final com.phloc.commons.url.IURIToURLConverter aConverter,
+  public static List <ISimpleURL> getAllRegisteredJSIncludeURLsForThisRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                                               @Nonnull final IWebURIToURLConverter aConverter,
                                                                                final boolean bRegularVersion)
   {
-    if (aConverter == null)
-      throw new NullPointerException ("converter");
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    ValueEnforcer.notNull (aConverter, "Converter");
 
     final Set <IJSPathProvider> aSet = _getPerRequestSet (false);
     final List <ISimpleURL> ret = new ArrayList <ISimpleURL> ();
     if (aSet != null)
       for (final IJSPathProvider aPathProvider : aSet)
-        ret.add (aConverter.getAsURL (aPathProvider.getJSItemPath (bRegularVersion)));
+        ret.add (aConverter.getAsURL (aRequestScope, aPathProvider.getJSItemPath (bRegularVersion)));
     return ret;
   }
 

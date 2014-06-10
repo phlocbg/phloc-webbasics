@@ -25,15 +25,17 @@ import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.io.PathRelativeFileIO;
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Manager for {@link UserDataObject} objects.
- *
+ * 
  * @author Philip Helger
  */
 public final class UserDataManager
@@ -56,7 +58,7 @@ public final class UserDataManager
   /**
    * Set the user data path, relative to the URL context and relative to the
    * servlet context directory.
-   *
+   * 
    * @param sUserDataPath
    *        The path to be set. May neither be <code>null</code> nor empty and
    *        must start with a "/" character.
@@ -82,7 +84,7 @@ public final class UserDataManager
   /**
    * Get the base path, where all user objects reside. It is relative to the URL
    * context and relative to the servlet context directory.
-   *
+   * 
    * @return The current user data path. Always starting with a "/", but without
    *         any context information. By default the return value is
    *         {@value #DEFAULT_USER_DATA_PATH}.
@@ -107,7 +109,7 @@ public final class UserDataManager
    * context (inside the web application) or inside the data directory (outside
    * the web application). By default the files reside inside the web
    * application.
-   *
+   * 
    * @param bServletContextIO
    *        <code>true</code> to use servlet context IO, <code>false</code> to
    *        use data IO.
@@ -139,19 +141,25 @@ public final class UserDataManager
   }
 
   /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @return Context and user data path. Always starting with a "/". E.g.
    *         <code>/user</code> or <code>/context/user</code>
    */
   @Nonnull
   @Nonempty
-  public static String getContextAndUserDataPath ()
+  public static String getContextAndUserDataPath (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return LinkUtils.getURIWithContext (getUserDataPath ());
+    return LinkUtils.getURIWithContext (aRequestScope, getUserDataPath ());
   }
 
   /**
    * Get the URL to the passed UDO object.
-   *
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aUDO
    *        The UDO object to get the URL from.
    * @return The path to the user data object as an URL, including the context
@@ -162,16 +170,20 @@ public final class UserDataManager
    */
   @Nonnull
   @Nonempty
-  public static String getURLPath (@Nonnull final UserDataObject aUDO)
+  public static String getURLPath (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                   @Nonnull final UserDataObject aUDO)
   {
-    if (aUDO == null)
-      throw new NullPointerException ("UDO");
-    return getContextAndUserDataPath () + aUDO.getPath ();
+    ValueEnforcer.notNull (aUDO, "UDO");
+
+    return LinkUtils.getURIWithContext (aRequestScope, getUserDataPath () + aUDO.getPath ());
   }
 
   /**
    * Get the URL to the passed UDO object.
-   *
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aUDO
    *        The UDO object to get the URL from.
    * @return The URL to the user data object, including the context path. Always
@@ -181,9 +193,10 @@ public final class UserDataManager
    */
   @Nonnull
   @Nonempty
-  public static SimpleURL getURL (@Nonnull final UserDataObject aUDO)
+  public static SimpleURL getURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final UserDataObject aUDO)
   {
-    return new SimpleURL (getURLPath (aUDO));
+    return new SimpleURL (getURLPath (aRequestScope, aUDO));
   }
 
   @Nonnull
@@ -203,7 +216,7 @@ public final class UserDataManager
 
   /**
    * Get the file system resource of the passed UDO object.
-   *
+   * 
    * @param aUDO
    *        The UDO object to get the resource from.
    * @return The matching file system resource. No check is performed, whether
@@ -219,7 +232,7 @@ public final class UserDataManager
 
   /**
    * Get the File of the passed UDO object.
-   *
+   * 
    * @param aUDO
    *        The UDO object to get the resource from.
    * @return The matching File. No check is performed, whether the file exists

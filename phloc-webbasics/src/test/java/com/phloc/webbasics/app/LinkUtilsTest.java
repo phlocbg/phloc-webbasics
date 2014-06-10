@@ -23,6 +23,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
 import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
@@ -40,9 +42,11 @@ public final class LinkUtilsTest
   {
     assertEquals (LinkUtils.DEFAULT_STREAM_SERVLET_NAME, LinkUtils.getStreamServletName ());
     LinkUtils.setStreamServletName ("abc");
-    assertEquals ("/abc/x", LinkUtils.getStreamURL ("x").getAsString ());
+    final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScope ();
+    assertEquals ("/abc/x", LinkUtils.getStreamURL (aRequestScope, "x").getAsString ());
     LinkUtils.setStreamServletName (LinkUtils.DEFAULT_STREAM_SERVLET_NAME);
     assertEquals (LinkUtils.DEFAULT_STREAM_SERVLET_NAME, LinkUtils.getStreamServletName ());
-    assertEquals ("/" + LinkUtils.DEFAULT_STREAM_SERVLET_NAME + "/x", LinkUtils.getStreamURL ("x").getAsString ());
+    assertEquals ("/" + LinkUtils.DEFAULT_STREAM_SERVLET_NAME + "/x", LinkUtils.getStreamURL (aRequestScope, "x")
+                                                                               .getAsString ());
   }
 }

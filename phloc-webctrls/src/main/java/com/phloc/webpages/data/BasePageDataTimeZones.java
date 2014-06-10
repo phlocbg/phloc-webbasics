@@ -46,6 +46,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with all time zones
@@ -107,6 +108,7 @@ public class BasePageDataTimeZones extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final long nNow = PDTFactory.getCurrentMillis ();
@@ -143,7 +145,7 @@ public class BasePageDataTimeZones extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (3)
                .setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT", "S"),
                                                            aDisplayLocale));

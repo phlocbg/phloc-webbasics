@@ -365,6 +365,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final ResponseData aResponseData = _handleRequest (aRequestData, aServerData);
 
     // Convert the response to JSON and add the special nodes
-    return AjaxDefaultResponse.createSuccess (aResponseData.getAsJson ()).addAll (aResponseData.getSpecialNodes ());
+    return AjaxDefaultResponse.createSuccess (aRequestScope, aResponseData.getAsJson ())
+                              .addAll (aResponseData.getSpecialNodes ());
   }
 }

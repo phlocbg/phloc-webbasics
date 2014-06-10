@@ -81,6 +81,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -843,10 +844,13 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   }
 
   @Nonnull
-  protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
+  protected IHCNode getTabWithUsers (@Nonnull final WebPageExecutionContext aWPEC,
                                      @Nonnull final Collection <? extends IUser> aUsers,
                                      @Nonnull @Nonempty final String sTableID)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     final boolean bSeparateLoginName = !useEmailAddressAsLoginName ();
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
@@ -916,7 +920,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (3).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
@@ -943,16 +947,16 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
     final Collection <? extends IUser> aActiveUsers = aMgr.getAllActiveUsers ();
     aTabBox.addTab (EText.TAB_ACTIVE.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aActiveUsers.size ())),
-                    getTabWithUsers (aDisplayLocale, aActiveUsers, getID () + "1"));
+                    getTabWithUsers (aWPEC, aActiveUsers, getID () + "1"));
 
     final Collection <? extends IUser> aDisabledUsers = aMgr.getAllDisabledUsers ();
     aTabBox.addTab (EText.TAB_DISABLED.getDisplayTextWithArgs (aDisplayLocale,
                                                                Integer.toString (aDisabledUsers.size ())),
-                    getTabWithUsers (aDisplayLocale, aDisabledUsers, getID () + "2"));
+                    getTabWithUsers (aWPEC, aDisabledUsers, getID () + "2"));
 
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
     aTabBox.addTab (EText.TAB_DELETED.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aDeletedUsers.size ())),
-                    getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
+                    getTabWithUsers (aWPEC, aDeletedUsers, getID () + "3"));
     aNodeList.addChild (aTabBox);
   }
 }

@@ -23,19 +23,21 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.IURIToURLConverter;
+import com.phloc.webbasics.IWebURIToURLConverter;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * The default implementation of {@link IURIToURLConverter} that uses
- * {@link LinkUtils#getStreamURL(String)} to convert URIs to URLs. If you are
- * using a different stream servlet path, you may need to provide your own
- * implementation and use it in
+ * {@link LinkUtils#getStreamURL(IRequestWebScopeWithoutResponse, String)} to
+ * convert URIs to URLs. If you are using a different stream servlet path, you
+ * may need to provide your own implementation and use it in
  * {@link com.phloc.webbasics.ajax.AjaxDefaultResponse}!
  * 
  * @author Philip Helger
  */
 @Immutable
-public final class StreamURIToURLConverter implements IURIToURLConverter
+public final class StreamURIToURLConverter implements IWebURIToURLConverter
 {
   private static final StreamURIToURLConverter s_aInstance = new StreamURIToURLConverter ();
 
@@ -52,8 +54,9 @@ public final class StreamURIToURLConverter implements IURIToURLConverter
   }
 
   @Nonnull
-  public ISimpleURL getAsURL (@Nonnull @Nonempty final String sURI)
+  public ISimpleURL getAsURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                              @Nonnull @Nonempty final String sURI)
   {
-    return LinkUtils.getStreamURL (sURI);
+    return LinkUtils.getStreamURL (aRequestScope, sURI);
   }
 }

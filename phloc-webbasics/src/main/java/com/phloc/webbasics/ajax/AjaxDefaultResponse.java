@@ -26,11 +26,11 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.url.IURIToURLConverter;
 import com.phloc.html.hc.IHCHasChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
@@ -39,9 +39,11 @@ import com.phloc.html.hc.utils.HCSpecialNodeHandler;
 import com.phloc.json2.IJson;
 import com.phloc.json2.impl.JsonObject;
 import com.phloc.json2.serialize.JsonWriter;
+import com.phloc.webbasics.IWebURIToURLConverter;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.app.html.StreamURIToURLConverter;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 @Immutable
 public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements IAjaxResponse
@@ -75,23 +77,26 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
    * URLs.
    */
   @GuardedBy ("s_aRWLock")
-  private static IURIToURLConverter s_aConverter = StreamURIToURLConverter.getInstance ();
+  private static IWebURIToURLConverter s_aConverter = StreamURIToURLConverter.getInstance ();
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
   private final IJson m_aSuccessValue;
 
-  private void _addCSSAndJS (@Nonnull final IURIToURLConverter aConverter)
+  private void _addCSSAndJS (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                             @Nonnull final IWebURIToURLConverter aConverter)
   {
-    if (aConverter == null)
-      throw new NullPointerException ("URIToURLConverter");
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    ValueEnforcer.notNull (aConverter, "URIToURLConverter");
 
     // Grab per-request CSS/JS only in success case!
     final boolean bRegularFiles = GlobalDebug.isDebugMode ();
-    for (final ISimpleURL aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludeURLsForThisRequest (aConverter,
+    for (final ISimpleURL aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludeURLsForThisRequest (aRequestScope,
+                                                                                                         aConverter,
                                                                                                          bRegularFiles))
       addExternalCSS (aCSSPath.getAsString ());
-    for (final ISimpleURL aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludeURLsForThisRequest (aConverter,
+    for (final ISimpleURL aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludeURLsForThisRequest (aRequestScope,
+                                                                                                      aConverter,
                                                                                                       bRegularFiles))
       addExternalJS (aJSPath.getAsString ());
   }
@@ -102,10 +107,12 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
    * @param aNode
    *        The response HTML node. May be <code>null</code>.
    */
-  protected AjaxDefaultResponse (@Nullable final IHCNode aNode, @Nonnull final IURIToURLConverter aConverter)
+  protected AjaxDefaultResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                 @Nullable final IHCNode aNode,
+                                 @Nonnull final IWebURIToURLConverter aConverter)
   {
     // Do it first
-    _addCSSAndJS (aConverter);
+    _addCSSAndJS (aRequestScope, aConverter);
 
     // Now decompose the HCNode itself
     final JsonObject aObj = new JsonObject ();
@@ -132,19 +139,19 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
                                  @Nullable final IJson aSuccessValue,
-                                 @Nullable final IURIToURLConverter aConverter)
+                                 @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
+                                 @Nullable final IWebURIToURLConverter aConverter)
   {
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
     m_aSuccessValue = aSuccessValue;
     if (bSuccess)
-      _addCSSAndJS (aConverter);
+      _addCSSAndJS (aRequestScope, aConverter);
   }
 
-  public static void setDefaultURIToURLConverter (@Nonnull final IURIToURLConverter aConverter)
+  public static void setDefaultURIToURLConverter (@Nonnull final IWebURIToURLConverter aConverter)
   {
-    if (aConverter == null)
-      throw new NullPointerException ("converter");
+    ValueEnforcer.notNull (aConverter, "Converter");
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -158,7 +165,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   }
 
   @Nonnull
-  public static IURIToURLConverter getDefaultURIToURLConverter ()
+  public static IWebURIToURLConverter getDefaultURIToURLConverter ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -260,49 +267,59 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess ()
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return createSuccess (getDefaultURIToURLConverter ());
+    return createSuccess (aRequestScope, getDefaultURIToURLConverter ());
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nonnull final IURIToURLConverter aConverter)
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final IWebURIToURLConverter aConverter)
   {
-    return createSuccess ((IJson) null, aConverter);
+    return createSuccess (aRequestScope, (IJson) null, aConverter);
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IJson aSuccessValue)
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nullable final IJson aSuccessValue)
   {
-    return createSuccess (aSuccessValue, getDefaultURIToURLConverter ());
+    return createSuccess (aRequestScope, aSuccessValue, getDefaultURIToURLConverter ());
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IJson aSuccessValue,
-                                                   @Nonnull final IURIToURLConverter aConverter)
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nullable final IJson aSuccessValue,
+                                                   @Nonnull final IWebURIToURLConverter aConverter)
   {
-    return new AjaxDefaultResponse (true, null, aSuccessValue, aConverter);
+    return new AjaxDefaultResponse (true, null, aSuccessValue, aRequestScope, aConverter);
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode)
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nullable final IHCNode aNode)
   {
     // Use the default converter here
-    return createSuccess (aNode, getDefaultURIToURLConverter ());
+    return createSuccess (aRequestScope, aNode, getDefaultURIToURLConverter ());
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode,
-                                                   @Nonnull final IURIToURLConverter aConverter)
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nullable final IHCNode aNode,
+                                                   @Nonnull final IWebURIToURLConverter aConverter)
   {
     // Special case required
-    return new AjaxDefaultResponse (aNode, aConverter);
+    return new AjaxDefaultResponse (aRequestScope, aNode, aConverter);
   }
 
   @Nonnull
   public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
   {
+    // No request scope needed in case of error!
     // No converter needed in case of error!
-    return new AjaxDefaultResponse (false, sErrorMessage, null, null);
+    return new AjaxDefaultResponse (false,
+                                    sErrorMessage,
+                                    (IJson) null,
+                                    (IRequestWebScopeWithoutResponse) null,
+                                    (IWebURIToURLConverter) null);
   }
 }

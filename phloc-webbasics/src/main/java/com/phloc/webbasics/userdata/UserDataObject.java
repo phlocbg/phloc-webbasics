@@ -30,6 +30,7 @@ import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Represents a single web accessible object, that was provided by the user.
@@ -63,6 +64,9 @@ public class UserDataObject implements Serializable
   }
 
   /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @return The path to the user data object as an URL, including the context
    *         path. Always starting with a "/". E.g.
    *         <code>/context/user/file.txt</code> if this object points to
@@ -70,21 +74,24 @@ public class UserDataObject implements Serializable
    */
   @Nonnull
   @Nonempty
-  public String getAsURLPath ()
+  public String getAsURLPath (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return UserDataManager.getURLPath (this);
+    return UserDataManager.getURLPath (aRequestScope, this);
   }
 
   /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @return The path to the user data object as an URL, including the context
    *         path. Always starting with a "/". E.g.
    *         <code>/context/user/file.txt</code> if this object points to
    *         <code>/file.txt</code>.
    */
   @Nonnull
-  public SimpleURL getAsURL ()
+  public SimpleURL getAsURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return UserDataManager.getURL (this);
+    return UserDataManager.getURL (aRequestScope, this);
   }
 
   /**

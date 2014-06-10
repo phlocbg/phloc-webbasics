@@ -54,6 +54,7 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.custom.toolbar.SimpleButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class SimpleWebPageStyler implements IWebPageStyler
 {
@@ -63,20 +64,23 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
 
   @Nonnull
-  public IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)
+  public IHCNode createImageView (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nullable final UserDataObject aUDO,
+                                  @Nonnull final Locale aDisplayLocale)
   {
-    return createImageView (aUDO, 200, aDisplayLocale);
+    return createImageView (aRequestScope, aUDO, 200, aDisplayLocale);
   }
 
   @Nonnull
-  public IHCNode createImageView (@Nullable final UserDataObject aUDO,
+  public IHCNode createImageView (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nullable final UserDataObject aUDO,
                                   final int nMaxWidth,
                                   @Nonnull final Locale aDisplayLocale)
   {
     if (aUDO == null)
       return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aDisplayLocale));
 
-    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL ());
+    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aRequestScope));
     ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());
     if (aSize != null)
     {
@@ -168,7 +172,9 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable, @Nonnull final Locale aDisplayLocale)
+  public DataTables createDefaultDataTables (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull final IHCTable <?> aTable,
+                                             @Nonnull final Locale aDisplayLocale)
   {
     final DataTables ret = new DataTables (aTable);
     ret.setDisplayLocale (aDisplayLocale);

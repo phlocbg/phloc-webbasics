@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -41,7 +42,6 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.reader.XMLListHandler;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCScriptFile;
@@ -68,15 +68,12 @@ public class JSFiles
   {
     private final String m_sCondComment;
     private final String m_sPath;
-    private final SimpleURL m_aURL;
 
     public JSItem (@Nullable final String sCondComment, @Nonnull @Nonempty final String sPath)
     {
-      if (StringHelper.hasNoText (sPath))
-        throw new IllegalArgumentException ("path");
+      ValueEnforcer.notEmpty (sPath, "path");
       m_sCondComment = sCondComment;
       m_sPath = GlobalDebug.isDebugMode () ? sPath : JSFilenameHelper.getMinifiedJSPath (sPath);
-      m_aURL = LinkUtils.getURLWithContext (m_sPath);
     }
 
     @Nullable
@@ -98,16 +95,16 @@ public class JSFiles
     }
 
     @Nonnull
-    public ISimpleURL getAsURL ()
+    public SimpleURL getAsURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
-      return m_aURL;
+      return LinkUtils.getURLWithContext (aRequestScope, m_sPath);
     }
 
     @Nonnull
     public IHCNode getAsNode (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
       // Ensure it works cookie-less
-      final HCScriptFile aScript = HCScriptFile.create (aRequestScope.encodeURL (m_aURL));
+      final HCScriptFile aScript = HCScriptFile.create (getAsURL (aRequestScope));
       if (StringHelper.hasText (m_sCondComment))
         return new HCConditionalCommentNode (m_sCondComment, aScript);
       return aScript;

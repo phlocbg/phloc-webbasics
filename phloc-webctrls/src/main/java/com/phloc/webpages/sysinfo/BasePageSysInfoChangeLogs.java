@@ -49,6 +49,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDate;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with all linked third party libraries
@@ -119,6 +120,7 @@ public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     if (s_aCache == null)
@@ -153,7 +155,7 @@ public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (0).setComparator (new ComparatorTableDate (aDisplayLocale));
     aDataTables.setInitialSorting (0, ESortOrder.DESCENDING);
     aNodeList.addChild (aDataTables);

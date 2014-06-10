@@ -44,14 +44,18 @@ public class LogoutServlet extends AbstractUnifiedResponseServlet
    * Get the redirection URL. This method is invoked BEFORE an eventual log-out
    * happens!
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @return The URL to redirect to, after this servlet was invoked. May not be
    *         <code>null</code>.
    */
   @OverrideOnDemand
   @Nonnull
-  protected ISimpleURL getRedirectURL ()
+  protected ISimpleURL getRedirectURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return LinkUtils.getHomeLink ();
+    // No need for a session ID upon logout
+    return LinkUtils.getHomeLinkWithoutSession ();
   }
 
   @Override
@@ -60,7 +64,7 @@ public class LogoutServlet extends AbstractUnifiedResponseServlet
   {
     // Get the redirect URL before the session is invalidated, in case the
     // code requires the current session
-    final ISimpleURL aRedirectURL = getRedirectURL ();
+    final ISimpleURL aRedirectURL = getRedirectURL (aRequestScope);
 
     // Don't create a session, if none is present
     final HttpSession aHttpSession = aRequestScope.getRequest ().getSession (false);

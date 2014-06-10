@@ -74,6 +74,6 @@ public class AjaxHandlerServerLog extends AbstractAjaxHandler
     LogUtils.log (AjaxHandlerServerLog.class, eSeverity, sMessage);
 
     // Convert the response to JSON
-    return AjaxDefaultResponse.createSuccess ();
+    return AjaxDefaultResponse.createSuccess (aRequestScope);
   }
 }

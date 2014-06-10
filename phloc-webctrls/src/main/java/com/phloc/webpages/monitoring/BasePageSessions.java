@@ -55,6 +55,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.UITextFormatter;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Show information on all active sessions
@@ -137,7 +138,10 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     return false;
   }
 
-  private IHCNode _getSessionScopeInfo (@Nonnull final ISessionScope aScope, @Nonnull final Locale aDisplayLocale)
+  @Nonnull
+  private IHCNode _getSessionScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                        @Nonnull final ISessionScope aScope,
+                                        @Nonnull final Locale aDisplayLocale)
   {
     final HCNodeList ret = new HCNodeList ();
 
@@ -177,7 +181,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     ret.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     ret.addChild (aDataTables);
 
@@ -185,7 +189,8 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Nonnull
-  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final ISessionApplicationScope aScope,
+  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final ISessionApplicationScope aScope,
                                                    @Nonnull final Locale aDisplayLocale)
   {
     final HCNodeList aNodeList = new HCNodeList ();
@@ -223,7 +228,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -234,6 +239,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final ISessionScope aScope)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
@@ -242,12 +248,13 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     aNodeList.addChild (aToolbar);
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
-    aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale), _getSessionScopeInfo (aScope, aDisplayLocale));
+    aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale),
+                    _getSessionScopeInfo (aRequestScope, aScope, aDisplayLocale));
     for (final ISessionApplicationScope aSessionAppScope : ContainerHelper.getSortedByKey (aScope.getAllSessionApplicationScopes ())
                                                                           .values ())
       aTabBox.addTab (EText.MSG_SESSION_APPLICATION_SCOPES.getDisplayTextWithArgs (aDisplayLocale,
                                                                                    aSessionAppScope.getID ()),
-                      _getSessionApplicationScopeInfo (aSessionAppScope, aDisplayLocale));
+                      _getSessionApplicationScopeInfo (aRequestScope, aSessionAppScope, aDisplayLocale));
     aNodeList.addChild (aTabBox);
   }
 
@@ -274,6 +281,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
@@ -298,7 +306,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

@@ -51,6 +51,7 @@ import com.phloc.webctrls.famfam.EFamFamCSSPathProvider;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with all currencies
@@ -112,6 +113,7 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
@@ -168,7 +170,7 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (0).setDataSort (0, 6);
     aDataTables.getOrCreateColumnOfTarget (1).setDataSort (1, 6);
     aDataTables.getOrCreateColumnOfTarget (3)

@@ -34,14 +34,20 @@ import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public interface IWebPageStyler
 {
   @Nonnull
-  IHCNode createImageView (@Nullable UserDataObject aUDO, @Nonnull Locale aDisplayLocale);
+  IHCNode createImageView (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nullable UserDataObject aUDO,
+                           @Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IHCNode createImageView (@Nullable UserDataObject aUDO, int nMaxWidth, @Nonnull Locale aDisplayLocale);
+  IHCNode createImageView (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nullable UserDataObject aUDO,
+                           int nMaxWidth,
+                           @Nonnull Locale aDisplayLocale);
 
   @Nullable
   IHCNode createEmailLink (@Nullable String sEmailAddress);
@@ -88,7 +94,9 @@ public interface IWebPageStyler
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
 
   @Nonnull
-  DataTables createDefaultDataTables (@Nonnull IHCTable <?> aTable, @Nonnull Locale aDisplayLocale);
+  DataTables createDefaultDataTables (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                                      @Nonnull IHCTable <?> aTable,
+                                      @Nonnull Locale aDisplayLocale);
 
   @Nonnull
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);

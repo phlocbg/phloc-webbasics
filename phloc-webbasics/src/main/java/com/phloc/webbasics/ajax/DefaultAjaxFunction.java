@@ -27,6 +27,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Default AjaxFunction implementation assuming that the Ajax servlet is
@@ -63,22 +64,21 @@ public class DefaultAjaxFunction extends AbstractAjaxFunction
 
   @Nonnull
   @Nonempty
-  public String getInvocationURI ()
+  public String getInvocationURI (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return LinkUtils.getURIWithContext (getPathWithoutContext ());
+    return LinkUtils.getURIWithContext (aRequestScope, getPathWithoutContext ());
   }
 
   @Nonnull
-  @Nonempty
-  public ISimpleURL getInvocationURL ()
+  public ISimpleURL getInvocationURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return getInvocationURL (null);
+    return getInvocationURL (aRequestScope, null);
   }
 
   @Nonnull
-  @Nonempty
-  public ISimpleURL getInvocationURL (@Nullable final Map <String, String> aParams)
+  public ISimpleURL getInvocationURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                      @Nullable final Map <String, String> aParams)
   {
-    return LinkUtils.getURLWithContext (getPathWithoutContext (), aParams);
+    return LinkUtils.getURLWithContext (aRequestScope, getPathWithoutContext (), aParams);
   }
 }

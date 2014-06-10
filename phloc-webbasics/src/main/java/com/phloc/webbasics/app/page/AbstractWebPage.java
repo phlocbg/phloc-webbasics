@@ -29,7 +29,7 @@ import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.url.ReadonlySimpleURL;
+import com.phloc.commons.url.SMap;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
@@ -228,18 +228,21 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   /**
    * Get the help URL of the current page
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aDisplayLocale
    *        The current display locale. Never <code>null</code>.
    * @return The help URL for this page. May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
-  protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
+  protected ISimpleURL getHelpURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                   @Nonnull final Locale aDisplayLocale)
   {
-    return new ReadonlySimpleURL (LinkUtils.getURIWithContext ("help/" +
-                                                               getID () +
-                                                               "?locale=" +
-                                                               aDisplayLocale.toString ()));
+    return LinkUtils.getURLWithContext (aRequestScope,
+                                        "help/" + getID (),
+                                        new SMap ().add ("locale", aDisplayLocale.toString ()));
   }
 
   /**
@@ -258,9 +261,10 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @OverrideOnDemand
   protected IHCNode getHelpIconNode (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final HCA aHelpNode = new HCA (getHelpURL (aDisplayLocale));
+    final HCA aHelpNode = new HCA (getHelpURL (aRequestScope, aDisplayLocale));
     final String sPageName = getDisplayText (aDisplayLocale);
     aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale, sPageName));
     aHelpNode.addChild (new HCSpan ().addClass (CSS_PAGE_HELP_ICON));
