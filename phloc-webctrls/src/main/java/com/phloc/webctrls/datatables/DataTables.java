@@ -153,8 +153,7 @@ public class DataTables implements IHCNodeBuilder
     ValueEnforcer.notNull (aTable, "Table");
     if (!aTable.hasHeaderRows ())
       s_aLogger.warn ("Table does not have a header row, so DataTables may not be displayed correctly!");
-    if (StringHelper.hasNoText (aTable.getID ()))
-      throw new IllegalArgumentException ("Table has no ID!");
+    ValueEnforcer.notEmpty (aTable.getID (), "Table has no ID!");
 
     m_aTable = aTable;
   }
