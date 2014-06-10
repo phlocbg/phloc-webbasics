@@ -53,6 +53,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCLink;
 import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This class keeps all the global CSS files that are read from configuration.
@@ -119,9 +120,10 @@ public class CSSFiles
     }
 
     @Nonnull
-    public IHCNode getAsNode ()
+    public IHCNode getAsNode (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
-      final HCLink aLink = HCLink.createCSSLink (m_aURL);
+      // Ensure that it works without cookies
+      final HCLink aLink = HCLink.createCSSLink (aRequestScope.encodeURL (m_aURL));
       if (m_aMedia != null)
         for (final ECSSMedium eMedium : m_aMedia)
           aLink.addMedium (eMedium);

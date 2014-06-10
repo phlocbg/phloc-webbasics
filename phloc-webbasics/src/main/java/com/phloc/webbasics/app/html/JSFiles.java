@@ -48,6 +48,7 @@ import com.phloc.html.hc.html.HCScriptFile;
 import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.html.resource.js.JSFilenameHelper;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This class keeps all the global JS files that are read from configuration.
@@ -103,9 +104,10 @@ public class JSFiles
     }
 
     @Nonnull
-    public IHCNode getAsNode ()
+    public IHCNode getAsNode (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
     {
-      final HCScriptFile aScript = HCScriptFile.create (m_aURL);
+      // Ensure it works cookie-less
+      final HCScriptFile aScript = HCScriptFile.create (aRequestScope.encodeURL (m_aURL));
       if (StringHelper.hasText (m_sCondComment))
         return new HCConditionalCommentNode (m_sCondComment, aScript);
       return aScript;

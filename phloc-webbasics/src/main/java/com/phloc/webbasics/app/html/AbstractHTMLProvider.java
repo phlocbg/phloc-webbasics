@@ -118,11 +118,11 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
 
     // Add configured CSS
     for (final CSSFiles.CSSItem aCSSItem : getAllCSSItems ())
-      aHead.addCSS (aCSSItem.getAsNode ());
+      aHead.addCSS (aCSSItem.getAsNode (aRequestScope));
 
     // Add all configured JS
     for (final JSFiles.JSItem aJSFile : getAllJSItems ())
-      aHead.addJS (aJSFile.getAsNode ());
+      aHead.addJS (aJSFile.getAsNode (aRequestScope));
   }
 
   /**
