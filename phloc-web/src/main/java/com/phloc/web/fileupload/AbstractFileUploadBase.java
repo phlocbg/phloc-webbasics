@@ -294,9 +294,9 @@ public abstract class AbstractFileUploadBase
         // Don't use getName() here to prevent an InvalidFileNameException.
         final String fileName = ((AbstractFileUploadBase.FileItemIteratorImpl.FileItemStreamImpl) item).m_sName;
         final IFileItem fileItem = aFileItemFactory.createItem (item.getFieldName (),
-                                                   item.getContentType (),
-                                                   item.isFormField (),
-                                                   fileName);
+                                                                item.getContentType (),
+                                                                item.isFormField (),
+                                                                fileName);
         items.add (fileItem);
         try
         {

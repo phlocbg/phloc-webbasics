@@ -28,7 +28,7 @@ import com.phloc.commons.ValueEnforcer;
 
 /**
  * Contains a list of Accept-Encoding values as specified by the HTTP header
- *
+ * 
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -51,7 +51,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given encoding.
-   *
+   * 
    * @param sEncoding
    *        The encoding name to query. May not be <code>null</code>.
    * @return The matching {@link QValue} and never <code>null</code>.
@@ -79,7 +79,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given encoding.
-   *
+   * 
    * @param sEncoding
    *        The encoding name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.
@@ -92,7 +92,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
   /**
    * Check if the passed encoding is supported. Supported means the quality is
    * &gt; 0.
-   *
+   * 
    * @param sEncoding
    *        The encoding to be checked. May not be <code>null</code>.
    * @return <code>true</code> if the encoding is supported, <code>false</code>

@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Represents a single network port.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable

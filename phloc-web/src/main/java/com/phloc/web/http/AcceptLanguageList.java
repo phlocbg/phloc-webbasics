@@ -26,7 +26,7 @@ import com.phloc.commons.ValueEnforcer;
 
 /**
  * Represents a list of Accept-Language values as specified in the HTTP header
- *
+ * 
  * @author Philip Helger
  */
 public final class AcceptLanguageList extends AbstractQValueList <String>
@@ -48,7 +48,7 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given language.
-   *
+   * 
    * @param sLanguage
    *        The language name to query. May not be <code>null</code>.
    * @return The associated {@link QValue}. Never <code>null</code>.
@@ -76,7 +76,7 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given language.
-   *
+   * 
    * @param sLanguage
    *        The language name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.

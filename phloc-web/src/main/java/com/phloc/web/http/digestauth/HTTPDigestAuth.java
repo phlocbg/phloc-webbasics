@@ -43,7 +43,7 @@ import com.phloc.web.http.HTTPStringHelper;
 
 /**
  * Handling for HTTP Digest Authentication
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -73,7 +73,7 @@ public final class HTTPDigestAuth
   /**
    * Get the parameters of a Digest authentication string. It may be used for
    * both client and server handling.
-   *
+   * 
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value cannot be parsed as a HTTP
@@ -222,7 +222,7 @@ public final class HTTPDigestAuth
   /**
    * Get the Digest authentication credentials from the passed HTTP servlet
    * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
-   *
+   * 
    * @param aHttpRequest
    *        The HTTP request to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed request does not contain a valid
@@ -240,7 +240,7 @@ public final class HTTPDigestAuth
   /**
    * Get the Digest authentication credentials from the passed HTTP header
    * value.
-   *
+   * 
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value is not a correct HTTP Digest
@@ -318,7 +318,7 @@ public final class HTTPDigestAuth
 
   /**
    * Create HTTP Digest auth credentials for a client
-   *
+   * 
    * @param eMethod
    *        The HTTP method of the request. May not be <code>null</code>.
    * @param sDigestURI

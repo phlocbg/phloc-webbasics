@@ -26,7 +26,7 @@ import com.phloc.commons.ValueEnforcer;
 
 /**
  * Represents a list of Accept-Charset values as specified in the HTTP header
- *
+ * 
  * @author Philip Helger
  */
 public final class AcceptCharsetList extends AbstractQValueList <String>
@@ -48,7 +48,7 @@ public final class AcceptCharsetList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given charset.
-   *
+   * 
    * @param sCharset
    *        The charset name to query. May not be <code>null</code>.
    * @return The associated {@link QValue}.
@@ -75,7 +75,7 @@ public final class AcceptCharsetList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given charset.
-   *
+   * 
    * @param sCharset
    *        The charset name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.

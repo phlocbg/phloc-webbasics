@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * JSch logger implementation on top of SLF4J.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable

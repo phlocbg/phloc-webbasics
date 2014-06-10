@@ -38,7 +38,7 @@ import com.phloc.web.http.digestauth.HTTPDigestAuth;
 
 /**
  * Handling for HTTP Basic Authentication
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -59,7 +59,7 @@ public final class HTTPBasicAuth
   /**
    * Get the Basic authentication credentials from the passed HTTP servlet
    * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
-   *
+   * 
    * @param aHttpRequest
    *        The HTTP request to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed request does not contain a valid
@@ -76,7 +76,7 @@ public final class HTTPBasicAuth
 
   /**
    * Get the Basic authentication credentials from the passed HTTP header value.
-   *
+   * 
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value is not a correct HTTP Basic
