@@ -52,6 +52,7 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.mime.MimeTypeParserException;
 import com.phloc.commons.mime.MimeTypeUtils;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.web.CWeb;
 
@@ -106,6 +107,11 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   private String m_sRedirectedUrl;
   private String m_sForwardedUrl;
   private String m_sIncludedUrl;
+  private String m_sEncodeUrlSuffix;
+  private String m_sEncodeRedirectUrlSuffix;
+
+  public MockHttpServletResponse ()
+  {}
 
   /**
    * Set whether {@link #getOutputStream()} access is allowed.
@@ -426,33 +432,32 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   }
 
   /**
-   * The default implementation returns the given URL String as-is.
-   * <p>
-   * Can be overridden in subclasses, appending a session id or the like.
+   * The default implementation returns the given URL String as-is. Use
+   * {@link #setEncodeUrlSuffix(String)} to define a suffix to be appended.
    * 
    * @return the encoded URL
    */
   @Nullable
   public String encodeURL (@Nullable final String sUrl)
   {
+    if (StringHelper.hasText (m_sEncodeUrlSuffix))
+      return StringHelper.getNotNull (sUrl) + m_sEncodeUrlSuffix;
     return sUrl;
   }
 
   /**
-   * The default implementation delegates to {@link #encodeURL}, returning the
-   * given URL String as-is.
-   * <p>
-   * Can be overridden in subclasses, appending a session id or the like in a
-   * redirect-specific fashion. For general URL encoding rules, override the
-   * common {@link #encodeURL} method instead, appyling to redirect URLs as well
-   * as to general URLs.
+   * The default implementation returns the given URL String as-is. Use
+   * {@link #setEncodeRedirectUrlSuffix(String)} to define a suffix to be
+   * appended.
    * 
    * @return the encoded URL
    */
   @Nullable
   public String encodeRedirectURL (@Nullable final String sUrl)
   {
-    return encodeURL (sUrl);
+    if (StringHelper.hasText (m_sEncodeRedirectUrlSuffix))
+      return StringHelper.getNotNull (sUrl) + m_sEncodeRedirectUrlSuffix;
+    return sUrl;
   }
 
   @Deprecated
@@ -589,6 +594,28 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public String getIncludedUrl ()
   {
     return m_sIncludedUrl;
+  }
+
+  public void setEncodeUrlSuffix (@Nullable final String sEncodeUrlSuffix)
+  {
+    m_sEncodeUrlSuffix = sEncodeUrlSuffix;
+  }
+
+  @Nullable
+  public String getEncodeUrlSuffix ()
+  {
+    return m_sEncodeUrlSuffix;
+  }
+
+  public void setEncodeRedirectUrlSuffix (@Nullable final String sEncodeRedirectUrlSuffix)
+  {
+    m_sEncodeRedirectUrlSuffix = sEncodeRedirectUrlSuffix;
+  }
+
+  @Nullable
+  public String getEncodeRedirectUrlSuffix ()
+  {
+    return m_sEncodeRedirectUrlSuffix;
   }
 
   /**
