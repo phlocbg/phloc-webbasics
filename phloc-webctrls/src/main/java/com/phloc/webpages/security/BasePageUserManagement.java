@@ -263,40 +263,39 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
    * Callback for manually extracting custom attributes. This method is called
    * independently if custom attributes are present or not.
    * 
+   * @param aWPEC
    * @param aCurrentUser
    *        The user currently shown
    * @param aCustomAttrs
    *        The available custom attributes
    * @param aTable
    *        The table to be add custom information
-   * @param aDisplayLocale
-   *        The display locale to use
    * @return A set of all attribute names that were handled in this method or
    *         <code>null</code>.
    */
   @Nullable
   @OverrideOnDemand
-  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IUser aCurrentUser,
+  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                                          @Nonnull final IUser aCurrentUser,
                                                           @Nonnull final Map <String, ?> aCustomAttrs,
-                                                          @Nonnull final IHCTableFormView <?> aTable,
-                                                          @Nonnull final Locale aDisplayLocale)
+                                                          @Nonnull final IHCTableFormView <?> aTable)
   {
     return null;
   }
 
   /**
+   * @param aWPEC
    * @param aTable
    *        Table to be filled.
    * @param aSelectedObject
    *        Current user.
-   * @param aDisplayLocale
-   *        Display locale to use.
    */
   @OverrideOnDemand
-  protected void onShowSelectedObjectTableStart (@Nonnull final IHCTableFormView <?> aTable,
-                                                 @Nonnull final IUser aSelectedObject,
-                                                 @Nonnull final Locale aDisplayLocale)
+  protected void onShowSelectedObjectTableStart (@Nonnull final WebPageExecutionContext aWPEC,
+                                                 @Nonnull final IHCTableFormView <?> aTable,
+                                                 @Nonnull final IUser aSelectedObject)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     aTable.createItemRow ()
           .setLabel (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale))
           .setCtrl (PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
@@ -336,7 +335,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   SecurityUI.getUserDisplayName (aSelectedObject,
                                                                                                                  aDisplayLocale)));
-    onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
+    onShowSelectedObjectTableStart (aWPEC, aTable, aSelectedObject);
     if (!useEmailAddressAsLoginName ())
     {
       aTable.createItemRow ()
@@ -413,10 +412,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
     final Map <String, Object> aCustomAttrs = aSelectedObject.getAllAttributes ();
 
     // Callback
-    final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
-                                                                        aCustomAttrs,
-                                                                        aTable,
-                                                                        aDisplayLocale);
+    final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aWPEC, aSelectedObject, aCustomAttrs, aTable);
 
     if (!aCustomAttrs.isEmpty ())
     {
