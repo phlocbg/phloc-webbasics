@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
@@ -434,11 +435,29 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * which do not support cookies.
    * 
    * @param sURL
-   *        the url to be encoded.
+   *        the url to be encoded. May not be <code>null</code>.
    * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
    */
   @Nonnull
   String encodeURL (@Nonnull String sURL);
+
+  /**
+   * Encodes the specified URL by including the session ID in it, or, if
+   * encoding is not needed, returns the URL unchanged. The implementation of
+   * this method includes the logic to determine whether the session ID needs to
+   * be encoded in the URL. For example, if the browser supports cookies, or
+   * session tracking is turned off, URL encoding is unnecessary.
+   * <p>
+   * For robust session tracking, all URLs emitted by a servlet should be run
+   * through this method. Otherwise, URL rewriting cannot be used with browsers
+   * which do not support cookies.
+   * 
+   * @param aURL
+   *        the url to be encoded. May not be <code>null</code>.
+   * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
+   */
+  @Nonnull
+  ISimpleURL encodeURL (@Nonnull ISimpleURL aURL);
 
   /**
    * Encodes the specified URL for use in the <code>sendRedirect</code> method
@@ -460,6 +479,27 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    */
   @Nonnull
   String encodeRedirectURL (@Nonnull String sURL);
+
+  /**
+   * Encodes the specified URL for use in the <code>sendRedirect</code> method
+   * or, if encoding is not needed, returns the URL unchanged. The
+   * implementation of this method includes the logic to determine whether the
+   * session ID needs to be encoded in the URL. Because the rules for making
+   * this determination can differ from those used to decide whether to encode a
+   * normal link, this method is separated from the <code>encodeURL</code>
+   * method.
+   * <p>
+   * All URLs sent to the <code>HttpServletResponse.sendRedirect</code> method
+   * should be run through this method. Otherwise, URL rewriting cannot be used
+   * with browsers which do not support cookies.
+   * 
+   * @param aURL
+   *        the url to be encoded. May not be <code>null</code>.
+   * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
+   * @see #encodeURL(String)
+   */
+  @Nonnull
+  ISimpleURL encodeRedirectURL (@Nonnull ISimpleURL aURL);
 
   /**
    * Check if this request uses a Cookie based session handling (meaning cookies

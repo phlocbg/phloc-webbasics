@@ -44,6 +44,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.scopes.AbstractMapBasedScope;
 import com.phloc.scopes.ScopeUtils;
 import com.phloc.web.fileupload.IFileItem;
@@ -503,9 +505,27 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   }
 
   @Nonnull
+  public ISimpleURL encodeURL (@Nonnull final ISimpleURL aURL)
+  {
+    ValueEnforcer.notNull (aURL, "URL");
+    final String sURL = aURL.getAsString ();
+    final String sEncodedURL = encodeURL (sURL);
+    return sURL.equals (sEncodedURL) ? aURL : new SimpleURL (sEncodedURL);
+  }
+
+  @Nonnull
   public String encodeRedirectURL (@Nonnull final String sURL)
   {
     return m_aHttpResponse.encodeRedirectURL (sURL);
+  }
+
+  @Nonnull
+  public ISimpleURL encodeRedirectURL (@Nonnull final ISimpleURL aURL)
+  {
+    ValueEnforcer.notNull (aURL, "URL");
+    final String sURL = aURL.getAsString ();
+    final String sEncodedURL = encodeRedirectURL (sURL);
+    return sURL.equals (sEncodedURL) ? aURL : new SimpleURL (sEncodedURL);
   }
 
   public boolean areCookiesEnabled ()
