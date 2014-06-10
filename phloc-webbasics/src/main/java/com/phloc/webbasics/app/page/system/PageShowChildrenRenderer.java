@@ -30,6 +30,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * The default renderer used for {@link PageShowChildren}.
@@ -61,6 +62,9 @@ public class PageShowChildrenRenderer implements Serializable
   /**
    * Render a menu item to an internal page
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aMenuItemPage
    *        The menu item. Never <code>null</code>.
    * @param aDisplayLocale
@@ -69,11 +73,13 @@ public class PageShowChildrenRenderer implements Serializable
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItemPage, @Nonnull final Locale aDisplayLocale)
+  protected IHCNode renderMenuItemPage (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                        @Nonnull final IMenuItemPage aMenuItemPage,
+                                        @Nonnull final Locale aDisplayLocale)
   {
     if (!aMenuItemPage.matchesDisplayFilter ())
       return null;
-    return new HCA (LinkUtils.getLinkToMenuItem (aMenuItemPage.getID ())).addChild (aMenuItemPage.getDisplayText (aDisplayLocale));
+    return new HCA (LinkUtils.getLinkToMenuItem (aRequestScope, aMenuItemPage.getID ())).addChild (aMenuItemPage.getDisplayText (aDisplayLocale));
   }
 
   /**

@@ -432,6 +432,7 @@ public final class LinkUtils
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   private static SimpleURL _getLinkToMenuItem (@Nonnull final ApplicationRequestManager aARM,
                                                @Nonnull final String sMenuItemID)
   {
@@ -446,12 +447,34 @@ public final class LinkUtils
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
     ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
 
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
     return _getLinkToMenuItem (aARM, sMenuItemID);
+  }
+
+  /**
+   * Get a link to the specified menu item.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param sMenuItemID
+   *        The ID of the menu item to link to. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getLinkToMenuItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull final String sMenuItemID)
+  {
+    ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
+
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    return new SimpleURL (aRequestScope.encodeURL (aRequestScope.getFullContextAndServletPath ())).add (aARM.getRequestParamNameMenuItem (),
+                                                                                                        sMenuItemID);
   }
 
   /**
@@ -500,9 +523,23 @@ public final class LinkUtils
    *         parameters. Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getSelfHref ()
   {
     return getSelfHref ((Map <String, String>) null);
+  }
+
+  /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @return A non-<code>null</code> URL to the current page, without any
+   *         parameters. Never <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getSelfHref (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getSelfHref (aRequestScope, (Map <String, String>) null);
   }
 
   /**
@@ -516,11 +553,35 @@ public final class LinkUtils
    * @see #getLinkToMenuItem(String)
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
     final String sSelectedMenuItemID = aARM.getRequestMenuItemID ();
     return _getLinkToMenuItem (aARM, sSelectedMenuItemID).addAll (aParams);
+  }
+
+  /**
+   * Get the URL to the current page with the provided set of parameter.
+   * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param aParams
+   *        The optional request parameters to be used. May be <code>null</code>
+   *        or empty.
+   * @return The non-<code>null</code> URL to the current page (selected menu
+   *         item) with the passed parameters.
+   * @see #getLinkToMenuItem(String)
+   */
+  @Nonnull
+  public static SimpleURL getSelfHref (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                       @Nullable final Map <String, String> aParams)
+  {
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    final String sSelectedMenuItemID = aARM.getRequestMenuItemID ();
+    return new SimpleURL (aRequestScope.encodeURL (aRequestScope.getFullContextAndServletPath ())).add (aARM.getRequestParamNameMenuItem (),
+                                                                                                        sSelectedMenuItemID);
   }
 
   /**

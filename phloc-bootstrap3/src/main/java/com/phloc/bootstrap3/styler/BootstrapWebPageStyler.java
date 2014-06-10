@@ -115,9 +115,9 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapButtonToolbar createToolbar ()
+  public BootstrapButtonToolbar createToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return new BootstrapButtonToolbar ();
+    return new BootstrapButtonToolbar (aRequestScope);
   }
 
   @Override

@@ -50,7 +50,6 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
@@ -257,6 +256,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       if (!canLogoutUser (aSelectedObject.getUser ()))
         throw new IllegalStateException ("Won't work!");
 
+      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
       final String sUserName = SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale);
@@ -277,11 +277,11 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       else
       {
         // Show question
-        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
         aForm.addChild (getStyler ().createSuccessBox (EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                      sUserName)));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -300,7 +300,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addButton (EText.MSG_UPDATE.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
@@ -314,7 +314,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
     final Collection <LoginInfo> aLoginInfos = LoggedInUserManager.getInstance ().getAllLoginInfos ();
     for (final LoginInfo aLoginInfo : aLoginInfos)
     {
-      final ISimpleURL aViewLink = createViewURL (aLoginInfo);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aLoginInfo);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale)));
@@ -325,11 +325,11 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       if (canLogoutUser (aLoginInfo.getUser ()))
       {
         final String sUserName = SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale);
-        aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
-                                                .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
-                                                .add (CHCParam.PARAM_OBJECT, aLoginInfo.getID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                           sUserName))
-                                                                                                  .addChild (getLogoutUserIcon ()));
+        aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
+                                            .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
+                                            .add (CHCParam.PARAM_OBJECT, aLoginInfo.getID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                                       sUserName))
+                                                                                              .addChild (getLogoutUserIcon ()));
       }
       else
       {

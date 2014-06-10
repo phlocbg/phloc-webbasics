@@ -189,9 +189,9 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public IButtonToolbar <?> createToolbar ()
+  public IButtonToolbar <?> createToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return new SimpleButtonToolbar ();
+    return new SimpleButtonToolbar (aRequestScope);
   }
 
   @Nonnull

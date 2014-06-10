@@ -52,6 +52,7 @@ import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 @SuppressWarnings ("deprecation")
 public class BasePageSavedStates extends AbstractWebPageForm <FormState>
@@ -150,6 +151,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
                                         @Nonnull final FormState aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
@@ -163,7 +165,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayText (aDisplayLocale)));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -179,6 +181,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
     if (aWPEC.hasAction (ACTION_DELETE_ALL))
     {
       final HCNodeList aNodeList = aWPEC.getNodeList ();
+      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
       if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
@@ -192,7 +195,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
       final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
       aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_ALL_QUERY.getDisplayText (aDisplayLocale)));
-      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL);
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
       aToolbar.addSubmitButtonYes (aDisplayLocale);
@@ -207,6 +210,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final FormStateManager aFSM = FormStateManager.getInstance ();
 
@@ -217,7 +221,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
     }
     else
     {
-      final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+      final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
       aToolbar.addButton (EText.BUTTON_DELETE.getDisplayText (aDisplayLocale),
                           aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL),
                           EDefaultIcon.DELETE);
@@ -251,7 +255,9 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
                                                 .add (FIELD_FLOW_ID, aFormState.getFlowID ())
                                                 .add (FIELD_RESTORE_FLOW_ID, aFormState.getFlowID ())).setTitle (EText.SAVED_STATE_EDIT.getDisplayText (aDisplayLocale))
                                                                                                       .addChild (getCreateImg ()));
-        aActionCell.addChild (createDeleteLink (aFormState, EText.SAVED_STATE_DELETE.getDisplayText (aDisplayLocale)));
+        aActionCell.addChild (createDeleteLink (aWPEC,
+                                                aFormState,
+                                                EText.SAVED_STATE_DELETE.getDisplayText (aDisplayLocale)));
       }
     }
   }

@@ -43,10 +43,11 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
- *
+ * 
  * @author Philip Helger
  */
 public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
@@ -64,7 +65,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   *
+   * 
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren
@@ -87,12 +88,13 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
+  public IHCNode renderMenuItemPage (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                     @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
-    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aMenuItem.getID ()));
+    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aRequestScope, aMenuItem.getID ()));
     aLink.addChild (getMenuItemPageLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
@@ -101,7 +103,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   *
+   * 
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren
@@ -144,7 +146,8 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI,
+  public void onMenuItemPageItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bSelected,
                                   final boolean bExpanded)
@@ -164,27 +167,31 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                  @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+    return createSideBarMenu (aRequestScope, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                  @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
+    return createSideBarMenu (aRequestScope, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                  @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final BootstrapMenuItemRenderer aRenderer)
   {
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    final HCUL aUL = MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
+    final HCUL aUL = MenuRendererCallback.createRenderedMenu (aRequestScope,
+                                                              FactoryNewInstance.create (HCUL.class),
                                                               aMenuTree.getRootItem (),
                                                               aRenderer,
                                                               aAllDisplayMenuItemIDs).addClass (CBootstrapCSS.NAV);

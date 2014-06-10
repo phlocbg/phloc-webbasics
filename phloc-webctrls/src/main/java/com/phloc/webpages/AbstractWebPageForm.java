@@ -108,14 +108,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @return A newly created toolbar. May be overridden to create other types of
    *         toolbars. May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
-  protected IButtonToolbar <?> createNewViewToolbar ()
+  protected IButtonToolbar <?> createNewViewToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar ();
+    return getStyler ().createToolbar (aWPEC.getRequestScope ());
   }
 
   /**
@@ -170,7 +172,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                   final boolean bCanEdit,
                                                   @Nonnull final DATATYPE aSelectedObject)
   {
-    final IButtonToolbar <?> aToolbar = createNewViewToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewViewToolbar (aWPEC);
     if (bCanGoBack)
     {
       // Back to list
@@ -179,21 +181,23 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (bCanEdit)
     {
       // Edit object
-      aToolbar.addButtonEdit (aWPEC.getDisplayLocale (), createEditURL (aSelectedObject));
+      aToolbar.addButtonEdit (aWPEC.getDisplayLocale (), createEditURL (aWPEC, aSelectedObject));
     }
     modifyViewToolbar (aWPEC, aSelectedObject, aToolbar);
     return aToolbar;
   }
 
   /**
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @return A newly created toolbar. May be overridden to create other types of
    *         toolbars :). May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
-  protected IButtonToolbar <?> createNewEditToolbar ()
+  protected IButtonToolbar <?> createNewEditToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar ();
+    return getStyler ().createToolbar (aWPEC.getRequestScope ());
   }
 
   /**
@@ -244,7 +248,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                   @Nonnull final HCForm aForm,
                                                   @Nonnull final DATATYPE aSelectedObject)
   {
-    final IButtonToolbar <?> aToolbar = createNewEditToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewEditToolbar (aWPEC);
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -272,14 +276,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @return A newly created toolbar. May be overridden to create other types of
    *         toolbars :). May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
-  protected IButtonToolbar <?> createNewCreateToolbar ()
+  protected IButtonToolbar <?> createNewCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar ();
+    return getStyler ().createToolbar (aWPEC.getRequestScope ());
   }
 
   /**
@@ -312,7 +318,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                     @Nonnull final HCForm aForm,
                                                     @Nullable final DATATYPE aSelectedObject)
   {
-    final IButtonToolbar <?> aToolbar = createNewCreateToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewCreateToolbar (aWPEC);
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
@@ -610,7 +616,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             // Show the input form. Either for the first time or because of form
             // errors a n-th time
             bShowList = false;
-            final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf () : createFormSelf ();
+            final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf (aWPEC) : createFormSelf (aWPEC);
             aForm.setID (INPUT_FORM_ID);
             aNodeList.addChild (aForm);
 

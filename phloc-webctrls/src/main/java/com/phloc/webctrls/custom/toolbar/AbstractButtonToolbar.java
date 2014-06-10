@@ -44,6 +44,7 @@ public abstract class AbstractButtonToolbar <IMPLTYPE extends AbstractButtonTool
 {
   private final SimpleURL m_aSelfHref;
 
+  @Deprecated
   public AbstractButtonToolbar ()
   {
     this (LinkUtils.getSelfHref ());

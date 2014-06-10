@@ -148,7 +148,7 @@ public class BasePageAudit extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 

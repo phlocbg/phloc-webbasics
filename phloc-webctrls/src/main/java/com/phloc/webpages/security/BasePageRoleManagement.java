@@ -270,7 +270,9 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
       return true;
 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteRole (aSelectedObject.getID ()).isChanged ())
@@ -282,10 +284,10 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
       return true;
     }
 
-    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -309,7 +311,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
     final Collection <? extends IRole> aRoles = AccessManager.getInstance ().getAllRoles ();
     for (final IRole aRole : aRoles)
     {
-      final ISimpleURL aViewLink = createViewURL (aRole);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aRole);
 
       final Collection <IUserGroup> aAssignedUserGroups = AccessManager.getInstance ()
                                                                        .getAllUserGroupsWithAssignedRole (aRole.getID ());
@@ -321,7 +323,8 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
       final IHCCell <?> aActionCell = aRow.addCell ();
       if (canDeleteRole (aRole))
       {
-        aActionCell.addChild (createDeleteLink (aRole,
+        aActionCell.addChild (createDeleteLink (aWPEC,
+                                                aRole,
                                                 EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                    aRole.getName ())));
       }

@@ -40,6 +40,7 @@ import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -169,18 +170,40 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A form that links to the current page.
    */
   @Nonnull
+  @Deprecated
   public HCForm createFormSelf ()
   {
     return new HCForm (LinkUtils.getSelfHref ());
   }
 
   /**
+   * @return A form that links to the current page.
+   */
+  @Nonnull
+  public HCForm createFormSelf (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    return new HCForm (aLEC.getSelfHref ());
+  }
+
+  /**
    * @return A file upload form that links to the current page.
    */
   @Nonnull
+  @Deprecated
   public HCForm createFormFileUploadSelf ()
   {
     final HCForm aForm = createFormSelf ();
+    aForm.setFileUploadEncType ();
+    return aForm;
+  }
+
+  /**
+   * @return A file upload form that links to the current page.
+   */
+  @Nonnull
+  public HCForm createFormFileUploadSelf (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    final HCForm aForm = createFormSelf (aLEC);
     aForm.setFileUploadEncType ();
     return aForm;
   }

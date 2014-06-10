@@ -67,7 +67,6 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
@@ -771,6 +770,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
       if (!canResetPassword (aSelectedObject))
         throw new IllegalStateException ("Won't work!");
 
+      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final boolean bShowForm = true;
       final FormErrors aFormErrors = new FormErrors ();
@@ -802,7 +802,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
       {
         // Show input form
         final boolean bHasAnyPasswordConstraint = GlobalPasswordSettings.getPasswordConstraintList ().hasConstraints ();
-        final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
+        final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf (aWPEC));
         final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
@@ -824,7 +824,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
               .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -872,7 +872,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
     for (final IUser aCurUser : aUsers)
     {
-      final ISimpleURL aViewLink = createViewURL (aCurUser);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aCurUser);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aCurUser, aDisplayLocale)));
@@ -896,22 +896,22 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
       // Edit user
       if (isEditAllowed (aCurUser))
-        aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
+        aActionCell.addChild (createEditLink (aWPEC, aCurUser));
       else
         aActionCell.addChild (createEmptyAction ());
 
       // Copy
-      aActionCell.addChild (createCopyLink (aCurUser, aDisplayLocale));
+      aActionCell.addChild (createCopyLink (aWPEC, aCurUser));
 
       // Reset password of user
       if (canResetPassword (aCurUser))
       {
-        aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
-                                                .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
-                                                .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                              SecurityUI.getUserDisplayName (aCurUser,
-                                                                                                                                                                                             aDisplayLocale)))
-                                                                                                .addChild (getResetPasswordIcon ()));
+        aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
+                                            .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
+                                            .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                                          SecurityUI.getUserDisplayName (aCurUser,
+                                                                                                                                                                                         aDisplayLocale)))
+                                                                                            .addChild (getResetPasswordIcon ()));
       }
       else
         aActionCell.addChild (createEmptyAction ());
@@ -934,11 +934,12 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();

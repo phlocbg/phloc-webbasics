@@ -102,7 +102,7 @@ public interface IWebPageStyler
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IButtonToolbar <?> createToolbar ();
+  IButtonToolbar <?> createToolbar (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 
   @Nonnull
   ITabBox <?> createTabBox ();

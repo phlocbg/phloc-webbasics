@@ -21,8 +21,10 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract base implementation of {@link IMenuItemRenderer}
@@ -35,8 +37,7 @@ public abstract class AbstractMenuItemRenderer <T extends AbstractHCList <?>> im
 
   public AbstractMenuItemRenderer (@Nonnull final Locale aContentLocale)
   {
-    if (aContentLocale == null)
-      throw new NullPointerException ("contentLocale");
+    ValueEnforcer.notNull (aContentLocale, "ContentLocale");
     m_aContentLocale = aContentLocale;
   }
 
@@ -55,7 +56,8 @@ public abstract class AbstractMenuItemRenderer <T extends AbstractHCList <?>> im
   public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
   {}
 
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI,
+  public void onMenuItemPageItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bIsSelected,
                                   final boolean bIsExpanded)

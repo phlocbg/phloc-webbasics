@@ -45,6 +45,7 @@ import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with global basic settings
@@ -117,6 +118,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     if (aWPEC.hasAttr (CHCParam.PARAM_ACTION, CHCParam.ACTION_SAVE))
@@ -131,7 +133,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
       aNodeList.addChild (getStyler ().createSuccessBox (EText.MSG_CHANGE_SUCCESS.getDisplayText (aDisplayLocale)));
     }
 
-    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
 
     // GlobalDebug
@@ -184,7 +186,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
 
     aForm.addChild (aTabBox);
 
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, CHCParam.ACTION_SAVE);
     aToolbar.addSubmitButtonSave (aDisplayLocale);
   }

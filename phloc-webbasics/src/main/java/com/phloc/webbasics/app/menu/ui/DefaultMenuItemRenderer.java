@@ -33,10 +33,11 @@ import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
- *
+ * 
  * @author Philip Helger
  */
 public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends AbstractMenuItemRenderer <T>
@@ -64,13 +65,14 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
+  public IHCNode renderMenuItemPage (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                     @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
     final String sMenuItemID = aMenuItem.getID ();
-    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
+    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aRequestScope, sMenuItemID));
     aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
     aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
     if (bIsSelected)
@@ -101,7 +103,8 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI,
+  public void onMenuItemPageItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bIsSelected,
                                   final boolean bIsExpanded)

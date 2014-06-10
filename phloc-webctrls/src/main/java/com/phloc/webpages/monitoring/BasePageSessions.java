@@ -243,8 +243,8 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
-    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aScope));
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
+    aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aWPEC, aScope));
     aNodeList.addChild (aToolbar);
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
@@ -286,7 +286,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 
@@ -295,7 +295,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     for (final ISessionScope aSessionScope : ScopeSessionManager.getInstance ().getAllSessionScopes ())
     {
-      final ISimpleURL aViewLink = createViewURL (aSessionScope);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aSessionScope);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aSessionScope.getID ()));

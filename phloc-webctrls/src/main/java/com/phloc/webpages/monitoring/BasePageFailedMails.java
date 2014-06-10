@@ -414,7 +414,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
 
     // Refresh button
     final boolean bDisabled = m_aFailedMailQueue.getAllFailedMails ().isEmpty ();
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aToolbar.addButton (EText.BUTTON_RESEND_ALL.getDisplayText (aDisplayLocale),
                         aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_RESEND_ALL),
@@ -439,7 +439,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
 
     for (final FailedMailData aItem : m_aFailedMailQueue.getAllFailedMails ())
     {
-      final ISimpleURL aViewURL = createViewURL (aItem);
+      final ISimpleURL aViewURL = createViewURL (aWPEC, aItem);
       final IEmailData aEmailData = aItem.getEmailData ();
       final Throwable aError = aItem.getError ();
 

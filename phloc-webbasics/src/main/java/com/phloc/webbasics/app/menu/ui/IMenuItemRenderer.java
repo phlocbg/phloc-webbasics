@@ -25,6 +25,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Interface for rendering menu objects
@@ -44,6 +45,9 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Render a menu item on a page
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aMenuItem
    *        The menu item to be rendered.
    * @param bHasChildren
@@ -55,7 +59,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItemPage (@Nonnull IMenuItemPage aMenuItem,
+  IHCNode renderMenuItemPage (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                              @Nonnull IMenuItemPage aMenuItem,
                               boolean bHasChildren,
                               boolean bIsSelected,
                               boolean bIsExpanded);
@@ -106,6 +111,9 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Callback invoked on the created node.
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aLI
    *        HCNode
    * @param bHasChildren
@@ -115,7 +123,11 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @param bIsExpanded
    *        <code>true</code> if the menu item is expanded
    */
-  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
+  void onMenuItemPageItem (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nonnull HCLI aLI,
+                           boolean bHasChildren,
+                           boolean bIsSelected,
+                           boolean bIsExpanded);
 
   /**
    * Callback invoked on the created node.

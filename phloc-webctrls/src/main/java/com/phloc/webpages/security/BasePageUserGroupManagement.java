@@ -387,7 +387,9 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
       return true;
 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteUserGroup (aSelectedObject.getID ()).isChanged ())
@@ -399,10 +401,10 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
       return true;
     }
 
-    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -419,7 +421,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
@@ -430,19 +432,21 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
     final Collection <? extends IUserGroup> aUserGroups = AccessManager.getInstance ().getAllUserGroups ();
     for (final IUserGroup aUserGroup : aUserGroups)
     {
-      final ISimpleURL aViewLink = createViewURL (aUserGroup);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aUserGroup);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroup.getName ()));
       aRow.addCell (EWebBasicsText.getYesOrNo (aUserGroup.hasContainedUsers (), aDisplayLocale));
 
       final IHCCell <?> aActionCell = aRow.addCell ();
-      aActionCell.addChild (createEditLink (aUserGroup,
+      aActionCell.addChild (createEditLink (aWPEC,
+                                            aUserGroup,
                                             EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                              aUserGroup.getName ())));
       if (canDeleteUserGroup (aUserGroup))
       {
-        aActionCell.addChild (createDeleteLink (aUserGroup,
+        aActionCell.addChild (createDeleteLink (aWPEC,
+                                                aUserGroup,
                                                 EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                    aUserGroup.getName ())));
       }

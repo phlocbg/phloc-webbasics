@@ -22,8 +22,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.js.IJSCodeProvider;
+import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.custom.IIcon;
 import com.phloc.webctrls.custom.toolbar.AbstractButtonToolbar;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Bootstrap3 button toolbar
@@ -32,8 +35,21 @@ import com.phloc.webctrls.custom.toolbar.AbstractButtonToolbar;
  */
 public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButtonToolbar>
 {
+  @Deprecated
   public BootstrapButtonToolbar ()
   {
+    addClass (CBootstrapCSS.BTN_TOOLBAR);
+  }
+
+  public BootstrapButtonToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    super (LinkUtils.getSelfHref (aRequestScope));
+    addClass (CBootstrapCSS.BTN_TOOLBAR);
+  }
+
+  public BootstrapButtonToolbar (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    super (aLEC.getSelfHref ());
     addClass (CBootstrapCSS.BTN_TOOLBAR);
   }
 

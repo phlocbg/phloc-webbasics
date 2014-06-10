@@ -49,6 +49,7 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base page for changing the password of the currently logged in use.
@@ -118,6 +119,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IUser aCurrentUser = LoggedInUserManager.getInstance ().getCurrentUser ();
@@ -154,7 +156,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
       {
         // Show input form
         final boolean bHasAnyPasswordConstraint = GlobalPasswordSettings.getPasswordConstraintList ().hasConstraints ();
-        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
         final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
@@ -177,7 +179,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
               .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, CHCParam.ACTION_PERFORM);
         aToolbar.addSubmitButtonSave (aDisplayLocale);
       }

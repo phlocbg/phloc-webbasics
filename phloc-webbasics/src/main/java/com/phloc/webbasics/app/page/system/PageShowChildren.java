@@ -28,6 +28,7 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.NonBlockingStack;
@@ -40,26 +41,26 @@ import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class PageShowChildren extends AbstractWebPage
 {
   private static final class ShowChildrenCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
+    private final IRequestWebScopeWithoutResponse m_aRequestScope;
     private final Locale m_aDisplayLocale;
     private final NonBlockingStack <HCUL> m_aStack;
     private final PageShowChildrenRenderer m_aRenderer;
 
     ShowChildrenCallback (@Nonnull final HCUL aUL,
-                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final WebPageExecutionContext aWPEC,
                           @Nonnull final PageShowChildrenRenderer aRenderer)
     {
-      if (aUL == null)
-        throw new NullPointerException ("UL");
-      if (aDisplayLocale == null)
-        throw new NullPointerException ("displayLocale");
-      if (aRenderer == null)
-        throw new NullPointerException ("renderer");
-      m_aDisplayLocale = aDisplayLocale;
+      ValueEnforcer.notNull (aUL, "UL");
+      ValueEnforcer.notNull (aWPEC, "WPEC");
+      ValueEnforcer.notNull (aRenderer, "Renderer");
+      m_aRequestScope = aWPEC.getRequestScope ();
+      m_aDisplayLocale = aWPEC.getDisplayLocale ();
       m_aStack = new NonBlockingStack <HCUL> (aUL);
       m_aRenderer = aRenderer;
     }
@@ -102,7 +103,7 @@ public class PageShowChildren extends AbstractWebPage
           aNode = m_aRenderer.renderMenuSeparator ((IMenuSeparator) aMenuObj, m_aDisplayLocale);
         else
           if (aMenuObj instanceof IMenuItemPage)
-            aNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj, m_aDisplayLocale);
+            aNode = m_aRenderer.renderMenuItemPage (m_aRequestScope, (IMenuItemPage) aMenuObj, m_aDisplayLocale);
           else
             if (aMenuObj instanceof IMenuItemExternal)
               aNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, m_aDisplayLocale);
@@ -170,14 +171,13 @@ public class PageShowChildren extends AbstractWebPage
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = m_aMenuTree.getItemWithID (getID ());
     if (aMenuTreeItem != null && aMenuTreeItem.getData () instanceof IMenuItem)
     {
       final HCUL aUL = createRootUL ();
-      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aDisplayLocale, m_aRenderer));
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aWPEC, m_aRenderer));
       aNodeList.addChild (aUL);
     }
   }

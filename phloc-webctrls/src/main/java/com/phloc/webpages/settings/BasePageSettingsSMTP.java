@@ -63,7 +63,6 @@ import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailData;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
@@ -498,7 +497,9 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       throw new IllegalStateException ("Cannot delete this object!");
 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (m_aMgr.removeSettings (aSelectedObject.getID ()).isChanged ())
@@ -510,10 +511,10 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       return true;
     }
 
-    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -528,6 +529,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   {
     if (aWPEC.hasAction (ACTION_TEST_MAIL) && aSelectedObject != null)
     {
+      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
       final FormErrors aFormErrors = new FormErrors ();
@@ -564,7 +566,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       }
 
       // Show question
-      final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+      final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
 
       final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
                                                                                              HCCol.star ()));
@@ -585,7 +587,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
             .setCtrl (new HCTextAreaAutosize (new RequestField (FIELD_TEST_BODY)).setRows (5))
             .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
 
-      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL);
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -604,7 +606,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
@@ -618,7 +620,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
     for (final NamedSMTPSettings aCurObject : m_aMgr.getAllSettings ().values ())
     {
       final ISMTPSettings aSettings = aCurObject.getSMTPSettings ();
-      final ISimpleURL aViewLink = createViewURL (aCurObject);
+      final ISimpleURL aViewLink = createViewURL (aWPEC, aCurObject);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aCurObject.getName ()));
@@ -626,20 +628,22 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       aRow.addCell (aSettings.getUserName ());
 
       final IHCCell <?> aActionCell = aRow.addCell ();
-      aActionCell.addChild (createEditLink (aCurObject,
+      aActionCell.addChild (createEditLink (aWPEC,
+                                            aCurObject,
                                             EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                              aCurObject.getName ())));
       if (_canDelete (aCurObject))
-        aActionCell.addChild (createDeleteLink (aCurObject,
+        aActionCell.addChild (createDeleteLink (aWPEC,
+                                                aCurObject,
                                                 EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                    aCurObject.getName ())));
       else
         aActionCell.addChild (createEmptyAction ());
 
-      aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
-                                              .add (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL)
-                                              .add (CHCParam.PARAM_OBJECT, aCurObject.getID ())).setTitle (EText.MSG_SEND_TEST_MAIL.getDisplayText (aDisplayLocale))
-                                                                                                .addChild (getTestMailIcon ()));
+      aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
+                                          .add (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL)
+                                          .add (CHCParam.PARAM_OBJECT, aCurObject.getID ())).setTitle (EText.MSG_SEND_TEST_MAIL.getDisplayText (aDisplayLocale))
+                                                                                            .addChild (getTestMailIcon ()));
     }
 
     aNodeList.addChild (aTable);

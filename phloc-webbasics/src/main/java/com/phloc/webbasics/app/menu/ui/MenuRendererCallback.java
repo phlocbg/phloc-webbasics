@@ -39,6 +39,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Renders menu item nodes.
@@ -47,6 +48,7 @@ import com.phloc.html.hc.html.HCLI;
  */
 public class MenuRendererCallback <T extends AbstractHCList <?>> extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
+  private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final IFactory <T> m_aFactory;
   private final NonBlockingStack <T> m_aMenuListStack;
   private final IMenuItemRenderer <T> m_aRenderer;
@@ -56,15 +58,18 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   private final NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> m_aTreeItemStack = new NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> ();
   private final String m_sSelectedItem;
 
-  protected MenuRendererCallback (@Nonnull final IFactory <T> aFactory,
+  protected MenuRendererCallback (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final IFactory <T> aFactory,
                                   @Nonnull final NonBlockingStack <T> aMenuListStack,
                                   @Nonnull final IMenuItemRenderer <T> aRenderer,
                                   @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
     ValueEnforcer.notNull (aMenuListStack, "MenuListStack");
     ValueEnforcer.notNull (aRenderer, "Renderer");
     ValueEnforcer.notNull (aDisplayMenuItemIDs, "DisplayMenuItemIDs");
 
+    m_aRequestScope = aRequestScope;
     m_aFactory = aFactory;
     m_aMenuListStack = aMenuListStack;
     m_aRenderer = aRenderer;
@@ -149,7 +154,8 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
         if (aMenuObj instanceof IMenuItemPage)
         {
           // page item
-          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj,
+          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage (m_aRequestScope,
+                                                                  (IMenuItemPage) aMenuObj,
                                                                   bHasChildren,
                                                                   bSelected,
                                                                   bExpanded);
@@ -158,7 +164,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
             aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
           else
             aLI = aParent.addAndReturnItem (aHCNode);
-          m_aRenderer.onMenuItemPageItem (aLI, bHasChildren, bSelected, bExpanded);
+          m_aRenderer.onMenuItemPageItem (m_aRequestScope, aLI, bHasChildren, bSelected, bExpanded);
           m_aMenuItemStack.push (aLI);
         }
         else
@@ -202,16 +208,21 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render the whole menu
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aRenderer
    *        The renderer to use
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <T>> T createRenderedMenu (@Nonnull final IFactory <T> aFactory,
+  public static <T extends AbstractHCList <T>> T createRenderedMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                                     @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer)
   {
-    return createRenderedMenu (aFactory,
+    return createRenderedMenu (aRequestScope,
+                               aFactory,
                                aMenuTree.getRootItem (),
                                aRenderer,
                                MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aMenuTree));
@@ -220,6 +231,9 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render a part of the menu
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aStartTreeItem
    *        The start tree to iterate
    * @param aRenderer
@@ -227,12 +241,14 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IFactory <T> aFactory,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                                     @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer)
   {
-    return createRenderedMenu (aFactory,
+    return createRenderedMenu (aRequestScope,
+                               aFactory,
                                aStartTreeItem,
                                aRenderer,
                                MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aMenuTree));
@@ -241,6 +257,9 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render the whole menu
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aRenderer
    *        The renderer to use
    * @param aDisplayMenuItemIDs
@@ -249,17 +268,21 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IFactory <T> aFactory,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                                     @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,
                                                                      @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    return createRenderedMenu (aFactory, aMenuTree.getRootItem (), aRenderer, aDisplayMenuItemIDs);
+    return createRenderedMenu (aRequestScope, aFactory, aMenuTree.getRootItem (), aRenderer, aDisplayMenuItemIDs);
   }
 
   /**
    * Render a part of the menu
    * 
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
    * @param aFactory
    *        The factory to be used to create nodes of type T. May not be
    *        <code>null</code>.
@@ -273,17 +296,18 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IFactory <T> aFactory,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                                     @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,
                                                                      @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    if (aFactory == null)
-      throw new NullPointerException ("Factory");
+    ValueEnforcer.notNull (aFactory, "Factory");
 
     final NonBlockingStack <T> aNodeStack = new NonBlockingStack <T> ();
     aNodeStack.push (aFactory.create ());
-    TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aFactory,
+    TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aRequestScope,
+                                                                                 aFactory,
                                                                                  aNodeStack,
                                                                                  aRenderer,
                                                                                  aDisplayMenuItemIDs));

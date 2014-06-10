@@ -223,7 +223,7 @@ public class BasePageScopes extends AbstractWebPageExt
     final IGlobalWebScope aGlobalScope = WebScopeManager.getGlobalScope ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 
