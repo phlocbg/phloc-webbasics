@@ -44,10 +44,11 @@ final class UserAgent implements IUserAgent
   private static final String CHROME_SEARCH_STRING = "Chrome";
   private static final String VERSION_SEARCH_STRING = "Version";
   private static final String SAFARI_SEARCH_STRING = "Safari";
-  private static final String IE_TRIDENT_SEARCH_STRING = "Trident/";
   private static final String OPERA_SEARCH_STRING = "Opera";
   private static final String FIREFOX_SEARCH_STRING = "Firefox";
   private static final String IE_SEARCH_STRING = "MSIE";
+  private static final String IE_TRIDENT_SEARCH_STRING = "Trident/";
+  private static final String IE_RV_SEARCH_STRING = "rv:";
   private static final String KONQUEROR_PREFIX = "Konqueror/";
   private static final String [] GECKO_VARIANTS = new String [] { "GranParadiso",
                                                                  "Fedora",
@@ -157,21 +158,41 @@ final class UserAgent implements IUserAgent
       // Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/4.0; SLCC2;
       // .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media
       // Center PC 6.0; Tablet PC 2.0)
+      // IE 11:
+      // Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; MALC; rv:11.0) like
+      // Gecko
       String sInfoIE = m_aElements.getListItemStartingWith (IE_SEARCH_STRING);
+      final String sTrident = m_aElements.getListItemStartingWith (IE_TRIDENT_SEARCH_STRING);
       // Negative Example:
       // Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux i686; en) Opera 9.63
       if (m_aElements.containsString (OPERA_SEARCH_STRING))
         sInfoIE = null;
 
       if (sInfoIE == null)
-        m_aInfoIE = BrowserInfoIE.IS_IT_NOT;
+      {
+        // IE 11 special handling - no MSIE any more
+        if (sTrident != null)
+        {
+          // "Trident/" must be present and "rv:" indicates the vesion number
+          final String sRV = m_aElements.getListItemStartingWith (IE_RV_SEARCH_STRING);
+          if (sRV != null)
+          {
+            final Version aVersion = new Version (sRV.substring (IE_RV_SEARCH_STRING.length ()));
+            m_aInfoIE = new BrowserInfoIE (aVersion, false);
+          }
+          else
+            m_aInfoIE = BrowserInfoIE.IS_IT_NOT;
+        }
+        else
+          m_aInfoIE = BrowserInfoIE.IS_IT_NOT;
+      }
       else
       {
         // IE Compatibility Mode check
         // http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
         final Version aVersion = new Version (sInfoIE.substring (IE_SEARCH_STRING.length ()).trim ());
         final boolean bIsIECompatibilityMode = aVersion.getMajor () == IE_VERSION_IN_COMPATIBILITY_MODE &&
-                                               m_aElements.getListItemStartingWith (IE_TRIDENT_SEARCH_STRING) != null;
+                                               sTrident != null;
         m_aInfoIE = new BrowserInfoIE (aVersion, bIsIECompatibilityMode);
       }
     }

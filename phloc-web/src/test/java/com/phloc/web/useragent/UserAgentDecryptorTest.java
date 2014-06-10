@@ -108,6 +108,17 @@ public final class UserAgentDecryptorTest
     assertFalse (aUA.getInfoWebSpider ().isIt ());
     assertEquals (new Version (7), aUA.getInfoIE ().getVersion ());
 
+    aUA = UserAgentDecryptor.decryptUserAgentString ("Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; MALC; rv:11.0) like Gecko");
+    assertFalse (aUA.getInfoFirefox ().isIt ());
+    assertTrue (aUA.getInfoIE ().isIt ());
+    assertFalse (aUA.getInfoOpera ().isIt ());
+    assertFalse (aUA.getInfoSafari ().isIt ());
+    assertFalse (aUA.getInfoChrome ().isIt ());
+    assertFalse (aUA.getInfoGeckoBased ().isIt ());
+    assertFalse (aUA.getInfoWebKitBased ().isIt ());
+    assertFalse (aUA.getInfoWebSpider ().isIt ());
+    assertEquals (new Version (11), aUA.getInfoIE ().getVersion ());
+
     // Opera
     aUA = UserAgentDecryptor.decryptUserAgentString ("Opera/9.64 (Windows NT 6.1; U; en) Presto/2.1.1");
     assertFalse (aUA.getInfoFirefox ().isIt ());
