@@ -17,6 +17,7 @@
  */
 package com.phloc.webpages;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -47,6 +48,8 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 @ThreadSafe
 public abstract class AbstractPageViewExternal extends AbstractWebPageExt
 {
+  public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
+
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("m_aRWLock")
@@ -55,13 +58,20 @@ public abstract class AbstractPageViewExternal extends AbstractWebPageExt
   @Nonnull
   public static IMicroContainer readHTMLPageFragment (@Nonnull final IReadableResource aResource)
   {
+    return readHTMLPageFragment (aResource, DEFAULT_CHARSET, WebHTMLCreator.getHTMLVersion ());
+  }
+
+  @Nonnull
+  public static IMicroContainer readHTMLPageFragment (@Nonnull final IReadableResource aResource,
+                                                      @Nonnull final Charset aCharset,
+                                                      @Nonnull final EHTMLVersion eHTMLVersion)
+  {
     // Read content once
-    final String sContent = StreamUtils.getAllBytesAsString (aResource, CCharset.CHARSET_UTF_8_OBJ);
+    final String sContent = StreamUtils.getAllBytesAsString (aResource, aCharset);
     if (sContent == null)
       throw new IllegalStateException ("Failed to read resource " + aResource.toString ());
 
     // Parse content
-    final EHTMLVersion eHTMLVersion = WebHTMLCreator.getHTMLVersion ();
     final IMicroContainer ret = XHTMLParser.unescapeXHTML (eHTMLVersion, sContent);
     if (ret == null)
       throw new IllegalStateException ("Failed to parse HTML code of resource " + aResource.toString ());
