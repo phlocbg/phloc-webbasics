@@ -41,6 +41,7 @@ import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -145,10 +146,11 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
   {}
 
   @Override
-  protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nonnull final HCHtml aHtml,
-                           @Nonnull final Locale aDisplayLocale)
+  protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
+    final Locale aDisplayLocale = aSWEC.getDisplayLocale ();
+
     final HCBody aBody = aHtml.getBody ();
     final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN));
     final HCCenter aCenter = aSpan.addAndReturnChild (new HCCenter ());

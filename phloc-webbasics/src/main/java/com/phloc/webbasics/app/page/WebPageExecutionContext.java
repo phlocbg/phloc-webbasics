@@ -39,7 +39,7 @@ public class WebPageExecutionContext extends LayoutExecutionContext
 
   public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final IWebPage aWebPage)
   {
-    super (aLEC.getRequestScope (), aLEC.getDisplayLocale (), aLEC.getSelectedMenuItemID ());
+    super (aLEC, aLEC.getSelectedMenuItemID ());
     m_aWebPage = ValueEnforcer.notNull (aWebPage, "WebPage");
   }
 
@@ -53,7 +53,7 @@ public class WebPageExecutionContext extends LayoutExecutionContext
   }
 
   /**
-   * @return The node list to be filled with content.
+   * @return The node list to be filled with content. Never <code>null</code>.
    */
   @Nonnull
   public HCNodeList getNodeList ()

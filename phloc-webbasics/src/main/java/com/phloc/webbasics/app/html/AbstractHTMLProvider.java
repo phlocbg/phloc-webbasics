@@ -33,6 +33,7 @@ import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
@@ -93,19 +94,17 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   /**
    * Fill the HTML HEAD element.
    * 
-   * @param aRequestScope
-   *        The request scope to use
+   * @param aSWEC
+   *        Web execution context
    * @param aHtml
    *        The HTML object to be filled.
-   * @param aDisplayLocale
-   *        The display locale to use
    */
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void fillHead (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nonnull final HCHtml aHtml,
-                           @Nonnull final Locale aDisplayLocale)
+  protected void fillHead (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
+
     final HCHead aHead = aHtml.getHead ();
 
     // Special meta tag
@@ -128,29 +127,26 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   /**
    * Fill the HTML body
    * 
-   * @param aRequestScope
-   *        request scope to use
+   * @param aSWEC
+   *        Web execution context
    * @param aHtml
    *        HTML object to be filled
-   * @param aDisplayLocale
-   *        Display locale to use
    */
-  protected abstract void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                    @Nonnull HCHtml aHtml,
-                                    @Nonnull Locale aDisplayLocale);
+  protected abstract void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull HCHtml aHtml);
 
   @Nonnull
   public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     final Locale aDisplayLocale = getDisplayLocale ();
+    final SimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope, aDisplayLocale);
 
     final HCHtml aHtml = createHCHtml (aDisplayLocale);
 
     // fill body
-    fillBody (aRequestScope, aHtml, aDisplayLocale);
+    fillBody (aSWEC, aHtml);
 
     // build HTML header (after body for per-request stuff)
-    fillHead (aRequestScope, aHtml, aDisplayLocale);
+    fillHead (aSWEC, aHtml);
 
     return aHtml;
   }

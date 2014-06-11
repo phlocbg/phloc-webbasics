@@ -17,7 +17,6 @@
  */
 package com.phloc.webbasics.app.layout;
 
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -29,7 +28,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This object is instantiated per page view and contains the current request
@@ -43,11 +41,10 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
 {
   private final String m_sSelectedMenuItemID;
 
-  public LayoutExecutionContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                 @Nonnull final Locale aDisplayLocale,
+  public LayoutExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC,
                                  @Nonnull final String sSelectedMenuItemID)
   {
-    super (aRequestScope, aDisplayLocale);
+    super (aSWEC.getRequestScope (), aSWEC.getDisplayLocale ());
     m_sSelectedMenuItemID = ValueEnforcer.notEmpty (sSelectedMenuItemID, "SelectedMenuItemID");
   }
 

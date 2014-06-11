@@ -41,6 +41,7 @@ import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.login.CLogin;
 import com.phloc.webbasics.login.LoginHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -64,36 +65,31 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void fillHead (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nonnull final HCHtml aHtml,
-                           @Nonnull final Locale aDisplayLocale)
+  protected void fillHead (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
-    super.fillHead (aRequestScope, aHtml, aDisplayLocale);
+    super.fillHead (aSWEC, aHtml);
     aHtml.getHead ().setPageTitle (m_sPageTitle);
   }
 
   /**
    * Customize the created form
    * 
-   * @param aRequestScope
-   *        Current request.
+   * @param aSWEC
+   *        Web execution context.
    * @param aForm
    *        The pre-filled form.
-   * @param aDisplayLocale
-   *        The display locale.
    */
   @OverrideOnDemand
-  protected void onAfterForm (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                              @Nonnull final BootstrapForm aForm,
-                              @Nonnull final Locale aDisplayLocale)
+  protected void onAfterForm (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final BootstrapForm aForm)
   {}
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nonnull final HCHtml aHtml,
-                           @Nonnull final Locale aDisplayLocale)
+  protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
+    final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
+    final Locale aDisplayLocale = aSWEC.getDisplayLocale ();
+
     final BootstrapForm aForm = new BootstrapForm (aRequestScope.getURL ());
 
     // The hidden field that triggers the validation
@@ -113,7 +109,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     aForm.addChild (new BootstrapSubmitButton ().addChild (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale)));
 
     // Customize
-    onAfterForm (aRequestScope, aForm, aDisplayLocale);
+    onAfterForm (aSWEC, aForm);
 
     // Layout the form
     final BootstrapContainer aContentLayout = new BootstrapContainer ();

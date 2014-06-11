@@ -18,7 +18,6 @@
 package com.phloc.webbasics.app.layout;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,9 +36,9 @@ import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.web.smtp.IEmailAttachmentList;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.app.error.InternalErrorHandler;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract class for create layouts based on certain areas.
@@ -133,9 +132,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   {}
 
   @Override
-  protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nonnull final HCHtml aHtml,
-                           @Nonnull final Locale aDisplayLocale)
+  protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
@@ -144,7 +141,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
     prepareBodyBeforeAreas (aHtml);
 
     final String sSelectedMenuItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
-    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aRequestScope, aDisplayLocale, sSelectedMenuItemID);
+    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aSWEC, sSelectedMenuItemID);
 
     // For all layout areas
     for (final String sAreaID : m_aLayoutAreaIDs)
@@ -168,10 +165,10 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
         // send internal error mail here
         InternalErrorHandler.handleInternalError (aBody,
                                                   t,
-                                                  aRequestScope,
+                                                  aSWEC.getRequestScope (),
                                                   (String) null,
                                                   (IEmailAttachmentList) null,
-                                                  aDisplayLocale,
+                                                  aSWEC.getDisplayLocale (),
                                                   true);
       }
     }
