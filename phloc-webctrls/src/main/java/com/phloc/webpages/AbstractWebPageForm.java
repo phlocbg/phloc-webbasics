@@ -117,7 +117,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected IButtonToolbar <?> createNewViewToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar (aWPEC.getRequestScope ());
+    return getStyler ().createToolbar (aWPEC);
   }
 
   /**
@@ -197,7 +197,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected IButtonToolbar <?> createNewEditToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar (aWPEC.getRequestScope ());
+    return getStyler ().createToolbar (aWPEC);
   }
 
   /**
@@ -285,7 +285,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected IButtonToolbar <?> createNewCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getStyler ().createToolbar (aWPEC.getRequestScope ());
+    return getStyler ().createToolbar (aWPEC);
   }
 
   /**

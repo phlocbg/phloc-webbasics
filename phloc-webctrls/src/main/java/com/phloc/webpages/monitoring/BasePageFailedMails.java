@@ -85,7 +85,6 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
@@ -409,12 +408,11 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
     final boolean bDisabled = m_aFailedMailQueue.getAllFailedMails ().isEmpty ();
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aWPEC);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aToolbar.addButton (EText.BUTTON_RESEND_ALL.getDisplayText (aDisplayLocale),
                         aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_RESEND_ALL),

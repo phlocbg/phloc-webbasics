@@ -67,7 +67,6 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGroup>
 {
@@ -387,7 +386,6 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
       return true;
 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
@@ -404,7 +402,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -416,12 +414,11 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))

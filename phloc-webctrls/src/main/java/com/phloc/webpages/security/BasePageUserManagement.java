@@ -80,7 +80,6 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -766,7 +765,6 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
       if (!canResetPassword (aSelectedObject))
         throw new IllegalStateException ("Won't work!");
 
-      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final boolean bShowForm = true;
       final FormErrors aFormErrors = new FormErrors ();
@@ -820,7 +818,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
               .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -929,12 +927,11 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();

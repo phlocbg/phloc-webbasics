@@ -55,7 +55,6 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.UITextFormatter;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Show information on all active sessions
@@ -239,11 +238,10 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final ISessionScope aScope)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aWPEC);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aWPEC, aScope));
     aNodeList.addChild (aToolbar);
 
@@ -280,12 +278,11 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aWPEC);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 

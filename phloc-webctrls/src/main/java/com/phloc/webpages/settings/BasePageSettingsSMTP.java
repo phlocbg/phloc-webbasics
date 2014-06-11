@@ -79,7 +79,6 @@ import com.phloc.webctrls.famfam.EFamFamIcon;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSettings>
@@ -497,7 +496,6 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       throw new IllegalStateException ("Cannot delete this object!");
 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
@@ -514,7 +512,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
-    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -529,7 +527,6 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   {
     if (aWPEC.hasAction (ACTION_TEST_MAIL) && aSelectedObject != null)
     {
-      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
       final FormErrors aFormErrors = new FormErrors ();
@@ -587,7 +584,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
             .setCtrl (new HCTextAreaAutosize (new RequestField (FIELD_TEST_BODY)).setRows (5))
             .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
 
-      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL);
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -601,12 +598,11 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),

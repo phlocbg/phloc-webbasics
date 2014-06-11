@@ -49,7 +49,6 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base page for changing the password of the currently logged in use.
@@ -119,7 +118,6 @@ public class BasePageChangePassword extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IUser aCurrentUser = LoggedInUserManager.getInstance ().getCurrentUser ();
@@ -179,7 +177,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
               .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, CHCParam.ACTION_PERFORM);
         aToolbar.addSubmitButtonSave (aDisplayLocale);
       }

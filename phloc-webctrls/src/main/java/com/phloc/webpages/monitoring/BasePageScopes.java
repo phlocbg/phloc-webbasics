@@ -48,7 +48,6 @@ import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.UITextFormatter;
 import com.phloc.webscopes.domain.IGlobalWebScope;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
@@ -218,12 +217,11 @@ public class BasePageScopes extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final IGlobalWebScope aGlobalScope = WebScopeManager.getGlobalScope ();
 
     // Refresh button
-    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aRequestScope);
+    final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aWPEC);
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 

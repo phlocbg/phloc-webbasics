@@ -29,13 +29,13 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public interface IWebPageStyler
 {
@@ -96,7 +96,7 @@ public interface IWebPageStyler
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IButtonToolbar <?> createToolbar (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
+  IButtonToolbar <?> createToolbar (@Nonnull LayoutExecutionContext aLEC);
 
   @Nonnull
   ITabBox <?> createTabBox ();

@@ -59,7 +59,6 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Show information on all logged in users.
@@ -253,7 +252,6 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       if (!canLogoutUser (aSelectedObject.getUser ()))
         throw new IllegalStateException ("Won't work!");
 
-      final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
       final String sUserName = SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale);
@@ -278,7 +276,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
         aForm.addChild (getStyler ().createSuccessBox (EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                      sUserName)));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -293,11 +291,10 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aRequestScope));
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addButton (EText.MSG_UPDATE.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),

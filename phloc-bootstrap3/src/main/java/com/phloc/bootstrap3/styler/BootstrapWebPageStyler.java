@@ -39,8 +39,8 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class BootstrapWebPageStyler extends SimpleWebPageStyler
 {
@@ -115,9 +115,9 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapButtonToolbar createToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  public BootstrapButtonToolbar createToolbar (@Nonnull final LayoutExecutionContext aLEC)
   {
-    return new BootstrapButtonToolbar (aRequestScope);
+    return new BootstrapButtonToolbar (aLEC);
   }
 
   @Override
