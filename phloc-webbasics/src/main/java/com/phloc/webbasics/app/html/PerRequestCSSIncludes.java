@@ -68,8 +68,7 @@ public final class PerRequestCSSIncludes
    */
   public static void registerCSSIncludeForThisRequest (@Nonnull final ICSSPathProvider aCSSPathProvider)
   {
-    if (aCSSPathProvider == null)
-      throw new NullPointerException ("cssPathProvider");
+    ValueEnforcer.notNull (aCSSPathProvider, "CSSPathProvider");
     _getPerRequestSet (true).add (aCSSPathProvider);
   }
 
@@ -81,8 +80,7 @@ public final class PerRequestCSSIncludes
    */
   public static void unregisterCSSIncludeFromThisRequest (@Nonnull final ICSSPathProvider aCSSPathProvider)
   {
-    if (aCSSPathProvider == null)
-      throw new NullPointerException ("cssPathProvider");
+    ValueEnforcer.notNull (aCSSPathProvider, "CSSPathProvider");
     _getPerRequestSet (true).remove (aCSSPathProvider);
   }
 

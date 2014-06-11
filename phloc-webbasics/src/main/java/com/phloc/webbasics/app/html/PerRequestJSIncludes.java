@@ -68,8 +68,8 @@ public final class PerRequestJSIncludes
    */
   public static void registerJSIncludeForThisRequest (@Nonnull final IJSPathProvider aJSPathProvider)
   {
-    if (aJSPathProvider == null)
-      throw new NullPointerException ("JSPathProvider");
+    ValueEnforcer.notNull (aJSPathProvider, "JSPathProvider");
+
     _getPerRequestSet (true).add (aJSPathProvider);
   }
 
@@ -81,8 +81,8 @@ public final class PerRequestJSIncludes
    */
   public static void unregisterJSIncludeFromThisRequest (@Nonnull final IJSPathProvider aJSPathProvider)
   {
-    if (aJSPathProvider == null)
-      throw new NullPointerException ("JSPathProvider");
+    ValueEnforcer.notNull (aJSPathProvider, "JSPathProvider");
+
     _getPerRequestSet (true).remove (aJSPathProvider);
   }
 
