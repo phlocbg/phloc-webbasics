@@ -158,7 +158,6 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
                                      @Nonnull final LoginInfo aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
@@ -197,9 +196,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
         aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
 
-      final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope,
-                                                                           aCustomAttrTable,
-                                                                           aDisplayLocale);
+      final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aCustomAttrTable);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 
       aTable.createItemRow ()
@@ -339,7 +336,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

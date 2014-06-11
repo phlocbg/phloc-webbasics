@@ -139,10 +139,10 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Nonnull
-  private IHCNode _getSessionScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                        @Nonnull final ISessionScope aScope,
-                                        @Nonnull final Locale aDisplayLocale)
+  private IHCNode _getSessionScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nonnull final ISessionScope aScope)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList ret = new HCNodeList ();
 
     final IHCTableFormView <?> aTableScope = ret.addAndReturnChild (getStyler ().createTableFormView (new HCCol (220),
@@ -181,7 +181,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     ret.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTableAttrs);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     ret.addChild (aDataTables);
 
@@ -189,10 +189,10 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Nonnull
-  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final ISessionApplicationScope aScope,
-                                                   @Nonnull final Locale aDisplayLocale)
+  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
+                                                   @Nonnull final ISessionApplicationScope aScope)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = new HCNodeList ();
 
     final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
@@ -228,7 +228,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTableAttrs);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -248,13 +248,12 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     aNodeList.addChild (aToolbar);
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
-    aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale),
-                    _getSessionScopeInfo (aRequestScope, aScope, aDisplayLocale));
+    aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale), _getSessionScopeInfo (aWPEC, aScope));
     for (final ISessionApplicationScope aSessionAppScope : ContainerHelper.getSortedByKey (aScope.getAllSessionApplicationScopes ())
                                                                           .values ())
       aTabBox.addTab (EText.MSG_SESSION_APPLICATION_SCOPES.getDisplayTextWithArgs (aDisplayLocale,
                                                                                    aSessionAppScope.getID ()),
-                      _getSessionApplicationScopeInfo (aRequestScope, aSessionAppScope, aDisplayLocale));
+                      _getSessionApplicationScopeInfo (aWPEC, aSessionAppScope));
     aNodeList.addChild (aTabBox);
   }
 
@@ -306,7 +305,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.getOrCreateColumnOfTarget (1).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

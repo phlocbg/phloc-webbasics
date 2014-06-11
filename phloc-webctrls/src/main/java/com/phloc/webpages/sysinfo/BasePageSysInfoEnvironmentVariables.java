@@ -39,7 +39,6 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with all environment variables
@@ -96,7 +95,6 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
@@ -112,7 +110,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

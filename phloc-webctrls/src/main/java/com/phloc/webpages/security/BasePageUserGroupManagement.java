@@ -458,7 +458,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.getOrCreateColumnOfTarget (2).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

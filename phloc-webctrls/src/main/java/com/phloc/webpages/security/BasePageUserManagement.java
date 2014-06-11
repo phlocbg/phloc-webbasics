@@ -844,7 +844,6 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
                                      @Nonnull final Collection <? extends IUser> aUsers,
                                      @Nonnull @Nonempty final String sTableID)
   {
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final boolean bSeparateLoginName = !useEmailAddressAsLoginName ();
@@ -916,7 +915,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.getOrCreateColumnOfTarget (3).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

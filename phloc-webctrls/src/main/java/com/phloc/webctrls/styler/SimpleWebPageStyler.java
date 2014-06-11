@@ -45,6 +45,7 @@ import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.HCTableForm;
@@ -64,23 +65,20 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                  @Nullable final UserDataObject aUDO,
-                                  @Nonnull final Locale aDisplayLocale)
+  public IHCNode createImageView (@Nonnull final SimpleWebExecutionContext aSWEC, @Nullable final UserDataObject aUDO)
   {
-    return createImageView (aRequestScope, aUDO, 200, aDisplayLocale);
+    return createImageView (aSWEC, aUDO, 200);
   }
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public IHCNode createImageView (@Nonnull final SimpleWebExecutionContext aSWEC,
                                   @Nullable final UserDataObject aUDO,
-                                  final int nMaxWidth,
-                                  @Nonnull final Locale aDisplayLocale)
+                                  final int nMaxWidth)
   {
     if (aUDO == null)
-      return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aDisplayLocale));
+      return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aSWEC.getDisplayLocale ()));
 
-    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aRequestScope));
+    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aSWEC.getRequestScope ()));
     ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());
     if (aSize != null)
     {
@@ -172,12 +170,11 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                             @Nonnull final IHCTable <?> aTable,
-                                             @Nonnull final Locale aDisplayLocale)
+  public DataTables createDefaultDataTables (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                             @Nonnull final IHCTable <?> aTable)
   {
     final DataTables ret = new DataTables (aTable);
-    ret.setDisplayLocale (aDisplayLocale);
+    ret.setDisplayLocale (aSWEC.getDisplayLocale ());
     ret.addAllColumns (aTable);
     return ret;
   }

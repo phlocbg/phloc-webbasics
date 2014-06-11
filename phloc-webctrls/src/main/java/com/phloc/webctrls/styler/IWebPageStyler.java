@@ -28,6 +28,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
@@ -39,15 +40,10 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 public interface IWebPageStyler
 {
   @Nonnull
-  IHCNode createImageView (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nullable UserDataObject aUDO,
-                           @Nonnull Locale aDisplayLocale);
+  IHCNode createImageView (@Nonnull SimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO);
 
   @Nonnull
-  IHCNode createImageView (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                           @Nullable UserDataObject aUDO,
-                           int nMaxWidth,
-                           @Nonnull Locale aDisplayLocale);
+  IHCNode createImageView (@Nonnull SimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO, int nMaxWidth);
 
   @Nullable
   IHCNode createEmailLink (@Nullable String sEmailAddress);
@@ -94,9 +90,7 @@ public interface IWebPageStyler
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
 
   @Nonnull
-  DataTables createDefaultDataTables (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                                      @Nonnull IHCTable <?> aTable,
-                                      @Nonnull Locale aDisplayLocale);
+  DataTables createDefaultDataTables (@Nonnull SimpleWebExecutionContext aSWEC, @Nonnull IHCTable <?> aTable);
 
   @Nonnull
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);

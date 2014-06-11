@@ -170,19 +170,20 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   @Nonnull
   public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
-                                                  @Nonnull final IMenuTree aMenuTree,
-                                                  @Nonnull final Locale aDisplayLocale)
+                                                  @Nonnull final IMenuTree aMenuTree)
   {
-    return createSideBarMenu (aSWEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+    return createSideBarMenu (aSWEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree));
   }
 
   @Nonnull
   public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
-                                                  @Nonnull final MenuItemDeterminatorCallback aDeterminator,
-                                                  @Nonnull final Locale aDisplayLocale)
+                                                  @Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
-    return createSideBarMenu (aSWEC, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
+    return createSideBarMenu (aSWEC,
+                              aMenuTree,
+                              aDeterminator,
+                              new BootstrapMenuItemRenderer (aSWEC.getDisplayLocale ()));
   }
 
   @Nonnull

@@ -55,7 +55,6 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Page with information on the current network settings
@@ -122,7 +121,6 @@ public class BasePageSysInfoNetwork extends AbstractWebPageExt
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
-    final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
@@ -258,7 +256,7 @@ public class BasePageSysInfoNetwork extends AbstractWebPageExt
                                        (GlobalDebug.isDebugMode () ? ": " + t.getMessage () : ""));
       }
 
-      final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+      final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
       aDataTables.setDisplayLength (-1);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 

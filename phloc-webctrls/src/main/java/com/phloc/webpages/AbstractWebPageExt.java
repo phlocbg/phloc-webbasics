@@ -17,7 +17,6 @@
  */
 package com.phloc.webpages;
 
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnegative;
@@ -252,12 +251,11 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
 
   @Nonnull
   public static <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final LayoutExecutionContext aLEC,
-                                                                                    @Nonnull final T aCurObject,
-                                                                                    @Nonnull final Locale aDisplayLocale)
+                                                                                    @Nonnull final T aCurObject)
   {
     return createDeleteLink (aLEC,
                              aCurObject,
-                             EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
+                             EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aLEC.getDisplayLocale (),
                                                                                 aCurObject.getDisplayName ()));
   }
 

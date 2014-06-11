@@ -119,10 +119,10 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getGlobalScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                       @Nonnull final IGlobalWebScope aScope,
-                                       @Nonnull final Locale aDisplayLocale)
+  private IHCNode _getGlobalScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
+                                       @Nonnull final IGlobalWebScope aScope)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = new HCNodeList ();
 
     final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
@@ -160,7 +160,7 @@ public class BasePageScopes extends AbstractWebPageExt
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTableAttrs);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -168,10 +168,10 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getApplicationScopeInfo (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                            @Nonnull final IApplicationScope aScope,
-                                            @Nonnull final Locale aDisplayLocale)
+  private IHCNode _getApplicationScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
+                                            @Nonnull final IApplicationScope aScope)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = new HCNodeList ();
 
     final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
@@ -207,7 +207,7 @@ public class BasePageScopes extends AbstractWebPageExt
                  .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTableAttrs, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTableAttrs);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
@@ -230,13 +230,13 @@ public class BasePageScopes extends AbstractWebPageExt
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
     // Global scope
     aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aGlobalScope.getID ()),
-                    _getGlobalScopeInfo (aRequestScope, aGlobalScope, aDisplayLocale));
+                    _getGlobalScopeInfo (aWPEC, aGlobalScope));
 
     // Application scopes
     for (final IApplicationScope aAppScope : ContainerHelper.getSortedByKey (aGlobalScope.getAllApplicationScopes ())
                                                             .values ())
       aTabBox.addTab (EText.MSG_APPLICATION_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aAppScope.getID ()),
-                      _getApplicationScopeInfo (aRequestScope, aAppScope, aDisplayLocale));
+                      _getApplicationScopeInfo (aWPEC, aAppScope));
 
     aNodeList.addChild (aTabBox);
   }

@@ -648,7 +648,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyler ().createDefaultDataTables (aRequestScope, aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
     aDataTables.getOrCreateColumnOfTarget (3).setSortable (false).addClass (CSS_CLASS_ACTION_COL);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
