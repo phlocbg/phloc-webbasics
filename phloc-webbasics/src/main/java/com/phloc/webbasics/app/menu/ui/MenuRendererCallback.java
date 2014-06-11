@@ -39,7 +39,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
  * Renders menu item nodes.
@@ -48,7 +48,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
  */
 public class MenuRendererCallback <T extends AbstractHCList <?>> extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
-  private final LayoutExecutionContext m_aLEC;
+  private final SimpleWebExecutionContext m_aSWEC;
   private final IFactory <T> m_aFactory;
   private final NonBlockingStack <T> m_aMenuListStack;
   private final IMenuItemRenderer <T> m_aRenderer;
@@ -58,18 +58,18 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   private final NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> m_aTreeItemStack = new NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> ();
   private final String m_sSelectedItem;
 
-  protected MenuRendererCallback (@Nonnull final LayoutExecutionContext aLEC,
+  protected MenuRendererCallback (@Nonnull final SimpleWebExecutionContext aSWEC,
                                   @Nonnull final IFactory <T> aFactory,
                                   @Nonnull final NonBlockingStack <T> aMenuListStack,
                                   @Nonnull final IMenuItemRenderer <T> aRenderer,
                                   @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    ValueEnforcer.notNull (aLEC, "LEC");
+    ValueEnforcer.notNull (aSWEC, "LEC");
     ValueEnforcer.notNull (aMenuListStack, "MenuListStack");
     ValueEnforcer.notNull (aRenderer, "Renderer");
     ValueEnforcer.notNull (aDisplayMenuItemIDs, "DisplayMenuItemIDs");
 
-    m_aLEC = aLEC;
+    m_aSWEC = aSWEC;
     m_aFactory = aFactory;
     m_aMenuListStack = aMenuListStack;
     m_aRenderer = aRenderer;
@@ -138,13 +138,13 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
-        final IHCNode aHCNode = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
+        final IHCNode aHCNode = m_aRenderer.renderSeparator (m_aSWEC, (IMenuSeparator) aMenuObj);
         HCLI aLI;
         if (aHCNode instanceof HCLI)
           aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
         else
           aLI = aParent.addAndReturnItem (aHCNode);
-        m_aRenderer.onMenuSeparatorItem (aLI);
+        m_aRenderer.onMenuSeparatorItem (m_aSWEC, aLI);
         m_aMenuItemStack.push (aLI);
       }
       else
@@ -154,7 +154,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
         if (aMenuObj instanceof IMenuItemPage)
         {
           // page item
-          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage (m_aLEC,
+          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage (m_aSWEC,
                                                                   (IMenuItemPage) aMenuObj,
                                                                   bHasChildren,
                                                                   bSelected,
@@ -164,14 +164,15 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
             aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
           else
             aLI = aParent.addAndReturnItem (aHCNode);
-          m_aRenderer.onMenuItemPageItem (m_aLEC, aLI, bHasChildren, bSelected, bExpanded);
+          m_aRenderer.onMenuItemPageItem (m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
           m_aMenuItemStack.push (aLI);
         }
         else
           if (aMenuObj instanceof IMenuItemExternal)
           {
             // external item
-            final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj,
+            final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal (m_aSWEC,
+                                                                        (IMenuItemExternal) aMenuObj,
                                                                         bHasChildren,
                                                                         bSelected,
                                                                         bExpanded);
@@ -180,7 +181,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
               aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
             else
               aLI = aParent.addAndReturnItem (aHCNode);
-            m_aRenderer.onMenuItemExternalItem (aLI, bHasChildren, bSelected, bExpanded);
+            m_aRenderer.onMenuItemExternalItem (m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
             m_aMenuItemStack.push (aLI);
           }
           else
@@ -208,7 +209,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render the whole menu
    * 
-   * @param aLEC
+   * @param aSWEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
    * @param aRenderer
@@ -216,12 +217,12 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <T>> T createRenderedMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends AbstractHCList <T>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer)
   {
-    return createRenderedMenu (aLEC,
+    return createRenderedMenu (aSWEC,
                                aFactory,
                                aMenuTree.getRootItem (),
                                aRenderer,
@@ -231,7 +232,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render a part of the menu
    * 
-   * @param aLEC
+   * @param aSWEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
    * @param aStartTreeItem
@@ -241,13 +242,13 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer)
   {
-    return createRenderedMenu (aLEC,
+    return createRenderedMenu (aSWEC,
                                aFactory,
                                aStartTreeItem,
                                aRenderer,
@@ -257,7 +258,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render the whole menu
    * 
-   * @param aLEC
+   * @param aSWEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
    * @param aRenderer
@@ -268,19 +269,19 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,
                                                                      @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    return createRenderedMenu (aLEC, aFactory, aMenuTree.getRootItem (), aRenderer, aDisplayMenuItemIDs);
+    return createRenderedMenu (aSWEC, aFactory, aMenuTree.getRootItem (), aRenderer, aDisplayMenuItemIDs);
   }
 
   /**
    * Render a part of the menu
    * 
-   * @param aLEC
+   * @param aSWEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
    * @param aFactory
@@ -296,7 +297,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,
@@ -306,7 +307,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
 
     final NonBlockingStack <T> aNodeStack = new NonBlockingStack <T> ();
     aNodeStack.push (aFactory.create ());
-    TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aLEC,
+    TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aSWEC,
                                                                                  aFactory,
                                                                                  aNodeStack,
                                                                                  aRenderer,

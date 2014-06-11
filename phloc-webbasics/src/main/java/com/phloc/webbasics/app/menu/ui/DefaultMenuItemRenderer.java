@@ -32,7 +32,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.impl.HCEntityNode;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -58,20 +58,21 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Nonnull
-  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
+  public IHCNode renderSeparator (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                  @Nonnull final IMenuSeparator aSeparator)
   {
     return HCEntityNode.newNBSP ();
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final LayoutExecutionContext aLEC,
+  public IHCNode renderMenuItemPage (@Nonnull final SimpleWebExecutionContext aSWEC,
                                      @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
     final String sMenuItemID = aMenuItem.getID ();
-    final HCA aLink = new HCA (aLEC.getLinkToMenuItem (sMenuItemID));
+    final HCA aLink = new HCA (aSWEC.getLinkToMenuItem (sMenuItemID));
     aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
     aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
     if (bIsSelected)
@@ -80,7 +81,8 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Nonnull
-  public IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItem,
+  public IHCNode renderMenuItemExternal (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                         @Nonnull final IMenuItemExternal aMenuItem,
                                          final boolean bHasChildren,
                                          final boolean bIsSelected,
                                          final boolean bIsExpanded)
@@ -96,13 +98,13 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
+  public void onMenuSeparatorItem (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCLI aLI)
   {
     aLI.addClass (CSS_CLASS_MENU_SEPARATOR);
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final LayoutExecutionContext aLEC,
+  public void onMenuItemPageItem (@Nonnull final SimpleWebExecutionContext aSWEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bIsSelected,
@@ -112,7 +114,8 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
+  public void onMenuItemExternalItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                      @Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
                                       final boolean bIsSelected,
                                       final boolean bIsExpanded)

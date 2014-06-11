@@ -25,7 +25,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
  * Interface for rendering menu objects
@@ -35,18 +35,20 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 public interface IMenuItemRenderer <T extends AbstractHCList <?>>
 {
   /**
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aSeparator
    *        The separator to be rendered.
    * @return The rendered menu separator. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderSeparator (@Nonnull IMenuSeparator aSeparator);
+  IHCNode renderSeparator (@Nonnull SimpleWebExecutionContext aSWEC, @Nonnull IMenuSeparator aSeparator);
 
   /**
    * Render a menu item on a page
    * 
-   * @param aLEC
-   *        Layout execution context. May not be <code>null</code>.
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aMenuItem
    *        The menu item to be rendered.
    * @param bHasChildren
@@ -58,7 +60,7 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItemPage (@Nonnull LayoutExecutionContext aLEC,
+  IHCNode renderMenuItemPage (@Nonnull SimpleWebExecutionContext aSWEC,
                               @Nonnull IMenuItemPage aMenuItem,
                               boolean bHasChildren,
                               boolean bIsSelected,
@@ -67,6 +69,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Render a menu item with an external link
    * 
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aMenuItem
    *        The menu item to be rendered.
    * @param bHasChildren
@@ -78,7 +82,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItemExternal (@Nonnull IMenuItemExternal aMenuItem,
+  IHCNode renderMenuItemExternal (@Nonnull SimpleWebExecutionContext aSWEC,
+                                  @Nonnull IMenuItemExternal aMenuItem,
                                   boolean bHasChildren,
                                   boolean bIsSelected,
                                   boolean bIsExpanded);
@@ -102,16 +107,18 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Callback invoked on the created node.
    * 
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aLI
    *        HCNode
    */
-  void onMenuSeparatorItem (@Nonnull HCLI aLI);
+  void onMenuSeparatorItem (@Nonnull SimpleWebExecutionContext aSWEC, @Nonnull HCLI aLI);
 
   /**
    * Callback invoked on the created node.
    * 
-   * @param aLEC
-   *        Layout execution context. May not be <code>null</code>.
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aLI
    *        HCNode
    * @param bHasChildren
@@ -121,7 +128,7 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @param bIsExpanded
    *        <code>true</code> if the menu item is expanded
    */
-  void onMenuItemPageItem (@Nonnull LayoutExecutionContext aLEC,
+  void onMenuItemPageItem (@Nonnull SimpleWebExecutionContext aSWEC,
                            @Nonnull HCLI aLI,
                            boolean bHasChildren,
                            boolean bIsSelected,
@@ -130,6 +137,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Callback invoked on the created node.
    * 
+   * @param aSWEC
+   *        Web execution context. May not be <code>null</code>.
    * @param aLI
    *        HCNode
    * @param bHasChildren
@@ -139,5 +148,9 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @param bIsExpanded
    *        <code>true</code> if the menu item is expanded
    */
-  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
+  void onMenuItemExternalItem (@Nonnull SimpleWebExecutionContext aSWEC,
+                               @Nonnull HCLI aLI,
+                               boolean bHasChildren,
+                               boolean bIsSelected,
+                               boolean bIsExpanded);
 }

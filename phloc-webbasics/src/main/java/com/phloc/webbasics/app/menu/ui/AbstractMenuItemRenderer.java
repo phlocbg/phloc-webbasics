@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
  * Abstract base implementation of {@link IMenuItemRenderer}
@@ -53,17 +53,18 @@ public abstract class AbstractMenuItemRenderer <T extends AbstractHCList <?>> im
   public void onLevelUp (@Nonnull final T aLastLevel)
   {}
 
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
+  public void onMenuSeparatorItem (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCLI aLI)
   {}
 
-  public void onMenuItemPageItem (@Nonnull final LayoutExecutionContext aLEC,
+  public void onMenuItemPageItem (@Nonnull final SimpleWebExecutionContext aSWEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bIsSelected,
                                   final boolean bIsExpanded)
   {}
 
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
+  public void onMenuItemExternalItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                      @Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
                                       final boolean bIsSelected,
                                       final boolean bIsExpanded)

@@ -39,7 +39,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
@@ -57,7 +57,8 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
+  public IHCNode renderSeparator (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                  @Nonnull final IMenuSeparator aSeparator)
   {
     return new HCLI ().addClass (CBootstrapCSS.DIVIDER);
   }
@@ -87,13 +88,13 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final LayoutExecutionContext aLEC,
+  public IHCNode renderMenuItemPage (@Nonnull final SimpleWebExecutionContext aSWEC,
                                      @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
-    final HCA aLink = new HCA (aLEC.getLinkToMenuItem (aMenuItem.getID ()));
+    final HCA aLink = new HCA (aSWEC.getLinkToMenuItem (aMenuItem.getID ()));
     aLink.addChild (getMenuItemPageLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
@@ -125,7 +126,8 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItem,
+  public IHCNode renderMenuItemExternal (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                         @Nonnull final IMenuItemExternal aMenuItem,
                                          final boolean bHasChildren,
                                          final boolean bIsSelected,
                                          final boolean bIsExpanded)
@@ -145,7 +147,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final LayoutExecutionContext aLEC,
+  public void onMenuItemPageItem (@Nonnull final SimpleWebExecutionContext aSWEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bSelected,
@@ -156,7 +158,8 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
+  public void onMenuItemExternalItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                      @Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
                                       final boolean bSelected,
                                       final boolean bExpanded)
@@ -166,30 +169,30 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aLEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+    return createSideBarMenu (aSWEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aLEC, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
+    return createSideBarMenu (aSWEC, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final BootstrapMenuItemRenderer aRenderer)
   {
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    final HCUL aUL = MenuRendererCallback.createRenderedMenu (aLEC,
+    final HCUL aUL = MenuRendererCallback.createRenderedMenu (aSWEC,
                                                               FactoryNewInstance.create (HCUL.class),
                                                               aMenuTree.getRootItem (),
                                                               aRenderer,
