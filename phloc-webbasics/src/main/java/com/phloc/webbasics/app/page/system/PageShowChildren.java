@@ -17,8 +17,6 @@
  */
 package com.phloc.webbasics.app.page.system;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,14 +39,12 @@ import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class PageShowChildren extends AbstractWebPage
 {
   private static final class ShowChildrenCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
-    private final IRequestWebScopeWithoutResponse m_aRequestScope;
-    private final Locale m_aDisplayLocale;
+    private final WebPageExecutionContext m_aWPEC;
     private final NonBlockingStack <HCUL> m_aStack;
     private final PageShowChildrenRenderer m_aRenderer;
 
@@ -59,8 +55,7 @@ public class PageShowChildren extends AbstractWebPage
       ValueEnforcer.notNull (aUL, "UL");
       ValueEnforcer.notNull (aWPEC, "WPEC");
       ValueEnforcer.notNull (aRenderer, "Renderer");
-      m_aRequestScope = aWPEC.getRequestScope ();
-      m_aDisplayLocale = aWPEC.getDisplayLocale ();
+      m_aWPEC = aWPEC;
       m_aStack = new NonBlockingStack <HCUL> (aUL);
       m_aRenderer = aRenderer;
     }
@@ -100,13 +95,13 @@ public class PageShowChildren extends AbstractWebPage
       {
         IHCNode aNode;
         if (aMenuObj instanceof IMenuSeparator)
-          aNode = m_aRenderer.renderMenuSeparator ((IMenuSeparator) aMenuObj, m_aDisplayLocale);
+          aNode = m_aRenderer.renderMenuSeparator (m_aWPEC, (IMenuSeparator) aMenuObj);
         else
           if (aMenuObj instanceof IMenuItemPage)
-            aNode = m_aRenderer.renderMenuItemPage (m_aRequestScope, (IMenuItemPage) aMenuObj, m_aDisplayLocale);
+            aNode = m_aRenderer.renderMenuItemPage (m_aWPEC, (IMenuItemPage) aMenuObj);
           else
             if (aMenuObj instanceof IMenuItemExternal)
-              aNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, m_aDisplayLocale);
+              aNode = m_aRenderer.renderMenuItemExternal (m_aWPEC, (IMenuItemExternal) aMenuObj);
             else
               throw new IllegalStateException ("Unsupported menu object type: " + aMenuObj);
 
@@ -132,12 +127,8 @@ public class PageShowChildren extends AbstractWebPage
                            @Nonnull final PageShowChildrenRenderer aRenderer)
   {
     super (sID, aName);
-    if (aMenuTree == null)
-      throw new NullPointerException ("menuTree");
-    if (aRenderer == null)
-      throw new NullPointerException ("renderer");
-    m_aMenuTree = aMenuTree;
-    m_aRenderer = aRenderer;
+    m_aMenuTree = ValueEnforcer.notNull (aMenuTree, "MenuTree");
+    m_aRenderer = ValueEnforcer.notNull (aRenderer, "Renderer");
   }
 
   public PageShowChildren (@Nonnull @Nonempty final String sID,
@@ -153,12 +144,8 @@ public class PageShowChildren extends AbstractWebPage
                            @Nonnull final PageShowChildrenRenderer aRenderer)
   {
     super (sID, sName);
-    if (aMenuTree == null)
-      throw new NullPointerException ("menuTree");
-    if (aRenderer == null)
-      throw new NullPointerException ("renderer");
-    m_aMenuTree = aMenuTree;
-    m_aRenderer = aRenderer;
+    m_aMenuTree = ValueEnforcer.notNull (aMenuTree, "MenuTree");
+    m_aRenderer = ValueEnforcer.notNull (aRenderer, "Renderer");
   }
 
   @Nonnull

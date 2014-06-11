@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
@@ -43,13 +44,17 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
 
   public BootstrapButtonToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    super (LinkUtils.getSelfHref (aRequestScope));
-    addClass (CBootstrapCSS.BTN_TOOLBAR);
+    this (LinkUtils.getSelfHref (aRequestScope));
   }
 
   public BootstrapButtonToolbar (@Nonnull final LayoutExecutionContext aLEC)
   {
-    super (aLEC.getSelfHref ());
+    this (aLEC.getSelfHref ());
+  }
+
+  public BootstrapButtonToolbar (@Nonnull final SimpleURL aSelfHref)
+  {
+    super (aSelfHref);
     addClass (CBootstrapCSS.BTN_TOOLBAR);
   }
 

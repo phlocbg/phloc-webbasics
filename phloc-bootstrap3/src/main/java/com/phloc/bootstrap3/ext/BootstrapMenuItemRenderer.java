@@ -39,11 +39,10 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -88,13 +87,13 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public IHCNode renderMenuItemPage (@Nonnull final LayoutExecutionContext aLEC,
                                      @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
-    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aRequestScope, aMenuItem.getID ()));
+    final HCA aLink = new HCA (aLEC.getLinkToMenuItem (aMenuItem.getID ()));
     aLink.addChild (getMenuItemPageLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
@@ -146,7 +145,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public void onMenuItemPageItem (@Nonnull final LayoutExecutionContext aLEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bSelected,
@@ -167,30 +166,30 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aRequestScope, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+    return createSideBarMenu (aLEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aRequestScope, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
+    return createSideBarMenu (aLEC, aMenuTree, aDeterminator, new BootstrapMenuItemRenderer (aDisplayLocale));
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final LayoutExecutionContext aLEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final BootstrapMenuItemRenderer aRenderer)
   {
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    final HCUL aUL = MenuRendererCallback.createRenderedMenu (aRequestScope,
+    final HCUL aUL = MenuRendererCallback.createRenderedMenu (aLEC,
                                                               FactoryNewInstance.create (HCUL.class),
                                                               aMenuTree.getRootItem (),
                                                               aRenderer,

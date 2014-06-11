@@ -24,6 +24,7 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.custom.IIcon;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -40,7 +41,12 @@ public class SimpleButtonToolbar extends AbstractButtonToolbar <SimpleButtonTool
 
   public SimpleButtonToolbar (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    super (LinkUtils.getSelfHref (aRequestScope));
+    this (LinkUtils.getSelfHref (aRequestScope));
+  }
+
+  public SimpleButtonToolbar (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    this (aLEC.getSelfHref ());
   }
 
   public SimpleButtonToolbar (@Nonnull final SimpleURL aSelfHref)

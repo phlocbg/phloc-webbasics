@@ -354,7 +354,7 @@ public class LayoutExecutionContext
   @Nonnull
   public SimpleURL getSelfHref ()
   {
-    return LinkUtils.getLinkToMenuItem (m_aRequestScope, m_sSelectedMenuItemID);
+    return getLinkToMenuItem (m_sSelectedMenuItemID);
   }
 
   /**
@@ -369,7 +369,37 @@ public class LayoutExecutionContext
   @Nonnull
   public SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return LinkUtils.getLinkToMenuItem (m_aRequestScope, m_sSelectedMenuItemID).addAll (aParams);
+    return getLinkToMenuItem (m_sSelectedMenuItemID, aParams);
+  }
+
+  /**
+   * Get the URL of the specified menu it.
+   * 
+   * @param sMenuItemID
+   *        The ID of the menu item to link to. May not be <code>null</code>.
+   * @return The non-<code>null</code> URL to the specified menu item.
+   */
+  @Nonnull
+  public SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
+  {
+    return LinkUtils.getLinkToMenuItem (m_aRequestScope, sMenuItemID);
+  }
+
+  /**
+   * Get the URL of the specified menu it.
+   * 
+   * @param aParams
+   *        The optional request parameters to be used. May be <code>null</code>
+   *        or empty.
+   * @param sMenuItemID
+   *        The ID of the menu item to link to. May not be <code>null</code>.
+   * @return The non-<code>null</code> URL to the specified menu item with the
+   *         passed parameters.
+   */
+  @Nonnull
+  public SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID, @Nullable final Map <String, String> aParams)
+  {
+    return getLinkToMenuItem (sMenuItemID).addAll (aParams);
   }
 
   @Override

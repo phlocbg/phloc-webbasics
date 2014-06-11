@@ -470,6 +470,7 @@ public final class LinkUtils
   public static SimpleURL getLinkToMenuItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final String sMenuItemID)
   {
+    ValueEnforcer.notNull (aRequestScope, "RequestScope");
     ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
 
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();

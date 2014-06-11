@@ -25,7 +25,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * Interface for rendering menu objects
@@ -45,9 +45,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Render a menu item on a page
    * 
-   * @param aRequestScope
-   *        The request web scope to be used. Required for cookie-less handling.
-   *        May not be <code>null</code>.
+   * @param aLEC
+   *        Layout execution context. May not be <code>null</code>.
    * @param aMenuItem
    *        The menu item to be rendered.
    * @param bHasChildren
@@ -59,7 +58,7 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItemPage (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+  IHCNode renderMenuItemPage (@Nonnull LayoutExecutionContext aLEC,
                               @Nonnull IMenuItemPage aMenuItem,
                               boolean bHasChildren,
                               boolean bIsSelected,
@@ -111,9 +110,8 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
   /**
    * Callback invoked on the created node.
    * 
-   * @param aRequestScope
-   *        The request web scope to be used. Required for cookie-less handling.
-   *        May not be <code>null</code>.
+   * @param aLEC
+   *        Layout execution context. May not be <code>null</code>.
    * @param aLI
    *        HCNode
    * @param bHasChildren
@@ -123,7 +121,7 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    * @param bIsExpanded
    *        <code>true</code> if the menu item is expanded
    */
-  void onMenuItemPageItem (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+  void onMenuItemPageItem (@Nonnull LayoutExecutionContext aLEC,
                            @Nonnull HCLI aLI,
                            boolean bHasChildren,
                            boolean bIsSelected,

@@ -18,7 +18,6 @@
 package com.phloc.webbasics.app.page.system;
 
 import java.io.Serializable;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,8 +28,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
-import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
  * The default renderer used for {@link PageShowChildren}.
@@ -45,16 +43,16 @@ public class PageShowChildrenRenderer implements Serializable
   /**
    * Render a menu separator
    * 
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @param aMenuSeparator
    *        The menu separator. Never <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use. Never <code>null</code>.
    * @return The rendered representation or <code>null</code>
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuSeparator (@Nonnull final IMenuSeparator aMenuSeparator,
-                                         @Nonnull final Locale aDisplayLocale)
+  protected IHCNode renderMenuSeparator (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nonnull final IMenuSeparator aMenuSeparator)
   {
     return null;
   }
@@ -62,42 +60,38 @@ public class PageShowChildrenRenderer implements Serializable
   /**
    * Render a menu item to an internal page
    * 
-   * @param aRequestScope
-   *        The request web scope to be used. Required for cookie-less handling.
-   *        May not be <code>null</code>.
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @param aMenuItemPage
    *        The menu item. Never <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use. Never <code>null</code>.
    * @return The rendered representation or <code>null</code>
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuItemPage (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                        @Nonnull final IMenuItemPage aMenuItemPage,
-                                        @Nonnull final Locale aDisplayLocale)
+  protected IHCNode renderMenuItemPage (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nonnull final IMenuItemPage aMenuItemPage)
   {
     if (!aMenuItemPage.matchesDisplayFilter ())
       return null;
-    return new HCA (LinkUtils.getLinkToMenuItem (aRequestScope, aMenuItemPage.getID ())).addChild (aMenuItemPage.getDisplayText (aDisplayLocale));
+    return new HCA (aWPEC.getLinkToMenuItem (aMenuItemPage.getID ())).addChild (aMenuItemPage.getDisplayText (aWPEC.getDisplayLocale ()));
   }
 
   /**
    * Render a menu item to an external page
    * 
+   * @param aWPEC
+   *        Web page execution context. May not be <code>null</code>.
    * @param aMenuItemExternal
    *        The menu item. Never <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use. Never <code>null</code>.
    * @return The rendered representation or <code>null</code>
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItemExternal,
-                                            @Nonnull final Locale aDisplayLocale)
+  protected IHCNode renderMenuItemExternal (@Nonnull final WebPageExecutionContext aWPEC,
+                                            @Nonnull final IMenuItemExternal aMenuItemExternal)
   {
     if (!aMenuItemExternal.matchesDisplayFilter ())
       return null;
-    return new HCA (aMenuItemExternal.getURL ()).addChild (aMenuItemExternal.getDisplayText (aDisplayLocale));
+    return new HCA (aMenuItemExternal.getURL ()).addChild (aMenuItemExternal.getDisplayText (aWPEC.getDisplayLocale ()));
   }
 }
