@@ -38,7 +38,6 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
@@ -144,8 +143,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   @Nonnull
   public static SimpleURL createCreateURL (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sMenuItemID)
   {
-    return LinkUtils.getLinkToMenuItem (aLEC.getRequestScope (), sMenuItemID)
-                    .add (CHCParam.PARAM_ACTION, ACTION_CREATE);
+    return aLEC.getLinkToMenuItem (sMenuItemID).add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull

@@ -54,6 +54,16 @@ public enum EWebPageFormAction implements IHasID <String>
     return m_sID;
   }
 
+  /**
+   * @return <code>true</code> if this action modifies an existing object,
+   *         <code>false</code> if either creates a new object or just reads an
+   *         existing object.
+   */
+  public boolean isModifying ()
+  {
+    return this == EDIT || this == DELETE || this == UNDELETE;
+  }
+
   @Nullable
   public static EWebPageFormAction getFromIDOrNull (@Nullable final String sID)
   {

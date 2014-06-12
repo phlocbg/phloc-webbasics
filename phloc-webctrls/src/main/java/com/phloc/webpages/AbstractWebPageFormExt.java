@@ -108,7 +108,7 @@ public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>> 
   {
     final ObjectLockManager aOLM = MetaSystemManager.getLockManager ();
     // Lock EDIT and DELETE if an object is present
-    if ((eFormAction == EWebPageFormAction.EDIT || eFormAction == EWebPageFormAction.DELETE) && aSelectedObject != null)
+    if (eFormAction != null && eFormAction.isModifying () && aSelectedObject != null)
     {
       // Try to lock object
       final String sObjectID = aSelectedObject.getID ();
