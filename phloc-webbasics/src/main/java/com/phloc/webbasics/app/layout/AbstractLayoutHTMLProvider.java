@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -101,11 +102,13 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   /**
    * Overridable method that is called before the content areas are rendered
    * 
+   * @param aLEC
+   *        The layout execution context to use. Never <code>null</code>.
    * @param aHtml
    *        HTML element
    */
   @OverrideOnDemand
-  protected void prepareBodyBeforeAreas (@Nonnull final HCHtml aHtml)
+  protected void prepareBodyBeforeAreas (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final HCHtml aHtml)
   {}
 
   /**
@@ -124,24 +127,26 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   /**
    * Overridable method that is called after the content areas are rendered
    * 
+   * @param aLEC
+   *        Layout execution context
    * @param aHtml
    *        HTML element
    */
   @OverrideOnDemand
-  protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
+  protected void prepareBodyAfterAreas (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final HCHtml aHtml)
   {}
 
   @Override
   protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
+    final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
+    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aSWEC, aSelectedMenuItem);
+
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
 
     // Before callback
-    prepareBodyBeforeAreas (aHtml);
-
-    final String sSelectedMenuItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
-    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aSWEC, sSelectedMenuItemID);
+    prepareBodyBeforeAreas (aLEC, aHtml);
 
     // For all layout areas
     for (final String sAreaID : m_aLayoutAreaIDs)
@@ -174,7 +179,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
     }
 
     // After callback
-    prepareBodyAfterAreas (aHtml);
+    prepareBodyAfterAreas (aLEC, aHtml);
   }
 
   @Override

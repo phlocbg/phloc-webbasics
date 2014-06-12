@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
@@ -39,20 +40,26 @@ import com.phloc.webbasics.app.SimpleWebExecutionContext;
 @NotThreadSafe
 public class LayoutExecutionContext extends SimpleWebExecutionContext
 {
-  private final String m_sSelectedMenuItemID;
+  private final IMenuItemPage m_aSelectedMenuItem;
 
   public LayoutExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC,
-                                 @Nonnull final String sSelectedMenuItemID)
+                                 @Nonnull final IMenuItemPage aSelectedMenuItem)
   {
     super (aSWEC.getRequestScope (), aSWEC.getDisplayLocale ());
-    m_sSelectedMenuItemID = ValueEnforcer.notEmpty (sSelectedMenuItemID, "SelectedMenuItemID");
+    m_aSelectedMenuItem = ValueEnforcer.notNull (aSelectedMenuItem, "SelectedMenuItem");
+  }
+
+  @Nonnull
+  public IMenuItemPage getSelectedMenuItem ()
+  {
+    return m_aSelectedMenuItem;
   }
 
   @Nonnull
   @Nonempty
   public String getSelectedMenuItemID ()
   {
-    return m_sSelectedMenuItemID;
+    return m_aSelectedMenuItem.getID ();
   }
 
   /**
@@ -64,7 +71,7 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
   @Nonnull
   public SimpleURL getSelfHref ()
   {
-    return getLinkToMenuItem (m_sSelectedMenuItemID);
+    return getLinkToMenuItem (m_aSelectedMenuItem.getID ());
   }
 
   /**
@@ -79,14 +86,14 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
   @Nonnull
   public SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return getLinkToMenuItem (m_sSelectedMenuItemID, aParams);
+    return getLinkToMenuItem (m_aSelectedMenuItem.getID (), aParams);
   }
 
   @Override
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("selectedMenuItemID", m_sSelectedMenuItemID)
+                            .append ("selectedMenuItem", m_aSelectedMenuItem)
                             .toString ();
   }
 }

@@ -39,7 +39,7 @@ public class WebPageExecutionContext extends LayoutExecutionContext
 
   public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final IWebPage aWebPage)
   {
-    super (aLEC, aLEC.getSelectedMenuItemID ());
+    super (aLEC, aLEC.getSelectedMenuItem ());
     m_aWebPage = ValueEnforcer.notNull (aWebPage, "WebPage");
   }
 
