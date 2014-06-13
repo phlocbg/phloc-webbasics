@@ -64,8 +64,8 @@ public class HTMLConfigManager
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
 
   private final String m_sBasePath;
-  private final List <CSSFiles.CSSItem> m_aAllCSSItems;
-  private final List <JSFiles.JSItem> m_aAllJSItems;
+  private final List <CSSItem> m_aAllCSSItems;
+  private final List <JSItem> m_aAllJSItems;
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
   private HTMLConfigManager ()
@@ -118,7 +118,7 @@ public class HTMLConfigManager
    */
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSFiles.CSSItem> getAllCSSItems ()
+  public List <CSSItem> getAllCSSItems ()
   {
     return ContainerHelper.newList (m_aAllCSSItems);
   }
@@ -128,7 +128,7 @@ public class HTMLConfigManager
    */
   @Nonnull
   @ReturnsMutableCopy
-  public List <JSFiles.JSItem> getAllJSItems ()
+  public List <JSItem> getAllJSItems ()
   {
     return ContainerHelper.newList (m_aAllJSItems);
   }
