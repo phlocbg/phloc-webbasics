@@ -676,21 +676,24 @@ public final class InternalErrorHandler
 
     if (GlobalDebug.isDebugMode ())
     {
-      if (aParent != null)
+      if (t != null)
       {
-        // Get error stack trace
-        final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
-        final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
-                                                                   .setRows (20)
-                                                                   .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
-                                                                   .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
-                                                                   .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
+        // Show stack trace details
+        if (aParent != null)
+        {
+          // Get error stack trace
+          final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
+          final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
+                                                                     .setRows (20)
+                                                                     .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
+                                                                     .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
+                                                                     .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
 
-        aParent.addChild (aStackTrace);
+          aParent.addChild (aStackTrace);
+        }
+        s_aLogger.error ("The error stack trace", t);
       }
 
-      if (t != null)
-        s_aLogger.error ("The error stack trace", t);
       if (StringHelper.hasText (sCustomData))
         s_aLogger.error ("Custom data: " + sCustomData);
 
