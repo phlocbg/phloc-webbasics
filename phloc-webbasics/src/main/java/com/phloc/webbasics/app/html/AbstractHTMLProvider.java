@@ -104,7 +104,6 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   protected void fillHead (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
-
     final HCHead aHead = aHtml.getHead ();
 
     // Special meta tag
@@ -138,8 +137,11 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     final Locale aDisplayLocale = getDisplayLocale ();
+
+    // Build the execution scope
     final SimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope, aDisplayLocale);
 
+    // Create the surrounding HTML element
     final HCHtml aHtml = createHCHtml (aDisplayLocale);
 
     // fill body
