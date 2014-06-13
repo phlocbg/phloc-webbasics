@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.collections.ContainerHelper;
 
@@ -30,6 +31,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class EmptyExportRecordProvider implements IExportRecordProvider
 {
   @Nullable

@@ -55,7 +55,6 @@ public final class ExporterCSV implements IExporterFile
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ExporterCSV.class);
 
-  @Nonnull
   private final Charset m_aCharset;
   private char m_cSeparator = CSVWriter.DEFAULT_SEPARATOR;
   private EUnicodeBOM m_eBOM;

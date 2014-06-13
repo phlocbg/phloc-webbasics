@@ -30,6 +30,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.iterate.IterableIterator;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroDocument;
@@ -55,7 +56,7 @@ public final class ExporterXML implements IExporterFile
   private static final String ELEMENT_FIELD = "field";
   private static final String ATTR_TYPE = "type";
 
-  private Charset m_aCharset = XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ;
+  private final XMLWriterSettings m_aXWS = new XMLWriterSettings ();
   private boolean m_bEmitTypeAttr = true;
 
   public ExporterXML ()
@@ -64,14 +65,21 @@ public final class ExporterXML implements IExporterFile
   @Nonnull
   public ExporterXML setCharset (@Nonnull final Charset aCharset)
   {
-    m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
+    m_aXWS.setCharset (aCharset);
     return this;
   }
 
   @Nonnull
   public Charset getCharset ()
   {
-    return m_aCharset;
+    return m_aXWS.getCharsetObj ();
+  }
+
+  @Nonnull
+  @ReturnsMutableObject (reason = "Design")
+  public XMLWriterSettings getXMLWriterSettings ()
+  {
+    return m_aXWS;
   }
 
   @Nonnull
@@ -131,11 +139,14 @@ public final class ExporterXML implements IExporterFile
   {
     try
     {
+      ValueEnforcer.notNull (aProvider, "Provider");
+      ValueEnforcer.notNull (aOS, "OutputStream");
+
       final IMicroDocument aDoc = convertRecords (aProvider);
       if (aDoc == null)
         return ESuccess.FAILURE;
 
-      MicroWriter.writeToStream (aDoc, aOS, new XMLWriterSettings ().setCharset (m_aCharset));
+      MicroWriter.writeToStream (aDoc, aOS, m_aXWS);
       return ESuccess.SUCCESS;
     }
     finally

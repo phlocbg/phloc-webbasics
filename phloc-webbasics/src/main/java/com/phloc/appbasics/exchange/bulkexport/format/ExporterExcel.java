@@ -56,11 +56,8 @@ import com.phloc.poi.excel.style.ExcelStyle;
 @NotThreadSafe
 public class ExporterExcel implements IExporterFile
 {
-  @Nonnull
   private static final ExcelStyle STYLE_DATE = new ExcelStyle ().setDataFormat ("dd.mm.yyyy");
-  @Nonnull
   private static final ExcelStyle STYLE_TIME = new ExcelStyle ().setDataFormat ("hh:mm:ss");
-  @Nonnull
   private static final ExcelStyle STYLE_DATETIME = new ExcelStyle ().setDataFormat ("dd.mm.yyyy hh:mm:ss");
 
   @Nonnull
@@ -186,14 +183,13 @@ public class ExporterExcel implements IExporterFile
   public final ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                        @Nonnull @WillClose final OutputStream aOS)
   {
-    ValueEnforcer.notNull (aProvider, "Provider");
-    ValueEnforcer.notNull (aOS, "OutputStream");
-
     try
     {
+      ValueEnforcer.notNull (aProvider, "Provider");
+      ValueEnforcer.notNull (aOS, "OutputStream");
+
       final WorkbookCreationHelper aWBCH = new WorkbookCreationHelper (m_eVersion);
       aWBCH.createNewSheet ();
-      // TODO add sheet
 
       // Header
       final IExportRecord aHeaderRecord = aProvider.getHeader ();

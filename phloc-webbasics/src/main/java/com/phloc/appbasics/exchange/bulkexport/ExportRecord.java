@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -32,7 +33,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -43,7 +44,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class ExportRecord implements IExportRecord
+@NotThreadSafe
+public class ExportRecord implements IExportRecord
 {
   private final List <IExportRecordField> m_aFields = new ArrayList <IExportRecordField> ();
 
@@ -178,10 +180,10 @@ public final class ExportRecord implements IExportRecord
 
   @Override
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <IExportRecordField> getAllFields ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aFields);
+    return ContainerHelper.newList (m_aFields);
   }
 
   @Override

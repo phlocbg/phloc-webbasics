@@ -27,6 +27,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * An implementation of {@link IExportRecordProvider} that uses a constant list
@@ -37,11 +38,8 @@ import com.phloc.commons.collections.ContainerHelper;
 @Immutable
 public class ConstantExportRecordProvider implements IExportRecordProvider
 {
-  @Nullable
   private final IExportRecord m_aHeader;
-  @Nonnull
   private final List <IExportRecord> m_aBody;
-  @Nullable
   private final IExportRecord m_aFooter;
 
   public ConstantExportRecordProvider (@Nonnull final Collection <? extends IExportRecord> aBody)
@@ -81,5 +79,14 @@ public class ConstantExportRecordProvider implements IExportRecordProvider
   public IExportRecord getFooter ()
   {
     return m_aFooter;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).appendIfNotNull ("header", m_aHeader)
+                                       .append ("body", m_aBody)
+                                       .appendIfNotNull ("footer", m_aFooter)
+                                       .toString ();
   }
 }

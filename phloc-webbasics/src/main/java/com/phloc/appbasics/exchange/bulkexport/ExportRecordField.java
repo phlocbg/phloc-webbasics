@@ -41,12 +41,12 @@ import com.phloc.commons.type.EBaseType;
  * @author Philip Helger
  */
 @Immutable
-public final class ExportRecordField implements IExportRecordField
+public class ExportRecordField implements IExportRecordField
 {
   private final EBaseType m_eFieldType;
   private final Object m_aValue;
 
-  private ExportRecordField (@Nonnull final EBaseType eFieldType, @Nullable final Object aValue)
+  protected ExportRecordField (@Nonnull final EBaseType eFieldType, @Nullable final Object aValue)
   {
     m_eFieldType = ValueEnforcer.notNull (eFieldType, "FieldType");
     m_aValue = aValue;
