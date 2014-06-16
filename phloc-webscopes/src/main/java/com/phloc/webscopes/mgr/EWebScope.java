@@ -77,7 +77,8 @@ public enum EWebScope
    *        if <code>false</code> and the scope is not existing,
    *        <code>null</code> will be returned. This parameter is only used in
    *        application, session and session application scopes.
-   * @return The matching IWebScope.
+   * @return The matching {@link IWebScope} or <code>null</code> if
+   *         bCreateIfNotExisting is <code>false</code> and no scope is present
    * @throws IllegalArgumentException
    *         If an illegal enumeration value is passed.
    */
@@ -87,7 +88,7 @@ public enum EWebScope
     switch (eWebScope)
     {
       case GLOBAL:
-        return WebScopeManager.getGlobalScope ();
+        return bCreateIfNotExisting ? WebScopeManager.getGlobalScope () : WebScopeManager.getGlobalScopeOrNull ();
       case APPLICATION:
         return WebScopeManager.getApplicationScope (bCreateIfNotExisting);
       case SESSION:
@@ -95,7 +96,7 @@ public enum EWebScope
       case SESSION_APPLICATION:
         return WebScopeManager.getSessionApplicationScope (bCreateIfNotExisting);
       case REQUEST:
-        return WebScopeManager.getRequestScope ();
+        return bCreateIfNotExisting ? WebScopeManager.getRequestScope () : WebScopeManager.getRequestScopeOrNull ();
       default:
         throw new IllegalArgumentException ("Unknown web scope: " + eWebScope);
     }
