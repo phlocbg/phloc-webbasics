@@ -17,7 +17,9 @@
  */
 package com.phloc.webctrls.autonumeric;
 
-import javax.annotation.Nullable;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
 
 import com.phloc.webbasics.form.RequestField;
 
@@ -27,23 +29,16 @@ import com.phloc.webbasics.form.RequestField;
  * 
  * @author Philip Helger
  */
-public class HCEditYear extends HCAutoNumeric
+public class HCEditYear extends HCAutoNumericInt
 {
   /** Default minimum value is 0 */
   public static final int DEFAULT_MIN = 0;
   /** Default maximum value is 0 */
   public static final int DEFAULT_MAX = 9999;
 
-  public HCEditYear ()
+  public HCEditYear (@Nonnull final RequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
-    this (null);
-  }
-
-  public HCEditYear (@Nullable final RequestField aRF)
-  {
-    super (aRF);
-    setDecimalPlaces (0);
-    setThousandSeparator ("");
+    super (aRF, aDisplayLocale);
     setMin (DEFAULT_MIN);
     setMax (DEFAULT_MAX);
   }

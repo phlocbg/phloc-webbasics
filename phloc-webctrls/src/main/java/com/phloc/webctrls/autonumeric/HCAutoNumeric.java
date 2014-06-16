@@ -17,29 +17,26 @@
  */
 package com.phloc.webctrls.autonumeric;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.NotThreadSafe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.id.IHasID;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.microdom.impl.MicroContainer;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCNodeBuilder;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.HCEdit;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
@@ -52,22 +49,23 @@ import com.phloc.webbasics.form.RequestField;
 
 /**
  * jQuery autoNumeric plugin from
- *
+ * 
  * <pre>
  * http://www.decorplanit.com/plugin/
  * </pre>
- *
+ * 
  * @author Philip Helger
  */
-public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializable
+@NotThreadSafe
+public class HCAutoNumeric extends HCEdit
 {
   /** The special CSS class to use for numeric inputs */
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
-  private static final Logger s_aLogger = LoggerFactory.getLogger (HCAutoNumeric.class);
 
-  private final RequestField m_aRF;
-  private String m_sID;
-  private BigDecimal m_aInitialValue;
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
+  private static String s_sDefaultThousandSeparator = null;
+
   private String m_sThousandSeparator;
   private String m_sDecimalSeparator;
   private Integer m_aDecimalPlaces;
@@ -75,78 +73,54 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   private BigDecimal m_aMax;
   private EAutoNumericLeadingZero m_eLeadingZero;
   private EAutoNumericRoundingMode m_eRoundingMode;
-  private IHCAutoNumericEditCustomizer m_aEditCustomizer;
 
-  public HCAutoNumeric ()
+  public HCAutoNumeric (@Nonnull final RequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
-    this (null, null);
-  }
+    super (aRF);
+    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
 
-  public HCAutoNumeric (@Nullable final Locale aDisplayLocale)
-  {
-    this (aDisplayLocale, null);
-  }
+    ensureID ();
+    addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
 
-  public HCAutoNumeric (@Nullable final RequestField aRF)
-  {
-    this (null, aRF);
-  }
-
-  public HCAutoNumeric (@Nullable final Locale aDisplayLocale, @Nullable final RequestField aRF)
-  {
     // Because the default min value is 0 (in v1.8.2) and we want negative
     // values by default!
     m_aMin = BigDecimal.valueOf (-999999999);
 
-    m_aRF = aRF;
-    m_sID = GlobalIDFactory.getNewStringID ();
-    if (aDisplayLocale != null)
-    {
-      final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
-      m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
-      m_sDecimalSeparator = Character.toString (m_aDFS.getDecimalSeparator ());
-    }
-  }
+    final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
+    m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
+    m_sDecimalSeparator = Character.toString (m_aDFS.getDecimalSeparator ());
 
-  @Nonnull
-  @Nonempty
-  public String getID ()
-  {
-    return m_sID;
-  }
-
-  @Nonnull
-  public HCAutoNumeric setID (@Nonnull @Nonempty final String sID)
-  {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    m_sID = sID;
-    return this;
+    // Assign default
+    final String sDefaultThousandSeparator = getDefaultThousandSeparator ();
+    if (sDefaultThousandSeparator != null)
+      m_sThousandSeparator = sDefaultThousandSeparator;
   }
 
   @Nullable
-  public BigDecimal getInitialValue ()
+  public static String getDefaultThousandSeparator ()
   {
-    return m_aInitialValue;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_sDefaultThousandSeparator;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
-  @Nonnull
-  public HCAutoNumeric setInitialValue (final long nInitialValue)
+  public static void setDefaultThousandSeparator (@Nullable final String sDefaultThousandSeparator)
   {
-    return setInitialValue (BigDecimal.valueOf (nInitialValue));
-  }
-
-  @Nonnull
-  public HCAutoNumeric setInitialValue (final double dInitialValue)
-  {
-    return setInitialValue (BigDecimal.valueOf (dInitialValue));
-  }
-
-  @Nonnull
-  public HCAutoNumeric setInitialValue (@Nullable final BigDecimal aInitialValue)
-  {
-    m_aInitialValue = aInitialValue;
-    return this;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_sDefaultThousandSeparator = sDefaultThousandSeparator;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nullable
@@ -188,6 +162,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     return this;
   }
 
+  private void _checkMinMax ()
+  {
+    if (m_aMin != null && m_aMax != null && m_aMin.compareTo (m_aMax) > 0)
+      throw new IllegalArgumentException ("Min (" + m_aMin + ") must be <= max (" + m_aMax + ")!");
+  }
+
   @Nullable
   public BigDecimal getMin ()
   {
@@ -210,6 +190,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   public HCAutoNumeric setMin (@Nullable final BigDecimal aMin)
   {
     m_aMin = aMin;
+    _checkMinMax ();
     return this;
   }
 
@@ -235,6 +216,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   public HCAutoNumeric setMax (@Nullable final BigDecimal aMax)
   {
     m_aMax = aMax;
+    _checkMinMax ();
     return this;
   }
 
@@ -264,19 +246,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     return this;
   }
 
-  @Nullable
-  public final IHCAutoNumericEditCustomizer getEditCustomizer ()
-  {
-    return m_aEditCustomizer;
-  }
-
-  @Nonnull
-  public HCAutoNumeric setEditCustomizer (@Nullable final IHCAutoNumericEditCustomizer aEditCustomizer)
-  {
-    m_aEditCustomizer = aEditCustomizer;
-    return this;
-  }
-
   @Nonnull
   public static JSInvocation invoke (@Nonnull final IJSExpression aExpr)
   {
@@ -286,7 +255,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   @Nonnull
   public JSInvocation invoke ()
   {
-    return invoke (JQuery.idRef (m_sID));
+    return invoke (JQuery.idRef (this));
   }
 
   @Nonnull
@@ -414,21 +383,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     return invoke ().arg ("getSettings");
   }
 
-  /**
-   * Customize the edit. By default the edit customizer from
-   * {@link #getEditCustomizer()} is used.
-   *
-   * @param aEdit
-   *        The edit to be customized
-   */
-  @OverrideOnDemand
-  protected void customizeEdit (@Nonnull final HCEdit aEdit)
-  {
-    final IHCAutoNumericEditCustomizer aEditCustomizer = getEditCustomizer ();
-    if (aEditCustomizer != null)
-      aEditCustomizer.customize (aEdit);
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getJSOptions ()
@@ -453,28 +407,14 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     return aArgs;
   }
 
-  @Nonnull
-  public HCNodeList build ()
+  @Override
+  protected IMicroNode internalConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    if (m_aMin != null && m_aMax != null && m_aMin.doubleValue () > m_aMax.doubleValue ())
-      throw new IllegalArgumentException ("Min must be <= max!");
-    if (m_aMin != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMin) < 0)
-      throw new IllegalArgumentException ("Initial value must be >= min!");
-    if (m_aMax != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMax) > 0)
-      throw new IllegalArgumentException ("Initial value must be <= max!");
-
     registerExternalResources ();
 
-    // build edit
-    if (m_aRF != null && m_aInitialValue != null)
-      s_aLogger.error ("InitialValue and RequestField cannot be used together - ignoring RequestField default value");
-    final HCEdit aEdit = m_aRF != null ? m_aInitialValue != null ? new HCEdit (m_aRF.getFieldName ())
-                                                                : new HCEdit (m_aRF) : new HCEdit ();
-    aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
-    customizeEdit (aEdit);
-
-    // Assemble
-    return new HCNodeList ().addChild (aEdit).addChild (new HCAutoNumericJS (this));
+    final IMicroNode aEdit = super.internalConvertToNode (aConversionSettings);
+    final IMicroNode aJS = new HCAutoNumericJS (this).convertToNode (aConversionSettings);
+    return new MicroContainer (aEdit, aJS);
   }
 
   public static void registerExternalResources ()

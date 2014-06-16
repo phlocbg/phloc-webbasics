@@ -31,7 +31,7 @@ import com.phloc.html.js.builder.jquery.JQueryInvocation;
 /**
  * A special script that initializes the auto numeric. It is a separate class,
  * so that potentially identical options can be merged to a single invocation.
- *
+ * 
  * @author Philip Helger
  */
 @OutOfBandNode
@@ -45,14 +45,9 @@ public class HCAutoNumericJS extends HCScriptOnDocumentReady
                                                 @Nonnull final HCAutoNumeric aAutoNumeric)
   {
     final JQueryInvocation aInvocation = aExplicitAutoNumeric != null ? aExplicitAutoNumeric
-                                                                     : JQuery.idRef (aAutoNumeric.getID ());
+                                                                     : JQuery.idRef (aAutoNumeric);
 
-    JSInvocation ret = HCAutoNumeric.autoNumericInit (aInvocation, aAutoNumeric.getJSOptions ());
-    if (aAutoNumeric.getInitialValue () != null)
-    {
-      // Never locale specific!
-      ret = HCAutoNumeric.autoNumericSet (ret, aAutoNumeric.getInitialValue ());
-    }
+    final JSInvocation ret = HCAutoNumeric.autoNumericInit (aInvocation, aAutoNumeric.getJSOptions ());
     return ret;
   }
 

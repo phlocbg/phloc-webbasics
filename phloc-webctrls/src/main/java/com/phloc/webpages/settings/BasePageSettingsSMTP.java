@@ -69,7 +69,7 @@ import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.smtp.CNamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
-import com.phloc.webctrls.autonumeric.HCAutoNumeric;
+import com.phloc.webctrls.autonumeric.HCAutoNumericInt;
 import com.phloc.webctrls.autosize.HCTextAreaAutosize;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
@@ -401,11 +401,10 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       final String sPort = EText.LABEL_PORT.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabelMandatory (sPort)
-            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_PORT, aSettings == null ? CWeb.DEFAULT_PORT_SMTP
-                                                                                        : aSettings.getPort ())).setMin (CNetworkPort.MINIMUM_PORT_NUMBER)
-                                                                                                                .setMax (CNetworkPort.MAXIMUM_PORT_NUMBER)
-                                                                                                                .setDecimalPlaces (0)
-                                                                                                                .setThousandSeparator (""))
+            .setCtrl (new HCAutoNumericInt (new RequestField (FIELD_PORT, aSettings == null ? CWeb.DEFAULT_PORT_SMTP
+                                                                                           : aSettings.getPort ()),
+                                            aDisplayLocale).setMin (CNetworkPort.MINIMUM_PORT_NUMBER)
+                                                           .setMax (CNetworkPort.MAXIMUM_PORT_NUMBER))
             .setErrorList (aFormErrors.getListOfField (FIELD_PORT));
     }
 
@@ -460,11 +459,10 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       final String sConnectionTimeout = EText.LABEL_CONNECTION_TIMEOUT.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabelMandatory (sConnectionTimeout)
-            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_CONNECTION_TIMEOUT,
-                                                           aSettings == null ? EmailGlobalSettings.getConnectionTimeoutMilliSecs ()
-                                                                            : aSettings.getConnectionTimeoutMilliSecs ())).setMin (0)
-                                                                                                                          .setDecimalPlaces (0)
-                                                                                                                          .setThousandSeparator (""))
+            .setCtrl (new HCAutoNumericInt (new RequestField (FIELD_CONNECTION_TIMEOUT,
+                                                              aSettings == null ? EmailGlobalSettings.getConnectionTimeoutMilliSecs ()
+                                                                               : aSettings.getConnectionTimeoutMilliSecs ()),
+                                            aDisplayLocale).setMin (0))
             .setErrorList (aFormErrors.getListOfField (FIELD_CONNECTION_TIMEOUT));
     }
 
@@ -472,11 +470,10 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
       final String sSocketTimeout = EText.LABEL_SOCKET_TIMEOUT.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabelMandatory (sSocketTimeout)
-            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_SOCKET_TIMEOUT,
-                                                           aSettings == null ? EmailGlobalSettings.getTimeoutMilliSecs ()
-                                                                            : aSettings.getTimeoutMilliSecs ())).setMin (0)
-                                                                                                                .setDecimalPlaces (0)
-                                                                                                                .setThousandSeparator (""))
+            .setCtrl (new HCAutoNumericInt (new RequestField (FIELD_SOCKET_TIMEOUT,
+                                                              aSettings == null ? EmailGlobalSettings.getTimeoutMilliSecs ()
+                                                                               : aSettings.getTimeoutMilliSecs ()),
+                                            aDisplayLocale).setMin (0))
             .setErrorList (aFormErrors.getListOfField (FIELD_SOCKET_TIMEOUT));
     }
   }
