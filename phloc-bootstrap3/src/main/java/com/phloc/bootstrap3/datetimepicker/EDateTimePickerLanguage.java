@@ -28,7 +28,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * All locales available in the Bootstrap DateTimePicker
- *
+ * 
  * @author Philip Helger
  */
 public enum EDateTimePickerLanguage
@@ -40,6 +40,7 @@ public enum EDateTimePickerLanguage
   DA ("da", "da"),
   DE ("de", "de"),
   DE_AT ("de_AT", "de-AT"),
+  EE ("ee", "ee"),
   EL ("el", "el"),
   ES ("es", "es"),
   FI ("fi", "fi"),
@@ -53,6 +54,7 @@ public enum EDateTimePickerLanguage
   IS ("is", "is"),
   IT ("it", "it"),
   JA ("ja", "ja"),
+  KO ("ko", "ko"),
   KR ("kr", "kr"),
   LT ("lt", "lt"),
   LV ("lv", "lv"),

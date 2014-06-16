@@ -19,6 +19,7 @@ package com.phloc.bootstrap3.datetimepicker;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.annotations.OutOfBandNode;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.utils.SpecialNodeListModifier;
@@ -46,5 +47,11 @@ public class BootstrapDateTimePickerJS extends HCScript
   public BootstrapDateTimePicker getDateTimePicker ()
   {
     return m_aDTP;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("DTP", m_aDTP).toString ();
   }
 }

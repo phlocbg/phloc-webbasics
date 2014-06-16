@@ -31,10 +31,11 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.cache.AbstractNotifyingCache;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorStringLongestFirst;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
 
@@ -50,8 +51,7 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
   @Nonnull
   public BootstrapDateTimePickerFormatBuilder append (@Nonnull final EDateTimePickerFormatToken eToken)
   {
-    if (eToken == null)
-      throw new NullPointerException ("token");
+    ValueEnforcer.notNull (eToken, "Token");
     m_aList.add (eToken);
     return this;
   }
@@ -64,6 +64,7 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public List <Object> getAllInternalObjects ()
   {
     return ContainerHelper.newList (m_aList);
@@ -131,8 +132,7 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
 
     public Searcher (@Nonnull final String sRest)
     {
-      if (sRest == null)
-        throw new NullPointerException ("rest");
+      ValueEnforcer.notNull (sRest, "Rest");
       m_sRest = sRest;
     }
 
@@ -183,8 +183,7 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
     @SuppressFBWarnings ("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
     protected BootstrapDateTimePickerFormatBuilder getValueToCache (@Nullable final String sJavaPattern)
     {
-      if (sJavaPattern == null)
-        throw new NullPointerException ("JavaPattern");
+      ValueEnforcer.notNull (sJavaPattern, "JavaPattern");
 
       // Do parsing
       final BootstrapDateTimePickerFormatBuilder aDFB = new BootstrapDateTimePickerFormatBuilder ();
@@ -209,8 +208,8 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
   @Nonnull
   public static IDateFormatBuilder fromJavaPattern (@Nonnull final String sJavaPattern)
   {
-    if (StringHelper.hasNoText (sJavaPattern))
-      throw new IllegalArgumentException ("JavaPattern");
+    ValueEnforcer.notEmpty (sJavaPattern, "JavaPattern");
+
     return s_aCache.getFromCache (sJavaPattern);
   }
 }
