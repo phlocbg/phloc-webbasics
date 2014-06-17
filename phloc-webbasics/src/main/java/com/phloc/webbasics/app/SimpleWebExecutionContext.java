@@ -28,6 +28,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.attrs.IAttributeContainer;
+import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
@@ -54,14 +55,27 @@ public class SimpleWebExecutionContext
 {
   private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final Locale m_aDisplayLocale;
-  private final MapBasedAttributeContainer m_aCustomAttrs;
+  private final MapBasedAttributeContainer m_aCustomAttrs = new MapBasedAttributeContainer ();
+
+  public SimpleWebExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC)
+  {
+    this (aSWEC.getRequestScope (), aSWEC.getDisplayLocale (), aSWEC.getCustomAttrs ());
+  }
 
   public SimpleWebExecutionContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                     @Nonnull final Locale aDisplayLocale)
   {
+    this (aRequestScope, aDisplayLocale, (IReadonlyAttributeContainer) null);
+  }
+
+  public SimpleWebExecutionContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                    @Nonnull final Locale aDisplayLocale,
+                                    @Nullable final IReadonlyAttributeContainer aCustomAttrs)
+  {
     m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope");
     m_aDisplayLocale = ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
-    m_aCustomAttrs = new MapBasedAttributeContainer ();
+    if (aCustomAttrs != null)
+      m_aCustomAttrs.setAttributes (aCustomAttrs);
   }
 
   @Nonnull

@@ -33,7 +33,8 @@ import com.phloc.webbasics.app.SimpleWebExecutionContext;
 /**
  * This object is instantiated per page view and contains the current request
  * scope, the display locale, the selected menu item and a set of custom
- * attributes.
+ * attributes. In addition to the base class {@link SimpleWebExecutionContext}
+ * the selected menu item is added.
  * 
  * @author Philip Helger
  */
@@ -42,19 +43,32 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
 {
   private final IMenuItemPage m_aSelectedMenuItem;
 
+  public LayoutExecutionContext (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    this (aLEC, aLEC.getSelectedMenuItem ());
+  }
+
   public LayoutExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC,
                                  @Nonnull final IMenuItemPage aSelectedMenuItem)
   {
-    super (aSWEC.getRequestScope (), aSWEC.getDisplayLocale ());
+    super (aSWEC);
     m_aSelectedMenuItem = ValueEnforcer.notNull (aSelectedMenuItem, "SelectedMenuItem");
   }
 
+  /**
+   * @return The selected menu item as specified in the constructor. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   public IMenuItemPage getSelectedMenuItem ()
   {
     return m_aSelectedMenuItem;
   }
 
+  /**
+   * @return The ID of the selected menu item as specified in the constructor.
+   *         Neiter <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getSelectedMenuItemID ()

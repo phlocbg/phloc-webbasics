@@ -37,6 +37,11 @@ public class WebPageExecutionContext extends LayoutExecutionContext
   private final IWebPage m_aWebPage;
   private final HCNodeList m_aNodeList = new HCNodeList ();
 
+  public WebPageExecutionContext (@Nonnull final WebPageExecutionContext aWPEC)
+  {
+    this (aWPEC, aWPEC.getWebPage ());
+  }
+
   public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final IWebPage aWebPage)
   {
     super (aLEC, aLEC.getSelectedMenuItem ());
