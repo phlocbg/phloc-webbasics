@@ -65,7 +65,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
+public class BasePageLoginInfo <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <LoginInfo, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -141,20 +141,19 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
 
   @Override
   @Nullable
-  protected LoginInfo getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected LoginInfo getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return LoggedInUserManager.getInstance ().getLoginInfo (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final LoginInfo aLoginInfo)
+  protected final boolean isEditAllowed (@Nonnull final WPECTYPE aWPEC, @Nullable final LoginInfo aLoginInfo)
   {
     return false;
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                     @Nonnull final LoginInfo aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final LoginInfo aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -205,7 +204,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final LoginInfo aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -214,7 +213,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   }
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final LoginInfo aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -244,8 +243,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   }
 
   @Override
-  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
-                                         @Nullable final LoginInfo aSelectedObject)
+  protected boolean handleCustomActions (@Nonnull final WPECTYPE aWPEC, @Nullable final LoginInfo aSelectedObject)
   {
     if (aWPEC.hasAction (ACTION_LOGOUT_USER) && aSelectedObject != null)
     {
@@ -289,7 +287,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

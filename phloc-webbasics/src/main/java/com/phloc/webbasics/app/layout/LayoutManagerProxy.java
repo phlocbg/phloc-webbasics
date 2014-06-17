@@ -28,10 +28,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCNode;
 
@@ -41,22 +41,20 @@ import com.phloc.html.hc.IHCNode;
  * @author Philip Helger
  */
 @ThreadSafe
-public class LayoutManagerProxy implements ILayoutManager
+public class LayoutManagerProxy <LECTYPE extends LayoutExecutionContext> implements ILayoutManager <LECTYPE>
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
-  private final Map <String, ILayoutAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, ILayoutAreaContentProvider> ();
+  private final Map <String, ILayoutAreaContentProvider <LECTYPE>> m_aContentProviders = new LinkedHashMap <String, ILayoutAreaContentProvider <LECTYPE>> ();
 
   public LayoutManagerProxy ()
   {}
 
   public void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                           @Nonnull final ILayoutAreaContentProvider aContentProvider)
+                                           @Nonnull final ILayoutAreaContentProvider <LECTYPE> aContentProvider)
   {
-    if (StringHelper.hasNoText (sAreaID))
-      throw new IllegalArgumentException ("areaID");
-    if (aContentProvider == null)
-      throw new NullPointerException ("contentProvider");
+    ValueEnforcer.notEmpty (sAreaID, "AreaID");
+    ValueEnforcer.notNull (aContentProvider, "ContentProvider");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -89,15 +87,14 @@ public class LayoutManagerProxy implements ILayoutManager
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull @Nonempty final String sAreaID)
+  public IHCNode getContentOfArea (@Nonnull @Nonempty final String sAreaID, @Nonnull final LECTYPE aLEC)
   {
-    if (sAreaID == null)
-      throw new NullPointerException ("areaID");
+    ValueEnforcer.notNull (sAreaID, "AreaID");
 
     m_aRWLock.readLock ().lock ();
     try
     {
-      final ILayoutAreaContentProvider aContentProvider = m_aContentProviders.get (sAreaID);
+      final ILayoutAreaContentProvider <LECTYPE> aContentProvider = m_aContentProviders.get (sAreaID);
       return aContentProvider == null ? null : aContentProvider.getContent (aLEC);
     }
     finally

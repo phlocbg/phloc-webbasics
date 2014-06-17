@@ -34,7 +34,6 @@ import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.html.HCCol;
@@ -55,7 +54,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoRequest extends AbstractWebPageExt
+public class BasePageSysInfoRequest <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -70,7 +69,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
     MSG_VALUE ("Wert", "Value"),
     MSG_DETAILS ("Details", "Details");
 
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
@@ -109,7 +108,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

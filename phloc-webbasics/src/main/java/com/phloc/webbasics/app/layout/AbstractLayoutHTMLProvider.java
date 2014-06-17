@@ -46,7 +46,7 @@ import com.phloc.webbasics.app.html.AbstractHTMLProvider;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
+public abstract class AbstractLayoutHTMLProvider <LECTYPE extends LayoutExecutionContext> extends AbstractHTMLProvider
 {
   public static final boolean DEFAULT_CREATE_LAYOUT_AREA_SPAN = true;
 
@@ -93,11 +93,15 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
    * @return this
    */
   @Nonnull
-  public AbstractLayoutHTMLProvider setCreateLayoutAreaSpan (final boolean bCreateLayoutAreaSpan)
+  public AbstractLayoutHTMLProvider <LECTYPE> setCreateLayoutAreaSpan (final boolean bCreateLayoutAreaSpan)
   {
     m_bCreateLayoutAreaSpan = bCreateLayoutAreaSpan;
     return this;
   }
+
+  @Nonnull
+  protected abstract LECTYPE createLayoutExecutionContext (@Nonnull SimpleWebExecutionContext aSWEC,
+                                                           @Nonnull IMenuItemPage aSelectedMenuItem);
 
   /**
    * Overridable method that is called before the content areas are rendered
@@ -108,21 +112,21 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
    *        HTML element
    */
   @OverrideOnDemand
-  protected void prepareBodyBeforeAreas (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final HCHtml aHtml)
+  protected void prepareBodyBeforeAreas (@Nonnull final LECTYPE aLEC, @Nonnull final HCHtml aHtml)
   {}
 
   /**
    * Determine the content of a single area.
    * 
-   * @param aLEC
-   *        The layout execution context to use. Never <code>null</code>.
    * @param sAreaID
    *        The area ID to be rendered.
+   * @param aLEC
+   *        The layout execution context to use. Never <code>null</code>.
    * @return The node to be rendered for the passed layout area. May be
    *         <code>null</code>.
    */
   @Nullable
-  protected abstract IHCNode getContentOfArea (@Nonnull LayoutExecutionContext aLEC, @Nonnull String sAreaID);
+  protected abstract IHCNode getContentOfArea (@Nonnull String sAreaID, @Nonnull LECTYPE aLEC);
 
   /**
    * Overridable method that is called after the content areas are rendered
@@ -133,14 +137,14 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
    *        HTML element
    */
   @OverrideOnDemand
-  protected void prepareBodyAfterAreas (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final HCHtml aHtml)
+  protected void prepareBodyAfterAreas (@Nonnull final LECTYPE aLEC, @Nonnull final HCHtml aHtml)
   {}
 
   @Override
   protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
-    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aSWEC, aSelectedMenuItem);
+    final LECTYPE aLEC = createLayoutExecutionContext (aSWEC, aSelectedMenuItem);
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
@@ -153,7 +157,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
     {
       try
       {
-        final IHCNode aContent = getContentOfArea (aLEC, sAreaID);
+        final IHCNode aContent = getContentOfArea (sAreaID, aLEC);
         if (m_bCreateLayoutAreaSpan)
         {
           // Create a span around the context

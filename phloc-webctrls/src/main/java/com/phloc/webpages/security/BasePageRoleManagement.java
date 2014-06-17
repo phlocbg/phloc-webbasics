@@ -61,7 +61,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
-public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
+public class BasePageRoleManagement <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <IRole, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -132,13 +132,13 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
 
   @Override
   @Nullable
-  protected IRole getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IRole getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getRoleOfID (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final IRole aRole)
+  protected final boolean isEditAllowed (@Nonnull final WPECTYPE aWPEC, @Nullable final IRole aRole)
   {
     return false;
   }
@@ -169,7 +169,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IRole aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final IRole aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -236,7 +236,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final IRole aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -245,7 +245,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   }
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final IRole aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -262,8 +262,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   }
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final IRole aSelectedObject)
+  protected boolean handleDeleteAction (@Nonnull final WPECTYPE aWPEC, @Nonnull final IRole aSelectedObject)
   {
     if (!canDeleteRole (aSelectedObject))
       return true;
@@ -295,7 +294,7 @@ public class BasePageRoleManagement extends AbstractWebPageFormExt <IRole>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

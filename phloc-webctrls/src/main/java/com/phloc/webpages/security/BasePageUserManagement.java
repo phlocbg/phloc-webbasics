@@ -83,7 +83,7 @@ import com.phloc.webpages.EWebPageText;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
+public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <IUser, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -194,7 +194,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   }
 
   @Nonnull
-  public BasePageUserManagement setDefaultUserLocale (@Nullable final Locale aDefaultUserLocale)
+  public BasePageUserManagement <WPECTYPE> setDefaultUserLocale (@Nullable final Locale aDefaultUserLocale)
   {
     m_aDefaultUserLocale = aDefaultUserLocale;
     return this;
@@ -233,13 +233,13 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @Override
   @Nullable
-  protected IUser getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IUser getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserOfID (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final IUser aUser)
+  protected final boolean isEditAllowed (@Nonnull final WPECTYPE aWPEC, @Nullable final IUser aUser)
   {
     return SecurityUIHelper.canBeEdited (aUser);
   }
@@ -274,7 +274,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
    */
   @Nullable
   @OverrideOnDemand
-  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
+  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final WPECTYPE aWPEC,
                                                           @Nonnull final IUser aCurrentUser,
                                                           @Nonnull final Map <String, ?> aCustomAttrs,
                                                           @Nonnull final IHCTableFormView <?> aTable)
@@ -290,7 +290,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
    *        Current user.
    */
   @OverrideOnDemand
-  protected void onShowSelectedObjectTableStart (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void onShowSelectedObjectTableStart (@Nonnull final WPECTYPE aWPEC,
                                                  @Nonnull final IHCTableFormView <?> aTable,
                                                  @Nonnull final IUser aSelectedObject)
   {
@@ -324,7 +324,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @Override
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IUser aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final IUser aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -454,7 +454,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
    */
   @OverrideOnDemand
   @Nullable
-  protected Map <String, String> validateCustomParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected Map <String, String> validateCustomParameters (@Nonnull final WPECTYPE aWPEC,
                                                            @Nullable final IUser aSelectedObject,
                                                            @Nonnull final FormErrors aFormErrors,
                                                            final boolean bEdit)
@@ -464,7 +464,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @Override
   @SuppressWarnings ("null")
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final IUser aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -628,7 +628,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
    *        The table where new fields should be added. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void showInputFormEnd (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputFormEnd (@Nonnull final WPECTYPE aWPEC,
                                    @Nullable final IUser aSelectedObject,
                                    @Nonnull final HCForm aForm,
                                    final boolean bEdit,
@@ -639,14 +639,14 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
   @SuppressWarnings ("null")
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final IUser aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
                                 @Nonnull final FormErrors aFormErrors)
   {
-    if (bEdit && !isEditAllowed (aSelectedObject))
+    if (bEdit && !isEditAllowed (aWPEC, aSelectedObject))
       throw new IllegalStateException ("Won't work!");
 
     final boolean bIsAdministrator = aSelectedObject != null && aSelectedObject.isAdministrator ();
@@ -757,8 +757,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   }
 
   @Override
-  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
-                                         @Nullable final IUser aSelectedObject)
+  protected boolean handleCustomActions (@Nonnull final WPECTYPE aWPEC, @Nullable final IUser aSelectedObject)
   {
     if (aWPEC.hasAction (ACTION_RESET_PASSWORD) && aSelectedObject != null)
     {
@@ -838,7 +837,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   }
 
   @Nonnull
-  protected IHCNode getTabWithUsers (@Nonnull final WebPageExecutionContext aWPEC,
+  protected IHCNode getTabWithUsers (@Nonnull final WPECTYPE aWPEC,
                                      @Nonnull final Collection <? extends IUser> aUsers,
                                      @Nonnull @Nonempty final String sTableID)
   {
@@ -888,7 +887,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
       final IHCCell <?> aActionCell = aRow.addCell ();
 
       // Edit user
-      if (isEditAllowed (aCurUser))
+      if (isEditAllowed (aWPEC, aCurUser))
         aActionCell.addChild (createEditLink (aWPEC, aCurUser));
       else
         aActionCell.addChild (createEmptyAction ());
@@ -925,7 +924,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

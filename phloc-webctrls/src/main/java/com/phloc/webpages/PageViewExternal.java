@@ -41,7 +41,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * @author Philip Helger
  */
 @ThreadSafe
-public class PageViewExternal extends AbstractPageViewExternal
+public class PageViewExternal <WPECTYPE extends WebPageExecutionContext> extends AbstractPageViewExternal <WPECTYPE>
 {
   protected final IReadableResource m_aResource;
   @GuardedBy ("m_aRWLock")
@@ -141,7 +141,7 @@ public class PageViewExternal extends AbstractPageViewExternal
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final boolean bReadFromResource = isReadEveryTime ();

@@ -35,9 +35,9 @@ import com.phloc.scopes.singleton.ApplicationSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class ApplicationLayoutManager extends ApplicationSingleton implements ILayoutManager
+public final class ApplicationLayoutManager <LECTYPE extends LayoutExecutionContext> extends ApplicationSingleton implements ILayoutManager <LECTYPE>
 {
-  private final LayoutManagerProxy m_aProxy = new LayoutManagerProxy ();
+  private final LayoutManagerProxy <LECTYPE> m_aProxy = new LayoutManagerProxy <LECTYPE> ();
 
   @UsedViaReflection
   @Deprecated
@@ -45,13 +45,13 @@ public final class ApplicationLayoutManager extends ApplicationSingleton impleme
   {}
 
   @Nonnull
-  public static ApplicationLayoutManager getInstance ()
+  public static <LECTYPE extends LayoutExecutionContext> ApplicationLayoutManager <LECTYPE> getInstance ()
   {
     return getApplicationSingleton (ApplicationLayoutManager.class);
   }
 
   public void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                           @Nonnull final ILayoutAreaContentProvider aContentProvider)
+                                           @Nonnull final ILayoutAreaContentProvider <LECTYPE> aContentProvider)
   {
     m_aProxy.registerAreaContentProvider (sAreaID, aContentProvider);
   }
@@ -64,9 +64,9 @@ public final class ApplicationLayoutManager extends ApplicationSingleton impleme
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
+  public IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final LECTYPE aLEC)
   {
-    return m_aProxy.getContentOfArea (aLEC, sAreaID);
+    return m_aProxy.getContentOfArea (sAreaID, aLEC);
   }
 
   @Override

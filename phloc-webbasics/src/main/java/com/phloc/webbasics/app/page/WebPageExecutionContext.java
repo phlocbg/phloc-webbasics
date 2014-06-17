@@ -34,7 +34,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 @NotThreadSafe
 public class WebPageExecutionContext extends LayoutExecutionContext
 {
-  private final IWebPage m_aWebPage;
+  private final IWebPage <? extends WebPageExecutionContext> m_aWebPage;
   private final HCNodeList m_aNodeList = new HCNodeList ();
 
   public WebPageExecutionContext (@Nonnull final WebPageExecutionContext aWPEC)
@@ -42,7 +42,8 @@ public class WebPageExecutionContext extends LayoutExecutionContext
     this (aWPEC, aWPEC.getWebPage ());
   }
 
-  public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final IWebPage aWebPage)
+  public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC,
+                                  @Nonnull final IWebPage <? extends WebPageExecutionContext> aWebPage)
   {
     super (aLEC, aLEC.getSelectedMenuItem ());
     m_aWebPage = ValueEnforcer.notNull (aWebPage, "WebPage");
@@ -52,7 +53,7 @@ public class WebPageExecutionContext extends LayoutExecutionContext
    * @return The invoked web page. Never <code>null</code>.
    */
   @Nonnull
-  public IWebPage getWebPage ()
+  public IWebPage <? extends WebPageExecutionContext> getWebPage ()
   {
     return m_aWebPage;
   }

@@ -24,14 +24,15 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.layout.ILayoutManager;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * Base interface for an application-specific initializer. The methods are
  * called in the correct order they are required for dependencies.
- *
+ * 
  * @author Philip Helger
  */
-public interface IApplicationInitializer
+public interface IApplicationInitializer <LECTYPE extends LayoutExecutionContext>
 {
   /**
    * Init all application specific settings. This method is called before all
@@ -41,7 +42,7 @@ public interface IApplicationInitializer
 
   /**
    * Init all application locales
-   *
+   * 
    * @param aLocaleMgr
    *        Locale manager to use
    */
@@ -49,15 +50,15 @@ public interface IApplicationInitializer
 
   /**
    * Register all layout handler
-   *
+   * 
    * @param aLayoutMgr
    *        The layout manager to use
    */
-  void initLayout (@Nonnull ILayoutManager aLayoutMgr);
+  void initLayout (@Nonnull ILayoutManager <LECTYPE> aLayoutMgr);
 
   /**
    * Create all menu items
-   *
+   * 
    * @param aMenuTree
    *        The menu tree to init
    */
@@ -65,7 +66,7 @@ public interface IApplicationInitializer
 
   /**
    * Register all ajax functions
-   *
+   * 
    * @param aAjaxInvoker
    *        The ajax invoker to use
    */
@@ -73,7 +74,7 @@ public interface IApplicationInitializer
 
   /**
    * Register all actions
-   *
+   * 
    * @param aActionInvoker
    *        The action invoker to use
    */

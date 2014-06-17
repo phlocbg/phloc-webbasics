@@ -55,7 +55,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public class BasePageScopes extends AbstractWebPageExt
+public class BasePageScopes <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -118,8 +118,7 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getGlobalScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
-                                       @Nonnull final IGlobalWebScope aScope)
+  private IHCNode _getGlobalScopeInfo (@Nonnull final WPECTYPE aWPEC, @Nonnull final IGlobalWebScope aScope)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = new HCNodeList ();
@@ -167,8 +166,7 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getApplicationScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
-                                            @Nonnull final IApplicationScope aScope)
+  private IHCNode _getApplicationScopeInfo (@Nonnull final WPECTYPE aWPEC, @Nonnull final IApplicationScope aScope)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = new HCNodeList ();
@@ -214,7 +212,7 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

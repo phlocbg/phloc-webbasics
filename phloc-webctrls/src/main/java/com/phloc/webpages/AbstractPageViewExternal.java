@@ -46,7 +46,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * @author Philip Helger
  */
 @ThreadSafe
-public abstract class AbstractPageViewExternal extends AbstractWebPageExt
+public abstract class AbstractPageViewExternal <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
 
@@ -120,7 +120,7 @@ public abstract class AbstractPageViewExternal extends AbstractWebPageExt
    * @return this
    */
   @Nonnull
-  public final AbstractPageViewExternal setReadEveryTime (final boolean bReadEveryTime)
+  public final AbstractPageViewExternal <WPECTYPE> setReadEveryTime (final boolean bReadEveryTime)
   {
     m_aRWLock.writeLock ().lock ();
     try

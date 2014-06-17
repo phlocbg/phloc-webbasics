@@ -61,7 +61,7 @@ import com.phloc.webpages.UITextFormatter;
  * 
  * @author Philip Helger
  */
-public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
+public class BasePageSessions <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <ISessionScope, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -126,20 +126,19 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
 
   @Override
   @Nullable
-  protected ISessionScope getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected ISessionScope getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return ScopeSessionManager.getInstance ().getSessionScopeOfID (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final ISessionScope aSessionScope)
+  protected final boolean isEditAllowed (@Nonnull final WPECTYPE aWPEC, @Nullable final ISessionScope aSessionScope)
   {
     return false;
   }
 
   @Nonnull
-  private IHCNode _getSessionScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final ISessionScope aScope)
+  private IHCNode _getSessionScopeInfo (@Nonnull final WPECTYPE aWPEC, @Nonnull final ISessionScope aScope)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList ret = new HCNodeList ();
@@ -188,7 +187,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Nonnull
-  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final WebPageExecutionContext aWPEC,
+  private IHCNode _getSessionApplicationScopeInfo (@Nonnull final WPECTYPE aWPEC,
                                                    @Nonnull final ISessionApplicationScope aScope)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -235,7 +234,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final ISessionScope aScope)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final ISessionScope aScope)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -256,7 +255,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final ISessionScope aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -265,7 +264,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final ISessionScope aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -276,7 +275,7 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

@@ -30,6 +30,7 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.web.smtp.failed.FailedMailQueue;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
@@ -102,126 +103,120 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
-                                                  @Nonnull final IMenuItem aParent,
-                                                  @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                  @Nonnull final IAuditManager aAuditManager,
-                                                  @Nonnull final FailedMailQueue aFailedMailQueue)
+  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
+                                                                                             @Nonnull final IMenuItem aParent,
+                                                                                             @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                             @Nonnull final IAuditManager aAuditManager,
+                                                                                             @Nonnull final FailedMailQueue aFailedMailQueue)
   {
     final IMenuItemPage aAdminMonitoring = aMenuTree.createItem (aParent,
-                                                                 new PageShowChildren (MENU_ADMIN_MONITORING,
-                                                                                       EWebPageText.PAGE_NAME_MONITORING.getAsMLT (),
-                                                                                       aMenuTree))
+                                                                 new PageShowChildren <WPECTYPE> (MENU_ADMIN_MONITORING,
+                                                                                                  EWebPageText.PAGE_NAME_MONITORING.getAsMLT (),
+                                                                                                  aMenuTree))
                                                     .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminMonitoring, new BasePageAudit (MENU_ADMIN_MONITORING_AUDIT, aAuditManager))
+    aMenuTree.createItem (aAdminMonitoring, new BasePageAudit <WPECTYPE> (MENU_ADMIN_MONITORING_AUDIT, aAuditManager))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring,
-                          new BasePageFailedMails (MENU_ADMIN_MONITORING_FAILEDMAILS, aFailedMailQueue))
+                          new BasePageFailedMails <WPECTYPE> (MENU_ADMIN_MONITORING_FAILEDMAILS, aFailedMailQueue))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminMonitoring, new BasePageLoginInfo (MENU_ADMIN_MONITORING_LOGININFO))
+    aMenuTree.createItem (aAdminMonitoring, new BasePageLoginInfo <WPECTYPE> (MENU_ADMIN_MONITORING_LOGININFO))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminMonitoring, new BasePageScopes (MENU_ADMIN_MONITORING_SCOPES))
+    aMenuTree.createItem (aAdminMonitoring, new BasePageScopes <WPECTYPE> (MENU_ADMIN_MONITORING_SCOPES))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminMonitoring, new BasePageSessions (MENU_ADMIN_MONITORING_SESSIONS))
+    aMenuTree.createItem (aAdminMonitoring, new BasePageSessions <WPECTYPE> (MENU_ADMIN_MONITORING_SESSIONS))
              .setDisplayFilter (aDisplayFilter);
     return aAdminMonitoring;
   }
 
   @Nonnull
-  public static IMenuItemPage addSecurityItems (@Nonnull final IMenuTree aMenuTree,
-                                                @Nonnull final IMenuItem aParent,
-                                                @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                @Nonnull final Locale aDefaultLocale)
+  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSecurityItems (@Nonnull final IMenuTree aMenuTree,
+                                                                                           @Nonnull final IMenuItem aParent,
+                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                           @Nonnull final Locale aDefaultLocale)
   {
     final IMenuItemPage aAdminSecurity = aMenuTree.createItem (aParent,
-                                                               new PageShowChildren (MENU_ADMIN_SECURITY,
-                                                                                     EWebPageText.PAGE_NAME_SECURITY.getAsMLT (),
-                                                                                     aMenuTree))
+                                                               new PageShowChildren <WPECTYPE> (MENU_ADMIN_SECURITY,
+                                                                                                EWebPageText.PAGE_NAME_SECURITY.getAsMLT (),
+                                                                                                aMenuTree))
                                                   .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSecurity,
-                          new BasePageUserManagement (MENU_ADMIN_SECURITY_USER).setDefaultUserLocale (aDefaultLocale))
+                          new BasePageUserManagement <WPECTYPE> (MENU_ADMIN_SECURITY_USER).setDefaultUserLocale (aDefaultLocale))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSecurity, new BasePageUserGroupManagement (MENU_ADMIN_SECURITY_USER_GROUP))
+    aMenuTree.createItem (aAdminSecurity, new BasePageUserGroupManagement <WPECTYPE> (MENU_ADMIN_SECURITY_USER_GROUP))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSecurity, new BasePageRoleManagement (MENU_ADMIN_SECURITY_ROLE))
+    aMenuTree.createItem (aAdminSecurity, new BasePageRoleManagement <WPECTYPE> (MENU_ADMIN_SECURITY_ROLE))
              .setDisplayFilter (aDisplayFilter);
     return aAdminSecurity;
   }
 
   @Nonnull
-  @Deprecated
-  public static IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
-                                                @Nonnull final IMenuItem aParent,
-                                                @Nullable final IFilter <IMenuObject> aDisplayFilter)
-  {
-    return addSettingsItems (aMenuTree, aParent, aDisplayFilter, (NamedSMTPSettingsManager) null);
-  }
-
-  @Nonnull
-  public static IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
-                                                @Nonnull final IMenuItem aParent,
-                                                @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
+  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
+                                                                                           @Nonnull final IMenuItem aParent,
+                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                           @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
   {
     final IMenuItemPage aAdminSettings = aMenuTree.createItem (aParent,
-                                                               new PageShowChildren (MENU_ADMIN_SETTINGS,
-                                                                                     EWebPageText.PAGE_NAME_SETTINGS.getAsMLT (),
-                                                                                     aMenuTree))
+                                                               new PageShowChildren <WPECTYPE> (MENU_ADMIN_SETTINGS,
+                                                                                                EWebPageText.PAGE_NAME_SETTINGS.getAsMLT (),
+                                                                                                aMenuTree))
                                                   .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSettings, new BasePageSettingsGlobal (MENU_ADMIN_SETTINGS_GLOBAL))
+    aMenuTree.createItem (aAdminSettings, new BasePageSettingsGlobal <WPECTYPE> (MENU_ADMIN_SETTINGS_GLOBAL))
              .setDisplayFilter (aDisplayFilter);
 
     if (aNamedSMTPSettingsMgr != null)
-      aMenuTree.createItem (aAdminSettings, new BasePageSettingsSMTP (aNamedSMTPSettingsMgr, MENU_ADMIN_SETTINGS_SMTP))
+      aMenuTree.createItem (aAdminSettings,
+                            new BasePageSettingsSMTP <WPECTYPE> (aNamedSMTPSettingsMgr, MENU_ADMIN_SETTINGS_SMTP))
                .setDisplayFilter (aDisplayFilter);
 
     return aAdminSettings;
   }
 
   @Nonnull
-  public static IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
-                                               @Nonnull final IMenuItem aParent,
-                                               @Nullable final IFilter <IMenuObject> aDisplayFilter)
+  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
+                                                                                          @Nonnull final IMenuItem aParent,
+                                                                                          @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     final IMenuItemPage aAdminSysInfo = aMenuTree.createItem (aParent,
-                                                              new PageShowChildren (MENU_ADMIN_SYSINFO,
-                                                                                    EWebPageText.PAGE_NAME_SYSINFO.getAsMLT (),
-                                                                                    aMenuTree))
+                                                              new PageShowChildren <WPECTYPE> (MENU_ADMIN_SYSINFO,
+                                                                                               EWebPageText.PAGE_NAME_SYSINFO.getAsMLT (),
+                                                                                               aMenuTree))
                                                  .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoChangeLogs (MENU_ADMIN_SYSINFO_CHANGELOGS))
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoChangeLogs <WPECTYPE> (MENU_ADMIN_SYSINFO_CHANGELOGS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoEnvironmentVariables (MENU_ADMIN_SYSINFO_ENVVARS))
+    aMenuTree.createItem (aAdminSysInfo,
+                          new BasePageSysInfoEnvironmentVariables <WPECTYPE> (MENU_ADMIN_SYSINFO_ENVVARS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoNetwork (MENU_ADMIN_SYSINFO_NETWORK))
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoNetwork <WPECTYPE> (MENU_ADMIN_SYSINFO_NETWORK))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoRequest (MENU_ADMIN_SYSINFO_REQUEST))
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoRequest <WPECTYPE> (MENU_ADMIN_SYSINFO_REQUEST))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoSystemProperties (MENU_ADMIN_SYSINFO_SYSPROPS))
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoSystemProperties <WPECTYPE> (MENU_ADMIN_SYSINFO_SYSPROPS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThirdPartyLibraries (MENU_ADMIN_SYSINFO_THIRDPARTYLIBS))
+    aMenuTree.createItem (aAdminSysInfo,
+                          new BasePageSysInfoThirdPartyLibraries <WPECTYPE> (MENU_ADMIN_SYSINFO_THIRDPARTYLIBS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThreads (MENU_ADMIN_SYSINFO_THREADS))
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThreads <WPECTYPE> (MENU_ADMIN_SYSINFO_THREADS))
              .setDisplayFilter (aDisplayFilter);
     return aAdminSysInfo;
   }
 
   @Nonnull
-  public static IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
-                                            @Nonnull final IMenuItem aParent,
-                                            @Nullable final IFilter <IMenuObject> aDisplayFilter)
+  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
+                                                                                       @Nonnull final IMenuItem aParent,
+                                                                                       @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     final IMenuItemPage aAdminData = aMenuTree.createItem (aParent,
-                                                           new PageShowChildren (MENU_ADMIN_DATA,
-                                                                                 EWebPageText.PAGE_NAME_DATA.getAsMLT (),
-                                                                                 aMenuTree))
+                                                           new PageShowChildren <WPECTYPE> (MENU_ADMIN_DATA,
+                                                                                            EWebPageText.PAGE_NAME_DATA.getAsMLT (),
+                                                                                            aMenuTree))
                                               .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminData, new BasePageDataCountries (MENU_ADMIN_DATA_COUNTRIES))
+    aMenuTree.createItem (aAdminData, new BasePageDataCountries <WPECTYPE> (MENU_ADMIN_DATA_COUNTRIES))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminData, new BasePageDataCurrencies (MENU_ADMIN_DATA_CURRENCIES))
+    aMenuTree.createItem (aAdminData, new BasePageDataCurrencies <WPECTYPE> (MENU_ADMIN_DATA_CURRENCIES))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminData, new BasePageDataLanguages (MENU_ADMIN_DATA_LANGUAGES))
+    aMenuTree.createItem (aAdminData, new BasePageDataLanguages <WPECTYPE> (MENU_ADMIN_DATA_LANGUAGES))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminData, new BasePageDataTimeZones (MENU_ADMIN_DATA_TIMEZONES))
+    aMenuTree.createItem (aAdminData, new BasePageDataTimeZones <WPECTYPE> (MENU_ADMIN_DATA_TIMEZONES))
              .setDisplayFilter (aDisplayFilter);
     return aAdminData;
   }

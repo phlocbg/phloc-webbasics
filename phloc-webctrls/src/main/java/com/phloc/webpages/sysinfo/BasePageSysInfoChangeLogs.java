@@ -35,7 +35,6 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.PDTFactory;
@@ -55,7 +54,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
+public class BasePageSysInfoChangeLogs <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -65,7 +64,7 @@ public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
     MSG_HEADER_CATEGORY ("Kategorie", "Category"),
     MSG_HEADER_CHANGE ("Änderung", "Change");
 
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
@@ -116,7 +115,7 @@ public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

@@ -52,8 +52,9 @@ import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageForm;
 
+// For GlobalMenuTree
 @SuppressWarnings ("deprecation")
-public class BasePageSavedStates extends AbstractWebPageForm <FormState>
+public class BasePageSavedStates <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <FormState, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -118,25 +119,24 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
   @Override
   @Nullable
-  protected FormState getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected FormState getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return FormStateManager.getInstance ().getFormStateOfID (sID);
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                     @Nonnull final FormState aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final FormState aSelectedObject)
   {}
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final FormState aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {}
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final FormState aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -145,8 +145,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   {}
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final FormState aSelectedObject)
+  protected boolean handleDeleteAction (@Nonnull final WPECTYPE aWPEC, @Nonnull final FormState aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -172,8 +171,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   }
 
   @Override
-  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
-                                         @Nullable final FormState aSelectedObject)
+  protected boolean handleCustomActions (@Nonnull final WPECTYPE aWPEC, @Nullable final FormState aSelectedObject)
   {
     if (aWPEC.hasAction (ACTION_DELETE_ALL))
     {
@@ -203,7 +201,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

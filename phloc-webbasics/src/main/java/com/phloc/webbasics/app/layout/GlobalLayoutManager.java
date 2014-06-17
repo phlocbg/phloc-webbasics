@@ -36,9 +36,9 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  */
 @ThreadSafe
 @Deprecated
-public final class GlobalLayoutManager extends GlobalSingleton implements ILayoutManager
+public final class GlobalLayoutManager <LECTYPE extends LayoutExecutionContext> extends GlobalSingleton implements ILayoutManager <LECTYPE>
 {
-  private final LayoutManagerProxy m_aProxy = new LayoutManagerProxy ();
+  private final LayoutManagerProxy <LECTYPE> m_aProxy = new LayoutManagerProxy <LECTYPE> ();
 
   @UsedViaReflection
   @Deprecated
@@ -46,13 +46,13 @@ public final class GlobalLayoutManager extends GlobalSingleton implements ILayou
   {}
 
   @Nonnull
-  public static GlobalLayoutManager getInstance ()
+  public static <LECTYPE extends LayoutExecutionContext> GlobalLayoutManager <LECTYPE> getInstance ()
   {
     return getGlobalSingleton (GlobalLayoutManager.class);
   }
 
   public void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                           @Nonnull final ILayoutAreaContentProvider aContentProvider)
+                                           @Nonnull final ILayoutAreaContentProvider <LECTYPE> aContentProvider)
   {
     m_aProxy.registerAreaContentProvider (sAreaID, aContentProvider);
   }
@@ -65,9 +65,9 @@ public final class GlobalLayoutManager extends GlobalSingleton implements ILayou
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
+  public IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final LECTYPE aLEC)
   {
-    return m_aProxy.getContentOfArea (aLEC, sAreaID);
+    return m_aProxy.getContentOfArea (sAreaID, aLEC);
   }
 
   @Override

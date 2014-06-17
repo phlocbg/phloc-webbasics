@@ -37,7 +37,6 @@ import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
@@ -81,7 +80,7 @@ import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
-public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSettings>
+public class BasePageSettingsSMTP <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <NamedSMTPSettings, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -127,7 +126,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
     ERR_BODY_INVALID ("Es muss eine gültige Nachricht angegeben werden.", "A valid email message must be provided"),
     SUCCESS_TEST_MAIL ("Die Test-Nachricht wurde zum Versand übermittelt.", "The test email message was scheduled for sending.");
 
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
@@ -211,8 +210,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
 
   @Override
   @Nullable
-  protected NamedSMTPSettings getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                                 @Nullable final String sID)
+  protected NamedSMTPSettings getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return m_aMgr.getSettings (sID);
   }
@@ -223,8 +221,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                     @Nonnull final NamedSMTPSettings aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final NamedSMTPSettings aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -278,7 +275,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final NamedSMTPSettings aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -363,7 +360,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
 
   @SuppressWarnings ("null")
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final NamedSMTPSettings aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -486,8 +483,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   }
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final NamedSMTPSettings aSelectedObject)
+  protected boolean handleDeleteAction (@Nonnull final WPECTYPE aWPEC, @Nonnull final NamedSMTPSettings aSelectedObject)
   {
     if (!_canDelete (aSelectedObject))
       throw new IllegalStateException ("Cannot delete this object!");
@@ -519,7 +515,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   }
 
   @Override
-  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+  protected boolean handleCustomActions (@Nonnull final WPECTYPE aWPEC,
                                          @Nullable final NamedSMTPSettings aSelectedObject)
   {
     if (aWPEC.hasAction (ACTION_TEST_MAIL) && aSelectedObject != null)
@@ -593,7 +589,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSetti
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

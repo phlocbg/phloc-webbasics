@@ -27,7 +27,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public interface ILayoutAreaContentProvider
+public interface ILayoutAreaContentProvider <LECTYPE extends LayoutExecutionContext>
 {
   /**
    * @param aLEC
@@ -35,5 +35,5 @@ public interface ILayoutAreaContentProvider
    * @return The content of the area based on the current state.
    */
   @Nullable
-  IHCNode getContent (@Nonnull LayoutExecutionContext aLEC);
+  IHCNode getContent (@Nonnull LECTYPE aLEC);
 }

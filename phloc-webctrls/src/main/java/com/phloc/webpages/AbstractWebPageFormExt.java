@@ -43,7 +43,7 @@ import com.phloc.webbasics.mgr.MetaSystemManager;
  * @param <DATATYPE>
  *        The data type of the object to be handled.
  */
-public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
+public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>, WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <DATATYPE, WPECTYPE>
 {
   public AbstractWebPageFormExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
@@ -102,7 +102,7 @@ public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>> 
   @Override
   @Nonnull
   @OverrideOnDemand
-  protected EContinue beforeProcessing (@Nonnull final WebPageExecutionContext aWPEC,
+  protected EContinue beforeProcessing (@Nonnull final WPECTYPE aWPEC,
                                         @Nullable final DATATYPE aSelectedObject,
                                         @Nullable final EWebPageFormAction eFormAction)
   {

@@ -24,14 +24,15 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.layout.ILayoutManager;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * Default implementation class of {@link IApplicationInitializer} doing
  * nothing. Use this as the base class for your implementation.
- *
+ * 
  * @author Philip Helger
  */
-public class DefaultApplicationInitializer implements IApplicationInitializer
+public class DefaultApplicationInitializer <LECTYPE extends LayoutExecutionContext> implements IApplicationInitializer <LECTYPE>
 {
   public void initApplicationSettings ()
   {}
@@ -39,7 +40,7 @@ public class DefaultApplicationInitializer implements IApplicationInitializer
   public void initLocales (@Nonnull final ILocaleManager aLocaleMgr)
   {}
 
-  public void initLayout (@Nonnull final ILayoutManager aLayoutMgr)
+  public void initLayout (@Nonnull final ILayoutManager <LECTYPE> aLayoutMgr)
   {}
 
   public void initMenu (@Nonnull final IMenuTree aMenuTree)

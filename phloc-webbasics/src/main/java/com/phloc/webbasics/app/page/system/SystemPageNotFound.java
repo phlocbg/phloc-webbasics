@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.text.ISimpleMultiLingualText;
-import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.html.HCH1;
@@ -41,7 +39,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * 
  * @author Philip Helger
  */
-public class SystemPageNotFound extends AbstractWebPage
+public class SystemPageNotFound <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
 {
   public static final String PAGEID_SYSTEM_NOTFOUND = "system.notfound";
   private static final Logger s_aLogger = LoggerFactory.getLogger (SystemPageNotFound.class);
@@ -53,7 +51,7 @@ public class SystemPageNotFound extends AbstractWebPage
     TITLE ("Seite nicht gefunden", "Page not found"),
     MESSAGE ("Die von Ihnen gesuchte Seite existiert leider nicht!", "The page you are looking for does not exist!");
 
-    private final ISimpleMultiLingualText m_aTP;
+    private final TextProvider m_aTP;
 
     private ETextBase (@Nonnull final String sDE, @Nonnull final String sEN)
     {
@@ -67,21 +65,13 @@ public class SystemPageNotFound extends AbstractWebPage
     }
   }
 
-  private static final SystemPageNotFound s_aInstance = new SystemPageNotFound ();
-
-  protected SystemPageNotFound ()
+  public SystemPageNotFound ()
   {
-    super (PAGEID_SYSTEM_NOTFOUND, new ReadonlyMultiLingualText (ETextBase.PAGENAME.m_aTP));
-  }
-
-  @Nonnull
-  public static SystemPageNotFound getInstance ()
-  {
-    return s_aInstance;
+    super (PAGEID_SYSTEM_NOTFOUND, ETextBase.PAGENAME.m_aTP);
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

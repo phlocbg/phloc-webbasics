@@ -26,14 +26,15 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.html.hc.IHCNode;
 
-public interface ILayoutManager
+public interface ILayoutManager <LECTYPE extends LayoutExecutionContext>
 {
-  void registerAreaContentProvider (@Nonnull String sAreaID, @Nonnull ILayoutAreaContentProvider aContentProvider);
+  void registerAreaContentProvider (@Nonnull String sAreaID,
+                                    @Nonnull ILayoutAreaContentProvider <LECTYPE> aContentProvider);
 
   @Nonnull
   @ReturnsMutableCopy
   List <String> getAllAreaIDs ();
 
   @Nullable
-  IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull @Nonempty String sAreaID);
+  IHCNode getContentOfArea (@Nonnull @Nonempty String sAreaID, @Nonnull LECTYPE aLEC);
 }

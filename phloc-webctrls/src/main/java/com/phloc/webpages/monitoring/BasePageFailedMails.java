@@ -92,7 +92,7 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  * 
  * @author Philip Helger
  */
-public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
+public class BasePageFailedMails <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <FailedMailData, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -183,20 +183,20 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected boolean isEditAllowed (@Nullable final FailedMailData aSelectedObject)
+  protected boolean isEditAllowed (@Nonnull final WPECTYPE aWPEC, @Nullable final FailedMailData aSelectedObject)
   {
     return false;
   }
 
   @Override
   @Nullable
-  protected FailedMailData getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected FailedMailData getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return m_aFailedMailQueue.getFailedMailOfID (sID);
   }
 
   @Override
-  protected void modifyViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void modifyViewToolbar (@Nonnull final WPECTYPE aWPEC,
                                     @Nonnull final FailedMailData aSelectedObject,
                                     @Nonnull final IButtonToolbar <?> aToolbar)
   {
@@ -227,8 +227,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                     @Nonnull final FailedMailData aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final FailedMailData aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -317,7 +316,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final FailedMailData aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -326,7 +325,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final FailedMailData aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -337,8 +336,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final FailedMailData aSelectedObject)
+  protected boolean handleDeleteAction (@Nonnull final WPECTYPE aWPEC, @Nonnull final FailedMailData aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -353,8 +351,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
-                                         @Nullable final FailedMailData aSelectedObject)
+  protected boolean handleCustomActions (@Nonnull final WPECTYPE aWPEC, @Nullable final FailedMailData aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -405,7 +402,7 @@ public class BasePageFailedMails extends AbstractWebPageFormExt <FailedMailData>
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

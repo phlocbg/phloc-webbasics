@@ -42,22 +42,23 @@ import com.phloc.webbasics.action.ApplicationActionManager;
 import com.phloc.webbasics.ajax.ApplicationAjaxManager;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webbasics.app.layout.ApplicationLayoutManager;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataManager;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Callbacks for the application server
- *
+ * 
  * @author Philip Helger
  */
-public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistics
+public abstract class WebAppListenerMultiApp <LECTYPE extends LayoutExecutionContext> extends WebAppListenerWithStatistics
 {
   public static final int DEFAULT_PASSWORD_MIN_LENGTH = 6;
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListenerMultiApp.class);
 
   @Nonnull
   @Nonempty
-  protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
+  protected abstract Map <String, IApplicationInitializer <LECTYPE>> getAllInitializers ();
 
   /**
    * Set global system properties, after the content was initialized but before
@@ -89,12 +90,12 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
     initGlobals ();
 
     // Determine all initializers
-    final Map <String, IApplicationInitializer> aIniter = getAllInitializers ();
+    final Map <String, IApplicationInitializer <LECTYPE>> aIniter = getAllInitializers ();
     if (ContainerHelper.isEmpty (aIniter))
       throw new IllegalStateException ("No application initializers provided!");
 
     // Invoke all initializers
-    for (final Map.Entry <String, IApplicationInitializer> aEntry : aIniter.entrySet ())
+    for (final Map.Entry <String, IApplicationInitializer <LECTYPE>> aEntry : aIniter.entrySet ())
     {
       final String sAppID = aEntry.getKey ();
       WebScopeManager.onRequestBegin (sAppID,
@@ -102,7 +103,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
                                       new MockHttpServletResponse ());
       try
       {
-        final IApplicationInitializer aInitializer = aEntry.getValue ();
+        final IApplicationInitializer <LECTYPE> aInitializer = aEntry.getValue ();
 
         // Set per-application settings
         aInitializer.initApplicationSettings ();
@@ -111,7 +112,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
         aInitializer.initLocales (ApplicationLocaleManager.getInstance ());
 
         // Create the application layouts
-        aInitializer.initLayout (ApplicationLayoutManager.getInstance ());
+        aInitializer.initLayout (ApplicationLayoutManager.<LECTYPE> getInstance ());
 
         // Create all menu items
         aInitializer.initMenu (ApplicationMenuTree.getTree ());

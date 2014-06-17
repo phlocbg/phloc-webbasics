@@ -49,7 +49,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * @author Philip Helger
  */
 @ThreadSafe
-public class PageViewExternalMultiLingual extends AbstractPageViewExternal
+public class PageViewExternalMultiLingual <WPECTYPE extends WebPageExecutionContext> extends AbstractPageViewExternal <WPECTYPE>
 {
   @NotThreadSafe
   private static final class ContentPerLocale implements Serializable
@@ -228,7 +228,7 @@ public class PageViewExternalMultiLingual extends AbstractPageViewExternal
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();

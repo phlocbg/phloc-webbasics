@@ -40,16 +40,16 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
-public class PageShowChildren extends AbstractWebPage
+public class PageShowChildren <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
 {
-  private static final class ShowChildrenCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+  private static final class ShowChildrenCallback <WPECTYPE extends WebPageExecutionContext> extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
-    private final WebPageExecutionContext m_aWPEC;
+    private final WPECTYPE m_aWPEC;
     private final NonBlockingStack <HCUL> m_aStack;
     private final PageShowChildrenRenderer m_aRenderer;
 
     ShowChildrenCallback (@Nonnull final HCUL aUL,
-                          @Nonnull final WebPageExecutionContext aWPEC,
+                          @Nonnull final WPECTYPE aWPEC,
                           @Nonnull final PageShowChildrenRenderer aRenderer)
     {
       ValueEnforcer.notNull (aUL, "UL");
@@ -156,7 +156,7 @@ public class PageShowChildren extends AbstractWebPage
   }
 
   @Override
-  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
@@ -164,7 +164,7 @@ public class PageShowChildren extends AbstractWebPage
     if (aMenuTreeItem != null && aMenuTreeItem.getData () instanceof IMenuItem)
     {
       final HCUL aUL = createRootUL ();
-      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aWPEC, m_aRenderer));
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback <WPECTYPE> (aUL, aWPEC, m_aRenderer));
       aNodeList.addChild (aUL);
     }
   }

@@ -49,7 +49,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractWebPage extends AbstractPage implements IWebPage
+public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext> extends AbstractPage implements IWebPage <WPECTYPE>
 {
   /** The CSS class to be applied to the help div */
   public static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
@@ -137,7 +137,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   @Nonnull
-  public AbstractWebPage setIcon (@Nullable final IWebPageIcon aIcon)
+  public AbstractWebPage <WPECTYPE> setIcon (@Nullable final IWebPageIcon aIcon)
   {
     m_aIcon = aIcon;
     return this;
@@ -145,14 +145,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 
   @Nullable
   @OverrideOnDemand
-  public String getHeaderText (@Nonnull final WebPageExecutionContext aWPEC)
+  public String getHeaderText (@Nonnull final WPECTYPE aWPEC)
   {
     return getDisplayText (aWPEC.getDisplayLocale ());
   }
 
   @Nullable
   @OverrideOnDemand
-  public IHCNode getHeaderNode (@Nonnull final WebPageExecutionContext aWPEC)
+  public IHCNode getHeaderNode (@Nonnull final WPECTYPE aWPEC)
   {
     final String sText = getHeaderText (aWPEC);
     if (StringHelper.hasNoText (sText))
@@ -218,7 +218,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    */
   @OverrideOnDemand
   @Nonnull
-  protected EValidity isValidToDisplayPage (@Nonnull final WebPageExecutionContext aWPEC)
+  protected EValidity isValidToDisplayPage (@Nonnull final WPECTYPE aWPEC)
   {
     return EValidity.VALID;
   }
@@ -238,7 +238,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.
    */
-  protected abstract void fillContent (@Nonnull WebPageExecutionContext aWPEC);
+  protected abstract void fillContent (@Nonnull WPECTYPE aWPEC);
 
   /**
    * This method is called after the main
@@ -282,7 +282,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode getHelpIconNode (@Nonnull final WebPageExecutionContext aWPEC)
+  protected IHCNode getHelpIconNode (@Nonnull final WPECTYPE aWPEC)
   {
     final IRequestWebScopeWithoutResponse aRequestScope = aWPEC.getRequestScope ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -303,7 +303,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return <code>true</code> if help is available, <code>false</code> if not
    */
   @OverrideOnDemand
-  public boolean isHelpAvailable (@Nonnull final WebPageExecutionContext aWPEC)
+  public boolean isHelpAvailable (@Nonnull final WPECTYPE aWPEC)
   {
     return false;
   }
@@ -318,7 +318,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    *        The help node to be inserted. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void insertHelpNode (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IHCNode aHelpNode)
+  protected void insertHelpNode (@Nonnull final WPECTYPE aWPEC, @Nonnull final IHCNode aHelpNode)
   {
     // Add the help icon as the first child of the resulting node list
     aWPEC.getNodeList ().addChild (0, aHelpNode);
@@ -329,7 +329,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * {@link #fillContent(WebPageExecutionContext)} method and creating the help
    * node if desired.
    */
-  public final void getContent (@Nonnull final WebPageExecutionContext aWPEC)
+  public final void getContent (@Nonnull final WPECTYPE aWPEC)
   {
     if (isValidToDisplayPage (aWPEC).isValid ())
     {

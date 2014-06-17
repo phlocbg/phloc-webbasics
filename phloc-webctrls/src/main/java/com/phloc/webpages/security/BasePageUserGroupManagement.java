@@ -68,7 +68,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
-public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGroup>
+public class BasePageUserGroupManagement <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <IUserGroup, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -154,7 +154,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
 
   @Override
   @Nullable
-  protected IUserGroup getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IUserGroup getSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserGroupOfID (sID);
   }
@@ -185,8 +185,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                     @Nonnull final IUserGroup aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WPECTYPE aWPEC, @Nonnull final IUserGroup aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -284,7 +283,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   }
 
   @Override
-  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void validateAndSaveInputParameters (@Nonnull final WPECTYPE aWPEC,
                                                  @Nullable final IUserGroup aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
@@ -341,7 +340,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   }
 
   @Override
-  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WPECTYPE aWPEC,
                                 @Nullable final IUserGroup aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
@@ -379,8 +378,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   }
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
-                                        @Nonnull final IUserGroup aSelectedObject)
+  protected boolean handleDeleteAction (@Nonnull final WPECTYPE aWPEC, @Nonnull final IUserGroup aSelectedObject)
   {
     if (!canDeleteUserGroup (aSelectedObject))
       return true;
@@ -412,7 +410,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageFormExt <IUserGr
   }
 
   @Override
-  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
+  protected void showListOfExistingObjects (@Nonnull final WPECTYPE aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();

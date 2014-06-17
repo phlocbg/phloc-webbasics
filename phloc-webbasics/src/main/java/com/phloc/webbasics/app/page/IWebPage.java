@@ -28,7 +28,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public interface IWebPage extends IPage
+public interface IWebPage <WPECTYPE extends WebPageExecutionContext> extends IPage
 {
   /**
    * @return The icon for the web page. May be <code>null</code>.
@@ -44,7 +44,7 @@ public interface IWebPage extends IPage
    * @return The header/headline of the page. May be <code>null</code>.
    */
   @Nullable
-  String getHeaderText (@Nonnull WebPageExecutionContext aWPEC);
+  String getHeaderText (@Nonnull WPECTYPE aWPEC);
 
   /**
    * Get the headline of the page. By default it is
@@ -56,11 +56,11 @@ public interface IWebPage extends IPage
    *         indicate that no rendering is required.
    */
   @Nullable
-  IHCNode getHeaderNode (@Nonnull WebPageExecutionContext aWPEC);
+  IHCNode getHeaderNode (@Nonnull WPECTYPE aWPEC);
 
   /**
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.
    */
-  void getContent (@Nonnull WebPageExecutionContext aWPEC);
+  void getContent (@Nonnull WPECTYPE aWPEC);
 }

@@ -29,11 +29,11 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public class LayoutHTMLProvider extends AbstractLayoutHTMLProvider
+public abstract class LayoutHTMLProvider <LECTYPE extends LayoutExecutionContext> extends AbstractLayoutHTMLProvider <LECTYPE>
 {
-  private final ILayoutManager m_aLayoutMgr;
+  private final ILayoutManager <LECTYPE> m_aLayoutMgr;
 
-  public LayoutHTMLProvider (@Nonnull final ILayoutManager aLayoutMgr)
+  public LayoutHTMLProvider (@Nonnull final ILayoutManager <LECTYPE> aLayoutMgr)
   {
     super (aLayoutMgr.getAllAreaIDs ());
 
@@ -45,28 +45,18 @@ public class LayoutHTMLProvider extends AbstractLayoutHTMLProvider
    *         <code>null</code>.
    */
   @Nonnull
-  public final ILayoutManager getLayoutManager ()
+  public final ILayoutManager <LECTYPE> getLayoutManager ()
   {
     return m_aLayoutMgr;
   }
 
-  /**
-   * Determine the content of a single area.
-   * 
-   * @param aLEC
-   *        The layout execution context to use. Never <code>null</code>.
-   * @param sAreaID
-   *        The area ID to be rendered.
-   * @return The node to be rendered for the passed layout area. May be
-   *         <code>null</code>.
-   */
   @Override
   @OverrideOnDemand
   @Nullable
-  protected IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
+  protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final LECTYPE aLEC)
   {
     // By default the layout manager is used
-    return m_aLayoutMgr.getContentOfArea (aLEC, sAreaID);
+    return m_aLayoutMgr.getContentOfArea (sAreaID, aLEC);
   }
 
   @Override
