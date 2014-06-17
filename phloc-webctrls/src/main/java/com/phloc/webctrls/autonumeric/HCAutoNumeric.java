@@ -31,11 +31,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
-import com.phloc.commons.microdom.IMicroNode;
-import com.phloc.commons.microdom.impl.MicroContainer;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
+import com.phloc.html.hc.IHCHasChildren;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -410,18 +409,18 @@ public class HCAutoNumeric extends HCEdit
   }
 
   @Override
-  protected IMicroNode internalConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
-  {
-    registerExternalResources ();
-
-    final IMicroNode aEdit = super.internalConvertToNode (aConversionSettings);
-    final IMicroNode aJS = new HCAutoNumericJS (this).convertToNode (aConversionSettings);
-    return new MicroContainer (aEdit, aJS);
-  }
-
-  public static void registerExternalResources ()
+  public void onAdded (@Nonnull final IHCHasChildren aParent)
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
+    ((IHCNodeWithChildren <?>) aParent).addChild (new HCAutoNumericJS (this));
+  }
+
+  @Override
+  public void onRemoved (@Nonnull final IHCHasChildren aParent)
+  {
+    PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
+    PerRequestJSIncludes.unregisterJSIncludeFromThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
+    ((IHCNodeWithChildren <?>) aParent).removeChild (new HCAutoNumericJS (this));
   }
 }
