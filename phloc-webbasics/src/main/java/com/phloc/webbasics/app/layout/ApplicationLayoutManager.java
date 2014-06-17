@@ -44,6 +44,7 @@ public final class ApplicationLayoutManager <LECTYPE extends LayoutExecutionCont
   public ApplicationLayoutManager ()
   {}
 
+  @SuppressWarnings ("unchecked")
   @Nonnull
   public static <LECTYPE extends LayoutExecutionContext> ApplicationLayoutManager <LECTYPE> getInstance ()
   {

@@ -45,6 +45,7 @@ public final class GlobalLayoutManager <LECTYPE extends LayoutExecutionContext> 
   public GlobalLayoutManager ()
   {}
 
+  @SuppressWarnings ("unchecked")
   @Nonnull
   public static <LECTYPE extends LayoutExecutionContext> GlobalLayoutManager <LECTYPE> getInstance ()
   {
