@@ -32,6 +32,7 @@ import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
@@ -332,8 +333,8 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
                                                                                                        HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                  SecurityUI.getUserDisplayName (aSelectedObject,
-                                                                                                                 aDisplayLocale)));
+                                                                                  SecurityUtils.getUserDisplayName (aSelectedObject,
+                                                                                                                    aDisplayLocale)));
     onShowSelectedObjectTableStart (aWPEC, aTable, aSelectedObject);
     if (!useEmailAddressAsLoginName ())
     {
@@ -656,8 +657,8 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
                                                                                            HCCol.star (),
                                                                                            new HCCol (20)));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                      SecurityUI.getUserDisplayName (aSelectedObject,
-                                                                                                                     aDisplayLocale))
+                                                                                      SecurityUtils.getUserDisplayName (aSelectedObject,
+                                                                                                                        aDisplayLocale))
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     if (!useEmailAddressAsLoginName ())
@@ -786,8 +787,8 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
           aWPEC.getNodeList ()
                .addChild (getStyler ().createSuccessBox (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                              SecurityUI.getUserDisplayName (aSelectedObject,
-                                                                                                                                             aDisplayLocale))));
+                                                                                                              SecurityUtils.getUserDisplayName (aSelectedObject,
+                                                                                                                                                aDisplayLocale))));
           return true;
         }
       }
@@ -800,8 +801,8 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                            SecurityUI.getUserDisplayName (aSelectedObject,
-                                                                                                                           aDisplayLocale)));
+                                                                                            SecurityUtils.getUserDisplayName (aSelectedObject,
+                                                                                                                              aDisplayLocale)));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()
@@ -867,7 +868,7 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
       final ISimpleURL aViewLink = createViewURL (aWPEC, aCurUser);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aCurUser, aDisplayLocale)));
+      aRow.addCell (new HCA (aViewLink).addChild (SecurityUtils.getUserDisplayName (aCurUser, aDisplayLocale)));
       if (bSeparateLoginName)
         aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getLoginName ()));
       aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getEmailAddress ()));
@@ -901,8 +902,8 @@ public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> e
         aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
                                             .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
                                             .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                          SecurityUI.getUserDisplayName (aCurUser,
-                                                                                                                                                                                         aDisplayLocale)))
+                                                                                                                                                          SecurityUtils.getUserDisplayName (aCurUser,
+                                                                                                                                                                                            aDisplayLocale)))
                                                                                             .addChild (getResetPasswordIcon ()));
       }
       else

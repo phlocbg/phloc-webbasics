@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
@@ -56,7 +57,6 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
-import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
@@ -166,7 +166,7 @@ public class BasePageLoginInfo <WPECTYPE extends WebPageExecutionContext> extend
           .setCtrl (aSelectedObject.getUserID ());
     aTable.createItemRow ()
           .setLabel (EText.MSG_USERNAME.getDisplayText (aDisplayLocale))
-          .setCtrl (SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale));
+          .setCtrl (SecurityUtils.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale));
     aTable.createItemRow ()
           .setLabel (EText.MSG_LOGINDT.getDisplayText (aDisplayLocale))
           .setCtrl (PDTToString.getAsString (aSelectedObject.getLoginDT (), aDisplayLocale));
@@ -252,7 +252,7 @@ public class BasePageLoginInfo <WPECTYPE extends WebPageExecutionContext> extend
 
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
-      final String sUserName = SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale);
+      final String sUserName = SecurityUtils.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale);
 
       if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
@@ -309,14 +309,15 @@ public class BasePageLoginInfo <WPECTYPE extends WebPageExecutionContext> extend
       final ISimpleURL aViewLink = createViewURL (aWPEC, aLoginInfo);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale)));
+      aRow.addCell (new HCA (aViewLink).addChild (SecurityUtils.getUserDisplayName (aLoginInfo.getUser (),
+                                                                                    aDisplayLocale)));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLoginDT (), aDisplayLocale));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLastAccessDT (), aDisplayLocale));
 
       final IHCCell <?> aActionCell = aRow.addCell ();
       if (canLogoutUser (aLoginInfo.getUser ()))
       {
-        final String sUserName = SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale);
+        final String sUserName = SecurityUtils.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale);
         aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
                                             .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
                                             .add (CHCParam.PARAM_OBJECT, aLoginInfo.getID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,

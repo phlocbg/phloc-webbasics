@@ -27,6 +27,7 @@ import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.equals.EqualsUtils;
@@ -160,8 +161,8 @@ public class BasePageChangePassword <WPECTYPE extends WebPageExecutionContext> e
                                                                                                new HCCol (20)));
 
         aTable.setSpanningHeaderContent (EText.TITLE.getDisplayTextWithArgs (aDisplayLocale,
-                                                                             SecurityUI.getUserDisplayName (aCurrentUser,
-                                                                                                            aDisplayLocale)));
+                                                                             SecurityUtils.getUserDisplayName (aCurrentUser,
+                                                                                                               aDisplayLocale)));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()

@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.user.IUser;
-import com.phloc.commons.ValueEnforcer;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
@@ -60,11 +60,10 @@ public final class SecurityUI
    * @return <code>null</code> if no translation is present.
    */
   @Nullable
+  @Deprecated
   public static String getGuestUserDisplayName (@Nonnull final Locale aDisplayLocale)
   {
-    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
-
-    return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
+    return SecurityUtils.getGuestUserDisplayName (aDisplayLocale);
   }
 
   /**
@@ -79,13 +78,10 @@ public final class SecurityUI
    *         an invalid user was provided.
    */
   @Nullable
+  @Deprecated
   public static String getUserDisplayName (@Nullable final String sUserID, @Nonnull final Locale aDisplayLocale)
   {
-    if (StringHelper.hasNoText (sUserID))
-      return getGuestUserDisplayName (aDisplayLocale);
-
-    final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
-    return aUser == null ? sUserID : getUserDisplayName (aUser, aDisplayLocale);
+    return SecurityUtils.getUserDisplayName (sUserID, aDisplayLocale);
   }
 
   /**
@@ -101,16 +97,10 @@ public final class SecurityUI
    *         of the user.
    */
   @Nullable
+  @Deprecated
   public static String getUserDisplayName (@Nullable final IUser aUser, @Nonnull final Locale aDisplayLocale)
   {
-    ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
-    if (aUser == null)
-      return getGuestUserDisplayName (aDisplayLocale);
-
-    String ret = aUser.getDisplayName ();
-    if (StringHelper.hasNoText (ret))
-      ret = aUser.getLoginName ();
-    return ret;
+    return SecurityUtils.getUserDisplayName (aUser, aDisplayLocale);
   }
 
   /**

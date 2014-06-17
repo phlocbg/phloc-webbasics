@@ -42,6 +42,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.audit.IAuditItem;
 import com.phloc.appbasics.security.audit.IAuditManager;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -62,7 +63,6 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
-import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 
@@ -165,7 +165,7 @@ public class BasePageAudit <WPECTYPE extends WebPageExecutionContext> extends Ab
     {
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (PDTToString.getAsString (aItem.getDateTime (), aDisplayLocale));
-      aRow.addCell (SecurityUI.getUserDisplayName (aItem.getUserID (), aDisplayLocale));
+      aRow.addCell (SecurityUtils.getUserDisplayName (aItem.getUserID (), aDisplayLocale));
       aRow.addCell (aItem.getType ().getID ());
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
       aRow.addCell (getActionString (aItem));
