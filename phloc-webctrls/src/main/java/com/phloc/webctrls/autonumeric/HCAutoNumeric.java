@@ -62,6 +62,8 @@ public class HCAutoNumeric extends HCEdit
   /** The special CSS class to use for numeric inputs */
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
 
+  public static final int DEFAULT_MIN_VALUE = -999999999;
+
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("s_aRWLock")
   private static String s_sDefaultThousandSeparator = null;
@@ -84,7 +86,7 @@ public class HCAutoNumeric extends HCEdit
 
     // Because the default min value is 0 (in v1.8.2) and we want negative
     // values by default!
-    m_aMin = BigDecimal.valueOf (-999999999);
+    m_aMin = BigDecimal.valueOf (DEFAULT_MIN_VALUE);
 
     final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
     m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());

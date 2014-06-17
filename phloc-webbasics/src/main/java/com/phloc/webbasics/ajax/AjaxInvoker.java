@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.factory.FactoryNewInstance;
@@ -154,6 +156,16 @@ public class AjaxInvoker implements IAjaxInvoker
     }
   }
 
+  @OverrideOnDemand
+  protected void onLongRunningExecution (@Nonnull final String sFunctionName, @Nonnegative final long nExecutionMillis)
+  {
+    s_aLogger.warn ("Finished invoking AJAX function '" +
+                    sFunctionName +
+                    "' which took " +
+                    nExecutionMillis +
+                    " milliseconds (which is too long)");
+  }
+
   @Nonnull
   public IAjaxResponse invokeFunction (@Nonnull final String sFunctionName,
                                        @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
@@ -181,10 +193,11 @@ public class AjaxInvoker implements IAjaxInvoker
     // of success
     aHandlerObj.registerExternalResources ();
 
-    // execute request
+    // Main handle request
     final IAjaxResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
     if (aReturnValue.isFailure ())
     {
+      // Execution failed
       s_aLogger.warn ("Invoked AJAX function '" + sFunctionName + "' returned a failure: " + aReturnValue.toString ());
     }
 
@@ -195,11 +208,7 @@ public class AjaxInvoker implements IAjaxInvoker
     final long nExecutionMillis = aSW.stopAndGetMillis ();
     s_aStatsFunctionTimer.addTime (sFunctionName, nExecutionMillis);
     if (nExecutionMillis > CGlobal.MILLISECONDS_PER_SECOND)
-      s_aLogger.warn ("Finished invoking AJAX function '" +
-                      sFunctionName +
-                      "' which took " +
-                      nExecutionMillis +
-                      " milliseconds (which is too long)");
+      onLongRunningExecution (sFunctionName, nExecutionMillis);
     return aReturnValue;
   }
 

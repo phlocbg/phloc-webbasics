@@ -170,8 +170,10 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
           if (s_aLogger.isTraceEnabled ())
             s_aLogger.trace ("  AJAX Result: " + aResult);
 
-          // Do not cache the result!
+          // Convert to JSON String
           final String sResultJSON = aResult.getSerializedAsJSON (GlobalDebug.isDebugMode ());
+
+          // Do not cache the result!
           aUnifiedResponse.disableCaching ()
                           .setContentAndCharset (sResultJSON, CWebCharset.CHARSET_XML_OBJ)
                           .setMimeType (CMimeType.APPLICATION_JSON);
