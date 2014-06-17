@@ -33,7 +33,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCHasChildren;
+import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.js.builder.IJSExpression;
@@ -409,7 +409,7 @@ public class HCAutoNumeric extends HCEdit
   }
 
   @Override
-  public void onAdded (@Nonnull final IHCHasChildren aParent)
+  public void onAdded (@Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
@@ -417,7 +417,7 @@ public class HCAutoNumeric extends HCEdit
   }
 
   @Override
-  public void onRemoved (@Nonnull final IHCHasChildren aParent)
+  public void onRemoved (@Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
     PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
     PerRequestJSIncludes.unregisterJSIncludeFromThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
