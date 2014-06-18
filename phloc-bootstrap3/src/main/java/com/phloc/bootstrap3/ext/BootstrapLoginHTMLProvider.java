@@ -83,6 +83,31 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
   protected void onAfterForm (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final BootstrapForm aForm)
   {}
 
+  /**
+   * Customize the created container, where the form resides in
+   * 
+   * @param aSWEC
+   *        Web execution context.
+   * @param aContainer
+   *        The pre-filled container.
+   */
+  @OverrideOnDemand
+  protected void onAfterContainer (@Nonnull final SimpleWebExecutionContext aSWEC,
+                                   @Nonnull final BootstrapContainer aContainer)
+  {}
+
+  /**
+   * Customize the created span, where the container resides in
+   * 
+   * @param aSWEC
+   *        Web execution context.
+   * @param aSpan
+   *        The span where the container resides in
+   */
+  @OverrideOnDemand
+  protected void onAfterLoginContainer (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCSpan aSpan)
+  {}
+
   @Override
   @OverridingMethodsMustInvokeSuper
   protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
@@ -121,8 +146,13 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     aCol2.addChild (aForm);
     aRow.createColumn (0, 2, 3, 3);
 
+    onAfterContainer (aSWEC, aContentLayout);
+
+    final HCSpan aSpan = new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout);
+    onAfterLoginContainer (aSWEC, aSpan);
+
     // Build body
     final HCBody aBody = aHtml.getBody ();
-    aBody.addChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout));
+    aBody.addChild (aSpan);
   }
 }
