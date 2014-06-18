@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.typeahead;
+package com.phloc.webctrls.typeaheadten;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,7 @@ import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webctrls.typeahead.TypeaheadDataset;
 
 @WorkInProgress
 public class HCTypeahead0101 implements IHCNodeBuilder
@@ -398,7 +399,7 @@ public class HCTypeahead0101 implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.TYPEAHEAD_0_10_1);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.TYPEAHEAD_0_10_2);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.PHLOC_TYPEAHEAD);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETypeaheadCSSPathProvider.TYPEAHEAD_BOOTSTRAP);
   }

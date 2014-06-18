@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.typeahead;
+package com.phloc.webctrls.typeaheadten;
 
 import javax.annotation.Nonnull;
 
@@ -31,7 +31,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 public enum ETypeaheadJSPathProvider implements IJSPathProvider
 {
   /** https://github.com/twitter/typeahead.js/ */
-  TYPEAHEAD_0_9_3 ("typeahead/0.9.3/typeahead.js"),
+  TYPEAHEAD_0_10_2 ("typeahead/0.10.2/typeahead.bundle.js"),
   PHLOC_TYPEAHEAD ("typeahead/phloc-typeahead.js");
 
   private final String m_sPath;

@@ -15,43 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.typeahead;
+package com.phloc.webctrls.typeaheadten;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.html.resource.js.IJSPathProvider;
-import com.phloc.html.resource.js.JSFilenameHelper;
+import com.phloc.css.CSSFilenameHelper;
+import com.phloc.html.resource.css.ICSSPathProvider;
 
 /**
- * Contains default JS paths for this package.
+ * Contains default CSS paths for this package.
  * 
  * @author Philip Helger
  */
-public enum ETypeaheadJSPathProvider implements IJSPathProvider
+public enum ETypeaheadCSSPathProvider implements ICSSPathProvider
 {
-  /** https://github.com/twitter/typeahead.js/ */
-  TYPEAHEAD_0_9_3 ("typeahead/0.9.3/typeahead.js"),
-  PHLOC_TYPEAHEAD ("typeahead/phloc-typeahead.js");
+  TYPEAHEAD_BOOTSTRAP ("typeahead/typeahead.js-bootstrap.css");
 
   private final String m_sPath;
 
-  private ETypeaheadJSPathProvider (@Nonnull @Nonempty final String sPath)
+  private ETypeaheadCSSPathProvider (@Nonnull @Nonempty final String sPath)
   {
-    if (!JSFilenameHelper.isJSFilename (sPath))
+    if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
     m_sPath = sPath;
   }
 
   @Nonnull
   @Nonempty
-  public String getJSItemPath (final boolean bRegular)
+  public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : JSFilenameHelper.getMinifiedJSPath (m_sPath);
-  }
-
-  public boolean canBeBundled ()
-  {
-    return true;
+    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
   }
 }
