@@ -90,10 +90,16 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
    *        Web execution context.
    * @param aContainer
    *        The pre-filled container.
+   * @param aRow
+   *        The pre-filled row
+   * @param aContentCol
+   *        The content column, where the form resides in,
    */
   @OverrideOnDemand
   protected void onAfterContainer (@Nonnull final SimpleWebExecutionContext aSWEC,
-                                   @Nonnull final BootstrapContainer aContainer)
+                                   @Nonnull final BootstrapContainer aContainer,
+                                   @Nonnull final BootstrapRow aRow,
+                                   @Nonnull final HCDiv aContentCol)
   {}
 
   /**
@@ -146,7 +152,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     aCol2.addChild (aForm);
     aRow.createColumn (0, 2, 3, 3);
 
-    onAfterContainer (aSWEC, aContentLayout);
+    onAfterContainer (aSWEC, aContentLayout, aRow, aCol2);
 
     final HCSpan aSpan = new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout);
     onAfterLoginContainer (aSWEC, aSpan);
