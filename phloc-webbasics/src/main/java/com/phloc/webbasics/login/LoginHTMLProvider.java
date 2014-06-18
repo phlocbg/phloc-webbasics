@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ELoginResult;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
@@ -57,8 +58,7 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
 
   public LoginHTMLProvider (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
-    if (eLoginResult == null)
-      throw new NullPointerException ("loginResult");
+    ValueEnforcer.notNull (eLoginResult, "LoginResult");
     m_bLoginError = bLoginError;
     m_eLoginResult = eLoginResult;
   }
