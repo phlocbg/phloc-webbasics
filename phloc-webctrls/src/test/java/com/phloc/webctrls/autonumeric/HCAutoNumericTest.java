@@ -43,36 +43,14 @@ public final class HCAutoNumericTest
     final HCAutoNumeric a = new HCAutoNumeric (new RequestField ("dummy"), Locale.GERMANY);
     final String sID = a.getID ();
     assertEquals ("<input id=\"" +
-                      sID +
-                      "\" class=\"auto-numeric-edit\" name=\"dummy\" type=\"text\" value=\"\" />" +
-                      CRLF +
-                      "<script type=\"text/javascript\">" +
-                      CRLF +
-                      "  <!--" +
-                      CRLF +
-                      "$(document).ready(function(){$('#id10001').autoNumeric('init',{aSep:'.',aDec:',',vMin:'-999999999'});});" +
-                      CRLF +
-                      "//-->" +
-                      CRLF +
-                      "</script>" +
-                      CRLF,
-                  a.getAsHTMLString (new HCConversionSettings (EHTMLVersion.HTML5)));
+                  sID +
+                  "\" class=\"auto-numeric-edit\" name=\"dummy\" type=\"text\" value=\"\" />" +
+                  CRLF, a.getAsHTMLString (new HCConversionSettings (EHTMLVersion.HTML5)));
 
     a.setThousandSeparator ("");
     assertEquals ("<input id=\"" +
-                      sID +
-                      "\" class=\"auto-numeric-edit\" name=\"dummy\" type=\"text\" value=\"\" />" +
-                      CRLF +
-                      "<script type=\"text/javascript\">" +
-                      CRLF +
-                      "  <!--" +
-                      CRLF +
-                      "$(document).ready(function(){$('#id10001').autoNumeric('init',{aSep:'',aDec:',',vMin:'-999999999'});});" +
-                      CRLF +
-                      "//-->" +
-                      CRLF +
-                      "</script>" +
-                      CRLF,
-                  a.getAsHTMLString (new HCConversionSettings (EHTMLVersion.HTML5)));
+                  sID +
+                  "\" class=\"auto-numeric-edit\" name=\"dummy\" type=\"text\" value=\"\" />" +
+                  CRLF, a.getAsHTMLString (new HCConversionSettings (EHTMLVersion.HTML5)));
   }
 }
