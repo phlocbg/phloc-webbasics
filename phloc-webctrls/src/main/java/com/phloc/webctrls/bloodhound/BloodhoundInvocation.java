@@ -154,4 +154,15 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
   {
     return get ().arg (aQuery).arg (aCallback);
   }
+
+  /**
+   * To be used as the <code>source</code> parameter for Typeahead integration.
+   * 
+   * @return Invocation of <code>ttAdapter</code>
+   */
+  @Nonnull
+  public BloodhoundInvocation ttAdapter ()
+  {
+    return bloodhoundInvoke ("ttAdapter");
+  }
 }
