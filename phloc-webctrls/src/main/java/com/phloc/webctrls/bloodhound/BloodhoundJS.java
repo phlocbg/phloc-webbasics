@@ -44,12 +44,18 @@ public final class BloodhoundJS
     return bloodhound ().ref ("tokenizers");
   }
 
+  /**
+   * @return The Bloodhound built-in "whitespace" tokenizer.
+   */
   @Nonnull
   public static JSFieldRef bloodhoundTokenizersWhitespace ()
   {
     return bloodhoundTokenizers ().ref ("whitespace");
   }
 
+  /**
+   * @return The Bloodhound built-in "nonword" tokenizer.
+   */
   @Nonnull
   public static JSFieldRef bloodhoundTokenizersNonword ()
   {
@@ -57,10 +63,16 @@ public final class BloodhoundJS
   }
 
   @Nonnull
-  public static JSInvocation newBloodhound (@Nonnull final BloodhoundOptions aOptions)
+  public static JSInvocation bloodhoundNoConflict ()
+  {
+    return bloodhound ().invoke ("noConflict");
+  }
+
+  @Nonnull
+  public static BloodhoundInvocation newBloodhound (@Nonnull final BloodhoundOptions aOptions)
   {
     ValueEnforcer.notNull (aOptions, "Options");
 
-    return new JSInvocation (bloodhound ()).arg (aOptions.getAsJSObject ());
+    return new BloodhoundInvocation (bloodhound ()).arg (aOptions.getAsJSObject ());
   }
 }
