@@ -20,14 +20,14 @@ import com.phloc.html.js.builder.JSExpr;
  * 
  * @author Philip Helger
  */
-public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvocation>
+public class BloodhoundJSInvocation extends AbstractJSInvocation <BloodhoundJSInvocation>
 {
-  public BloodhoundInvocation (final IJSGeneratable aType)
+  public BloodhoundJSInvocation (final IJSGeneratable aType)
   {
     super (aType);
   }
 
-  public BloodhoundInvocation (@Nullable final IJSExpression aLhs, @Nonnull @Nonempty final String sMethod)
+  public BloodhoundJSInvocation (@Nullable final IJSExpression aLhs, @Nonnull @Nonempty final String sMethod)
   {
     super (aLhs, sMethod);
   }
@@ -41,25 +41,25 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
    * @return A new jQuery invocation object. Never <code>null</code>.
    */
   @Nonnull
-  public BloodhoundInvocation bloodhoundInvoke (@Nonnull @Nonempty final String sMethod)
+  public BloodhoundJSInvocation bloodhoundInvoke (@Nonnull @Nonempty final String sMethod)
   {
-    return new BloodhoundInvocation (this, sMethod);
+    return new BloodhoundJSInvocation (this, sMethod);
   }
 
   @Nonnull
-  public BloodhoundInvocation initialize ()
+  public BloodhoundJSInvocation initialize ()
   {
     return bloodhoundInvoke ("initialize");
   }
 
   @Nonnull
-  public BloodhoundInvocation initialize (final boolean bReinitialize)
+  public BloodhoundJSInvocation initialize (final boolean bReinitialize)
   {
     return initialize ().arg (bReinitialize);
   }
 
   @Nonnull
-  public BloodhoundInvocation add (@Nullable final BloodhoundDatum aDatum)
+  public BloodhoundJSInvocation add (@Nullable final BloodhoundDatum aDatum)
   {
     if (aDatum != null)
       return add (ContainerHelper.newList (aDatum));
@@ -67,7 +67,7 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
   }
 
   @Nonnull
-  public BloodhoundInvocation add (@Nullable final BloodhoundDatum... aDatums)
+  public BloodhoundJSInvocation add (@Nullable final BloodhoundDatum... aDatums)
   {
     if (ArrayHelper.isNotEmpty (aDatums))
       return add (ContainerHelper.newList (aDatums));
@@ -75,7 +75,7 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
   }
 
   @Nonnull
-  public BloodhoundInvocation add (@Nullable final List <? extends BloodhoundDatum> aDatums)
+  public BloodhoundJSInvocation add (@Nullable final List <? extends BloodhoundDatum> aDatums)
   {
     if (ContainerHelper.isNotEmpty (aDatums))
     {
@@ -88,25 +88,25 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
   }
 
   @Nonnull
-  public BloodhoundInvocation clear ()
+  public BloodhoundJSInvocation clear ()
   {
     return bloodhoundInvoke ("clear");
   }
 
   @Nonnull
-  public BloodhoundInvocation clearPrefetchCache ()
+  public BloodhoundJSInvocation clearPrefetchCache ()
   {
     return bloodhoundInvoke ("clearPrefetchCache");
   }
 
   @Nonnull
-  public BloodhoundInvocation clearRemoteCache ()
+  public BloodhoundJSInvocation clearRemoteCache ()
   {
     return bloodhoundInvoke ("clearRemoteCache");
   }
 
   @Nonnull
-  public BloodhoundInvocation get ()
+  public BloodhoundJSInvocation get ()
   {
     return bloodhoundInvoke ("get");
   }
@@ -125,10 +125,10 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
    *        Query string
    * @param aCallback
    *        Callback function. Takes one argument: array of suggestions
-   * @return new {@link BloodhoundInvocation}
+   * @return new {@link BloodhoundJSInvocation}
    */
   @Nonnull
-  public BloodhoundInvocation get (@Nonnull final String sQuery, @Nonnull final JSAnonymousFunction aCallback)
+  public BloodhoundJSInvocation get (@Nonnull final String sQuery, @Nonnull final JSAnonymousFunction aCallback)
   {
     return get (JSExpr.lit (sQuery), aCallback);
   }
@@ -147,10 +147,10 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
    *        Query string
    * @param aCallback
    *        Callback function. Takes one argument: array of suggestions
-   * @return new {@link BloodhoundInvocation}
+   * @return new {@link BloodhoundJSInvocation}
    */
   @Nonnull
-  public BloodhoundInvocation get (@Nonnull final IJSExpression aQuery, @Nonnull final IJSExpression aCallback)
+  public BloodhoundJSInvocation get (@Nonnull final IJSExpression aQuery, @Nonnull final IJSExpression aCallback)
   {
     return get ().arg (aQuery).arg (aCallback);
   }
@@ -161,7 +161,7 @@ public class BloodhoundInvocation extends AbstractJSInvocation <BloodhoundInvoca
    * @return Invocation of <code>ttAdapter</code>
    */
   @Nonnull
-  public BloodhoundInvocation ttAdapter ()
+  public BloodhoundJSInvocation ttAdapter ()
   {
     return bloodhoundInvoke ("ttAdapter");
   }

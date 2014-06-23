@@ -27,10 +27,12 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ICloneable;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
@@ -40,7 +42,7 @@ import com.phloc.html.js.builder.JSReturn;
 import com.phloc.html.js.builder.JSVar;
 
 @NotThreadSafe
-public class BloodhoundOptions
+public class BloodhoundOptions implements ICloneable <BloodhoundOptions>
 {
   public static final String JSON_DATUM_TOKENIZER = "datumTokenizer";
   public static final String JSON_QUERY_TOKENIZER = "queryTokenizer";
@@ -66,6 +68,19 @@ public class BloodhoundOptions
 
   public BloodhoundOptions ()
   {}
+
+  public BloodhoundOptions (@Nonnull final BloodhoundOptions aOther)
+  {
+    ValueEnforcer.notNull (aOther, "Other");
+    m_aDatumTokenizer = aOther.m_aDatumTokenizer;
+    m_aQueryTokenizer = aOther.m_aQueryTokenizer;
+    m_nLimit = aOther.m_nLimit;
+    m_aDupDetector = aOther.m_aDupDetector;
+    m_aSorter = aOther.m_aSorter;
+    m_aLocal = aOther.m_aLocal == null ? null : ContainerHelper.newList (aOther.m_aLocal);
+    m_aPrefetch = aOther.m_aPrefetch == null ? null : aOther.m_aPrefetch.getClone ();
+    m_aRemote = aOther.m_aRemote == null ? null : aOther.m_aRemote.getClone ();
+  }
 
   /**
    * @return A function with the signature (datum) that transforms a datum into
@@ -284,5 +299,25 @@ public class BloodhoundOptions
     if (m_aRemote != null)
       ret.add (JSON_REMOTE, m_aRemote.getAsJSObject ());
     return ret;
+  }
+
+  @Nonnull
+  public BloodhoundOptions getClone ()
+  {
+    return new BloodhoundOptions (this);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).appendIfNotNull ("datumTokenizer", m_aDatumTokenizer)
+                                       .appendIfNotNull ("queryTokenizer", m_aQueryTokenizer)
+                                       .append ("limit", m_nLimit)
+                                       .appendIfNotNull ("dupDetector", m_aDupDetector)
+                                       .appendIfNotNull ("sorter", m_aSorter)
+                                       .appendIfNotNull ("local", m_aLocal)
+                                       .appendIfNotNull ("prefetch", m_aPrefetch)
+                                       .appendIfNotNull ("remote", m_aRemote)
+                                       .toString ();
   }
 }

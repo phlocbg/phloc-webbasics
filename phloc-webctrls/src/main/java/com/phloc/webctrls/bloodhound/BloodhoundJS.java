@@ -69,10 +69,10 @@ public final class BloodhoundJS
   }
 
   @Nonnull
-  public static BloodhoundInvocation newBloodhound (@Nonnull final BloodhoundOptions aOptions)
+  public static BloodhoundJSInvocation newBloodhound (@Nonnull final BloodhoundOptions aOptions)
   {
     ValueEnforcer.notNull (aOptions, "Options");
 
-    return new BloodhoundInvocation (bloodhound ()).arg (aOptions.getAsJSObject ());
+    return new BloodhoundJSInvocation (bloodhound ()).arg (aOptions.getAsJSObject ());
   }
 }
