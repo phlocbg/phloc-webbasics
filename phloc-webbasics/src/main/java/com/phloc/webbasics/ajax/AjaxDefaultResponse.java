@@ -33,7 +33,9 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCHasChildren;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.hc.utils.HCSpecialNodeHandler;
 import com.phloc.json2.IJson;
@@ -118,12 +120,17 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     final JsonObject aObj = new JsonObject ();
     if (aNode != null)
     {
+      // Customize before extracting special content
+      if (aNode instanceof IHCNodeWithChildren <?>)
+        HCUtils.customizeNodes ((IHCNodeWithChildren <?>) aNode, HCSettings.getConversionSettings ());
+
       IHCNode aRealNode;
       if (aNode instanceof IHCHasChildren)
       {
         // no need to keepOnDocumentReady stuff as the document is already
         // loaded
-        aRealNode = HCSpecialNodeHandler.extractSpecialContent ((IHCHasChildren) aNode, this, false);
+        final boolean bKeepOnDocumentReady = false;
+        aRealNode = HCSpecialNodeHandler.extractSpecialContent ((IHCHasChildren) aNode, this, bKeepOnDocumentReady);
       }
       else
         aRealNode = aNode;

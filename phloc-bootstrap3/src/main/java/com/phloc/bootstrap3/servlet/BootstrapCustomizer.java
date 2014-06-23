@@ -27,8 +27,8 @@ import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.IHCControl;
+import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.customize.HCEmptyCustomizer;
 import com.phloc.html.hc.html.HCImg;
 
@@ -48,7 +48,7 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
   }
 
   @Override
-  public void customizeNode (@Nonnull final IHCNodeWithChildren <?> aParentElement,
+  public void customizeNode (@Nonnull final IHCHasChildrenMutable <?, ? super IHCNode> aParentElement,
                              @Nonnull final IHCNode aNode,
                              @Nonnull final EHTMLVersion eHTMLVersion)
   {
