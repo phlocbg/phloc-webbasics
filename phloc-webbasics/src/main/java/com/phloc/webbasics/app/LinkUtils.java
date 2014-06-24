@@ -467,6 +467,7 @@ public final class LinkUtils
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getLinkToMenuItem (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final String sMenuItemID)
   {
@@ -510,6 +511,7 @@ public final class LinkUtils
    *         <code>/</code> or <code>/context</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getHomeLink (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     ValueEnforcer.notNull (aRequestScope, "RequestScope");
@@ -538,6 +540,7 @@ public final class LinkUtils
    *         parameters. Never <code>null</code>.
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getSelfHref (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return getSelfHref (aRequestScope, (Map <String, String>) null);
@@ -576,6 +579,7 @@ public final class LinkUtils
    * @see #getLinkToMenuItem(String)
    */
   @Nonnull
+  @Deprecated
   public static SimpleURL getSelfHref (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                        @Nullable final Map <String, String> aParams)
   {
@@ -591,6 +595,7 @@ public final class LinkUtils
    *         the current display locale. Never <code>null</code> nor empty.
    */
   @Nonnull
+  @Deprecated
   @ReturnsMutableCopy
   public static SMap getDefaultParams ()
   {
@@ -605,6 +610,7 @@ public final class LinkUtils
    *         the current display locale. Never <code>null</code> nor empty.
    */
   @Nonnull
+  @Deprecated
   @ReturnsMutableCopy
   public static SMap getDefaultParams (@Nonnull final ILayoutExecutionContext aLEC)
   {

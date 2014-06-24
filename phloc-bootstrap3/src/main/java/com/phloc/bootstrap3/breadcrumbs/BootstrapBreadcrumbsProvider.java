@@ -24,12 +24,12 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 
 @Immutable
 public final class BootstrapBreadcrumbsProvider
@@ -38,12 +38,13 @@ public final class BootstrapBreadcrumbsProvider
   {}
 
   @Nonnull
-  public static BootstrapBreadcrumbs createBreadcrumbs (@Nonnull final IMenuTree aMenuTree,
-                                                        @Nonnull final Locale aDisplayLocale)
+  public static BootstrapBreadcrumbs createBreadcrumbs (@Nonnull final ILayoutExecutionContext aLEC)
   {
+    final Locale aDisplayLocale = aLEC.getDisplayLocale ();
+    final IMenuTree aMenuTree = aLEC.getMenuTree ();
     final BootstrapBreadcrumbs aBreadcrumb = new BootstrapBreadcrumbs ();
     final List <IMenuItem> aItems = new ArrayList <IMenuItem> ();
-    IMenuItem aCurrent = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
+    IMenuItem aCurrent = aLEC.getSelectedMenuItem ();
     while (aCurrent != null)
     {
       aItems.add (0, aCurrent);

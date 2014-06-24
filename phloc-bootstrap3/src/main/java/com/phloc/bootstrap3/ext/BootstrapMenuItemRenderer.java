@@ -40,6 +40,7 @@ import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.ISimpleWebExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
@@ -169,10 +170,10 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
-                                                  @Nonnull final IMenuTree aMenuTree)
+  public static IHCElement <?> createSideBarMenu (@Nonnull final ILayoutExecutionContext aLEC)
   {
-    return createSideBarMenu (aSWEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree));
+    final IMenuTree aMenuTree = aLEC.getMenuTree ();
+    return createSideBarMenu (aLEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree));
   }
 
   @Nonnull

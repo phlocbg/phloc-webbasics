@@ -109,6 +109,7 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   public ApplicationRequestManager ()
   {}
 
+  @Nonnull
   public static ApplicationRequestManager getInstance ()
   {
     return getGlobalSingleton (ApplicationRequestManager.class);

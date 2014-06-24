@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.menu.IMenuItemPage;
-import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
@@ -43,27 +42,18 @@ import com.phloc.webbasics.app.SimpleWebExecutionContext;
 @NotThreadSafe
 public class LayoutExecutionContext extends SimpleWebExecutionContext implements ILayoutExecutionContext
 {
-  private final IMenuTree m_aMenuTree;
   private final IMenuItemPage m_aSelectedMenuItem;
 
   public LayoutExecutionContext (@Nonnull final ILayoutExecutionContext aLEC)
   {
-    this (aLEC, aLEC.getMenuTree (), aLEC.getSelectedMenuItem ());
+    this (aLEC, aLEC.getSelectedMenuItem ());
   }
 
   public LayoutExecutionContext (@Nonnull final ISimpleWebExecutionContext aSWEC,
-                                 @Nonnull final IMenuTree aMenuTree,
                                  @Nonnull final IMenuItemPage aSelectedMenuItem)
   {
     super (aSWEC);
-    m_aMenuTree = ValueEnforcer.notNull (aMenuTree, "MenuTree");
     m_aSelectedMenuItem = ValueEnforcer.notNull (aSelectedMenuItem, "SelectedMenuItem");
-  }
-
-  @Nonnull
-  public IMenuTree getMenuTree ()
-  {
-    return m_aMenuTree;
   }
 
   @Nonnull
@@ -95,7 +85,6 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext implements
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("menuTree", m_aMenuTree)
                             .append ("selectedMenuItem", m_aSelectedMenuItem)
                             .toString ();
   }

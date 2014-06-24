@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.web.fileupload.IFileItem;
@@ -24,10 +25,18 @@ public interface ISimpleWebExecutionContext
   IRequestWebScopeWithoutResponse getRequestScope ();
 
   /**
-   * @return The current display locale.
+   * @return The current display locale. Base on the item of the request
+   *         manager.
    */
   @Nonnull
   Locale getDisplayLocale ();
+
+  /**
+   * @return The current menu tree. Based on the menu tree of the request
+   *         manager.
+   */
+  @Nonnull
+  IMenuTree getMenuTree ();
 
   /**
    * Check if the request parameter with the given name is present (independent

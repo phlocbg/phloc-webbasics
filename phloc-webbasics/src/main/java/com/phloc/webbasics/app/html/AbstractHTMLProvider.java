@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
@@ -59,6 +60,13 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   protected Locale getDisplayLocale ()
   {
     return ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
+  }
+
+  @Nonnull
+  @OverrideOnDemand
+  protected IMenuTree getMenuTree ()
+  {
+    return ApplicationRequestManager.getInstance ().getMenuTree ();
   }
 
   @OverrideOnDemand
@@ -140,7 +148,9 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
     final Locale aDisplayLocale = getDisplayLocale ();
 
     // Build the execution scope
-    final ISimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope, aDisplayLocale);
+    final ISimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope,
+                                                                            aDisplayLocale,
+                                                                            getMenuTree ());
 
     // Create the surrounding HTML element
     final HCHtml aHtml = createHCHtml (aDisplayLocale);
