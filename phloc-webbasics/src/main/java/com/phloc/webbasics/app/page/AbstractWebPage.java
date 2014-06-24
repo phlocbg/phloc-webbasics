@@ -40,7 +40,7 @@ import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -180,7 +180,7 @@ public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext>
    * @return A form that links to the current page.
    */
   @Nonnull
-  public HCForm createFormSelf (@Nonnull final LayoutExecutionContext aLEC)
+  public HCForm createFormSelf (@Nonnull final ILayoutExecutionContext aLEC)
   {
     return new HCForm (aLEC.getSelfHref ());
   }
@@ -201,7 +201,7 @@ public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext>
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  public HCForm createFormFileUploadSelf (@Nonnull final LayoutExecutionContext aLEC)
+  public HCForm createFormFileUploadSelf (@Nonnull final ILayoutExecutionContext aLEC)
   {
     final HCForm aForm = createFormSelf (aLEC);
     aForm.setFileUploadEncType ();

@@ -29,7 +29,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public abstract class LayoutHTMLProvider <LECTYPE extends LayoutExecutionContext> extends AbstractLayoutHTMLProvider <LECTYPE>
+public abstract class LayoutHTMLProvider <LECTYPE extends ILayoutExecutionContext> extends AbstractLayoutHTMLProvider <LECTYPE>
 {
   private final ILayoutManager <LECTYPE> m_aLayoutMgr;
 

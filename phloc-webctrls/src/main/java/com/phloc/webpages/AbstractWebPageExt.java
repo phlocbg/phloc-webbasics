@@ -38,7 +38,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
@@ -142,19 +142,20 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static SimpleURL createCreateURL (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sMenuItemID)
+  public static SimpleURL createCreateURL (@Nonnull final ILayoutExecutionContext aLEC,
+                                           @Nonnull final String sMenuItemID)
   {
     return aLEC.getLinkToMenuItem (sMenuItemID).add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull
-  public static SimpleURL createCreateURL (@Nonnull final LayoutExecutionContext aLEC)
+  public static SimpleURL createCreateURL (@Nonnull final ILayoutExecutionContext aLEC)
   {
     return aLEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull
-  public static SimpleURL createViewURL (@Nonnull final LayoutExecutionContext aLEC,
+  public static SimpleURL createViewURL (@Nonnull final ILayoutExecutionContext aLEC,
                                          @Nonnull final IHasID <String> aCurObject)
   {
     return aLEC.getSelfHref ()
@@ -163,14 +164,14 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final ILayoutExecutionContext aLEC,
                                                                                   @Nonnull final T aCurObject)
   {
     return createEditLink (aLEC, aCurObject, (Map <String, String>) null);
   }
 
   @Nonnull
-  public static <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final ILayoutExecutionContext aLEC,
                                                                                   @Nonnull final T aCurObject,
                                                                                   @Nullable final Map <String, String> aParams)
   {
@@ -188,7 +189,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static SimpleURL createEditURL (@Nonnull final LayoutExecutionContext aLEC,
+  public static SimpleURL createEditURL (@Nonnull final ILayoutExecutionContext aLEC,
                                          @Nonnull final IHasID <String> aCurObject)
   {
     return aLEC.getSelfHref ()
@@ -197,7 +198,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static HCA createEditLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static HCA createEditLink (@Nonnull final ILayoutExecutionContext aLEC,
                                     @Nonnull final IHasID <String> aCurObject,
                                     @Nullable final String sTitle)
   {
@@ -205,7 +206,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static HCA createEditLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static HCA createEditLink (@Nonnull final ILayoutExecutionContext aLEC,
                                     @Nonnull final IHasID <String> aCurObject,
                                     @Nullable final String sTitle,
                                     @Nullable final Map <String, String> aParams)
@@ -215,7 +216,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final ILayoutExecutionContext aLEC,
                                                                                   @Nonnull final T aCurObject)
   {
     return createCopyLink (aLEC,
@@ -231,7 +232,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static SimpleURL createCopyURL (@Nonnull final LayoutExecutionContext aLEC,
+  public static SimpleURL createCopyURL (@Nonnull final ILayoutExecutionContext aLEC,
                                          @Nonnull final IHasID <String> aCurObject)
   {
     return aLEC.getSelfHref ()
@@ -240,7 +241,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static HCA createCopyLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static HCA createCopyLink (@Nonnull final ILayoutExecutionContext aLEC,
                                     @Nonnull final IHasID <String> aCurObject,
                                     @Nullable final String sTitle)
   {
@@ -249,7 +250,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final ILayoutExecutionContext aLEC,
                                                                                     @Nonnull final T aCurObject)
   {
     return createDeleteLink (aLEC,
@@ -265,7 +266,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static SimpleURL createDeleteURL (@Nonnull final LayoutExecutionContext aLEC,
+  public static SimpleURL createDeleteURL (@Nonnull final ILayoutExecutionContext aLEC,
                                            @Nonnull final IHasID <String> aCurObject)
   {
     return aLEC.getSelfHref ()
@@ -274,7 +275,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static HCA createDeleteLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static HCA createDeleteLink (@Nonnull final ILayoutExecutionContext aLEC,
                                       @Nonnull final IHasID <String> aCurObject,
                                       @Nullable final String sTitle)
   {
@@ -283,7 +284,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static SimpleURL createUndeleteURL (@Nonnull final LayoutExecutionContext aLEC,
+  public static SimpleURL createUndeleteURL (@Nonnull final ILayoutExecutionContext aLEC,
                                              @Nonnull final IHasID <String> aCurObject)
   {
     return aLEC.getSelfHref ()
@@ -298,7 +299,7 @@ public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionConte
   }
 
   @Nonnull
-  public static HCA createNestedCreateLink (@Nonnull final LayoutExecutionContext aLEC,
+  public static HCA createNestedCreateLink (@Nonnull final ILayoutExecutionContext aLEC,
                                             @Nonnull final IHasID <String> aCurObject,
                                             @Nullable final String sTitle)
   {

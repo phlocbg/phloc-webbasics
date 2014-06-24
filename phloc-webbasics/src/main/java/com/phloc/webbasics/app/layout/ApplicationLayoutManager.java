@@ -35,7 +35,7 @@ import com.phloc.scopes.singleton.ApplicationSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class ApplicationLayoutManager <LECTYPE extends LayoutExecutionContext> extends ApplicationSingleton implements ILayoutManager <LECTYPE>
+public final class ApplicationLayoutManager <LECTYPE extends ILayoutExecutionContext> extends ApplicationSingleton implements ILayoutManager <LECTYPE>
 {
   private final LayoutManagerProxy <LECTYPE> m_aProxy = new LayoutManagerProxy <LECTYPE> ();
 
@@ -46,7 +46,7 @@ public final class ApplicationLayoutManager <LECTYPE extends LayoutExecutionCont
 
   @SuppressWarnings ("unchecked")
   @Nonnull
-  public static <LECTYPE extends LayoutExecutionContext> ApplicationLayoutManager <LECTYPE> getInstance ()
+  public static <LECTYPE extends ILayoutExecutionContext> ApplicationLayoutManager <LECTYPE> getInstance ()
   {
     return getApplicationSingleton (ApplicationLayoutManager.class);
   }

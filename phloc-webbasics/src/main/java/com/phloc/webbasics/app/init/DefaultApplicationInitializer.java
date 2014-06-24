@@ -23,8 +23,8 @@ import com.phloc.appbasics.app.ILocaleManager;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.layout.ILayoutManager;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * Default implementation class of {@link IApplicationInitializer} doing
@@ -32,7 +32,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
  * 
  * @author Philip Helger
  */
-public class DefaultApplicationInitializer <LECTYPE extends LayoutExecutionContext> implements IApplicationInitializer <LECTYPE>
+public class DefaultApplicationInitializer <LECTYPE extends ILayoutExecutionContext> implements IApplicationInitializer <LECTYPE>
 {
   public void initApplicationSettings ()
   {}

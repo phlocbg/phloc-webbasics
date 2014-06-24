@@ -26,7 +26,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.html.hc.IHCNode;
 
-public interface ILayoutManager <LECTYPE extends LayoutExecutionContext>
+public interface ILayoutManager <LECTYPE extends ILayoutExecutionContext>
 {
   void registerAreaContentProvider (@Nonnull String sAreaID,
                                     @Nonnull ILayoutAreaContentProvider <LECTYPE> aContentProvider);

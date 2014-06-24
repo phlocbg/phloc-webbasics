@@ -46,7 +46,7 @@ import com.phloc.webbasics.app.html.AbstractHTMLProvider;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractLayoutHTMLProvider <LECTYPE extends LayoutExecutionContext> extends AbstractHTMLProvider
+public abstract class AbstractLayoutHTMLProvider <LECTYPE extends ILayoutExecutionContext> extends AbstractHTMLProvider
 {
   public static final boolean DEFAULT_CREATE_LAYOUT_AREA_SPAN = true;
 

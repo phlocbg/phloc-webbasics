@@ -90,42 +90,17 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return m_aDisplayLocale;
   }
 
-  /**
-   * Check if the request parameter with the given name is present (independent
-   * of the value).
-   * 
-   * @param sName
-   *        Request parameter name
-   * @return <code>true</code> of the attribute is present, <code>false</code>
-   *         if not
-   */
   public boolean containsAttr (@Nullable final String sName)
   {
     return m_aRequestScope.containsAttribute (sName);
   }
 
-  /**
-   * Get the value of the request parameter with the given name.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @return The value of the passed request parameter
-   */
   @Nullable
   public String getAttr (@Nullable final String sName)
   {
     return getAttr (sName, null);
   }
 
-  /**
-   * Get the value of the request parameter with the given name.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @param sDefault
-   *        The default value to be used, if no request attribute is present
-   * @return The value of the passed request parameter or the default value
-   */
   @Nullable
   public String getAttr (@Nullable final String sName, @Nullable final String sDefault)
   {
@@ -133,169 +108,59 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return StringHelper.trim (sScopeValue);
   }
 
-  /**
-   * Get the value list of the request parameter with the given name.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @return The value list of the passed request parameter
-   */
   @Nullable
   public List <String> getAttrs (@Nullable final String sName)
   {
     return m_aRequestScope.getAttributeValues (sName);
   }
 
-  /**
-   * Get the value of the request parameter with the given name as a boolean.
-   * 
-   * @param sName
-   *        The attribute values.
-   * @param bDefault
-   *        The default value to be returned if either no such parameter is
-   *        present or if the parameter value cannot be safely converted to an
-   *        boolean value.
-   * @return The boolean representation of the parameter value or the default
-   *         value.
-   */
   public boolean getBooleanAttr (@Nullable final String sName, final boolean bDefault)
   {
     return m_aRequestScope.getAttributeAsBoolean (sName, bDefault);
   }
 
-  /**
-   * Get the value of the request parameter with the given name as an integer.
-   * 
-   * @param sName
-   *        The attribute values.
-   * @param nDefault
-   *        The default value to be returned if either no such parameter is
-   *        present or if the parameter value cannot be safely converted to an
-   *        integer value.
-   * @return The integer representation of the parameter value or the default
-   *         value.
-   */
   public int getIntAttr (@Nullable final String sName, final int nDefault)
   {
     return m_aRequestScope.getAttributeAsInt (sName, nDefault);
   }
 
-  /**
-   * Get the value of the request parameter with the given name as a long.
-   * 
-   * @param sName
-   *        The attribute values.
-   * @param nDefault
-   *        The default value to be returned if either no such parameter is
-   *        present or if the parameter value cannot be safely converted to an
-   *        long value.
-   * @return The long representation of the parameter value or the default
-   *         value.
-   */
   public long getLongAttr (@Nullable final String sName, final long nDefault)
   {
     return m_aRequestScope.getAttributeAsLong (sName, nDefault);
   }
 
-  /**
-   * Get the value of the request parameter with the given name as a double.
-   * 
-   * @param sName
-   *        The attribute values.
-   * @param dDefault
-   *        The default value to be returned if either no such parameter is
-   *        present or if the parameter value cannot be safely converted to an
-   *        integer value.
-   * @return The integer representation of the parameter value or the default
-   *         value.
-   */
   public double getDoubleAttr (@Nullable final String sName, final double dDefault)
   {
     return m_aRequestScope.getAttributeAsDouble (sName, dDefault);
   }
 
-  /**
-   * Get the value of the request parameter with the given name casted to the
-   * specified data type.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @return The value of the passed request parameter
-   */
   @Nullable
   public <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
   {
     return getCastedAttr (sName, (DATATYPE) null);
   }
 
-  /**
-   * Get the value of the request parameter with the given name casted to the
-   * specified data type.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @param aDefault
-   *        The default value to be returned, if no such parameter is present
-   * @return The value of the passed request parameter
-   */
   @Nullable
   public <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName, @Nullable final DATATYPE aDefault)
   {
     return m_aRequestScope.getCastedAttribute (sName, aDefault);
   }
 
-  /**
-   * Check if a request parameter with the given value is present.
-   * 
-   * @param sName
-   *        The name of the request parameter.
-   * @param sValue
-   *        The expected value of the request parameter.
-   * @return <code>true</code> if the request parameter is present and has the
-   *         expected value - <code>false</code> otherwise.
-   */
   public boolean hasAttr (@Nullable final String sName, final String sValue)
   {
     return EqualsUtils.equals (sValue, getAttr (sName));
   }
 
-  /**
-   * Get the value of the checkbox of the request parameter with the given name.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @param bDefaultValue
-   *        the default value to be returned, if no request attribute is present
-   * @return The value of the passed request parameter
-   */
   public boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
   {
     return getCheckBoxAttrStatic (sName, bDefaultValue);
   }
 
-  /**
-   * Get the value of the checkbox of the request parameter with the given name.
-   * 
-   * @param sName
-   *        Request parameter name
-   * @param bDefaultValue
-   *        the default value to be returned, if no request attribute is present
-   * @return The value of the passed request parameter
-   */
   public static boolean getCheckBoxAttrStatic (@Nullable final String sName, final boolean bDefaultValue)
   {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
   }
 
-  /**
-   * Get the uploaded file with the specified request parameter.
-   * 
-   * @param sName
-   *        The parameter name.
-   * @return <code>null</code> if no such uploaded file is present.
-   * @throws ClassCastException
-   *         if the passed request parameter is not a file
-   */
   @Nullable
   public IFileItem getFileItem (@Nullable final String sName)
   {
@@ -336,10 +201,6 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return getUserAgent ().getBrowserInfo ();
   }
 
-  /**
-   * @return The custom attributes for this execution context. Never
-   *         <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableObject (reason = "Design")
   public IAttributeContainer getCustomAttrs ()
@@ -347,30 +208,12 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return m_aCustomAttrs;
   }
 
-  /**
-   * Get the URL of the specified menu it.
-   * 
-   * @param sMenuItemID
-   *        The ID of the menu item to link to. May not be <code>null</code>.
-   * @return The non-<code>null</code> URL to the specified menu item.
-   */
   @Nonnull
   public SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
     return LinkUtils.getLinkToMenuItem (m_aRequestScope, sMenuItemID);
   }
 
-  /**
-   * Get the URL of the specified menu it.
-   * 
-   * @param aParams
-   *        The optional request parameters to be used. May be <code>null</code>
-   *        or empty.
-   * @param sMenuItemID
-   *        The ID of the menu item to link to. May not be <code>null</code>.
-   * @return The non-<code>null</code> URL to the specified menu item with the
-   *         passed parameters.
-   */
   @Nonnull
   public SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID, @Nullable final Map <String, String> aParams)
   {

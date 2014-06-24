@@ -23,6 +23,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
@@ -42,7 +43,7 @@ public class WebPageExecutionContext extends LayoutExecutionContext
     this (aWPEC, aWPEC.getWebPage ());
   }
 
-  public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC,
+  public WebPageExecutionContext (@Nonnull final ILayoutExecutionContext aLEC,
                                   @Nonnull final IWebPage <? extends WebPageExecutionContext> aWebPage)
   {
     super (aLEC, aLEC.getSelectedMenuItem ());

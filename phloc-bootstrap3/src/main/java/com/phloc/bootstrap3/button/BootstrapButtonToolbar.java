@@ -24,7 +24,7 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webctrls.custom.IIcon;
 import com.phloc.webctrls.custom.toolbar.AbstractButtonToolbar;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -47,7 +47,7 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
     this (LinkUtils.getSelfHref (aRequestScope));
   }
 
-  public BootstrapButtonToolbar (@Nonnull final LayoutExecutionContext aLEC)
+  public BootstrapButtonToolbar (@Nonnull final ILayoutExecutionContext aLEC)
   {
     this (aLEC.getSelfHref ());
   }

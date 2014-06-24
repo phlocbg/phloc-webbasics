@@ -41,7 +41,7 @@ import com.phloc.html.hc.IHCNode;
  * @author Philip Helger
  */
 @ThreadSafe
-public class LayoutManagerProxy <LECTYPE extends LayoutExecutionContext> implements ILayoutManager <LECTYPE>
+public class LayoutManagerProxy <LECTYPE extends ILayoutExecutionContext> implements ILayoutManager <LECTYPE>
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")

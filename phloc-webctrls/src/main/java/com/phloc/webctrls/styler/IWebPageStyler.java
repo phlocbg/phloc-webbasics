@@ -29,7 +29,7 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.app.ISimpleWebExecutionContext;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
@@ -96,7 +96,7 @@ public interface IWebPageStyler
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IButtonToolbar <?> createToolbar (@Nonnull LayoutExecutionContext aLEC);
+  IButtonToolbar <?> createToolbar (@Nonnull ILayoutExecutionContext aLEC);
 
   @Nonnull
   ITabBox <?> createTabBox ();

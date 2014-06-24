@@ -29,7 +29,7 @@ import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.customize.HCMultiCustomizer;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
 
 /**
@@ -37,7 +37,7 @@ import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
  * 
  * @author Philip Helger
  */
-public abstract class WebAppListenerMultiAppBootstrap <LECTYPE extends LayoutExecutionContext> extends WebAppListenerMultiApp <LECTYPE>
+public abstract class WebAppListenerMultiAppBootstrap <LECTYPE extends ILayoutExecutionContext> extends WebAppListenerMultiApp <LECTYPE>
 {
   @Nonnull
   @OverrideOnDemand

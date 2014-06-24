@@ -27,7 +27,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public interface ILayoutAreaContentProvider <LECTYPE extends LayoutExecutionContext>
+public interface ILayoutAreaContentProvider <LECTYPE extends ILayoutExecutionContext>
 {
   /**
    * @param aLEC

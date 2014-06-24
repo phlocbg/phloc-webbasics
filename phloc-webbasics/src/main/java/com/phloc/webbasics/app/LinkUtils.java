@@ -42,7 +42,7 @@ import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -606,7 +606,7 @@ public final class LinkUtils
    */
   @Nonnull
   @ReturnsMutableCopy
-  public static SMap getDefaultParams (@Nonnull final LayoutExecutionContext aLEC)
+  public static SMap getDefaultParams (@Nonnull final ILayoutExecutionContext aLEC)
   {
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
     return new SMap ().add (aARM.getRequestParamNameMenuItem (), aLEC.getSelectedMenuItemID ())

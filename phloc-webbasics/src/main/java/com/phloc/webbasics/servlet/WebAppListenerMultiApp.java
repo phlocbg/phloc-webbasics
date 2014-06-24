@@ -42,7 +42,7 @@ import com.phloc.webbasics.action.ApplicationActionManager;
 import com.phloc.webbasics.ajax.ApplicationAjaxManager;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webbasics.app.layout.ApplicationLayoutManager;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataManager;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -51,7 +51,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public abstract class WebAppListenerMultiApp <LECTYPE extends LayoutExecutionContext> extends WebAppListenerWithStatistics
+public abstract class WebAppListenerMultiApp <LECTYPE extends ILayoutExecutionContext> extends WebAppListenerWithStatistics
 {
   public static final int DEFAULT_PASSWORD_MIN_LENGTH = 6;
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListenerMultiApp.class);

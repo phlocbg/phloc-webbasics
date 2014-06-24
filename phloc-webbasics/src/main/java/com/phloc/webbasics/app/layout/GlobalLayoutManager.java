@@ -36,7 +36,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  */
 @ThreadSafe
 @Deprecated
-public final class GlobalLayoutManager <LECTYPE extends LayoutExecutionContext> extends GlobalSingleton implements ILayoutManager <LECTYPE>
+public final class GlobalLayoutManager <LECTYPE extends ILayoutExecutionContext> extends GlobalSingleton implements ILayoutManager <LECTYPE>
 {
   private final LayoutManagerProxy <LECTYPE> m_aProxy = new LayoutManagerProxy <LECTYPE> ();
 
@@ -47,7 +47,7 @@ public final class GlobalLayoutManager <LECTYPE extends LayoutExecutionContext> 
 
   @SuppressWarnings ("unchecked")
   @Nonnull
-  public static <LECTYPE extends LayoutExecutionContext> GlobalLayoutManager <LECTYPE> getInstance ()
+  public static <LECTYPE extends ILayoutExecutionContext> GlobalLayoutManager <LECTYPE> getInstance ()
   {
     return getGlobalSingleton (GlobalLayoutManager.class);
   }

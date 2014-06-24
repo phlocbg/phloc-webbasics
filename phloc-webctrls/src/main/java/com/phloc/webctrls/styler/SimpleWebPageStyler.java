@@ -46,7 +46,7 @@ import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.ISimpleWebExecutionContext;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.HCTableForm;
@@ -186,7 +186,7 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public IButtonToolbar <?> createToolbar (@Nonnull final LayoutExecutionContext aLEC)
+  public IButtonToolbar <?> createToolbar (@Nonnull final ILayoutExecutionContext aLEC)
   {
     return new SimpleButtonToolbar (aLEC);
   }

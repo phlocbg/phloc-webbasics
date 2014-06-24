@@ -23,8 +23,8 @@ import com.phloc.appbasics.app.ILocaleManager;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.layout.ILayoutManager;
-import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * Base interface for an application-specific initializer. The methods are
@@ -32,7 +32,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
  * 
  * @author Philip Helger
  */
-public interface IApplicationInitializer <LECTYPE extends LayoutExecutionContext>
+public interface IApplicationInitializer <LECTYPE extends ILayoutExecutionContext>
 {
   /**
    * Init all application specific settings. This method is called before all

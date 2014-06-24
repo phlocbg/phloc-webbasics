@@ -40,11 +40,11 @@ import com.phloc.webbasics.app.SimpleWebExecutionContext;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class LayoutExecutionContext extends SimpleWebExecutionContext
+public class LayoutExecutionContext extends SimpleWebExecutionContext implements ILayoutExecutionContext
 {
   private final IMenuItemPage m_aSelectedMenuItem;
 
-  public LayoutExecutionContext (@Nonnull final LayoutExecutionContext aLEC)
+  public LayoutExecutionContext (@Nonnull final ILayoutExecutionContext aLEC)
   {
     this (aLEC, aLEC.getSelectedMenuItem ());
   }
@@ -56,20 +56,12 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
     m_aSelectedMenuItem = ValueEnforcer.notNull (aSelectedMenuItem, "SelectedMenuItem");
   }
 
-  /**
-   * @return The selected menu item as specified in the constructor. Never
-   *         <code>null</code>.
-   */
   @Nonnull
   public IMenuItemPage getSelectedMenuItem ()
   {
     return m_aSelectedMenuItem;
   }
 
-  /**
-   * @return The ID of the selected menu item as specified in the constructor.
-   *         Neiter <code>null</code> nor empty.
-   */
   @Nonnull
   @Nonempty
   public String getSelectedMenuItemID ()
@@ -77,27 +69,12 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
     return m_aSelectedMenuItem.getID ();
   }
 
-  /**
-   * Get the URL to the current page.
-   * 
-   * @return The non-<code>null</code> URL to the current page (selected menu
-   *         item) with the passed parameters.
-   */
   @Nonnull
   public SimpleURL getSelfHref ()
   {
     return getLinkToMenuItem (m_aSelectedMenuItem.getID ());
   }
 
-  /**
-   * Get the URL to the current page with the provided set of parameters.
-   * 
-   * @param aParams
-   *        The optional request parameters to be used. May be <code>null</code>
-   *        or empty.
-   * @return The non-<code>null</code> URL to the current page (selected menu
-   *         item) with the passed parameters.
-   */
   @Nonnull
   public SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
