@@ -15,16 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.ajax;
+package com.phloc.webbasics.action;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
-public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExecutionContext> extends AbstractAjaxHandler
+public abstract class AbstractActionExecutorWithContext <LECTYPE extends ILayoutExecutionContext> extends AbstractActionExecutor
 {
   /**
    * Create the layout execution context
@@ -41,20 +40,20 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
    * 
    * @param aLEC
    *        The lyout execution context. Never <code>null</code>.
-   * @return the result object. May not be <code>null</code>
-   * @throws Exception
+   * @param aUnifiedResponse
+   *        The response to write to. Never <code>null</code>.
+   * @throws Throwable
+   *         in case of an error
    */
-  @OverrideOnDemand
   @Nonnull
-  protected abstract IAjaxResponse mainHandleRequest (@Nonnull LECTYPE aLEC) throws Exception;
+  protected abstract void mainExecute (@Nonnull LECTYPE aLEC, @Nonnull UnifiedResponse aUnifiedResponse) throws Throwable;
 
-  @Override
-  protected final IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  public final void execute (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                             @Nonnull final UnifiedResponse aUnifiedResponse) throws Throwable
   {
     final LECTYPE aLEC = createLayoutExecutionContext (aRequestScope);
     if (aLEC == null)
       throw new IllegalStateException ("Failed to create layout execution context!");
-    return mainHandleRequest (aLEC);
+    mainExecute (aLEC, aUnifiedResponse);
   }
 }
