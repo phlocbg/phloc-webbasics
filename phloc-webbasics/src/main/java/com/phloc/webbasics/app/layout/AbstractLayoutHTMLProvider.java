@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.appbasics.app.menu.IMenuItemPage;
+import com.phloc.appbasics.app.IRequestManager;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -101,7 +101,7 @@ public abstract class AbstractLayoutHTMLProvider <LECTYPE extends ILayoutExecuti
 
   @Nonnull
   protected abstract LECTYPE createLayoutExecutionContext (@Nonnull ISimpleWebExecutionContext aSWEC,
-                                                           @Nonnull IMenuItemPage aSelectedMenuItem);
+                                                           @Nonnull IRequestManager aRequestManager);
 
   /**
    * Overridable method that is called before the content areas are rendered
@@ -143,8 +143,7 @@ public abstract class AbstractLayoutHTMLProvider <LECTYPE extends ILayoutExecuti
   @Override
   protected void fillBody (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
-    final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
-    final LECTYPE aLEC = createLayoutExecutionContext (aSWEC, aSelectedMenuItem);
+    final LECTYPE aLEC = createLayoutExecutionContext (aSWEC, ApplicationRequestManager.getInstance ());
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();

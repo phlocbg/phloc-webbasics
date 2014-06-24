@@ -23,12 +23,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.menu.ApplicationMenuTree;
-import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItem;
-import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -104,17 +100,6 @@ public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> ext
                               @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
-  }
-
-  @Nonnull
-  @OverrideOnDemand
-  protected IMenuTree getMenuTree ()
-  {
-    IMenuTree ret = ApplicationMenuTree.getTree ();
-    // XXX hack alert :(
-    if (!ret.getRootItem ().hasChildren ())
-      ret = GlobalMenuTree.getTree ();
-    return ret;
   }
 
   @Override
@@ -232,7 +217,7 @@ public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> ext
         final HCRow aRow = aPerPage.addBodyRow ();
 
         final String sPageID = aFormState.getPageID ();
-        final IMenuItem aMenuItem = (IMenuItem) getMenuTree ().getMenuObjectOfID (sPageID);
+        final IMenuItem aMenuItem = (IMenuItem) aWPEC.getMenuTree ().getMenuObjectOfID (sPageID);
         aRow.addCell (aMenuItem.getDisplayText (aDisplayLocale));
 
         aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aDisplayLocale));

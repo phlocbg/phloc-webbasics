@@ -6,12 +6,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItemPage;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 
 public interface ILayoutExecutionContext extends ISimpleWebExecutionContext
 {
+  /**
+   * @return The menu tree to be used for this layout execution context. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  IMenuTree getMenuTree ();
+
   /**
    * @return The selected menu item as specified in the constructor. Never
    *         <code>null</code>.
