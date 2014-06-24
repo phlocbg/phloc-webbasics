@@ -103,26 +103,34 @@ public final class DataTablesServerDataCell implements Serializable
 
     // Convert to IMicroNode and to String
     final IMicroNode aNode = m_aContent.convertToNode (m_aCS);
-    m_sHTML = MicroWriter.getNodeAsString (aNode, m_aCS.getXMLWriterSettings ());
-
-    if (aNode instanceof IMicroNodeWithChildren)
-      m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
+    if (aNode == null)
+    {
+      m_sHTML = "";
+      m_sTextContent = null;
+    }
     else
-      if (aNode.isText ())
-      {
-        // ignore whitespace-only content
-        if (!((IMicroText) aNode).isElementContentWhitespace ())
-          m_sTextContent = aNode.getNodeValue ();
-        else
-          m_sTextContent = null;
-      }
+    {
+      m_sHTML = MicroWriter.getNodeAsString (aNode, m_aCS.getXMLWriterSettings ());
+
+      if (aNode instanceof IMicroNodeWithChildren)
+        m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
       else
-        if (aNode.isCDATA ())
+        if (aNode.isText ())
         {
-          m_sTextContent = aNode.getNodeValue ();
+          // ignore whitespace-only content
+          if (!((IMicroText) aNode).isElementContentWhitespace ())
+            m_sTextContent = aNode.getNodeValue ();
+          else
+            m_sTextContent = null;
         }
         else
-          m_sTextContent = null;
+          if (aNode.isCDATA ())
+          {
+            m_sTextContent = aNode.getNodeValue ();
+          }
+          else
+            m_sTextContent = null;
+    }
   }
 
   @Nonnull
