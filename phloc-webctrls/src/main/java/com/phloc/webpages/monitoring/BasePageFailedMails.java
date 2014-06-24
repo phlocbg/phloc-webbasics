@@ -77,7 +77,7 @@ import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.IReadonlyEmailAttachmentList;
 import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -92,7 +92,7 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  * 
  * @author Philip Helger
  */
-public class BasePageFailedMails <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <FailedMailData, WPECTYPE>
+public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <FailedMailData, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

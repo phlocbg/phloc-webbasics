@@ -44,7 +44,7 @@ import com.phloc.masterdata.currency.ECurrency;
 import com.phloc.masterdata.locale.ContinentUtils;
 import com.phloc.masterdata.locale.EContinent;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.famfam.EFamFamCSSPathProvider;
@@ -57,7 +57,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageDataCurrencies <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageDataCurrencies <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText

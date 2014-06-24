@@ -39,7 +39,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.scopes.domain.IApplicationScope;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -55,7 +55,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public class BasePageScopes <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageScopes <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

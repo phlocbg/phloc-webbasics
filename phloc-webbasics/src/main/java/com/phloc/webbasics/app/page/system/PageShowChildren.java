@@ -38,11 +38,11 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
-public class PageShowChildren <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
+public class PageShowChildren <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
 {
-  private static final class ShowChildrenCallback <WPECTYPE extends WebPageExecutionContext> extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+  private static final class ShowChildrenCallback <WPECTYPE extends IWebPageExecutionContext> extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
     private final WPECTYPE m_aWPEC;
     private final NonBlockingStack <HCUL> m_aStack;

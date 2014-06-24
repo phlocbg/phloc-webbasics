@@ -62,7 +62,7 @@ import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailData;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.smtp.CNamedSMTPSettings;
@@ -80,7 +80,7 @@ import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
-public class BasePageSettingsSMTP <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <NamedSMTPSettings, WPECTYPE>
+public class BasePageSettingsSMTP <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <NamedSMTPSettings, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

@@ -40,7 +40,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.impl.HCDOMWrapper;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * Renders a page with HTML code that is provided from an external resource
@@ -49,7 +49,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * @author Philip Helger
  */
 @ThreadSafe
-public class PageViewExternalMultiLingual <WPECTYPE extends WebPageExecutionContext> extends AbstractPageViewExternal <WPECTYPE>
+public class PageViewExternalMultiLingual <WPECTYPE extends IWebPageExecutionContext> extends AbstractPageViewExternal <WPECTYPE>
 {
   @NotThreadSafe
   private static final class ContentPerLocale implements Serializable

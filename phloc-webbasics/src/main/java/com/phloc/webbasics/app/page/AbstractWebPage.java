@@ -49,7 +49,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext> extends AbstractPage implements IWebPage <WPECTYPE>
+public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext> extends AbstractPage implements IWebPage <WPECTYPE>
 {
   /** The CSS class to be applied to the help div */
   public static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
@@ -225,7 +225,7 @@ public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext>
 
   /**
    * This method is called before the main
-   * {@link #fillContent(WebPageExecutionContext)} method is called.
+   * {@link #fillContent(IWebPageExecutionContext)} method is called.
    */
   @OverrideOnDemand
   protected void beforeFillContent ()
@@ -242,7 +242,7 @@ public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext>
 
   /**
    * This method is called after the main
-   * {@link #fillContent(WebPageExecutionContext)} method is called.
+   * {@link #fillContent(IWebPageExecutionContext)} method is called.
    */
   @OverrideOnDemand
   protected void afterFillContent ()
@@ -326,7 +326,7 @@ public abstract class AbstractWebPage <WPECTYPE extends WebPageExecutionContext>
 
   /**
    * Default implementation calling the abstract
-   * {@link #fillContent(WebPageExecutionContext)} method and creating the help
+   * {@link #fillContent(IWebPageExecutionContext)} method and creating the help
    * node if desired.
    */
   public final void getContent (@Nonnull final WPECTYPE aWPEC)

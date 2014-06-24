@@ -41,7 +41,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
@@ -53,7 +53,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoThreads <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageSysInfoThreads <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText

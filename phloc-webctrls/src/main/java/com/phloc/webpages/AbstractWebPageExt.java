@@ -40,13 +40,13 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webbasics.app.page.AbstractWebPage;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.styler.IWebPageStyler;
 import com.phloc.webctrls.styler.WebPageStylerManager;
 
-public abstract class AbstractWebPageExt <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
+public abstract class AbstractWebPageExt <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
 {
   /** The width of a single action column in pixels */
   public static final int DEFAULT_ACTION_COL_WIDTH = 20;

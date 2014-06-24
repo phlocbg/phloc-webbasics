@@ -33,7 +33,7 @@ import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.mgr.MetaSystemManager;
 
 /**
@@ -43,7 +43,7 @@ import com.phloc.webbasics.mgr.MetaSystemManager;
  * @param <DATATYPE>
  *        The data type of the object to be handled.
  */
-public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>, WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <DATATYPE, WPECTYPE>
+public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>, WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageForm <DATATYPE, WPECTYPE>
 {
   public AbstractWebPageFormExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {

@@ -48,7 +48,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.web.networkinterface.ComparatorNetworkInterfaceName;
 import com.phloc.web.networkinterface.NetworkInterfaceUtils;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
@@ -60,7 +60,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoNetwork <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageSysInfoNetwork <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText

@@ -28,7 +28,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * The default renderer used for {@link PageShowChildren}.
@@ -51,7 +51,7 @@ public class PageShowChildrenRenderer implements Serializable
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuSeparator (@Nonnull final WebPageExecutionContext aWPEC,
+  protected IHCNode renderMenuSeparator (@Nonnull final IWebPageExecutionContext aWPEC,
                                          @Nonnull final IMenuSeparator aMenuSeparator)
   {
     return null;
@@ -68,7 +68,7 @@ public class PageShowChildrenRenderer implements Serializable
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuItemPage (@Nonnull final WebPageExecutionContext aWPEC,
+  protected IHCNode renderMenuItemPage (@Nonnull final IWebPageExecutionContext aWPEC,
                                         @Nonnull final IMenuItemPage aMenuItemPage)
   {
     if (!aMenuItemPage.matchesDisplayFilter ())
@@ -87,7 +87,7 @@ public class PageShowChildrenRenderer implements Serializable
    */
   @Nullable
   @OverrideOnDemand
-  protected IHCNode renderMenuItemExternal (@Nonnull final WebPageExecutionContext aWPEC,
+  protected IHCNode renderMenuItemExternal (@Nonnull final IWebPageExecutionContext aWPEC,
                                             @Nonnull final IMenuItemExternal aMenuItemExternal)
   {
     if (!aMenuItemExternal.matchesDisplayFilter ())

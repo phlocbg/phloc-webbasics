@@ -42,7 +42,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.web.servlet.cookie.CookieHelper;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
@@ -54,7 +54,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoRequest <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageSysInfoRequest <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText

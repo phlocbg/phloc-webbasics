@@ -51,7 +51,7 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -65,7 +65,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageLoginInfo <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <LoginInfo, WPECTYPE>
+public class BasePageLoginInfo <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <LoginInfo, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

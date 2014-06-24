@@ -34,7 +34,7 @@ import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
@@ -50,7 +50,7 @@ import com.phloc.webctrls.js.JSFormHelper;
  * @param <DATATYPE>
  *        The data type of the object to be handled.
  */
-public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   // all internal IDs starting with "$" to prevent accidental overwrite with
   // actual field
@@ -86,7 +86,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
    * @param aWPEC
    *        The current web page execution context. Never <code>null</code>.
    * @return <code>true</code> if the form for
-   *         {@link #showInputForm(WebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
+   *         {@link #showInputForm(IWebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
    *         should be a file-upload form, <code>false</code> if a regular form
    *         is sufficient.
    */
@@ -445,7 +445,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
   /**
    * Add additional form IDs (e.g. client and accounting area). This method is
    * called before
-   * {@link #showInputForm(WebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
+   * {@link #showInputForm(IWebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
    * is called.
    * 
    * @param aWPEC

@@ -32,14 +32,14 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * Default page showing a very rudimentary "page not found"
  * 
  * @author Philip Helger
  */
-public class SystemPageNotFound <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
+public class SystemPageNotFound <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPage <WPECTYPE>
 {
   public static final String PAGEID_SYSTEM_NOTFOUND = "system.notfound";
   private static final Logger s_aLogger = LoggerFactory.getLogger (SystemPageNotFound.class);

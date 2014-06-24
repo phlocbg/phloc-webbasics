@@ -59,7 +59,7 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
@@ -68,7 +68,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
-public class BasePageUserGroupManagement <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <IUserGroup, WPECTYPE>
+public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <IUserGroup, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

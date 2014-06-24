@@ -68,7 +68,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webctrls.custom.EDefaultIcon;
@@ -84,7 +84,7 @@ import com.phloc.webpages.EWebPageText;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class BasePageUserManagement <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageFormExt <IUser, WPECTYPE>
+public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <IUser, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

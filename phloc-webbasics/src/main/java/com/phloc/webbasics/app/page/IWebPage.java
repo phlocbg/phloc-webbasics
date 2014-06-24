@@ -28,7 +28,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
-public interface IWebPage <WPECTYPE extends WebPageExecutionContext> extends IPage
+public interface IWebPage <WPECTYPE extends IWebPageExecutionContext> extends IPage
 {
   /**
    * @return The icon for the web page. May be <code>null</code>.
@@ -48,7 +48,7 @@ public interface IWebPage <WPECTYPE extends WebPageExecutionContext> extends IPa
 
   /**
    * Get the headline of the page. By default it is
-   * <code>&lt;h1&gt;{@link #getHeaderText(WebPageExecutionContext)}&lt;/h1&gt;</code>
+   * <code>&lt;h1&gt;{@link #getHeaderText(IWebPageExecutionContext)}&lt;/h1&gt;</code>
    * 
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.

@@ -45,7 +45,7 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webctrls.custom.EDefaultIcon;
@@ -54,7 +54,7 @@ import com.phloc.webpages.AbstractWebPageForm;
 
 // For GlobalMenuTree
 @SuppressWarnings ("deprecation")
-public class BasePageSavedStates <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <FormState, WPECTYPE>
+public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageForm <FormState, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText

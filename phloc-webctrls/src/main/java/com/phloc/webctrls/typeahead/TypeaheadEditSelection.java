@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * Domain object to easily handle the selected elements of a
@@ -92,7 +92,7 @@ public class TypeaheadEditSelection
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static TypeaheadEditSelection getSelectionForRequiredObject (@Nonnull final WebPageExecutionContext aWPEC,
+  public static TypeaheadEditSelection getSelectionForRequiredObject (@Nonnull final IWebPageExecutionContext aWPEC,
                                                                       @Nullable final String sEditFieldName,
                                                                       @Nullable final String sHiddenFieldName)
   {

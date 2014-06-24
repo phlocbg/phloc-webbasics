@@ -30,7 +30,7 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.web.smtp.failed.FailedMailQueue;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
@@ -103,7 +103,7 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
+  public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
                                                                                              @Nonnull final IMenuItem aParent,
                                                                                              @Nullable final IFilter <IMenuObject> aDisplayFilter,
                                                                                              @Nonnull final IAuditManager aAuditManager,
@@ -129,7 +129,7 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSecurityItems (@Nonnull final IMenuTree aMenuTree,
+  public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSecurityItems (@Nonnull final IMenuTree aMenuTree,
                                                                                            @Nonnull final IMenuItem aParent,
                                                                                            @Nullable final IFilter <IMenuObject> aDisplayFilter,
                                                                                            @Nonnull final Locale aDefaultLocale)
@@ -150,7 +150,7 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
+  public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
                                                                                            @Nonnull final IMenuItem aParent,
                                                                                            @Nullable final IFilter <IMenuObject> aDisplayFilter,
                                                                                            @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
@@ -172,7 +172,7 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
+  public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
                                                                                           @Nonnull final IMenuItem aParent,
                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
@@ -201,7 +201,7 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
-  public static <WPECTYPE extends WebPageExecutionContext> IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
+  public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
                                                                                        @Nonnull final IMenuItem aParent,
                                                                                        @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {

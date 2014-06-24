@@ -47,7 +47,7 @@ import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -61,7 +61,7 @@ import com.phloc.webpages.UITextFormatter;
  * 
  * @author Philip Helger
  */
-public class BasePageSessions <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageForm <ISessionScope, WPECTYPE>
+public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageForm <ISessionScope, WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs

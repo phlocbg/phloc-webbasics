@@ -37,7 +37,7 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.parser.XHTMLParser;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
-import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * Base class for pages consisting of external HTML code that is provided from
@@ -46,7 +46,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * @author Philip Helger
  */
 @ThreadSafe
-public abstract class AbstractPageViewExternal <WPECTYPE extends WebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public abstract class AbstractPageViewExternal <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
 
@@ -94,7 +94,7 @@ public abstract class AbstractPageViewExternal <WPECTYPE extends WebPageExecutio
 
   /**
    * @return <code>true</code> if the underlying resource should be read each
-   *         time {@link #fillContent(WebPageExecutionContext)} is invoked or
+   *         time {@link #fillContent(IWebPageExecutionContext)} is invoked or
    *         <code>false</code> if the resource is read once in the constructor
    *         and re-used over and over.
    */
@@ -114,7 +114,7 @@ public abstract class AbstractPageViewExternal <WPECTYPE extends WebPageExecutio
   /**
    * @param bReadEveryTime
    *        <code>true</code> if the underlying resource should be read each
-   *        time {@link #fillContent(WebPageExecutionContext)} is invoked or
+   *        time {@link #fillContent(IWebPageExecutionContext)} is invoked or
    *        <code>false</code> if the resource should be read once in the
    *        constructor and re-used over and over.
    * @return this
