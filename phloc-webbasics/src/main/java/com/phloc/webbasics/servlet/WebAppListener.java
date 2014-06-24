@@ -348,6 +348,20 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     return aSC.getInitParameter (sParameterName);
   }
 
+  @Nonnull
+  protected String getServletContextPath (@Nonnull final ServletContext aSC)
+  {
+    String sPath = aSC.getRealPath (".");
+    if (sPath == null)
+    {
+      // Fallback for Undertow
+      sPath = aSC.getRealPath ("");
+    }
+    if (StringHelper.hasNoText (sPath))
+      throw new IllegalStateException ("Failed to determine real path of ServletContext " + aSC);
+    return sPath;
+  }
+
   /**
    * Get the data path to be used for this application. By default the servlet
    * context init-parameter {@link #INIT_PARAMETER_STORAGE_PATH} is evaluated.
@@ -366,7 +380,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (StringHelper.hasNoText (sDataPath))
     {
       // No storage path provided in web.xml
-      sDataPath = aSC.getRealPath (".");
+      sDataPath = getServletContextPath (aSC);
       if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
         s_aLogger.info ("No servlet context init-parameter '" +
                         INIT_PARAMETER_STORAGE_PATH +
@@ -457,7 +471,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     // Init IO
     {
       // Get the ServletContext base path
-      final String sServletContextPath = aSC.getRealPath (".");
+      final String sServletContextPath = getServletContextPath (aSC);
       // Get the data path
       final String sDataPath = getDataPath (aSC);
       if (StringHelper.hasNoText (sDataPath))
