@@ -28,6 +28,7 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
@@ -48,7 +49,7 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext
     this (aLEC, aLEC.getSelectedMenuItem ());
   }
 
-  public LayoutExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public LayoutExecutionContext (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                  @Nonnull final IMenuItemPage aSelectedMenuItem)
   {
     super (aSWEC);

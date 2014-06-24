@@ -38,7 +38,7 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
 
@@ -96,7 +96,7 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapDataTables createDefaultDataTables (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                       @Nonnull final IHCTable <?> aTable)
   {
     final BootstrapDataTables ret = new BootstrapDataTables (aTable);

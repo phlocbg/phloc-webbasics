@@ -37,7 +37,7 @@ import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.web.smtp.IEmailAttachmentList;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.error.InternalErrorHandler;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 
@@ -100,7 +100,7 @@ public abstract class AbstractLayoutHTMLProvider <LECTYPE extends LayoutExecutio
   }
 
   @Nonnull
-  protected abstract LECTYPE createLayoutExecutionContext (@Nonnull SimpleWebExecutionContext aSWEC,
+  protected abstract LECTYPE createLayoutExecutionContext (@Nonnull ISimpleWebExecutionContext aSWEC,
                                                            @Nonnull IMenuItemPage aSelectedMenuItem);
 
   /**
@@ -141,7 +141,7 @@ public abstract class AbstractLayoutHTMLProvider <LECTYPE extends LayoutExecutio
   {}
 
   @Override
-  protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
+  protected void fillBody (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
     final LECTYPE aLEC = createLayoutExecutionContext (aSWEC, aSelectedMenuItem);

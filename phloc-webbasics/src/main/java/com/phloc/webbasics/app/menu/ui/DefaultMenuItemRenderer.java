@@ -32,7 +32,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.impl.HCEntityNode;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -58,14 +58,14 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Nonnull
-  public IHCNode renderSeparator (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderSeparator (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final IMenuSeparator aSeparator)
   {
     return HCEntityNode.newNBSP ();
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderMenuItemPage (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                      @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
@@ -81,7 +81,7 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Nonnull
-  public IHCNode renderMenuItemExternal (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderMenuItemExternal (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                          @Nonnull final IMenuItemExternal aMenuItem,
                                          final boolean bHasChildren,
                                          final boolean bIsSelected,
@@ -98,13 +98,13 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuSeparatorItem (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCLI aLI)
+  public void onMenuSeparatorItem (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCLI aLI)
   {
     aLI.addClass (CSS_CLASS_MENU_SEPARATOR);
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public void onMenuItemPageItem (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bIsSelected,
@@ -114,7 +114,7 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuItemExternalItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public void onMenuItemExternalItem (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                       @Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
                                       final boolean bIsSelected,

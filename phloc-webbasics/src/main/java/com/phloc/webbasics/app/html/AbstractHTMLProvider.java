@@ -33,6 +33,7 @@ import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -101,7 +102,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
    */
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void fillHead (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
+  protected void fillHead (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
     final HCHead aHead = aHtml.getHead ();
@@ -131,7 +132,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
    * @param aHtml
    *        HTML object to be filled
    */
-  protected abstract void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull HCHtml aHtml);
+  protected abstract void fillBody (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull HCHtml aHtml);
 
   @Nonnull
   public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
@@ -139,7 +140,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
     final Locale aDisplayLocale = getDisplayLocale ();
 
     // Build the execution scope
-    final SimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope, aDisplayLocale);
+    final ISimpleWebExecutionContext aSWEC = new SimpleWebExecutionContext (aRequestScope, aDisplayLocale);
 
     // Create the surrounding HTML element
     final HCHtml aHtml = createHCHtml (aDisplayLocale);

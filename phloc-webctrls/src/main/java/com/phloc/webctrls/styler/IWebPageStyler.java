@@ -28,7 +28,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
@@ -40,10 +40,10 @@ import com.phloc.webctrls.datatables.DataTables;
 public interface IWebPageStyler
 {
   @Nonnull
-  IHCNode createImageView (@Nonnull SimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO);
+  IHCNode createImageView (@Nonnull ISimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO);
 
   @Nonnull
-  IHCNode createImageView (@Nonnull SimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO, int nMaxWidth);
+  IHCNode createImageView (@Nonnull ISimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO, int nMaxWidth);
 
   @Nullable
   IHCNode createEmailLink (@Nullable String sEmailAddress);
@@ -90,7 +90,7 @@ public interface IWebPageStyler
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
 
   @Nonnull
-  DataTables createDefaultDataTables (@Nonnull SimpleWebExecutionContext aSWEC, @Nonnull IHCTable <?> aTable);
+  DataTables createDefaultDataTables (@Nonnull ISimpleWebExecutionContext aSWEC, @Nonnull IHCTable <?> aTable);
 
   @Nonnull
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);

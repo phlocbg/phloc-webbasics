@@ -45,7 +45,7 @@ import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
@@ -65,13 +65,13 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final SimpleWebExecutionContext aSWEC, @Nullable final UserDataObject aUDO)
+  public IHCNode createImageView (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nullable final UserDataObject aUDO)
   {
     return createImageView (aSWEC, aUDO, 200);
   }
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode createImageView (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nullable final UserDataObject aUDO,
                                   final int nMaxWidth)
   {
@@ -170,7 +170,7 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public DataTables createDefaultDataTables (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                              @Nonnull final IHCTable <?> aTable)
   {
     final DataTables ret = new DataTables (aTable);

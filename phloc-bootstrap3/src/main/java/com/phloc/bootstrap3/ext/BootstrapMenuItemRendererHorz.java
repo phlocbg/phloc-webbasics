@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 
 /**
  * A special menu item renderer for the footer area, where the items are
@@ -41,7 +41,7 @@ public class BootstrapMenuItemRendererHorz extends BootstrapMenuItemRenderer
 
   @Override
   @Nonnull
-  public IHCNode renderSeparator (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderSeparator (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final IMenuSeparator aSeparator)
   {
     return new HCLI ().addChild ("·");

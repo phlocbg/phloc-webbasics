@@ -39,7 +39,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
@@ -57,7 +57,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderSeparator (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderSeparator (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final IMenuSeparator aSeparator)
   {
     return new HCLI ().addClass (CBootstrapCSS.DIVIDER);
@@ -88,7 +88,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderMenuItemPage (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                      @Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
@@ -126,7 +126,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public IHCNode renderMenuItemExternal (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public IHCNode renderMenuItemExternal (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                          @Nonnull final IMenuItemExternal aMenuItem,
                                          final boolean bHasChildren,
                                          final boolean bIsSelected,
@@ -147,7 +147,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public void onMenuItemPageItem (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
                                   final boolean bSelected,
@@ -158,7 +158,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Override
-  public void onMenuItemExternalItem (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public void onMenuItemExternalItem (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                       @Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
                                       final boolean bSelected,
@@ -169,14 +169,14 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree)
   {
     return createSideBarMenu (aSWEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree));
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
@@ -187,7 +187,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static IHCElement <?> createSideBarMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public static IHCElement <?> createSideBarMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                   @Nonnull final IMenuTree aMenuTree,
                                                   @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                   @Nonnull final BootstrapMenuItemRenderer aRenderer)

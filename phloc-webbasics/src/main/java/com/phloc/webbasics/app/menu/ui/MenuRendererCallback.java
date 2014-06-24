@@ -39,6 +39,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
 
 /**
@@ -48,7 +49,7 @@ import com.phloc.webbasics.app.SimpleWebExecutionContext;
  */
 public class MenuRendererCallback <T extends AbstractHCList <?>> extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
-  private final SimpleWebExecutionContext m_aSWEC;
+  private final ISimpleWebExecutionContext m_aSWEC;
   private final IFactory <T> m_aFactory;
   private final NonBlockingStack <T> m_aMenuListStack;
   private final IMenuItemRenderer <T> m_aRenderer;
@@ -58,7 +59,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   private final NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> m_aTreeItemStack = new NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> ();
   private final String m_sSelectedItem;
 
-  protected MenuRendererCallback (@Nonnull final SimpleWebExecutionContext aSWEC,
+  protected MenuRendererCallback (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                   @Nonnull final IFactory <T> aFactory,
                                   @Nonnull final NonBlockingStack <T> aMenuListStack,
                                   @Nonnull final IMenuItemRenderer <T> aRenderer,
@@ -242,7 +243,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final IMenuTree aMenuTree,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
@@ -297,7 +298,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final SimpleWebExecutionContext aSWEC,
+  public static <T extends AbstractHCList <?>> T createRenderedMenu (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                                                      @Nonnull final IFactory <T> aFactory,
                                                                      @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,

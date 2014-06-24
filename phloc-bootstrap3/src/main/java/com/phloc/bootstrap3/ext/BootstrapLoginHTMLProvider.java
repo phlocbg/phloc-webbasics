@@ -41,7 +41,7 @@ import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.login.CLogin;
 import com.phloc.webbasics.login.LoginHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -65,7 +65,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void fillHead (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
+  protected void fillHead (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     super.fillHead (aSWEC, aHtml);
     aHtml.getHead ().setPageTitle (m_sPageTitle);
@@ -80,7 +80,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
    *        The pre-filled form.
    */
   @OverrideOnDemand
-  protected void onAfterForm (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final BootstrapForm aForm)
+  protected void onAfterForm (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final BootstrapForm aForm)
   {}
 
   /**
@@ -96,7 +96,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
    *        The content column, where the form resides in,
    */
   @OverrideOnDemand
-  protected void onAfterContainer (@Nonnull final SimpleWebExecutionContext aSWEC,
+  protected void onAfterContainer (@Nonnull final ISimpleWebExecutionContext aSWEC,
                                    @Nonnull final BootstrapContainer aContainer,
                                    @Nonnull final BootstrapRow aRow,
                                    @Nonnull final HCDiv aContentCol)
@@ -111,12 +111,12 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
    *        The span where the container resides in
    */
   @OverrideOnDemand
-  protected void onAfterLoginContainer (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCSpan aSpan)
+  protected void onAfterLoginContainer (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCSpan aSpan)
   {}
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void fillBody (@Nonnull final SimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
+  protected void fillBody (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nonnull final HCHtml aHtml)
   {
     final IRequestWebScopeWithoutResponse aRequestScope = aSWEC.getRequestScope ();
     final Locale aDisplayLocale = aSWEC.getDisplayLocale ();

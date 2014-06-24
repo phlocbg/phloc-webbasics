@@ -51,13 +51,13 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class SimpleWebExecutionContext
+public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
 {
   private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final Locale m_aDisplayLocale;
   private final MapBasedAttributeContainer m_aCustomAttrs = new MapBasedAttributeContainer ();
 
-  public SimpleWebExecutionContext (@Nonnull final SimpleWebExecutionContext aSWEC)
+  public SimpleWebExecutionContext (@Nonnull final ISimpleWebExecutionContext aSWEC)
   {
     this (aSWEC.getRequestScope (), aSWEC.getDisplayLocale (), aSWEC.getCustomAttrs ());
   }
