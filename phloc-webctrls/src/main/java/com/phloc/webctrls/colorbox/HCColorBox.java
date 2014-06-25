@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -133,14 +134,9 @@ public class HCColorBox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public IHCNode build ()
+  @ReturnsMutableCopy
+  public JSAssocArray getJSOptions ()
   {
-    IJQuerySelector aSelector = m_aSelector;
-    if (aSelector == null)
-      aSelector = JQuerySelector.id (m_aElement);
-
-    registerExternalResources ();
-
     // Build parameters
     final JSAssocArray aArgs = new JSAssocArray ();
     if (m_bPhoto != DEFAULT_PHOTO)
@@ -162,8 +158,22 @@ public class HCColorBox implements IHCNodeBuilder
       aArgs.add ("slideshowStop", EColorBoxText.SLIDESHOW_STOP.getDisplayText (m_aDisplayLocale));
     }
 
+    return aArgs;
+  }
+
+  @Nonnull
+  public IHCNode build ()
+  {
+    IJQuerySelector aSelector = m_aSelector;
+    if (aSelector == null)
+      aSelector = JQuerySelector.id (m_aElement);
+
+    registerExternalResources ();
+
     return HCNodeList.create (m_aElement,
-                              new HCScriptOnDocumentReady (aSelector.invoke ().invoke ("colorbox").arg (aArgs)));
+                              new HCScriptOnDocumentReady (aSelector.invoke ()
+                                                                    .invoke ("colorbox")
+                                                                    .arg (getJSOptions ())));
   }
 
   public static void registerExternalResources ()
