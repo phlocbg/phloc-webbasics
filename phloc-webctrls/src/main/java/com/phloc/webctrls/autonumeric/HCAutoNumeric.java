@@ -19,7 +19,6 @@ package com.phloc.webctrls.autonumeric;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -31,14 +30,14 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNodeWithChildren;
-import com.phloc.html.hc.ext.IHCNodeWithExternalResources;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.ext.IHCNodeWithJSOptions;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.js.builder.IJSExpression;
@@ -47,8 +46,6 @@ import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSGlobal;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
-import com.phloc.html.resource.css.ICSSPathProvider;
-import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.form.RequestField;
@@ -63,7 +60,7 @@ import com.phloc.webbasics.form.RequestField;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class HCAutoNumeric extends HCEdit implements IHCNodeWithExternalResources, IHCNodeWithJSOptions
+public class HCAutoNumeric extends HCEdit implements IHCNodeWithJSOptions
 {
   /** The special CSS class to use for numeric inputs */
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
@@ -415,33 +412,23 @@ public class HCAutoNumeric extends HCEdit implements IHCNodeWithExternalResource
     return aArgs;
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <? extends ICSSPathProvider> getAllCSSPathProviders ()
+  @Override
+  @OverrideOnDemand
+  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    return ContainerHelper.newList (EAutoNumericCSSPathProvider.AUTONUMERIC);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <? extends IJSPathProvider> getAllJSPathProviders ()
-  {
-    return ContainerHelper.newList (EAutoNumericJSPathProvider.AUTONUMERIC);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
   }
 
   @Override
   public void onAdded (@Nonnegative final int nIndex, @Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
     ((IHCNodeWithChildren <?>) aParent).addChild (new HCAutoNumericJS (this));
   }
 
   @Override
   public void onRemoved (@Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
-    PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.unregisterJSIncludeFromThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
     ((IHCNodeWithChildren <?>) aParent).removeChild (new HCAutoNumericJS (this));
   }
 }

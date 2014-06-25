@@ -27,6 +27,7 @@ import org.junit.Test;
 import com.phloc.commons.CGlobal;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.html.HCDiv;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.mock.WebBasicTestRule;
 
@@ -52,5 +53,19 @@ public final class HCAutoNumericTest
                   sID +
                   "\" class=\"auto-numeric-edit\" name=\"dummy\" type=\"text\" value=\"\" />" +
                   CRLF, a.getAsHTMLString (new HCConversionSettings (EHTMLVersion.HTML5)));
+  }
+
+  @Test
+  public void testAddAndRemove ()
+  {
+    final HCAutoNumeric a = new HCAutoNumeric (new RequestField ("dummy"), Locale.GERMANY);
+    final HCDiv aDiv = new HCDiv ();
+    assertEquals (0, aDiv.getChildCount ());
+    // Add the auto numeric which also adds the JS
+    aDiv.addChild (a);
+    assertEquals (2, aDiv.getChildCount ());
+    // Remove the auto numeric should also remove the JS
+    aDiv.removeChild (a);
+    assertEquals (0, aDiv.getChildCount ());
   }
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.phloc.commons.url.SMap;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.webbasics.servlet.WebAppListener;
 import com.phloc.webscopes.mock.MockServletRequestListenerScopeAware;
@@ -35,7 +36,8 @@ public class WebBasicTestRule extends WebScopeTestRule
 {
   public WebBasicTestRule ()
   {
-    this (null);
+    this (new SMap ().add (WebAppListener.INIT_PARAMETER_NO_STARTUP_INFO, "true")
+                     .add (WebAppListener.INIT_PARAMETER_NO_CHECK_FILE_ACCESS, "true"));
   }
 
   public WebBasicTestRule (@Nullable final Map <String, String> aServletContextInitParameters)

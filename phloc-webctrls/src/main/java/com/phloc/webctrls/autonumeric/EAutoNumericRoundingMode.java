@@ -20,8 +20,9 @@ package com.phloc.webctrls.autonumeric;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
 
-public enum EAutoNumericRoundingMode
+public enum EAutoNumericRoundingMode implements IHasID <String>
 {
   /** Round-Half-Up Symmetric */
   ROUND_HALF_UP_SYMMETRIC ("S"),

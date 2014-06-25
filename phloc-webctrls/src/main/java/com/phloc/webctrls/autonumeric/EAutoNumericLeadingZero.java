@@ -20,8 +20,9 @@ package com.phloc.webctrls.autonumeric;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
 
-public enum EAutoNumericLeadingZero
+public enum EAutoNumericLeadingZero implements IHasID <String>
 {
   /**
    * allows leading zero to be entered. They are removed on focusout event
