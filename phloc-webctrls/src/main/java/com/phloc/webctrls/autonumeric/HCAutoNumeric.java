@@ -30,14 +30,12 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNodeWithChildren;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.ext.IHCNodeWithJSOptions;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.js.builder.IJSExpression;
@@ -413,17 +411,13 @@ public class HCAutoNumeric extends HCEdit implements IHCNodeWithJSOptions
   }
 
   @Override
-  @OverrideOnDemand
-  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
-  {
-    super.internalBeforeConvertToNode (aConversionSettings);
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
-  }
-
-  @Override
   public void onAdded (@Nonnegative final int nIndex, @Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
+    // Register resources
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
+
+    // Add special JS code
     ((IHCNodeWithChildren <?>) aParent).addChild (new HCAutoNumericJS (this));
   }
 
