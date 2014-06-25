@@ -207,7 +207,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder <LECTYPE extends ILayou
   @OverrideOnDemand
   protected String getQueryString (@Nonnull final LECTYPE aLEC)
   {
-    return aLEC.getAttr (PARAM_QUERY);
+    return aLEC.getAttributeAsString (PARAM_QUERY);
   }
 
   /**

@@ -119,7 +119,7 @@ public class BasePageSettingsGlobal <WPECTYPE extends IWebPageExecutionContext> 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    if (aWPEC.hasAttr (CHCParam.PARAM_ACTION, CHCParam.ACTION_SAVE))
+    if (aWPEC.hasAction (CHCParam.ACTION_SAVE))
     {
       // Save changes
       final boolean bGlobalDebug = aWPEC.getCheckBoxAttr (FIELD_GLOBAL_DEBUG, GlobalDebug.isDebugMode ());

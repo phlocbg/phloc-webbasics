@@ -106,7 +106,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
   @Nullable
   protected final String getSelectedObjectID (@Nonnull final WPECTYPE aWPEC)
   {
-    return aWPEC.getAttr (CHCParam.PARAM_OBJECT);
+    return aWPEC.getAttributeAsString (CHCParam.PARAM_OBJECT);
   }
 
   /**
@@ -601,7 +601,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
               bShowInputForm = false;
 
               // Remove an optionally stored state
-              FormStateManager.getInstance ().deleteFormState (aWPEC.getAttr (FIELD_FLOW_ID));
+              FormStateManager.getInstance ().deleteFormState (aWPEC.getAttributeAsString (FIELD_FLOW_ID));
             }
             else
             {
@@ -626,7 +626,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
             modifyFormBeforeShowInputForm (aWPEC, aForm);
 
             // Is there as saved state to use?
-            final String sRestoreFlowID = aWPEC.getAttr (FIELD_RESTORE_FLOW_ID);
+            final String sRestoreFlowID = aWPEC.getAttributeAsString (FIELD_RESTORE_FLOW_ID);
             if (sRestoreFlowID != null)
             {
               final FormState aSavedState = FormStateManager.getInstance ().getFormStateOfID (sRestoreFlowID);

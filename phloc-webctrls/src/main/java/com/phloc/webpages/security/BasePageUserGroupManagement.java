@@ -291,7 +291,7 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
-    final String sName = aWPEC.getAttr (FIELD_NAME);
+    final String sName = aWPEC.getAttributeAsString (FIELD_NAME);
     final Collection <String> aRoleIDs = aWPEC.getAttributeValues (FIELD_ROLES);
 
     if (StringHelper.hasNoText (sName))

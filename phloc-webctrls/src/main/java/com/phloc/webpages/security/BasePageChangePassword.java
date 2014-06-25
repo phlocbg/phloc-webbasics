@@ -132,8 +132,8 @@ public class BasePageChangePassword <WPECTYPE extends IWebPageExecutionContext> 
       final FormErrors aFormErrors = new FormErrors ();
       if (aWPEC.hasAction (ACTION_PERFORM))
       {
-        final String sPlainTextPassword = aWPEC.getAttr (FIELD_PASSWORD);
-        final String sPlainTextPasswordConfirm = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
+        final String sPlainTextPassword = aWPEC.getAttributeAsString (FIELD_PASSWORD);
+        final String sPlainTextPasswordConfirm = aWPEC.getAttributeAsString (FIELD_PASSWORD_CONFIRM);
 
         final List <String> aPasswordErrors = GlobalPasswordSettings.getPasswordConstraintList ()
                                                                     .getInvalidPasswordDescriptions (sPlainTextPassword,

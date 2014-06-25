@@ -283,18 +283,18 @@ public class BasePageSettingsSMTP <WPECTYPE extends IWebPageExecutionContext> ex
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final String sName = aWPEC.getAttr (FIELD_NAME);
-    final String sHostName = aWPEC.getAttr (FIELD_HOSTNAME);
-    final String sPort = aWPEC.getAttr (FIELD_PORT);
+    final String sName = aWPEC.getAttributeAsString (FIELD_NAME);
+    final String sHostName = aWPEC.getAttributeAsString (FIELD_HOSTNAME);
+    final String sPort = aWPEC.getAttributeAsString (FIELD_PORT);
     final int nPort = StringParser.parseInt (sPort, CGlobal.ILLEGAL_UINT);
-    final String sUserName = aWPEC.getAttr (FIELD_USERNAME);
-    String sPassword = aWPEC.getAttr (FIELD_PASSWORD);
+    final String sUserName = aWPEC.getAttributeAsString (FIELD_USERNAME);
+    String sPassword = aWPEC.getAttributeAsString (FIELD_PASSWORD);
     if (sPassword == null && aSelectedObject != null)
     {
       // Password is not changed
       sPassword = aSelectedObject.getSMTPSettings ().getPassword ();
     }
-    final String sCharset = aWPEC.getAttr (FIELD_CHARSET);
+    final String sCharset = aWPEC.getAttributeAsString (FIELD_CHARSET);
     Charset aCharset = null;
     try
     {
@@ -526,10 +526,10 @@ public class BasePageSettingsSMTP <WPECTYPE extends IWebPageExecutionContext> ex
 
       if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
-        final String sSender = aWPEC.getAttr (FIELD_TEST_SENDER);
-        final String sReceiver = aWPEC.getAttr (FIELD_TEST_RECEIVER);
-        final String sSubject = aWPEC.getAttr (FIELD_TEST_SUBJECT);
-        final String sBody = aWPEC.getAttr (FIELD_TEST_BODY);
+        final String sSender = aWPEC.getAttributeAsString (FIELD_TEST_SENDER);
+        final String sReceiver = aWPEC.getAttributeAsString (FIELD_TEST_RECEIVER);
+        final String sSubject = aWPEC.getAttributeAsString (FIELD_TEST_SUBJECT);
+        final String sBody = aWPEC.getAttributeAsString (FIELD_TEST_BODY);
 
         if (!EmailAddressUtils.isValid (sSender))
           aFormErrors.addFieldError (FIELD_TEST_SENDER, EText.ERR_SENDER_INVALID.getDisplayText (aDisplayLocale));

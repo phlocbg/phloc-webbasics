@@ -474,12 +474,12 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final boolean bIsAdministrator = aSelectedObject != null && aSelectedObject.isAdministrator ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
-    String sLoginName = aWPEC.getAttr (FIELD_LOGINNAME);
-    final String sFirstName = aWPEC.getAttr (FIELD_FIRSTNAME);
-    final String sLastName = aWPEC.getAttr (FIELD_LASTNAME);
-    final String sEmailAddress = aWPEC.getAttr (FIELD_EMAILADDRESS);
-    final String sPassword = aWPEC.getAttr (FIELD_PASSWORD);
-    final String sPasswordConf = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
+    String sLoginName = aWPEC.getAttributeAsString (FIELD_LOGINNAME);
+    final String sFirstName = aWPEC.getAttributeAsString (FIELD_FIRSTNAME);
+    final String sLastName = aWPEC.getAttributeAsString (FIELD_LASTNAME);
+    final String sEmailAddress = aWPEC.getAttributeAsString (FIELD_EMAILADDRESS);
+    final String sPassword = aWPEC.getAttributeAsString (FIELD_PASSWORD);
+    final String sPasswordConf = aWPEC.getAttributeAsString (FIELD_PASSWORD_CONFIRM);
     final boolean bEnabled = bIsAdministrator ? true : aWPEC.getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
     final Collection <String> aUserGroupIDs = bIsAdministrator ? aAccessMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ())
                                                               : aWPEC.getAttributeValues (FIELD_USERGROUPS);
@@ -770,8 +770,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       final FormErrors aFormErrors = new FormErrors ();
       if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
-        final String sPlainTextPassword = aWPEC.getAttr (FIELD_PASSWORD);
-        final String sPlainTextPasswordConfirm = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
+        final String sPlainTextPassword = aWPEC.getAttributeAsString (FIELD_PASSWORD);
+        final String sPlainTextPasswordConfirm = aWPEC.getAttributeAsString (FIELD_PASSWORD_CONFIRM);
 
         final List <String> aPasswordErrors = GlobalPasswordSettings.getPasswordConstraintList ()
                                                                     .getInvalidPasswordDescriptions (sPlainTextPassword,
