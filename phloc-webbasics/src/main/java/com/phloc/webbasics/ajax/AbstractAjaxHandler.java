@@ -64,30 +64,19 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    * 
    * @param aRequestScope
    *        The current request scope. Never <code>null</code>.
-   * @param aParams
-   *        A mutable copy of the extracted request parameters. The values are
-   *        either of type String, String[] or IFileItem. Never
-   *        <code>null</code>.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract IAjaxResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                                                      @Nonnull MapBasedAttributeContainer aParams) throws Exception;
+  protected abstract IAjaxResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
 
   @Nonnull
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public final IAjaxResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
-    // Get all request parameter values to use from the request scope, as the
-    // request scope already differentiated between String, String[] and
-    // IFileItem!
-    final MapBasedAttributeContainer aParams = new MapBasedAttributeContainer (aRequestScope.getAllAttributes ());
-    modifyRequestParamMap (aParams);
-
     // Main invocation
-    final IAjaxResponse aResult = mainHandleRequest (aRequestScope, aParams);
+    final IAjaxResponse aResult = mainHandleRequest (aRequestScope);
     if (aResult == null)
       throw new IllegalStateException ("Invocation of " +
                                        CGStringHelper.getClassLocalName (getClass ()) +

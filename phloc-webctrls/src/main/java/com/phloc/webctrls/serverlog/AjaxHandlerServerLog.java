@@ -20,7 +20,6 @@ package com.phloc.webctrls.serverlog;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.log.LogUtils;
 import com.phloc.commons.string.StringHelper;
@@ -59,12 +58,11 @@ public class AjaxHandlerServerLog extends AbstractAjaxHandler
 
   @Override
   @Nonnull
-  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
-    final String sSeverity = aParams.getAttributeAsString (PARAM_SEVERITY);
-    final String sMessage = aParams.getAttributeAsString (PARAM_MESSAGE);
-    final String sKey = aParams.getAttributeAsString (PARAM_KEY);
+    final String sSeverity = aRequestScope.getAttributeAsString (PARAM_SEVERITY);
+    final String sMessage = aRequestScope.getAttributeAsString (PARAM_MESSAGE);
+    final String sKey = aRequestScope.getAttributeAsString (PARAM_KEY);
     final String sExpectedKey = ServerLogSessionKey.getGeneratedSessionKey ();
     if (StringHelper.hasNoText (sMessage) || sExpectedKey == null || !sExpectedKey.equals (sKey))
       return AjaxDefaultResponse.createError (null);

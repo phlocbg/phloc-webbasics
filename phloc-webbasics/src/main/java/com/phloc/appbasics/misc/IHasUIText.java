@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.misc;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -29,9 +31,11 @@ import com.phloc.commons.annotations.Nonempty;
 public interface IHasUIText
 {
   /**
+   * @param aDisplayLocale
+   *        Display locale. May not be <code>null</code>.
    * @return The UI text
    */
   @Nonnull
   @Nonempty
-  String getAsUIText ();
+  String getAsUIText (@Nonnull Locale aDisplayLocale);
 }

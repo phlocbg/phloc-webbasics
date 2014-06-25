@@ -20,7 +20,6 @@ package com.phloc.webbasics.ajax;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -49,8 +48,7 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
   protected abstract IAjaxResponse mainHandleRequest (@Nonnull LECTYPE aLEC) throws Exception;
 
   @Override
-  protected final IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected final IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     final LECTYPE aLEC = createLayoutExecutionContext (aRequestScope);
     if (aLEC == null)

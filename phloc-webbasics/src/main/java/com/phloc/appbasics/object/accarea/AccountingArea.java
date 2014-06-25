@@ -309,9 +309,9 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
 
   @Nonnull
   @Nonempty
-  public String getAsUIText ()
+  public String getAsUIText (Locale aDisplayLocale)
   {
-    return getClient ().getAsUIText () + " - " + getDisplayName ();
+    return getClient ().getAsUIText (aDisplayLocale) + " - " + getDisplayName ();
   }
 
   @Override

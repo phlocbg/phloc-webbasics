@@ -53,17 +53,16 @@ public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
 
   @Override
   @Nonnull
-  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     // Extract page ID
-    final String sPageID = aParams.getAttributeAsString (ATTR_PAGE_ID);
+    final String sPageID = aRequestScope.getAttributeAsString (ATTR_PAGE_ID);
     if (sPageID == null)
       return AjaxDefaultResponse.createError ("Page ID is missing!");
 
     // Filter all fields
     final MapBasedAttributeContainer aFieldCont = new MapBasedAttributeContainer ();
-    for (final Map.Entry <String, Object> aEntry : aParams.getAllAttributes ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : aRequestScope.getAllAttributes ().entrySet ())
       if (aEntry.getKey ().startsWith (PREFIX_FIELD))
       {
         // Skip the prefix

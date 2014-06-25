@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.ToStringGenerator;
@@ -311,35 +310,34 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
   @Override
   @Nonnull
-  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("DataTables AJAX request: " + ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
+      s_aLogger.debug ("DataTables AJAX request: " + ContainerHelper.getSortedByKey (aRequestScope.getAllAttributes ()));
 
     // Read input parameters
-    final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
-    final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);
-    final int nColumns = aParams.getAttributeAsInt (COLUMNS, 0);
-    final String sSearch = aParams.getAttributeAsString (SEARCH);
-    final boolean bRegEx = aParams.getAttributeAsBoolean (REGEX, false);
-    final int nSortingCols = aParams.getAttributeAsInt (SORTING_COLS);
-    final int nEcho = aParams.getAttributeAsInt (ECHO);
+    final int nDisplayStart = aRequestScope.getAttributeAsInt (DISPLAY_START, 0);
+    final int nDisplayLength = aRequestScope.getAttributeAsInt (DISPLAY_LENGTH, 0);
+    final int nColumns = aRequestScope.getAttributeAsInt (COLUMNS, 0);
+    final String sSearch = aRequestScope.getAttributeAsString (SEARCH);
+    final boolean bRegEx = aRequestScope.getAttributeAsBoolean (REGEX, false);
+    final int nSortingCols = aRequestScope.getAttributeAsInt (SORTING_COLS);
+    final int nEcho = aRequestScope.getAttributeAsInt (ECHO);
     final List <RequestDataColumn> aColumnData = new ArrayList <RequestDataColumn> (nColumns);
     for (int nColumn = 0; nColumn < nColumns; ++nColumn)
     {
-      final boolean bCSearchable = aParams.getAttributeAsBoolean (SEARCHABLE_PREFIX + nColumn);
-      final String sCSearch = aParams.getAttributeAsString (SEARCH_PREFIX + nColumn);
-      final boolean bCRegEx = aParams.getAttributeAsBoolean (REGEX_PREFIX + nColumn);
-      final boolean bCSortable = aParams.getAttributeAsBoolean (SORTABLE_PREFIX + nColumn);
-      final String sCDataProp = aParams.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
+      final boolean bCSearchable = aRequestScope.getAttributeAsBoolean (SEARCHABLE_PREFIX + nColumn);
+      final String sCSearch = aRequestScope.getAttributeAsString (SEARCH_PREFIX + nColumn);
+      final boolean bCRegEx = aRequestScope.getAttributeAsBoolean (REGEX_PREFIX + nColumn);
+      final boolean bCSortable = aRequestScope.getAttributeAsBoolean (SORTABLE_PREFIX + nColumn);
+      final String sCDataProp = aRequestScope.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
       aColumnData.add (new RequestDataColumn (bCSearchable, sCSearch, bCRegEx, bCSortable, sCDataProp));
     }
     final RequestDataSortColumn [] aSortColumns = new RequestDataSortColumn [nSortingCols];
     for (int i = 0; i < nSortingCols; ++i)
     {
-      final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + i);
-      final String sCSortDir = aParams.getAttributeAsString (SORT_DIR_PREFIX + i);
+      final int nCSortCol = aRequestScope.getAttributeAsInt (SORT_COL_PREFIX + i);
+      final String sCSortDir = aRequestScope.getAttributeAsString (SORT_DIR_PREFIX + i);
       final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir) ? ESortOrder.ASCENDING
                                                                           : CDataTables.SORT_DESC.equals (sCSortDir) ? ESortOrder.DESCENDING
                                                                                                                     : null;
@@ -354,7 +352,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                       nEcho);
 
     // Resolve dataTables
-    final String sDataTablesID = aParams.getAttributeAsString (OBJECT_ID);
+    final String sDataTablesID = aRequestScope.getAttributeAsString (OBJECT_ID);
     final DataTablesServerData aServerData = UIStateRegistry.getCurrent ()
                                                             .getCastedState (DataTablesServerData.OBJECT_TYPE,
                                                                              sDataTablesID);

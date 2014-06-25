@@ -24,23 +24,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json2.impl.JsonArray;
 import com.phloc.json2.impl.JsonObject;
-import com.phloc.webbasics.ajax.AbstractAjaxHandler;
+import com.phloc.webbasics.ajax.AbstractAjaxHandlerWithContext;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.AjaxSimpleResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
-import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 
 /**
  * Abstract AJAX handler that can be used as the source for a Bootstrap
@@ -48,7 +46,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHandler
+public abstract class AbstractAjaxHandlerTypeaheadFinder <LECTYPE extends ILayoutExecutionContext> extends AbstractAjaxHandlerWithContext <LECTYPE>
 {
   public static final String PARAM_QUERY = "query";
 
@@ -201,15 +199,15 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    * Get the provided query string from the parameter map. By default the value
    * of parameter {@link #PARAM_QUERY} is used.
    * 
-   * @param aParams
-   *        The request parameter map.
+   * @param aLEC
+   *        The layout execution context.
    * @return <code>null</code> if no such request parameter is present.
    */
   @Nullable
   @OverrideOnDemand
-  protected String getQueryString (@Nonnull final MapBasedAttributeContainer aParams)
+  protected String getQueryString (@Nonnull final LECTYPE aLEC)
   {
-    return aParams.getAttributeAsString (PARAM_QUERY);
+    return aLEC.getAttr (PARAM_QUERY);
   }
 
   /**
@@ -217,15 +215,15 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    * 
    * @param sOriginalQuery
    *        The original query string. Never <code>null</code>.
-   * @param aSortLocale
-   *        The sort locale to be used. Never <code>null</code>.
+   * @param aLEC
+   *        The layout execution context. Never <code>null</code>.
    * @return The non-<code>null</code> {@link Finder} object.
    */
   @Nonnull
   @OverrideOnDemand
-  protected Finder createFinder (@Nonnull final String sOriginalQuery, @Nonnull final Locale aSortLocale)
+  protected Finder createFinder (@Nonnull final String sOriginalQuery, @Nonnull final LECTYPE aLEC)
   {
-    return new Finder (aSortLocale).initialize (sOriginalQuery);
+    return new Finder (aLEC.getDisplayLocale ()).initialize (sOriginalQuery);
   }
 
   /**
@@ -234,33 +232,30 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    * 
    * @param aFinder
    *        The finder. Never <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use. Never <code>null</code>.
+   * @param aLEC
+   *        The leyout execution context. Never <code>null</code>.
    * @return A non-<code>null</code> list with all datums to use.
    */
   @Nonnull
   protected abstract List <? extends TypeaheadDatum> getAllMatchingDatums (@Nonnull Finder aFinder,
-                                                                           @Nonnull Locale aDisplayLocale);
+                                                                           @Nonnull LECTYPE aLEC);
 
   @Override
   @Nonnull
-  protected final IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected final IAjaxResponse mainHandleRequest (@Nonnull final LECTYPE aLEC) throws Exception
   {
-    final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
-
-    final String sOriginalQuery = getQueryString (aParams);
+    final String sOriginalQuery = getQueryString (aLEC);
     if (StringHelper.hasNoTextAfterTrim (sOriginalQuery))
     {
       // May happen when the user enters "  " (only spaces)
-      return AjaxDefaultResponse.createSuccess (aRequestScope, new JsonObject ());
+      return AjaxDefaultResponse.createSuccess (aLEC.getRequestScope (), new JsonObject ());
     }
 
     // Create the main Finder object
-    final Finder aFinder = createFinder (sOriginalQuery, aDisplayLocale);
+    final Finder aFinder = createFinder (sOriginalQuery, aLEC);
 
     // Map from ID to name
-    final List <? extends TypeaheadDatum> aMatchingDatums = getAllMatchingDatums (aFinder, aDisplayLocale);
+    final List <? extends TypeaheadDatum> aMatchingDatums = getAllMatchingDatums (aFinder, aLEC);
 
     // Convert to JSON, sorted by display name using the current display locale
     final JsonArray ret = new JsonArray ();

@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.object.client;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -89,7 +91,7 @@ public final class Client extends AbstractObject implements IClient
 
   @Nonnull
   @Nonempty
-  public String getAsUIText ()
+  public String getAsUIText (Locale aDisplayLocale)
   {
     return getID () + " - " + m_sDisplayName;
   }
