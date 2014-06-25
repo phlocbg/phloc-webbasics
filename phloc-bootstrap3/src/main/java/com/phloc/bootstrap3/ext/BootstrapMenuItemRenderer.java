@@ -173,7 +173,9 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   public static IHCElement <?> createSideBarMenu (@Nonnull final ILayoutExecutionContext aLEC)
   {
     final IMenuTree aMenuTree = aLEC.getMenuTree ();
-    return createSideBarMenu (aLEC, aMenuTree, new MenuItemDeterminatorCallback (aMenuTree));
+    return createSideBarMenu (aLEC,
+                              aMenuTree,
+                              new MenuItemDeterminatorCallback (aMenuTree, aLEC.getSelectedMenuItemID ()));
   }
 
   @Nonnull

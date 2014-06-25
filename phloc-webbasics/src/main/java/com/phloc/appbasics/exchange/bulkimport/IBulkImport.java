@@ -70,8 +70,10 @@ public interface IBulkImport
    * @param aIIS
    *        The input stream provider to read from. May not be <code>null</code>
    *        .
+   * @param aDisplayLocale
+   *        The display locale. May not be <code>null</code>.
    * @return The import result. Never <code>null</code>.
    */
   @Nonnull
-  BulkImportResult importObjects (@Nonnull IInputStreamProvider aIIS);
+  BulkImportResult importObjects (@Nonnull IInputStreamProvider aIIS, @Nonnull Locale aDisplayLocale);
 }

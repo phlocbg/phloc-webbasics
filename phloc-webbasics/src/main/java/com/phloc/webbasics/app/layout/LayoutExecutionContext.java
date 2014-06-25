@@ -17,19 +17,24 @@
  */
 package com.phloc.webbasics.app.layout;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.IRequestManager;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.ISimpleWebExecutionContext;
 import com.phloc.webbasics.app.SimpleWebExecutionContext;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This object is instantiated per page view and contains the current request
@@ -87,5 +92,17 @@ public class LayoutExecutionContext extends SimpleWebExecutionContext implements
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("selectedMenuItem", m_aSelectedMenuItem)
                             .toString ();
+  }
+
+  @Nonnull
+  public static LayoutExecutionContext createForAjaxOrAction (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    final IRequestManager aRequestMgr = ApplicationRequestManager.getInstance ();
+    // Get the locale from the session
+    final Locale aDisplayLocale = aRequestMgr.getRequestDisplayLocale ();
+    final IMenuTree aMenuTree = aRequestMgr.getMenuTree ();
+    // Since no menu item is selected, use the default menu item
+    return new LayoutExecutionContext (new SimpleWebExecutionContext (aRequestScope, aDisplayLocale, aMenuTree),
+                                       aMenuTree.getDefaultMenuItem ());
   }
 }

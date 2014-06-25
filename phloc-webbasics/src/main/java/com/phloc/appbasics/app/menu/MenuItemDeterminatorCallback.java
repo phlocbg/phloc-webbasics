@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -46,10 +46,10 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
   private final String m_sSelectedItemID;
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
-  public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
+  public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree, @Nullable final String sSelectedMenuItemID)
   {
     m_aMenuTree = ValueEnforcer.notNull (aMenuTree, "MenuTree");
-    m_sSelectedItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    m_sSelectedItemID = sSelectedMenuItemID;
     m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItemID);
     // The selected item may be null if an invalid menu item ID was passed
   }
@@ -153,9 +153,10 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
 
   @Nonnull
   @ReturnsMutableCopy
-  public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
+  public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final IMenuTree aMenuTree,
+                                                                @Nullable final String sSelectedMenuItemID)
   {
-    return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback (aMenuTree));
+    return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback (aMenuTree, sSelectedMenuItemID));
   }
 
   @Nonnull

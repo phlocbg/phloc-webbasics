@@ -35,7 +35,6 @@ import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.poi.excel.ExcelReadUtils;
@@ -55,8 +54,7 @@ public abstract class AbstractBulkImportExcel extends AbstractBulkImport
     MSG_ERR_NO_DATE ("Zeile {0}, Spalte {1}: Datum erwartet", "Row {0}, Column {1}: expected date"),
     MSG_ERR_NO_BOOLEAN ("Zeile {0}, Spalte {1}: Wahrheitswert erwartet", "Row {0}, Column {1}: expected boolean");
 
-    @Nonnull
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (@Nonnull final String sDE, @Nonnull final String sEN)
     {
