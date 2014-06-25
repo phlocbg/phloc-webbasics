@@ -48,7 +48,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
 /**
  * Render text
- *
+ * 
  * @author Philip Helger
  */
 public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizontalAlignment <PLText>, IPLHasVerticalAlignment <PLText>
@@ -175,7 +175,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
 
   /**
    * Set the rendering direction: top-down or bottom-up.
-   *
+   * 
    * @param bTopDown
    *        <code>true</code> to render top-down, <code>false</code> to render
    *        bottom-up.
@@ -201,7 +201,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
 
   /**
    * Set the maximum number of rows to render.
-   *
+   * 
    * @param nMaxRows
    *        Maximum number of rows. If &le; 0 than all lines are rendered.
    * @return this
@@ -279,7 +279,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
   /**
    * Get the text to draw, in case it is different from the stored text (e.g.
    * for page numbers in {@link PLTextWithPlaceholders})
-   *
+   * 
    * @param sText
    *        Original text. Never <code>null</code>.
    * @param aCtx

@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class contains the styling of a single border part. Currently only the
  * color can be set.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable

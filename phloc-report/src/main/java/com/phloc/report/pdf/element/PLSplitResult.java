@@ -24,7 +24,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class represents the result of splitting as defined in
  * {@link IPLSplittableElement}.
- *
+ * 
  * @author Philip Helger
  */
 public final class PLSplitResult

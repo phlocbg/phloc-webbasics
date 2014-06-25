@@ -40,7 +40,7 @@ import com.phloc.report.pdf.spec.WidthSpec.EWidthType;
 
 /**
  * A special table with a repeating header
- *
+ * 
  * @author Philip Helger
  */
 public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableElement
@@ -132,7 +132,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
    * Add a new table row. All contained elements are added with the specified
    * width in the constructor. <code>null</code> elements are represented as
    * empty cells.
-   *
+   * 
    * @param aElements
    *        The elements to add. May be <code>null</code>.
    * @return The added row and never <code>null</code>.
@@ -147,7 +147,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
    * Add a new table row. All contained elements are added with the specified
    * width in the constructor. <code>null</code> elements are represented as
    * empty cells.
-   *
+   * 
    * @param aElements
    *        The elements to add. May not be <code>null</code>.
    * @return this
@@ -190,7 +190,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
    * Add a new table row. All contained elements are added with the specified
    * width in the constructor. <code>null</code> elements are represented as
    * empty cells.
-   *
+   * 
    * @param aCells
    *        The cells to add. May not be <code>null</code>.
    * @return this
@@ -256,7 +256,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
 
   /**
    * Set the number of header rows in this table.
-   *
+   * 
    * @param nHeaderRowCount
    *        The number of header rows, to be repeated by page. Must be &ge; 0.
    * @return this
@@ -465,7 +465,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
 
   /**
    * Create a new table with the specified percentages.
-   *
+   * 
    * @param aPercentages
    *        The array to use. The sum of all percentages should be &le; 100. May
    *        neither be <code>null</code> nor empty.
@@ -485,7 +485,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
 
   /**
    * Create a new table with evenly sized columns.
-   *
+   * 
    * @param nColumnCount
    *        The number of columns to use. Must be &gt; 0.
    * @return The created {@link PLTable} and never <code>null</code>.

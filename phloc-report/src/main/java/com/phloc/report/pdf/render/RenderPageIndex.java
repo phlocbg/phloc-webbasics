@@ -24,7 +24,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class describes the index of the current page.
- *
+ * 
  * @author Philip Helger
  */
 public class RenderPageIndex

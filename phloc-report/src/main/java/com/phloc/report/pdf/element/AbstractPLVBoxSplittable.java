@@ -30,7 +30,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Vertical box - groups several rows.
- *
+ * 
  * @author Philip Helger
  */
 public abstract class AbstractPLVBoxSplittable <IMPLTYPE extends AbstractPLVBoxSplittable <IMPLTYPE>> extends AbstractPLVBox <IMPLTYPE> implements IPLSplittableElement

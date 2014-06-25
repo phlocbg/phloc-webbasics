@@ -148,7 +148,7 @@ public class PageLayoutPDF
 
   /**
    * Add a new page set
-   *
+   * 
    * @param aPageSet
    *        The page set to be added. May not be <code>null</code>.
    */
@@ -161,7 +161,7 @@ public class PageLayoutPDF
 
   /**
    * Render this layout to an OutputStream.
-   *
+   * 
    * @param aOS
    *        The output stream to write to. May not be <code>null</code>. Is
    *        closed automatically.
@@ -175,7 +175,7 @@ public class PageLayoutPDF
 
   /**
    * Render this layout to an OutputStream.
-   *
+   * 
    * @param aCustomizer
    *        The customizer to be invoked before the document is written to the
    *        stream. May be <code>null</code>.

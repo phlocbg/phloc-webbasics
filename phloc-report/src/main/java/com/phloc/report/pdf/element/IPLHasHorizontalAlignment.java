@@ -23,7 +23,7 @@ import com.phloc.report.pdf.spec.EHorzAlignment;
 
 /**
  * Base interface for objects with a horizontal alignment
- *
+ * 
  * @author Philip Helger
  */
 public interface IPLHasHorizontalAlignment <IMPLTYPE extends IPLHasHorizontalAlignment <IMPLTYPE>>
@@ -37,7 +37,7 @@ public interface IPLHasHorizontalAlignment <IMPLTYPE extends IPLHasHorizontalAli
 
   /**
    * Set the horizontal alignment of this element.
-   *
+   * 
    * @param eHorzAlign
    *        The new horizontal alignment. May not be <code>null</code>.
    * @return this

@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Defines a rectangular margin.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable

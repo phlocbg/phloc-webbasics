@@ -19,7 +19,7 @@ package com.phloc.report.pdf.element;
 
 /**
  * Vertical box - groups several rows.
- *
+ * 
  * @author Philip Helger
  */
 public class PLVBox extends AbstractPLVBox <PLVBox>

@@ -19,7 +19,7 @@ package com.phloc.report.pdf.element;
 
 /**
  * Horizontal box - groups several columns.
- *
+ * 
  * @author Philip Helger
  */
 public class PLHBox extends AbstractPLHBox <PLHBox>

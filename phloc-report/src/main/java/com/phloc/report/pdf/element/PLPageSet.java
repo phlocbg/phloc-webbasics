@@ -53,7 +53,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Represents a single page layout as element
- *
+ * 
  * @author Philip Helger
  */
 public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
@@ -70,7 +70,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Set the page header height.
-     *
+     * 
      * @param fHeaderHeight
      *        Height without padding or margin.
      */
@@ -112,7 +112,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Set the page footer height.
-     *
+     * 
      * @param fFooterHeight
      *        Height without padding or margin.
      */
@@ -131,7 +131,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Add a list of elements for a single page.
-     *
+     * 
      * @param aCurPageElements
      *        The list to use. May neither be <code>null</code> nor empty.
      */
@@ -229,7 +229,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Set the global page header
-   *
+   * 
    * @param aPageHeader
    *        The global page header. May be <code>null</code>.
    * @return this
@@ -267,7 +267,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Set the global page footer
-   *
+   * 
    * @param aPageFooter
    *        The global page footer. May be <code>null</code>.
    * @return this
@@ -491,7 +491,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Render all pages of this layout to the specified PDDocument
-   *
+   * 
    * @param aPrepareResult
    *        The preparation result. May not be <code>null</code>.
    * @param aDoc

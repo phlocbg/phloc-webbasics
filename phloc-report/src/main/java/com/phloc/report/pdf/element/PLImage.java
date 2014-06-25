@@ -40,7 +40,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Render an image
- *
+ * 
  * @author Philip Helger
  */
 public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizontalAlignment <PLImage>, IPLHasVerticalAlignment <PLImage>

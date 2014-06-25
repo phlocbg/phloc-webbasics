@@ -23,7 +23,7 @@ import com.phloc.report.pdf.spec.EVertAlignment;
 
 /**
  * Base interface for objects with a vertical alignment
- *
+ * 
  * @author Philip Helger
  */
 public interface IPLHasVerticalAlignment <IMPLTYPE extends IPLHasVerticalAlignment <IMPLTYPE>>
@@ -37,7 +37,7 @@ public interface IPLHasVerticalAlignment <IMPLTYPE extends IPLHasVerticalAlignme
 
   /**
    * Set the vertical alignment of this element.
-   *
+   * 
    * @param eVertAlign
    *        The new vertical alignment. May not be <code>null</code>.
    * @return this

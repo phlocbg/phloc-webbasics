@@ -27,7 +27,7 @@ import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
  * Horizontal box - groups several columns.
- *
+ * 
  * @author Philip Helger
  */
 public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxSplittable <IMPLTYPE>> extends AbstractPLHBox <IMPLTYPE> implements IPLSplittableElement

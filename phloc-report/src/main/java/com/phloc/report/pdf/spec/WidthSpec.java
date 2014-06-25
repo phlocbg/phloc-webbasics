@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * <li>star - element width is a relative part of the unused width of the
  * surrounding element</li>
  * </ul>
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -91,7 +91,7 @@ public class WidthSpec
   /**
    * Get the effective width based on the passed available width. This may not
    * be called for star width elements.
-   *
+   * 
    * @param fAvailableWidth
    *        The available width.
    * @return The effective width to use.
@@ -135,7 +135,7 @@ public class WidthSpec
 
   /**
    * Create a width element with an absolute value.
-   *
+   * 
    * @param fValue
    *        The width to use. Must be &gt; 0.
    * @return Never <code>null</code>.
@@ -150,7 +150,7 @@ public class WidthSpec
 
   /**
    * Create a width element with an percentage value.
-   *
+   * 
    * @param fPerc
    *        The width percentage to use. Must be &gt; 0.
    * @return Never <code>null</code>.
@@ -165,7 +165,7 @@ public class WidthSpec
 
   /**
    * Create a new star width element.
-   *
+   * 
    * @return Never <code>null</code>.
    */
   @Nonnull

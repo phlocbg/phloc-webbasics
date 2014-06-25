@@ -48,7 +48,7 @@ import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
  * Horizontal box - groups several columns.
- *
+ * 
  * @author Philip Helger
  */
 public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends AbstractPLElement <IMPLTYPE>
@@ -194,7 +194,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   *
+   * 
    * @param aBorder
    *        The border style to use. May be <code>null</code>.
    * @return this
@@ -207,7 +207,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   *
+   * 
    * @param aBorderX
    *        The border to set for left and right. Maybe <code>null</code>.
    * @param aBorderY
@@ -223,7 +223,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   *
+   * 
    * @param aBorderLeft
    *        The border to set for left. Maybe <code>null</code>.
    * @param aBorderTop
@@ -245,7 +245,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   *
+   * 
    * @param aBorder
    *        The border to set. May not be <code>null</code>.
    * @return this
@@ -262,7 +262,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the left border value around each contained column. This method may not
    * be called after an element got prepared!
-   *
+   * 
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -276,7 +276,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the top border value around each contained column. This method may not
    * be called after an element got prepared!
-   *
+   * 
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -290,7 +290,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the right border value around each contained column. This method may
    * not be called after an element got prepared!
-   *
+   * 
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -304,7 +304,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the bottom border value around each contained column. This method may
    * not be called after an element got prepared!
-   *
+   * 
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -318,7 +318,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Get the border around each contained column. By default
    * {@link BorderSpec#BORDER0} which means no border is used.
-   *
+   * 
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -330,7 +330,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the fill color to be used to fill the whole column. <code>null</code>
    * means no fill color.
-   *
+   * 
    * @param aColumnFillColor
    *        The fill color to use. May be <code>null</code> to indicate no fill
    *        color (which is also the default).
@@ -346,7 +346,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Get the fill color to be used to fill the whole column. <code>null</code>
    * means no fill color.
-   *
+   * 
    * @return May be <code>null</code>.
    */
   @Nullable

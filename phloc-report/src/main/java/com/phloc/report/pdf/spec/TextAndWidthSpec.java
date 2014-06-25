@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class wraps a text with a specified rendering width.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable

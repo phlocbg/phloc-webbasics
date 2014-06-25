@@ -32,7 +32,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
 /**
  * Render text
- *
+ * 
  * @author Philip Helger
  */
 public class PLTextSplittable extends PLText implements IPLSplittableElement

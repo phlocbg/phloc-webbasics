@@ -33,7 +33,7 @@ import com.phloc.report.pdf.spec.LineDashPatternSpec;
 /**
  * A special version of PDPageContentStream with an intergated "cache" to avoid
  * setting the same information over and over again.
- *
+ * 
  * @author Philip Helger
  */
 public class PDPageContentStreamWithCache extends PDPageContentStream

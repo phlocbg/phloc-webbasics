@@ -19,7 +19,7 @@ package com.phloc.report.pdf.spec;
 
 /**
  * Represents the possible horizontal alignments.
- *
+ * 
  * @author Philip Helger
  */
 public enum EHorzAlignment

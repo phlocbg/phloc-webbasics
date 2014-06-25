@@ -23,14 +23,14 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * Callback interface for PDF customization
- *
+ * 
  * @author Philip Helger
  */
 public interface IPDDocumentCustomizer
 {
   /**
    * Customize the passed PDDocument
-   *
+   * 
    * @param aDoc
    *        The document to be customized. Never <code>null</code>.
    */
