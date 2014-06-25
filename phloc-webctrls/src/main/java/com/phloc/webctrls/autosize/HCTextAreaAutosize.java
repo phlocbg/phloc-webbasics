@@ -20,6 +20,8 @@ package com.phloc.webctrls.autosize;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -38,23 +40,23 @@ public class HCTextAreaAutosize extends HCTextArea
   public HCTextAreaAutosize (@Nullable final String sName)
   {
     super (sName);
-    registerExternalResources ();
   }
 
   public HCTextAreaAutosize (@Nullable final String sName, @Nullable final String sValue)
   {
     super (sName, sValue);
-    registerExternalResources ();
   }
 
   public HCTextAreaAutosize (@Nonnull final IHCRequestField aRF)
   {
     super (aRF);
-    registerExternalResources ();
   }
 
-  public static void registerExternalResources ()
+  @Override
+  @OverrideOnDemand
+  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
+    super.internalBeforeConvertToNode (aConversionSettings);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutosizeJSPathProvider.AUTOSIZE);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutosizeJSPathProvider.AUTOSIZE_ALL);
   }

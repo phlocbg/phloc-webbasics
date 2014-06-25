@@ -20,12 +20,12 @@ package com.phloc.webctrls.facebook;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.impl.MicroElement;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.impl.AbstractHCNode;
 
@@ -40,9 +40,7 @@ public abstract class AbstractFBNode extends AbstractHCNode
 
   public AbstractFBNode (@Nonnull @Nonempty final String sElementName)
   {
-    if (StringHelper.hasNoText (sElementName))
-      throw new IllegalArgumentException ("elementName");
-    m_sElementName = sElementName;
+    m_sElementName = ValueEnforcer.notEmpty (sElementName, "ElementName");
   }
 
   /**

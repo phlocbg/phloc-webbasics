@@ -416,6 +416,7 @@ public class HCAutoNumeric extends HCEdit implements IHCNodeWithJSOptions
   @OverrideOnDemand
   protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
+    super.internalBeforeConvertToNode (aConversionSettings);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC);
   }
@@ -427,8 +428,9 @@ public class HCAutoNumeric extends HCEdit implements IHCNodeWithJSOptions
   }
 
   @Override
-  public void onRemoved (@Nonnull final IHCHasChildrenMutable <?, ?> aParent)
+  public void onRemoved (@Nonnegative final int nIndex, @Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
-    ((IHCNodeWithChildren <?>) aParent).removeChild (new HCAutoNumericJS (this));
+    // Remove the JS that is now on that index
+    aParent.removeChild (nIndex);
   }
 }
