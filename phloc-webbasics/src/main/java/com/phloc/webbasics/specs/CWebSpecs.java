@@ -21,6 +21,9 @@ public final class CWebSpecs
   public static final ClassPathResource WEB_FRAGMENT_30_XSD = new ClassPathResource ("schemas/servlet/web-fragment_3_0.xsd");
   public static final ClassPathResource WEB_FRAGMENT_31_XSD = new ClassPathResource ("schemas/servlet/web-fragment_3_1.xsd");
 
+  public static final String WEB_XML_PATH = "WEB-INF/web.xml";
+  public static final String WEB_FRAGMENT_PATH = "META-INF/web-fragment.xml";
+
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final CWebSpecs s_aInstance = new CWebSpecs ();
