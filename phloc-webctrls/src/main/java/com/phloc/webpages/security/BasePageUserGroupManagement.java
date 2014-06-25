@@ -292,7 +292,7 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
     final String sName = aWPEC.getAttr (FIELD_NAME);
-    final Collection <String> aRoleIDs = aWPEC.getAttrs (FIELD_ROLES);
+    final Collection <String> aRoleIDs = aWPEC.getAttributeValues (FIELD_ROLES);
 
     if (StringHelper.hasNoText (sName))
       aFormErrors.addFieldError (FIELD_NAME, EText.ERROR_NAME_REQUIRED.getDisplayText (aDisplayLocale));
@@ -361,7 +361,7 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
                                                                                      : aSelectedObject.getName ())).setPlaceholder (sName))
           .setErrorList (aFormErrors.getListOfField (FIELD_NAME));
 
-    final Collection <String> aRoleIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_ROLES)
+    final Collection <String> aRoleIDs = aSelectedObject == null ? aWPEC.getAttributeValues (FIELD_ROLES)
                                                                 : aSelectedObject.getAllContainedRoleIDs ();
     final RoleForUserGroupSelect aSelect = new RoleForUserGroupSelect (new RequestField (FIELD_ROLES),
                                                                        aDisplayLocale,

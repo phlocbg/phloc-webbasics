@@ -17,18 +17,25 @@
  */
 package com.phloc.webbasics.app;
 
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.ReturnsMutableObject;
+import com.phloc.commons.collections.attrs.AbstractReadonlyAttributeContainer;
 import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
@@ -109,65 +116,174 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return m_aMenuTree;
   }
 
-  public boolean containsAttr (@Nullable final String sName)
+  @Nonnegative
+  public int getAttributeCount ()
+  {
+    return m_aRequestScope.getAttributeCount ();
+  }
+
+  public boolean containsNoAttribute ()
+  {
+    return m_aRequestScope.containsNoAttribute ();
+  }
+
+  public boolean containsAttribute (@Nullable final String sName)
   {
     return m_aRequestScope.containsAttribute (sName);
   }
 
-  @Nullable
-  public String getAttr (@Nullable final String sName)
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, Object> getAllAttributes ()
   {
-    return getAttr (sName, null);
+    return m_aRequestScope.getAllAttributes ();
   }
 
   @Nullable
-  public String getAttr (@Nullable final String sName, @Nullable final String sDefault)
+  public Object getAttributeObject (@Nullable final String sName)
   {
-    final String sScopeValue = m_aRequestScope.getAttributeAsString (sName, sDefault);
-    return StringHelper.trim (sScopeValue);
+    return m_aRequestScope.getAttributeObject (sName);
   }
 
   @Nullable
-  public List <String> getAttrs (@Nullable final String sName)
+  public <DATATYPE> DATATYPE getCastedAttribute (@Nullable final String sName)
   {
-    return m_aRequestScope.getAttributeValues (sName);
-  }
-
-  public boolean getBooleanAttr (@Nullable final String sName, final boolean bDefault)
-  {
-    return m_aRequestScope.getAttributeAsBoolean (sName, bDefault);
-  }
-
-  public int getIntAttr (@Nullable final String sName, final int nDefault)
-  {
-    return m_aRequestScope.getAttributeAsInt (sName, nDefault);
-  }
-
-  public long getLongAttr (@Nullable final String sName, final long nDefault)
-  {
-    return m_aRequestScope.getAttributeAsLong (sName, nDefault);
-  }
-
-  public double getDoubleAttr (@Nullable final String sName, final double dDefault)
-  {
-    return m_aRequestScope.getAttributeAsDouble (sName, dDefault);
+    return m_aRequestScope.getCastedAttribute (sName);
   }
 
   @Nullable
-  public <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
-  {
-    return getCastedAttr (sName, (DATATYPE) null);
-  }
-
-  @Nullable
-  public <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName, @Nullable final DATATYPE aDefault)
+  public <DATATYPE> DATATYPE getCastedAttribute (@Nullable final String sName, @Nullable final DATATYPE aDefault)
   {
     return m_aRequestScope.getCastedAttribute (sName, aDefault);
   }
 
-  public boolean hasAttr (@Nullable final String sName, final String sValue)
+  @Nullable
+  public <DATATYPE> DATATYPE getTypedAttribute (@Nullable final String sName, @Nonnull final Class <DATATYPE> aDstClass)
   {
-    return EqualsUtils.equals (sValue, getAttr (sName));
+    return m_aRequestScope.getTypedAttribute (sName, aDstClass);
+  }
+
+  @Nullable
+  public <DATATYPE> DATATYPE getTypedAttribute (@Nullable final String sName,
+                                                @Nonnull final Class <DATATYPE> aDstClass,
+                                                @Nullable final DATATYPE aDefault)
+  {
+    return m_aRequestScope.getTypedAttribute (sName, aDstClass, aDefault);
+  }
+
+  @Nullable
+  public String getAttributeAsString (@Nullable final String sName)
+  {
+    return getAttributeAsString (sName, (String) null);
+  }
+
+  @Nullable
+  public String getAttributeAsString (@Nullable final String sName, @Nullable final String sDefault)
+  {
+    final String ret = m_aRequestScope.getAttributeAsString (sName, sDefault);
+    // Automatically and always remove leading and trailing whitespaces
+    return StringHelper.trim (ret);
+  }
+
+  public int getAttributeAsInt (@Nullable final String sName)
+  {
+    return getAttributeAsInt (sName, CGlobal.ILLEGAL_UINT);
+  }
+
+  public int getAttributeAsInt (@Nullable final String sName, final int nDefault)
+  {
+    // Always use String because we're handling request parameters
+    return AbstractReadonlyAttributeContainer.getAsInt (sName, getAttributeAsString (sName), nDefault);
+  }
+
+  public long getAttributeAsLong (@Nullable final String sName)
+  {
+    return getAttributeAsLong (sName, CGlobal.ILLEGAL_ULONG);
+  }
+
+  public long getAttributeAsLong (@Nullable final String sName, final long nDefault)
+  {
+    // Always use String because we're handling request parameters
+    return AbstractReadonlyAttributeContainer.getAsLong (sName, getAttributeAsString (sName), nDefault);
+  }
+
+  public double getAttributeAsDouble (@Nullable final String sName)
+  {
+    return getAttributeAsDouble (sName, CGlobal.ILLEGAL_UINT);
+  }
+
+  public double getAttributeAsDouble (@Nullable final String sName, final double dDefault)
+  {
+    // Always use String because we're handling request parameters
+    return AbstractReadonlyAttributeContainer.getAsDouble (sName, getAttributeAsString (sName), dDefault);
+  }
+
+  public boolean getAttributeAsBoolean (@Nullable final String sName)
+  {
+    return getAttributeAsBoolean (sName, false);
+  }
+
+  public boolean getAttributeAsBoolean (@Nullable final String sName, final boolean bDefault)
+  {
+    // Always use String because we're handling request parameters
+    return AbstractReadonlyAttributeContainer.getAsBoolean (sName, getAttributeAsString (sName), bDefault);
+  }
+
+  @Nonnull
+  public Enumeration <String> getAttributeNames ()
+  {
+    return m_aRequestScope.getAttributeNames ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllAttributeNames ()
+  {
+    return m_aRequestScope.getAllAttributeNames ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <Object> getAllAttributeValues ()
+  {
+    return m_aRequestScope.getAllAttributeValues ();
+  }
+
+  @Deprecated
+  public String getAttr (@Nullable final String sName)
+  {
+    return getAttributeAsString (sName);
+  }
+
+  @Deprecated
+  public boolean hasAttr (@Nullable final String sName, @Nullable final String sValue)
+  {
+    return hasAttributeValue (sName, sValue);
+  }
+
+  @Nullable
+  public List <String> getAttributeValues (@Nullable final String sName)
+  {
+    return m_aRequestScope.getAttributeValues (sName);
+  }
+
+  @Nullable
+  public List <String> getAttributeValues (@Nullable final String sName, @Nullable final List <String> aDefault)
+  {
+    return m_aRequestScope.getAttributeValues (sName, aDefault);
+  }
+
+  public boolean hasAttributeValue (@Nullable final String sName, @Nullable final String sDesiredValue)
+  {
+    return EqualsUtils.equals (getAttributeAsString (sName), sDesiredValue);
+  }
+
+  public boolean hasAttributeValue (@Nullable final String sName,
+                                    @Nullable final String sDesiredValue,
+                                    final boolean bDefault)
+  {
+    final String sValue = getAttributeAsString (sName);
+    return sValue == null ? bDefault : EqualsUtils.equals (sValue, sDesiredValue);
   }
 
   public boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
@@ -195,17 +311,23 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
   @Nullable
   public String getAction ()
   {
-    return getAttr (CHCParam.PARAM_ACTION);
+    return getAttributeAsString (CHCParam.PARAM_ACTION);
   }
 
   public boolean hasAction (@Nullable final String sAction)
   {
-    return hasAttr (CHCParam.PARAM_ACTION, sAction);
+    return EqualsUtils.equals (getAction (), sAction);
+  }
+
+  @Nullable
+  public String getSubAction ()
+  {
+    return getAttributeAsString (CHCParam.PARAM_SUBACTION);
   }
 
   public boolean hasSubAction (@Nullable final String sSubAction)
   {
-    return hasAttr (CHCParam.PARAM_SUBACTION, sSubAction);
+    return EqualsUtils.equals (getSubAction (), sSubAction);
   }
 
   @Nonnull

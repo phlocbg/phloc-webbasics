@@ -482,7 +482,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     final String sPasswordConf = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
     final boolean bEnabled = bIsAdministrator ? true : aWPEC.getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
     final Collection <String> aUserGroupIDs = bIsAdministrator ? aAccessMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ())
-                                                              : aWPEC.getAttrs (FIELD_USERGROUPS);
+                                                              : aWPEC.getAttributeValues (FIELD_USERGROUPS);
 
     if (useEmailAddressAsLoginName ())
     {
@@ -736,7 +736,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     }
 
     {
-      final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
+      final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttributeValues (FIELD_USERGROUPS)
                                                                        : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
       final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
                                                                          aDisplayLocale,

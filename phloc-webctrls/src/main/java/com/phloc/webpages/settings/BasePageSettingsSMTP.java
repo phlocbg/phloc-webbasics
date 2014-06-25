@@ -304,8 +304,8 @@ public class BasePageSettingsSMTP <WPECTYPE extends IWebPageExecutionContext> ex
     {}
     final boolean bSSLEnabled = aWPEC.getCheckBoxAttr (FIELD_SSL, EmailGlobalSettings.isUseSSL ());
     final boolean bSTARTTLSEnabled = aWPEC.getCheckBoxAttr (FIELD_STARTTLS, EmailGlobalSettings.isUseSTARTTLS ());
-    final long nConnectionTimeoutMS = aWPEC.getLongAttr (FIELD_CONNECTION_TIMEOUT, CGlobal.ILLEGAL_ULONG);
-    final long nSocketTimeoutMS = aWPEC.getLongAttr (FIELD_SOCKET_TIMEOUT, CGlobal.ILLEGAL_ULONG);
+    final long nConnectionTimeoutMS = aWPEC.getAttributeAsLong (FIELD_CONNECTION_TIMEOUT, CGlobal.ILLEGAL_ULONG);
+    final long nSocketTimeoutMS = aWPEC.getAttributeAsLong (FIELD_SOCKET_TIMEOUT, CGlobal.ILLEGAL_ULONG);
 
     if (StringHelper.hasNoText (sName))
       aFormErrors.addFieldError (FIELD_NAME, EText.ERROR_NAME_EMPTY.getDisplayText (aDisplayLocale));
