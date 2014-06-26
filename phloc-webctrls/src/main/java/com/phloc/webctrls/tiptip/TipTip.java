@@ -23,16 +23,18 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.html.AbstractHCSpan;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
@@ -41,11 +43,11 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 /**
  * Tooltip class using tiptip jQuery plugin.<br>
  * Source:
- * 
+ *
  * <pre>
  * http://code.drewwilson.com/entry/tiptip-jquery-plugin
  * </pre>
- * 
+ *
  * @author Philip Helger
  */
 public final class TipTip extends AbstractHCSpan <TipTip>
@@ -123,30 +125,39 @@ public final class TipTip extends AbstractHCSpan <TipTip>
     return this;
   }
 
-  @Nullable
-  public IHCNode build ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public JSAssocArray getJSOptions ()
   {
-    registerExternalResources ();
-
     final JSAssocArray aOptions = new JSAssocArray ();
     aOptions.add ("content", m_sContent);
     if (StringHelper.hasText (m_sMaxWidth))
       aOptions.add ("maxWidth", m_sMaxWidth);
     if (m_nEdgeOffset > 0)
       aOptions.add ("edgeOffset", m_nEdgeOffset);
-    final IHCNode aScript = new HCScriptOnDocumentReady (JQuery.idRef (aSpan).jqinvoke ("tipTip").arg (aOptions));
 
-    return HCNodeList.create (aSpan, aScript);
+    return aOptions;
   }
 
-  /**
-   * Registers all external resources (CSS or JS files) this control needs
-   */
-  public static void registerExternalResources ()
+  @Override
+  public void onAdded (@Nonnegative final int nIndex, @Nonnull final IHCHasChildrenMutable <?, ?> aParent)
   {
+    // Register resources
     PerRequestJSIncludes.registerJSIncludeForThisRequest (ETipTipJSPathProvider.TIPTIP_13);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETipTipCSSPathProvider.TIPTIP_13);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETipTipCSSPathProvider.TOOLTIP);
+
+    // Add special JS code
+    ((IHCNodeWithChildren <?>) aParent).addChild (new HCScriptOnDocumentReady (JQuery.idRef (this)
+                                                                                     .jqinvoke ("tipTip")
+                                                                                     .arg (getJSOptions ())));
+  }
+
+  @Override
+  public void onRemoved (@Nonnegative final int nIndex, @Nonnull final IHCHasChildrenMutable <?, ?> aParent)
+  {
+    // Remove the JS that is now on that index
+    aParent.removeChild (nIndex);
   }
 
   @Nonnull

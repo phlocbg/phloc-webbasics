@@ -54,7 +54,7 @@ public final class SecurityUI
 
   /**
    * Get the display name of the guest user in the specified locale.
-   * 
+   *
    * @param aDisplayLocale
    *        The locale to be used. May not be <code>null</code>.
    * @return <code>null</code> if no translation is present.
@@ -68,7 +68,7 @@ public final class SecurityUI
 
   /**
    * Get the display name of the user.
-   * 
+   *
    * @param sUserID
    *        User ID. May be <code>null</code>.
    * @param aDisplayLocale
@@ -87,7 +87,7 @@ public final class SecurityUI
   /**
    * Get the display name of the user. If no display name is present (because
    * first name and last name are empty), the login name is returned.
-   * 
+   *
    * @param aUser
    *        User. May be <code>null</code>.
    * @param aDisplayLocale
@@ -105,7 +105,7 @@ public final class SecurityUI
 
   /**
    * Create a tooltip with all the requirements for a password
-   * 
+   *
    * @param aDisplayLocale
    *        Display locale to use.
    * @return <code>null</code> if not special constraints are defined.
@@ -114,10 +114,10 @@ public final class SecurityUI
   public static IHCNode createPasswordConstraintTip (@Nonnull final Locale aDisplayLocale)
   {
     final List <String> aTexts = GlobalPasswordSettings.getPasswordConstraintList ()
-                                                       .getAllPasswordConstraintDescriptions (aDisplayLocale);
+        .getAllPasswordConstraintDescriptions (aDisplayLocale);
     if (aTexts.isEmpty ())
       return null;
 
-    return TipTip.create (HCUtils.list2divList (aTexts)).build ();
+    return TipTip.create (HCUtils.list2divList (aTexts));
   }
 }
