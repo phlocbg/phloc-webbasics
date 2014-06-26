@@ -30,14 +30,13 @@ import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.html.AbstractHCSpan;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
-import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
-import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
  * Tooltip class using tiptip jQuery plugin.<br>
@@ -49,7 +48,7 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  * 
  * @author Philip Helger
  */
-public final class TipTip implements IHCNodeBuilder
+public final class TipTip extends AbstractHCSpan <TipTip>
 {
   /** Used for tooltip initialization as jquery selector! */
   public static final ICSSClassProvider CSS_CLASS_TOOLTIP = DefaultCSSClassProvider.create ("nocss_tooltip");
@@ -63,10 +62,8 @@ public final class TipTip implements IHCNodeBuilder
 
   public TipTip (@Nonnull @Nonempty final String sText)
   {
-    if (StringHelper.hasNoText (sText))
-      throw new IllegalArgumentException ("No text makes no sense!");
-
-    m_sContent = sText;
+    addClass (CSS_CLASS_TOOLTIP);
+    m_sContent = ValueEnforcer.notEmpty (sText, "Text");
   }
 
   public TipTip (@Nonnull @Nonempty final String sText, @Nonnull final ETipType eType)
@@ -91,7 +88,11 @@ public final class TipTip implements IHCNodeBuilder
   @Nonnull
   public TipTip setType (@Nonnull final ETipType eType)
   {
+    if (m_eType != null)
+      removeClass (m_eType);
     m_eType = ValueEnforcer.notNull (eType, "Type");
+    if (m_eType != null)
+      addClass (m_eType);
     return this;
   }
 
@@ -127,10 +128,6 @@ public final class TipTip implements IHCNodeBuilder
   {
     registerExternalResources ();
 
-    final HCSpan aSpan = new HCSpan ().addClasses (m_eType, CSS_CLASS_TOOLTIP);
-    if (false)
-      aSpan.addChild (EDefaultIcon.INFO.getIcon ().getAsNode ());
-
     final JSAssocArray aOptions = new JSAssocArray ();
     aOptions.add ("content", m_sContent);
     if (StringHelper.hasText (m_sMaxWidth))
@@ -155,7 +152,7 @@ public final class TipTip implements IHCNodeBuilder
   @Nonnull
   private static String _getAsString (@Nonnull final IHCNode aHCNode)
   {
-    return HCSettings.getAsHTMLString (aHCNode);
+    return HCSettings.getAsHTMLStringWithoutNamespaces (aHCNode);
   }
 
   @Nonnull

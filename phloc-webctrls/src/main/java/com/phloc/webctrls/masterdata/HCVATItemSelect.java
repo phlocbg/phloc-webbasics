@@ -61,10 +61,13 @@ public class HCVATItemSelect extends HCExtSelect
     for (final Map.Entry <String, IVATItem> aEntry : ContainerHelper.getSortedByValue (aVATItems,
                                                                                        new ComparatorVATItemPercentage ())
                                                                     .entrySet ())
-      if (!aEntry.getValue ().isDeprecated ())
+    {
+      final IVATItem aVATItem = aEntry.getValue ();
+      if (!aVATItem.isDeprecated ())
       {
-        final String sDisplayText = aEntry.getValue ().getDisplayText (aDisplayLocale);
+        final String sDisplayText = aVATItem.getDisplayText (aDisplayLocale);
         addOption (aEntry.getKey (), sDisplayText);
       }
+    }
   }
 }

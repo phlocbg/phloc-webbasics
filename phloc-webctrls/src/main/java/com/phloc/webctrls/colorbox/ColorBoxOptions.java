@@ -22,19 +22,9 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeBuilder;
-import com.phloc.html.hc.html.HCScriptOnDocumentReady;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.html.js.builder.jquery.IJQuerySelector;
-import com.phloc.html.js.builder.jquery.JQuerySelector;
-import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
-import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
  * jQuery colorbox plugin from
@@ -45,42 +35,17 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * 
  * @author Philip Helger
  */
-public class HCColorBox implements IHCNodeBuilder
+public class ColorBoxOptions
 {
   public static final boolean DEFAULT_PHOTO = false;
 
-  private final IHCElement <?> m_aElement;
-  private final IJQuerySelector m_aSelector;
   private Locale m_aDisplayLocale;
-  private boolean m_bPhoto = false;
+  private boolean m_bPhoto = DEFAULT_PHOTO;
   private String m_sMaxWidth;
   private String m_sMaxHeight;
 
-  public HCColorBox (@Nonnull final IJQuerySelector aSelector)
-  {
-    ValueEnforcer.notNull (aSelector, "Selector");
-    m_aElement = null;
-    m_aSelector = aSelector;
-  }
-
-  public HCColorBox (@Nonnull final IHCElement <?> aElement)
-  {
-    ValueEnforcer.notNull (aElement, "Element");
-    m_aElement = aElement;
-    m_aSelector = null;
-  }
-
-  @Nullable
-  public IHCElement <?> getElement ()
-  {
-    return m_aElement;
-  }
-
-  @Nullable
-  public IJQuerySelector getSelector ()
-  {
-    return m_aSelector;
-  }
+  public ColorBoxOptions ()
+  {}
 
   @Nullable
   public Locale getDisplayLocale ()
@@ -89,7 +54,7 @@ public class HCColorBox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorBox setDisplayLocale (@Nonnull final Locale aDisplayLocale)
+  public ColorBoxOptions setDisplayLocale (@Nonnull final Locale aDisplayLocale)
   {
     m_aDisplayLocale = aDisplayLocale;
     return this;
@@ -101,7 +66,7 @@ public class HCColorBox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorBox setPhoto (final boolean bPhoto)
+  public ColorBoxOptions setPhoto (final boolean bPhoto)
   {
     m_bPhoto = bPhoto;
     return this;
@@ -114,7 +79,7 @@ public class HCColorBox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorBox setMaxWidth (@Nullable final String sMaxWidth)
+  public ColorBoxOptions setMaxWidth (@Nullable final String sMaxWidth)
   {
     m_sMaxWidth = sMaxWidth;
     return this;
@@ -127,7 +92,7 @@ public class HCColorBox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorBox setMaxHeight (@Nullable final String sMaxHeight)
+  public ColorBoxOptions setMaxHeight (@Nullable final String sMaxHeight)
   {
     m_sMaxHeight = sMaxHeight;
     return this;
@@ -159,26 +124,5 @@ public class HCColorBox implements IHCNodeBuilder
     }
 
     return aArgs;
-  }
-
-  @Nonnull
-  public IHCNode build ()
-  {
-    IJQuerySelector aSelector = m_aSelector;
-    if (aSelector == null)
-      aSelector = JQuerySelector.id (m_aElement);
-
-    registerExternalResources ();
-
-    return HCNodeList.create (m_aElement,
-                              new HCScriptOnDocumentReady (aSelector.invoke ()
-                                                                    .invoke ("colorbox")
-                                                                    .arg (getJSOptions ())));
-  }
-
-  public static void registerExternalResources ()
-  {
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX);
   }
 }

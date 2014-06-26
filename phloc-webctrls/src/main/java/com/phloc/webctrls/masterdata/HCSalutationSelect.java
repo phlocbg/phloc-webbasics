@@ -28,20 +28,20 @@ import com.phloc.webctrls.custom.HCExtSelect;
 
 public final class HCSalutationSelect extends HCExtSelect
 {
-  public HCSalutationSelect (final IHCRequestField aRF, final Locale aDisplayLocale)
+  public HCSalutationSelect (@Nonnull final IHCRequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
     this (aRF, aDisplayLocale, true);
   }
 
-  public HCSalutationSelect (final IHCRequestField aRF,
-                             final Locale aDisplayLocale,
+  public HCSalutationSelect (@Nonnull final IHCRequestField aRF,
+                             @Nonnull final Locale aDisplayLocale,
                              final boolean bAddOptionPleaseSelect)
   {
     this (aRF, aDisplayLocale, bAddOptionPleaseSelect, ESalutation.values ());
   }
 
-  public HCSalutationSelect (final IHCRequestField aRF,
-                             final Locale aDisplayLocale,
+  public HCSalutationSelect (@Nonnull final IHCRequestField aRF,
+                             @Nonnull final Locale aDisplayLocale,
                              final boolean bAddOptionPleaseSelect,
                              @Nonnull @Nonempty final ESalutation [] aSalutations)
   {

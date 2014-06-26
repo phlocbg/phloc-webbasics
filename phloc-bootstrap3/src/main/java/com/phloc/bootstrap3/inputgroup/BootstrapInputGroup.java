@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.button.BootstrapButton;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
@@ -59,12 +60,8 @@ public class BootstrapInputGroup implements IHCNodeBuilder
 
   public BootstrapInputGroup (@Nonnull final EBootstrapInputGroupSize eSize, @Nonnull final IHCNode aInput)
   {
-    if (eSize == null)
-      throw new NullPointerException ("size");
-    if (aInput == null)
-      throw new NullPointerException ("input");
-    m_eSize = eSize;
-    m_aInput = aInput;
+    m_eSize = ValueEnforcer.notNull (eSize, "Size");
+    m_aInput = ValueEnforcer.notNull (aInput, "Input");
   }
 
   @Nonnull
