@@ -223,7 +223,7 @@ public class BasePageScopes <WPECTYPE extends IWebPageExecutionContext> extends 
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
     // Global scope
     aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aGlobalScope.getID ()),
                     _getGlobalScopeInfo (aWPEC, aGlobalScope));

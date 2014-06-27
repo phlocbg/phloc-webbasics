@@ -312,7 +312,7 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
 
         // We're editing an existing object
         aAccessMgr.setUserGroupData (sUserGroupID, sName, aSelectedObject.getAllAttributes ());
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching roles
         final Collection <String> aPrevRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
@@ -330,7 +330,7 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
       {
         // We're creating a new object
         final IUserGroup aNewUserGroup = aAccessMgr.createNewUserGroup (sName);
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
         // assign to the matching internal user groups
         for (final String sRoleID : aRoleIDs)
@@ -389,16 +389,16 @@ public class BasePageUserGroupManagement <WPECTYPE extends IWebPageExecutionCont
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteUserGroup (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                         aSelectedObject.getName ())));
       else
-        aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+        aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                     aSelectedObject.getName ())));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-    aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
+    aForm.addChild (getStyler ().createQuestionBox (aWPEC, EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                aSelectedObject.getName ())));
     final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);

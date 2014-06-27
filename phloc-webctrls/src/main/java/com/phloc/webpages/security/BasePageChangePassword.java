@@ -124,7 +124,7 @@ public class BasePageChangePassword <WPECTYPE extends IWebPageExecutionContext> 
     final IUser aCurrentUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aCurrentUser == null)
     {
-      aNodeList.addChild (getStyler ().createErrorBox (EText.ERROR_NO_USER_PRESENT.getDisplayText (aDisplayLocale)));
+      aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.ERROR_NO_USER_PRESENT.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -147,7 +147,7 @@ public class BasePageChangePassword <WPECTYPE extends IWebPageExecutionContext> 
         if (aFormErrors.isEmpty ())
         {
           AccessManager.getInstance ().setUserPassword (aCurrentUser.getID (), sPlainTextPassword);
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CHANGE_PW.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_CHANGE_PW.getDisplayText (aDisplayLocale)));
           // Always show form
         }
       }

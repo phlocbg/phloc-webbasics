@@ -138,14 +138,14 @@ public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> ext
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (FormStateManager.getInstance ().deleteFormState (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.DELETE_SUCCESS.getDisplayText (aDisplayLocale)));
       else
-        aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.DELETE_ERROR.getDisplayText (aDisplayLocale)));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-    aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayText (aDisplayLocale)));
+    aForm.addChild (getStyler ().createQuestionBox (aWPEC, EText.DELETE_QUERY.getDisplayText (aDisplayLocale)));
     final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
@@ -166,14 +166,14 @@ public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> ext
       if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
       {
         if (FormStateManager.getInstance ().deleteAllFormStates ().isChanged ())
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_ALL_SUCCESS.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.DELETE_ALL_SUCCESS.getDisplayText (aDisplayLocale)));
         else
-          aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ALL_ERROR.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.DELETE_ALL_ERROR.getDisplayText (aDisplayLocale)));
         return true;
       }
 
       final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-      aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_ALL_QUERY.getDisplayText (aDisplayLocale)));
+      aForm.addChild (getStyler ().createQuestionBox (aWPEC, EText.DELETE_ALL_QUERY.getDisplayText (aDisplayLocale)));
       final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL);
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -195,7 +195,7 @@ public class BasePageSavedStates <WPECTYPE extends IWebPageExecutionContext> ext
     final Collection <FormState> aAllFormStates = aFSM.getAllFormStates ();
     if (aAllFormStates.isEmpty ())
     {
-      aNodeList.addChild (getStyler ().createInfoBox (EText.NONE_PRESENT.getDisplayText (aDisplayLocale)));
+      aNodeList.addChild (getStyler ().createInfoBox (aWPEC, EText.NONE_PRESENT.getDisplayText (aDisplayLocale)));
     }
     else
     {

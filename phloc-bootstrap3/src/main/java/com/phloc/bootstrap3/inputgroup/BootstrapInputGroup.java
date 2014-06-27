@@ -133,13 +133,6 @@ public class BootstrapInputGroup implements IHCNodeBuilder
     return this;
   }
 
-  @Nullable
-  @Deprecated
-  public IHCNode getPrefix ()
-  {
-    return ContainerHelper.getFirstElement (m_aPrefixes);
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public List <IHCNode> getAllPrefixes ()
@@ -225,13 +218,6 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   {
     m_aSuffixes.clear ();
     return this;
-  }
-
-  @Nullable
-  @Deprecated
-  public IHCNode getSuffix ()
-  {
-    return ContainerHelper.getFirstElement (m_aSuffixes);
   }
 
   @Nonnull

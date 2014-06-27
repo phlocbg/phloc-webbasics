@@ -45,8 +45,7 @@ import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.ISimpleWebExecutionContext;
-import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.HCTableForm;
@@ -65,20 +64,20 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final ISimpleWebExecutionContext aSWEC, @Nullable final UserDataObject aUDO)
+  public IHCNode createImageView (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final UserDataObject aUDO)
   {
-    return createImageView (aSWEC, aUDO, 200);
+    return createImageView (aWPEC, aUDO, 200);
   }
 
   @Nonnull
-  public IHCNode createImageView (@Nonnull final ISimpleWebExecutionContext aSWEC,
+  public IHCNode createImageView (@Nonnull final IWebPageExecutionContext aWPEC,
                                   @Nullable final UserDataObject aUDO,
                                   final int nMaxWidth)
   {
     if (aUDO == null)
-      return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aSWEC.getDisplayLocale ()));
+      return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aWPEC.getDisplayLocale ()));
 
-    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aSWEC.getRequestScope ()));
+    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aWPEC.getRequestScope ()));
     ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());
     if (aSize != null)
     {
@@ -122,31 +121,32 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public final IHCNode createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
+  public final IHCNode createIncorrectInputBox (@Nonnull final IWebPageExecutionContext aWPEC)
   {
-    return createErrorBox (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    return createErrorBox (aWPEC, EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
   }
 
   @Nonnull
-  public IHCElement <?> createErrorBox (@Nullable final String sText)
+  public IHCElement <?> createErrorBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return HCDiv.create (sText).addClass (CSS_CLASS_ERRORBOX);
   }
 
   @Nonnull
-  public IHCElement <?> createInfoBox (@Nullable final String sText)
+  public IHCElement <?> createInfoBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return HCDiv.create (sText).addClass (CSS_CLASS_INFOBOX);
   }
 
   @Nonnull
-  public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  public IHCElement <?> createSuccessBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return HCDiv.create (sText).addClass (CSS_CLASS_SUCCESSBOX);
   }
 
   @Nonnull
-  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  public IHCElement <?> createQuestionBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return HCDiv.create (sText).addClass (CSS_CLASS_QUESTIONBOX);
   }
@@ -170,30 +170,31 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final ISimpleWebExecutionContext aSWEC,
+  public DataTables createDefaultDataTables (@Nonnull final IWebPageExecutionContext aWPEC,
                                              @Nonnull final IHCTable <?> aTable)
   {
     final DataTables ret = new DataTables (aTable);
-    ret.setDisplayLocale (aSWEC.getDisplayLocale ());
+    ret.setDisplayLocale (aWPEC.getDisplayLocale ());
     ret.addAllColumns (aTable);
     return ret;
   }
 
   @Nonnull
-  public IHCElement <?> createUploadButton (@Nonnull final Locale aDisplayLocale)
+  public IHCElement <?> createUploadButton (@Nonnull final IWebPageExecutionContext aWPEC)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     return new HCButton (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
   }
 
   @Nonnull
-  public IButtonToolbar <?> createToolbar (@Nonnull final ILayoutExecutionContext aLEC)
+  public IButtonToolbar <?> createToolbar (@Nonnull final IWebPageExecutionContext aWPEC)
   {
-    return new SimpleButtonToolbar (aLEC);
+    return new SimpleButtonToolbar (aWPEC);
   }
 
   @Nonnull
   @UnsupportedOperation
-  public ITabBox <?> createTabBox ()
+  public ITabBox <?> createTabBox (@Nonnull final IWebPageExecutionContext aWPEC)
   {
     throw new UnsupportedOperationException ();
   }

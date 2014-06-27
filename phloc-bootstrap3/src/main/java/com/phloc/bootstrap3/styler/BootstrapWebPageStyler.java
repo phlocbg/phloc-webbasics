@@ -38,36 +38,37 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.ISimpleWebExecutionContext;
-import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
 
 public class BootstrapWebPageStyler extends SimpleWebPageStyler
 {
   @Override
   @Nonnull
-  public BootstrapErrorBox createErrorBox (@Nullable final String sText)
+  public BootstrapErrorBox createErrorBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return BootstrapErrorBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public BootstrapInfoBox createInfoBox (@Nullable final String sText)
+  public BootstrapInfoBox createInfoBox (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final String sText)
   {
     return BootstrapInfoBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public BootstrapSuccessBox createSuccessBox (@Nullable final String sText)
+  public BootstrapSuccessBox createSuccessBox (@Nonnull final IWebPageExecutionContext aWPEC,
+                                               @Nullable final String sText)
   {
     return BootstrapSuccessBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public BootstrapQuestionBox createQuestionBox (@Nullable final String sText)
+  public BootstrapQuestionBox createQuestionBox (@Nonnull final IWebPageExecutionContext aWPEC,
+                                                 @Nullable final String sText)
   {
     return BootstrapQuestionBox.create (sText);
   }
@@ -96,33 +97,34 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapDataTables createDefaultDataTables (@Nonnull final ISimpleWebExecutionContext aSWEC,
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final IWebPageExecutionContext aWPEC,
                                                       @Nonnull final IHCTable <?> aTable)
   {
     final BootstrapDataTables ret = new BootstrapDataTables (aTable);
-    ret.setDisplayLocale (aSWEC.getDisplayLocale ());
+    ret.setDisplayLocale (aWPEC.getDisplayLocale ());
     ret.addAllColumns (aTable);
     return ret;
   }
 
   @Override
   @Nonnull
-  public HCSpan createUploadButton (@Nonnull final Locale aDisplayLocale)
+  public HCSpan createUploadButton (@Nonnull final IWebPageExecutionContext aWPEC)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS)
                         .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
   }
 
   @Override
   @Nonnull
-  public BootstrapButtonToolbar createToolbar (@Nonnull final ILayoutExecutionContext aLEC)
+  public BootstrapButtonToolbar createToolbar (@Nonnull final IWebPageExecutionContext aWPEC)
   {
-    return new BootstrapButtonToolbar (aLEC);
+    return new BootstrapButtonToolbar (aWPEC);
   }
 
   @Override
   @Nonnull
-  public BootstrapTabBox createTabBox ()
+  public BootstrapTabBox createTabBox (@Nonnull final IWebPageExecutionContext aWPEC)
   {
     return new BootstrapTabBox ();
   }

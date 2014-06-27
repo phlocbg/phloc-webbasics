@@ -128,11 +128,11 @@ public class BasePageSettingsGlobal <WPECTYPE extends IWebPageExecutionContext> 
       GlobalDebug.setDebugModeDirect (bGlobalDebug);
       GlobalDebug.setProductionModeDirect (bGlobalProduction);
 
-      aNodeList.addChild (getStyler ().createSuccessBox (EText.MSG_CHANGE_SUCCESS.getDisplayText (aDisplayLocale)));
+      aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.MSG_CHANGE_SUCCESS.getDisplayText (aDisplayLocale)));
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
 
     // GlobalDebug
     {

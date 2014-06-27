@@ -125,7 +125,7 @@ public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>, 
         final String sDisplayObjectName = StringHelper.hasText (sObjectName) ? " '" + sObjectName + "'" : "";
         final String sDisplayUserName = aLockUser != null ? "'" + aLockUser.getDisplayName () + "'"
                                                          : EWebPageText.LOCKING_OTHER_USER.getDisplayText (aDisplayLocale);
-        aNodeList.addChild (getStyler ().createErrorBox (EWebPageText.LOCKING_FAILED.getDisplayTextWithArgs (aDisplayLocale,
+        aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EWebPageText.LOCKING_FAILED.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                              sDisplayObjectName,
                                                                                                              sDisplayUserName)));
         return EContinue.BREAK;

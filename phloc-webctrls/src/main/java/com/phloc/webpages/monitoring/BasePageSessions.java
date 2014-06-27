@@ -244,7 +244,7 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aWPEC, aScope));
     aNodeList.addChild (aToolbar);
 
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
     aTabBox.addTab (EText.MSG_SESSION.getDisplayText (aDisplayLocale), _getSessionScopeInfo (aWPEC, aScope));
     for (final ISessionApplicationScope aSessionAppScope : ContainerHelper.getSortedByKey (aScope.getAllSessionApplicationScopes ())
                                                                           .values ())

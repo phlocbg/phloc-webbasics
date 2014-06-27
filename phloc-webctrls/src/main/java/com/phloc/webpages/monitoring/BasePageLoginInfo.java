@@ -261,17 +261,17 @@ public class BasePageLoginInfo <WPECTYPE extends IWebPageExecutionContext> exten
 
         // Check if logout worked
         if (aSelectedObject.isLogout ())
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                           sUserName)));
         else
-          aNodeList.addChild (getStyler ().createErrorBox (EText.LOGOUT_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+          aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.LOGOUT_ERROR.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                       sUserName)));
       }
       else
       {
         // Show question
         final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-        aForm.addChild (getStyler ().createSuccessBox (EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
+        aForm.addChild (getStyler ().createSuccessBox (aWPEC, EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                      sUserName)));
 
         final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));

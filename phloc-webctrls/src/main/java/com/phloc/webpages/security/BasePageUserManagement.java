@@ -557,7 +557,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
                                 m_aDefaultUserLocale,
                                 aAttrMap,
                                 !bEnabled);
-        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching user groups
         final Collection <String> aPrevUserGroupIDs = aAccessMgr.getAllUserGroupIDsWithAssignedUser (sUserID);
@@ -585,14 +585,14 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
                                                          !bEnabled);
         if (aNewUser != null)
         {
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
           // assign to the matching internal user groups
           for (final String sUserGroupID : aUserGroupIDs)
             aAccessMgr.assignUserToUserGroup (sUserGroupID, aNewUser.getID ());
         }
         else
-          aNodeList.addChild (getStyler ().createErrorBox (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
       }
     }
   }
@@ -786,7 +786,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
         {
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
           aWPEC.getNodeList ()
-               .addChild (getStyler ().createSuccessBox (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+               .addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                               SecurityUtils.getUserDisplayName (aSelectedObject,
                                                                                                                                                 aDisplayLocale))));
           return true;
@@ -934,7 +934,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar (aWPEC));
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
 
     final AccessManager aMgr = AccessManager.getInstance ();
 

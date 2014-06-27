@@ -122,7 +122,7 @@ public class BasePageSysInfoNetwork <WPECTYPE extends IWebPageExecutionContext> 
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
 
     // HTTP headers
     {

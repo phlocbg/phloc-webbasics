@@ -17,8 +17,6 @@
  */
 package com.phloc.webpages;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -540,7 +538,6 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
   @Override
   protected final void fillContent (@Nonnull final WPECTYPE aWPEC)
   {
-    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Get the selected object
@@ -606,7 +603,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
             else
             {
               // Show: changes could not be saved...
-              aNodeList.addChild (getStyler ().createIncorrectInputBox (aDisplayLocale));
+              aNodeList.addChild (getStyler ().createIncorrectInputBox (aWPEC));
             }
           }
 
@@ -632,11 +629,13 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>, WPE
               final FormState aSavedState = FormStateManager.getInstance ().getFormStateOfID (sRestoreFlowID);
               if (aSavedState != null)
               {
+                // Restore all form values
                 aForm.addChild (new HCScriptOnDocumentReady (JSFormHelper.setAllFormValues (INPUT_FORM_ID,
                                                                                             aSavedState.getAsAssocArray ())));
               }
             }
 
+            // Show the main input form
             showInputForm (aWPEC, aSelectedObject, aForm, bIsEdit, bIsCopy, aFormErrors);
 
             // Toolbar on bottom

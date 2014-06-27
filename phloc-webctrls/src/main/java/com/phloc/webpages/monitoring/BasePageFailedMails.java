@@ -345,7 +345,7 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
     if (m_aFailedMailQueue.remove (aSelectedObject.getID ()) != null)
     {
       s_aLogger.info ("Deleted single failed mail with ID " + aSelectedObject.getID () + "!");
-      aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+      aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
     }
     return true;
   }
@@ -366,7 +366,7 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
         final String sSuccessMsg = aFailedMails.size () == 1 ? EText.DELETE_ALL_SUCCESS_1.getDisplayText (aDisplayLocale)
                                                             : EText.DELETE_ALL_SUCCESS_N.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                                  Integer.toString (aFailedMails.size ()));
-        aNodeList.addChild (getStyler ().createSuccessBox (sSuccessMsg));
+        aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, sSuccessMsg));
       }
     }
     else
@@ -378,7 +378,7 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
         {
           s_aLogger.info ("Trying to resend single failed mail with ID " + aFailedMailData.getID () + "!");
           ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
-          aNodeList.addChild (getStyler ().createSuccessBox (EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
         }
       }
       else
@@ -395,7 +395,7 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
             final String sSuccessMsg = aFailedMails.size () == 1 ? EText.RESENT_ALL_SUCCESS_1.getDisplayText (aDisplayLocale)
                                                                 : EText.RESENT_ALL_SUCCESS_N.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                                      Integer.toString (aFailedMails.size ()));
-            aNodeList.addChild (getStyler ().createSuccessBox (sSuccessMsg));
+            aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, sSuccessMsg));
           }
         }
     return true;

@@ -117,7 +117,7 @@ public class BasePageSysInfoRequest <WPECTYPE extends IWebPageExecutionContext> 
     final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
     final int nFirstColWidth = 250;
 
-    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox (aWPEC);
 
     // HTTP headers
     {

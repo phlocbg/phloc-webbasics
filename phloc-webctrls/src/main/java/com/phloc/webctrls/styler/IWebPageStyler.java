@@ -17,8 +17,6 @@
  */
 package com.phloc.webctrls.styler;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -28,8 +26,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.webbasics.app.ISimpleWebExecutionContext;
-import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
@@ -40,10 +37,10 @@ import com.phloc.webctrls.datatables.DataTables;
 public interface IWebPageStyler
 {
   @Nonnull
-  IHCNode createImageView (@Nonnull ISimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO);
+  IHCNode createImageView (@Nonnull IWebPageExecutionContext aWPEC, @Nullable UserDataObject aUDO);
 
   @Nonnull
-  IHCNode createImageView (@Nonnull ISimpleWebExecutionContext aSWEC, @Nullable UserDataObject aUDO, int nMaxWidth);
+  IHCNode createImageView (@Nonnull IWebPageExecutionContext aWPEC, @Nullable UserDataObject aUDO, int nMaxWidth);
 
   @Nullable
   IHCNode createEmailLink (@Nullable String sEmailAddress);
@@ -61,24 +58,24 @@ public interface IWebPageStyler
    * Create a box that shows a constant note, that changes could not be saved,
    * because the user did not enter all form data correctly.
    * 
-   * @param aDisplayLocale
-   *        The display locale to use.
+   * @param aWPEC
+   *        Simple web execution context. Never <code>null</code>.
    * @return The control to display
    */
   @Nonnull
-  IHCNode createIncorrectInputBox (@Nonnull Locale aDisplayLocale);
+  IHCNode createIncorrectInputBox (@Nonnull IWebPageExecutionContext aWPEC);
 
   @Nonnull
-  IHCElement <?> createErrorBox (@Nullable String sText);
+  IHCElement <?> createErrorBox (@Nonnull IWebPageExecutionContext aWPEC, @Nullable String sText);
 
   @Nonnull
-  IHCElement <?> createInfoBox (@Nullable String sText);
+  IHCElement <?> createInfoBox (@Nonnull IWebPageExecutionContext aWPEC, @Nullable String sText);
 
   @Nonnull
-  IHCElement <?> createSuccessBox (@Nullable String sText);
+  IHCElement <?> createSuccessBox (@Nonnull IWebPageExecutionContext aWPEC, @Nullable String sText);
 
   @Nonnull
-  IHCElement <?> createQuestionBox (@Nullable String sText);
+  IHCElement <?> createQuestionBox (@Nonnull IWebPageExecutionContext aWPEC, @Nullable String sText);
 
   @Nonnull
   IHCTable <?> createTable (@Nullable HCCol... aCols);
@@ -90,14 +87,14 @@ public interface IWebPageStyler
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
 
   @Nonnull
-  DataTables createDefaultDataTables (@Nonnull ISimpleWebExecutionContext aSWEC, @Nonnull IHCTable <?> aTable);
+  DataTables createDefaultDataTables (@Nonnull IWebPageExecutionContext aWPEC, @Nonnull IHCTable <?> aTable);
 
   @Nonnull
-  IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);
+  IHCElement <?> createUploadButton (@Nonnull IWebPageExecutionContext aWPEC);
 
   @Nonnull
-  IButtonToolbar <?> createToolbar (@Nonnull ILayoutExecutionContext aLEC);
+  IButtonToolbar <?> createToolbar (@Nonnull IWebPageExecutionContext aWPEC);
 
   @Nonnull
-  ITabBox <?> createTabBox ();
+  ITabBox <?> createTabBox (@Nonnull IWebPageExecutionContext aWPEC);
 }
