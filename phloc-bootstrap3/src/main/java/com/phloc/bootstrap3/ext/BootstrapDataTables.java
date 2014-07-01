@@ -29,7 +29,7 @@ import com.phloc.webctrls.datatables.DataTables;
 
 public class BootstrapDataTables extends DataTables
 {
-  public static final String DEFAULT_DOM = "<'row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>";
+  public static final String DEFAULT_DOM = "<'row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-5'i><'col-xs-7'p>>";
 
   @SuppressWarnings ("deprecation")
   public BootstrapDataTables (@Nonnull final IHCTable <?> aTable)
