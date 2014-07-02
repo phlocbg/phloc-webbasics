@@ -53,7 +53,13 @@ var PDFObject = function (obj){
 
         var axObj = null;
 
-        if (window.ActiveXObject) {
+        try {
+          axObj = new ActiveXObject("AcroPDF.PDF");
+        } catch (e) {
+          // Adobe installed
+        }
+           
+        if (axObj != null || window.ActiveXObject) {
 
             axObj = createAXO("AcroPDF.PDF");
 
@@ -118,6 +124,11 @@ var PDFObject = function (obj){
     };
 
 
+    // tell if the browser is the fucking ie9
+    isIE9 = function(){
+       return (navigator.userAgent.indexOf("Trident/5") > -1);
+    };
+    
     //If setting PDF to fill page, need to handle some CSS first
     setCssForFullWindowPdf = function (){
 
@@ -224,10 +235,13 @@ var PDFObject = function (obj){
 
         }
 
-        targetNode.innerHTML = '<object    data="' +url +'" type="application/pdf" width="' +width +'" height="' +height +'"></object>';
+        // if the browser is an ie9, I use a iframe, because object actually dont work as expected.
+        if(isIE9())
+          targetNode.innerHTML = '<iframe    src="' +url +'" width="' +width +'" height="' +height +'"></iframe>';
+        else
+          targetNode.innerHTML = '<object    data="' +url +'" type="application/pdf" width="' +width +'" height="' +height +'"></object>';
 
         return targetNode.getElementsByTagName("object")[0];
-
     };
 
     //The hash (#) prevents odd behavior in Windows
