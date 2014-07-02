@@ -31,6 +31,7 @@ import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
@@ -40,6 +41,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.impl.SuccessWithValue;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
 
@@ -202,8 +204,39 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
     if (!wasMigrationExecutedSuccessfully (sMigrationID))
     {
+      // Invoke the callback
       aMigrationAction.run ();
+
+      // Always assume success
       addMigrationResultSuccess (sMigrationID);
+    }
+  }
+
+  /**
+   * Perform a migration if it was not performed yet.
+   * 
+   * @param sMigrationID
+   *        The migration ID to handle. May neither be <code>null</code> nor
+   *        empty.
+   * @param aMigrationAction
+   *        The action to be performed. May not be <code>null</code>.
+   */
+  public void performMigrationIfNecessary (@Nonnull @Nonempty final String sMigrationID,
+                                           @Nonnull final INonThrowingCallable <SuccessWithValue <String>> aMigrationAction)
+  {
+    ValueEnforcer.notEmpty (sMigrationID, "MigrationID");
+    ValueEnforcer.notNull (aMigrationAction, "MigrationAction");
+
+    if (!wasMigrationExecutedSuccessfully (sMigrationID))
+    {
+      // Invoke the callback
+      final SuccessWithValue <String> ret = aMigrationAction.call ();
+
+      // Success or error
+      if (ret.isSuccess ())
+        addMigrationResultSuccess (sMigrationID);
+      else
+        addMigrationResultError (sMigrationID, ret.get ());
     }
   }
 
