@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.impl.DAOException;
+import com.phloc.appbasics.migration.SystemMigrationManager;
 import com.phloc.appbasics.security.audit.AuditManager;
 import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.lock.ObjectLockManager;
@@ -39,12 +40,14 @@ public final class MetaSystemManager extends GlobalSingleton
   public static final String DIRECTORY_AUDITS = "audits/";
   public static final String SMTP_SETTINGS_XML = "smtpsettings.xml";
   public static final String FAILED_MAILS_XML = "failedmails.xml";
+  public static final String SYSTEM_MIGRATIONS_XML = "systemmigrations.xml";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (MetaSystemManager.class);
 
   private AuditManager m_aAuditMgr;
   private NamedSMTPSettingsManager m_aSMTPSettingsMgr;
   private FailedMailQueueWithDAO m_aFailedMailQueue;
+  private SystemMigrationManager m_aSystemMigrationMgr;
 
   @Deprecated
   @UsedViaReflection
@@ -63,6 +66,8 @@ public final class MetaSystemManager extends GlobalSingleton
 
       m_aFailedMailQueue = new FailedMailQueueWithDAO (FAILED_MAILS_XML);
       ScopedMailAPI.getInstance ().setFailedMailQueue (m_aFailedMailQueue);
+
+      m_aSystemMigrationMgr = new SystemMigrationManager (SYSTEM_MIGRATIONS_XML);
 
       s_aLogger.info ("MetaSystemManager was initialized");
     }
@@ -109,8 +114,14 @@ public final class MetaSystemManager extends GlobalSingleton
   }
 
   @Nonnull
-  public static ObjectLockManager getLockManager ()
+  public static ObjectLockManager getLockMgr ()
   {
     return ObjectLockManager.getInstance ();
+  }
+
+  @Nonnull
+  public static SystemMigrationManager getSystemMigrationMgr ()
+  {
+    return getInstance ().m_aSystemMigrationMgr;
   }
 }

@@ -31,6 +31,7 @@ import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
@@ -179,6 +180,30 @@ public class SystemMigrationManager extends AbstractSimpleDAO
     finally
     {
       m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Perform a migration if it was not performed yet. The performed callback may
+   * not throw an error or return an error. All migrations executed with this
+   * method will be handled as a success only.
+   * 
+   * @param sMigrationID
+   *        The migration ID to handle. May neither be <code>null</code> nor
+   *        empty.
+   * @param aMigrationAction
+   *        The action to be performed. May not be <code>null</code>.
+   */
+  public void performMigrationIfNecessary (@Nonnull @Nonempty final String sMigrationID,
+                                           @Nonnull final INonThrowingRunnable aMigrationAction)
+  {
+    ValueEnforcer.notEmpty (sMigrationID, "MigrationID");
+    ValueEnforcer.notNull (aMigrationAction, "MigrationAction");
+
+    if (!wasMigrationExecutedSuccessfully (sMigrationID))
+    {
+      aMigrationAction.run ();
+      addMigrationResultSuccess (sMigrationID);
     }
   }
 

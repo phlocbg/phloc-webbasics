@@ -46,9 +46,9 @@ public class SystemMigrationResult implements IHasID <String>, ISuccessIndicator
   private final String m_sErrorMessage;
 
   protected SystemMigrationResult (@Nonnull @Nonempty final String sMigrationID,
-                             @Nonnull final DateTime aExecutionDT,
-                             final boolean bSuccess,
-                             @Nullable final String sErrorMessage)
+                                   @Nonnull final DateTime aExecutionDT,
+                                   final boolean bSuccess,
+                                   @Nullable final String sErrorMessage)
   {
     m_sMigrationID = ValueEnforcer.notEmpty (sMigrationID, "MigrationID");
     m_aExecutionDT = ValueEnforcer.notNull (aExecutionDT, "ExecutionDT");
@@ -126,7 +126,7 @@ public class SystemMigrationResult implements IHasID <String>, ISuccessIndicator
 
   @Nonnull
   public static SystemMigrationResult createFailure (@Nonnull @Nonempty final String sMigrationID,
-                                               @Nonnull final String sErrorMsg)
+                                                     @Nonnull final String sErrorMsg)
   {
     return new SystemMigrationResult (sMigrationID, PDTFactory.getCurrentDateTime (), false, sErrorMsg);
   }
