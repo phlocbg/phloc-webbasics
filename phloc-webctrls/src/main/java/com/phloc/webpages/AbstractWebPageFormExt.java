@@ -106,7 +106,7 @@ public abstract class AbstractWebPageFormExt <DATATYPE extends IHasID <String>, 
                                         @Nullable final DATATYPE aSelectedObject,
                                         @Nullable final EWebPageFormAction eFormAction)
   {
-    final ObjectLockManager aOLM = MetaSystemManager.getLockManager ();
+    final ObjectLockManager aOLM = MetaSystemManager.getLockMgr ();
     // Lock EDIT and DELETE if an object is present
     if (eFormAction != null && eFormAction.isModifying () && aSelectedObject != null)
     {
