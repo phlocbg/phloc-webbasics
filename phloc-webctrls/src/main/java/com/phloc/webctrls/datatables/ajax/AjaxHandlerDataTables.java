@@ -315,13 +315,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("DataTables AJAX request: " + ContainerHelper.getSortedByKey (aRequestScope.getAllAttributes ()));
 
-    // Read input parameters
-    final int nDisplayStart = aRequestScope.getAttributeAsInt (DISPLAY_START, 0);
-    final int nDisplayLength = aRequestScope.getAttributeAsInt (DISPLAY_LENGTH, 0);
-    final int nColumns = aRequestScope.getAttributeAsInt (COLUMNS, 0);
+    // Read input parameters and ensure non negativeness
+    final int nDisplayStart = Math.max (aRequestScope.getAttributeAsInt (DISPLAY_START, 0), 0);
+    final int nDisplayLength = Math.max (aRequestScope.getAttributeAsInt (DISPLAY_LENGTH, 0), 0);
+    final int nColumns = Math.max (aRequestScope.getAttributeAsInt (COLUMNS, 0), 0);
     final String sSearch = aRequestScope.getAttributeAsString (SEARCH);
     final boolean bRegEx = aRequestScope.getAttributeAsBoolean (REGEX, false);
-    // Ensure that the sorting column does not get negative
     final int nSortingCols = Math.max (aRequestScope.getAttributeAsInt (SORTING_COLS), 0);
     final int nEcho = aRequestScope.getAttributeAsInt (ECHO);
     final List <RequestDataColumn> aColumnData = new ArrayList <RequestDataColumn> (nColumns);
@@ -337,7 +336,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final RequestDataSortColumn [] aSortColumns = new RequestDataSortColumn [nSortingCols];
     for (int i = 0; i < nSortingCols; ++i)
     {
-      final int nCSortCol = aRequestScope.getAttributeAsInt (SORT_COL_PREFIX + i);
+      final int nCSortCol = Math.max (aRequestScope.getAttributeAsInt (SORT_COL_PREFIX + i), 0);
       final String sCSortDir = aRequestScope.getAttributeAsString (SORT_DIR_PREFIX + i);
       final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir) ? ESortOrder.ASCENDING
                                                                           : CDataTables.SORT_DESC.equals (sCSortDir) ? ESortOrder.DESCENDING
