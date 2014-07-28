@@ -25,15 +25,15 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 
 /**
  * Contains default CSS paths within this library.
- * 
+ *
  * @author Philip Helger
  */
 public enum EDataTablesCSSPathProvider implements ICSSPathProvider
 {
-  DATATABLES_1_10 ("datatables/1.10/css/jquery.dataTables.css"),
-  DATATABLES_THEMEROLLER_1_10 ("datatables/1.10/css/jquery.dataTables_themeroller.css"),
-  EXTRAS_FIXED_HEADER ("datatables/FixedHeader-2.1.1/dataTables.fixedHeader.css"),
-  EXTRAS_SCROLLER ("datatables/Scroller-1.2.1/dataTables.scroller.css");
+  DATATABLES_1_10 ("datatables/1.10.1/css/jquery.dataTables.css"),
+  DATATABLES_THEMEROLLER_1_10 ("datatables/1.10.1/css/jquery.dataTables_themeroller.css"),
+  EXTRAS_FIXED_HEADER ("datatables/FixedHeader-2.1.2/dataTables.fixedHeader.css"),
+  EXTRAS_SCROLLER ("datatables/Scroller-1.2.2/dataTables.scroller.css");
 
   private final String m_sPath;
 

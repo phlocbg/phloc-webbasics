@@ -36,7 +36,7 @@ public enum EWebCtrlsJSPathProvider implements IJSPathProvider
   RESPOND ("js/respond.js", false),
   STACKTRACE ("js/stacktrace.js", true),
   /** Insert in &lt;head> element (after or before your CSS) for IE &lt; 9 */
-  HTML5SHIV_3_7_0 ("html5shiv/3.7.0/html5shiv.js", false),
+  HTML5SHIV_3_7_2 ("html5shiv/3.7.2/html5shiv.js", false),
   /** Edit placeholder fix for IE < 10 */
   PLACEHOLDER_FIX ("placeholder/placeholder-fix.js", false),
   /** JQuery 1.7 */
