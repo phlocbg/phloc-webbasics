@@ -47,7 +47,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * AJAX handler for filling DataTables
- * 
+ *
  * @author Philip Helger
  */
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
@@ -321,7 +321,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final int nColumns = aRequestScope.getAttributeAsInt (COLUMNS, 0);
     final String sSearch = aRequestScope.getAttributeAsString (SEARCH);
     final boolean bRegEx = aRequestScope.getAttributeAsBoolean (REGEX, false);
-    final int nSortingCols = aRequestScope.getAttributeAsInt (SORTING_COLS);
+    // Ensure that the sorting column does not get negative
+    final int nSortingCols = Math.max (aRequestScope.getAttributeAsInt (SORTING_COLS), 0);
     final int nEcho = aRequestScope.getAttributeAsInt (ECHO);
     final List <RequestDataColumn> aColumnData = new ArrayList <RequestDataColumn> (nColumns);
     for (int nColumn = 0; nColumn < nColumns; ++nColumn)
