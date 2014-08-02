@@ -47,7 +47,7 @@ import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
@@ -66,7 +66,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   * 
+   *
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren
@@ -104,7 +104,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   * 
+   *
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren
@@ -173,9 +173,14 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
   public static IHCElement <?> createSideBarMenu (@Nonnull final ILayoutExecutionContext aLEC)
   {
     final IMenuTree aMenuTree = aLEC.getMenuTree ();
-    return createSideBarMenu (aLEC,
-                              aMenuTree,
-                              new MenuItemDeterminatorCallback (aMenuTree, aLEC.getSelectedMenuItemID ()));
+    return createSideBarMenu (aLEC, new MenuItemDeterminatorCallback (aMenuTree, aLEC.getSelectedMenuItemID ()));
+  }
+
+  @Nonnull
+  public static IHCElement <?> createSideBarMenu (@Nonnull final ILayoutExecutionContext aLEC,
+                                                  @Nonnull final MenuItemDeterminatorCallback aDeterminator)
+  {
+    return createSideBarMenu (aLEC, aLEC.getMenuTree (), aDeterminator);
   }
 
   @Nonnull
