@@ -17,11 +17,14 @@
  */
 package com.phloc.webbasics.userdata;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,21 +32,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.string.StringHelper;
-import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 /**
  * A per-session manager, that handles all the uploaded files while the process
  * to which the files belong is still in process.
- * 
+ *
  * @author Philip Helger
  */
 public class UserUploadManager extends SessionWebSingleton
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserUploadManager.class);
+
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, UserDataObject> m_aMap = new HashMap <String, UserDataObject> ();
 
@@ -73,27 +79,38 @@ public class UserUploadManager extends SessionWebSingleton
     WebFileIO.getFileOpMgr ().deleteFile (aUDO.getAsFile ());
   }
 
-  public void removeUploadedFile (@Nullable final String sID)
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> removeUploadedFiles (@Nullable final String... aIDs)
   {
-    m_aRWLock.writeLock ().lock ();
-    try
+    final List <String> ret = new ArrayList <String> ();
+    if (ArrayHelper.isNotEmpty (aIDs))
     {
-      final UserDataObject aUDO = m_aMap.remove (sID);
-      if (aUDO != null)
-        _deleteUDO (aUDO);
+      m_aRWLock.writeLock ().lock ();
+      try
+      {
+        for (final String sID : aIDs)
+        {
+          final UserDataObject aUDO = m_aMap.remove (sID);
+          if (aUDO != null)
+          {
+            _deleteUDO (aUDO);
+            ret.add (sID);
+          }
+        }
+      }
+      finally
+      {
+        m_aRWLock.writeLock ().unlock ();
+      }
     }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    return ret;
   }
 
   public void addUploadedFile (@Nonnull @Nonempty final String sID, @Nonnull final UserDataObject aUDO)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    if (aUDO == null)
-      throw new NullPointerException ("UDO");
+    ValueEnforcer.notEmpty (sID, "ID");
+    ValueEnforcer.notNull (aUDO, "UDO");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -112,8 +129,11 @@ public class UserUploadManager extends SessionWebSingleton
     }
   }
 
-  public void confirmUploadedFiles (@Nullable final String... aIDs)
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <UserDataObject> confirmUploadedFiles (@Nullable final String... aIDs)
   {
+    final List <UserDataObject> ret = new ArrayList <UserDataObject> ();
     if (aIDs != null)
     {
       m_aRWLock.writeLock ().lock ();
@@ -124,7 +144,10 @@ public class UserUploadManager extends SessionWebSingleton
           // Remove an eventually existing old UDO
           final UserDataObject aUDO = m_aMap.remove (sID);
           if (aUDO != null)
+          {
             s_aLogger.info ("Confirmed uploaded file " + aUDO);
+            ret.add (aUDO);
+          }
         }
       }
       finally
@@ -132,6 +155,7 @@ public class UserUploadManager extends SessionWebSingleton
         m_aRWLock.writeLock ().unlock ();
       }
     }
+    return ret;
   }
 
   @Nullable
@@ -146,5 +170,25 @@ public class UserUploadManager extends SessionWebSingleton
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Nonnegative
+  public int getUploadedFileCount ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aMap.size ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }
