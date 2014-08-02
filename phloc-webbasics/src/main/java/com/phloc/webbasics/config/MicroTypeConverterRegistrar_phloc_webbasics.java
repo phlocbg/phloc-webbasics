@@ -25,10 +25,12 @@ import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistrarSPI;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsMicroTypeConverter;
+import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webbasics.userdata.UserDataObjectMicroTypeConverter;
 
 /**
  * Register all MicroTypeConverter implementations of this project.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -38,5 +40,6 @@ public final class MicroTypeConverterRegistrar_phloc_webbasics implements IMicro
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
     aRegistry.registerMicroElementTypeConverter (NamedSMTPSettings.class, new NamedSMTPSettingsMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (UserDataObject.class, new UserDataObjectMicroTypeConverter ());
   }
 }

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.file.FilenameHelper;
@@ -36,7 +37,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * Represents a single web accessible object, that was provided by the user.
  * Think of this as a file descriptor. A {@link UserDataObject} lies directly
  * within a web application and can be accessed by regular file IO.
- * 
+ *
  * @author Philip Helger
  */
 public class UserDataObject implements Serializable
@@ -45,8 +46,7 @@ public class UserDataObject implements Serializable
 
   public UserDataObject (@Nonnull @Nonempty final String sPath)
   {
-    if (StringHelper.hasNoText (sPath))
-      throw new IllegalArgumentException ("path");
+    ValueEnforcer.notEmpty (sPath, "Path");
     // Ensure only forward slashes
     m_sPath = FilenameHelper.getPathUsingUnixSeparator (FilenameHelper.ensurePathStartingWithSeparator (sPath));
   }
@@ -106,7 +106,7 @@ public class UserDataObject implements Serializable
 
   /**
    * Get the File of this UDO object.
-   * 
+   *
    * @return The matching File. No check is performed, whether the file exists
    *         or not!
    */
