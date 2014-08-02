@@ -32,7 +32,6 @@ import com.phloc.commons.filter.IFilter;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
-import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webpages.data.BasePageDataCountries;
 import com.phloc.webpages.data.BasePageDataCurrencies;
@@ -90,24 +89,11 @@ public final class DefaultMenuConfigurator
   {}
 
   @Nonnull
-  public static IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
-                                                  @Nonnull final IMenuItem aParent,
-                                                  @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                  @Nonnull final IAuditManager aAuditManager)
-  {
-    return addMonitoringItems (aMenuTree,
-                               aParent,
-                               aDisplayFilter,
-                               aAuditManager,
-                               MetaSystemManager.getFailedMailQueue ());
-  }
-
-  @Nonnull
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
-                                                                                             @Nonnull final IMenuItem aParent,
-                                                                                             @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                                                             @Nonnull final IAuditManager aAuditManager,
-                                                                                             @Nonnull final FailedMailQueue aFailedMailQueue)
+                                                                                              @Nonnull final IMenuItem aParent,
+                                                                                              @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                              @Nonnull final IAuditManager aAuditManager,
+                                                                                              @Nonnull final FailedMailQueue aFailedMailQueue)
   {
     final IMenuItemPage aAdminMonitoring = aMenuTree.createItem (aParent,
                                                                  new PageShowChildren <WPECTYPE> (MENU_ADMIN_MONITORING,
@@ -130,9 +116,9 @@ public final class DefaultMenuConfigurator
 
   @Nonnull
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSecurityItems (@Nonnull final IMenuTree aMenuTree,
-                                                                                           @Nonnull final IMenuItem aParent,
-                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                                                           @Nonnull final Locale aDefaultLocale)
+                                                                                            @Nonnull final IMenuItem aParent,
+                                                                                            @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                            @Nonnull final Locale aDefaultLocale)
   {
     final IMenuItemPage aAdminSecurity = aMenuTree.createItem (aParent,
                                                                new PageShowChildren <WPECTYPE> (MENU_ADMIN_SECURITY,
@@ -151,9 +137,9 @@ public final class DefaultMenuConfigurator
 
   @Nonnull
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
-                                                                                           @Nonnull final IMenuItem aParent,
-                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                                                           @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
+                                                                                            @Nonnull final IMenuItem aParent,
+                                                                                            @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                                                            @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
   {
     final IMenuItemPage aAdminSettings = aMenuTree.createItem (aParent,
                                                                new PageShowChildren <WPECTYPE> (MENU_ADMIN_SETTINGS,
@@ -173,8 +159,8 @@ public final class DefaultMenuConfigurator
 
   @Nonnull
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
-                                                                                          @Nonnull final IMenuItem aParent,
-                                                                                          @Nullable final IFilter <IMenuObject> aDisplayFilter)
+                                                                                           @Nonnull final IMenuItem aParent,
+                                                                                           @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     final IMenuItemPage aAdminSysInfo = aMenuTree.createItem (aParent,
                                                               new PageShowChildren <WPECTYPE> (MENU_ADMIN_SYSINFO,
@@ -202,8 +188,8 @@ public final class DefaultMenuConfigurator
 
   @Nonnull
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
-                                                                                       @Nonnull final IMenuItem aParent,
-                                                                                       @Nullable final IFilter <IMenuObject> aDisplayFilter)
+                                                                                        @Nonnull final IMenuItem aParent,
+                                                                                        @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     final IMenuItemPage aAdminData = aMenuTree.createItem (aParent,
                                                            new PageShowChildren <WPECTYPE> (MENU_ADMIN_DATA,
