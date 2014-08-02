@@ -19,12 +19,11 @@ package com.phloc.webdemoapp.app.ajax.config;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webdemoapp.app.layout.config.RendererConfig;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -32,14 +31,14 @@ public final class AjaxHandlerConfigUpdateMenuView extends AbstractAjaxHandler
 {
   @Override
   @Nonnull
-  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     // Get the rendered content of the menu area
-    final IHCNode aRoot = RendererConfig.getMenuContent (ApplicationRequestManager.getInstance ()
-                                                                                  .getRequestDisplayLocale ());
+    final LayoutExecutionContext aLEC = LayoutExecutionContext.createForAjaxOrAction (aRequestScope);
+
+    final IHCNode aRoot = RendererConfig.getMenuContent (aLEC);
 
     // Set as result property
-    return AjaxDefaultResponse.createSuccess (aRoot);
+    return AjaxDefaultResponse.createSuccess (aRequestScope, aRoot);
   }
 }

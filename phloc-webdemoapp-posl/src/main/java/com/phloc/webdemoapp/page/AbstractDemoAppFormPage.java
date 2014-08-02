@@ -36,7 +36,7 @@ import com.phloc.webctrls.js.JSFormHelper;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
 import com.phloc.webpages.AbstractWebPageForm;
 
-public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
+public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE, WebPageExecutionContext>
 {
   public AbstractDemoAppFormPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
@@ -59,7 +59,8 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
   {
     final JSArray aSuccessUpdates = new JSArray ();
     // Update menu via Ajax
-    aSuccessUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_MENU,
+    aSuccessUpdates.add (JSFormHelper.createUpdateParam (aWPEC.getRequestScope (),
+                                                         CLayout.LAYOUT_AREAID_MENU,
                                                          CDemoAppAjaxConfig.UPDATE_MENU_VIEW));
 
     // Update special area directly with code
@@ -69,7 +70,8 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
     // Update special area directly with code
     aSpecialNode = BootstrapErrorBox.create ("Error saving the data!");
     aFailureUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_SPECIAL, aSpecialNode));
-    aToolbar.addButton ("Merken", JSFormHelper.saveFormData (INPUT_FORM_ID,
+    aToolbar.addButton ("Merken", JSFormHelper.saveFormData (aWPEC.getRequestScope (),
+                                                             INPUT_FORM_ID,
                                                              AjaxHandlerSaveFormState.PREFIX_FIELD,
                                                              getID (),
                                                              CDemoAppAjaxConfig.SAVE_FORM_STATE,

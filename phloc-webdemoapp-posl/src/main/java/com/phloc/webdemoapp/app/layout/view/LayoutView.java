@@ -21,10 +21,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.webbasics.app.layout.CLayout;
 import com.phloc.webbasics.app.layout.ILayoutManager;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
 /**
  * This class registers the renderer for the layout areas.
- * 
+ *
  * @author Philip Helger
  */
 public final class LayoutView
@@ -32,7 +33,7 @@ public final class LayoutView
   private LayoutView ()
   {}
 
-  public static void init (@Nonnull final ILayoutManager aLayoutMgr)
+  public static void init (@Nonnull final ILayoutManager <LayoutExecutionContext> aLayoutMgr)
   {
     // Register all layout area handler (order is important for SEO!)
     aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_VIEWPORT, new RendererView ());

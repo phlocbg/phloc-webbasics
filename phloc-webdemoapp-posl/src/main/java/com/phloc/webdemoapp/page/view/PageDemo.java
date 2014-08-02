@@ -25,7 +25,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public class PageDemo extends AbstractWebPageExt
+public class PageDemo extends AbstractWebPageExt <WebPageExecutionContext>
 {
   public PageDemo (@Nonnull @Nonempty final String sID)
   {

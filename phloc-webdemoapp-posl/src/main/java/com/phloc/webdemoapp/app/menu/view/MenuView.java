@@ -22,6 +22,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webdemoapp.page.view.PageDemo;
 import com.phloc.webpages.PageViewExternal;
 
@@ -35,13 +36,13 @@ public final class MenuView
   {
     // Common stuff
     aMenuTree.createRootItem (new PageDemo (CDemoAppMenuView.MENU_DEMO));
-    aMenuTree.createRootItem (new PageViewExternal (CDemoAppMenuView.MENU_SITENOTICE,
-                                                    "Site notice",
-                                                    new ClassPathResource ("viewpages/en/site-notice.xml")));
+    aMenuTree.createRootItem (new PageViewExternal <WebPageExecutionContext> (CDemoAppMenuView.MENU_SITENOTICE,
+                                                                              "Site notice",
+                                                                              new ClassPathResource ("viewpages/en/site-notice.xml")));
 
-    aMenuTree.createRootItem (new PageViewExternal (CDemoAppMenuView.MENU_GTC,
-                                                    "GTC",
-                                                    new ClassPathResource ("viewpages/en/gtc.xml")))
+    aMenuTree.createRootItem (new PageViewExternal <WebPageExecutionContext> (CDemoAppMenuView.MENU_GTC,
+                                                                              "GTC",
+                                                                              new ClassPathResource ("viewpages/en/gtc.xml")))
              .addFlag (CDemoAppMenuView.FLAG_FOOTER);
 
     // Set default

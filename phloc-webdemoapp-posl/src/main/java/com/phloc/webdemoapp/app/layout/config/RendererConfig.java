@@ -22,10 +22,12 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
+import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.base.BootstrapContainer;
 import com.phloc.bootstrap3.breadcrumbs.BootstrapBreadcrumbs;
@@ -49,27 +51,27 @@ import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.SimpleWebExecutionContext;
 import com.phloc.webbasics.app.layout.CLayout;
 import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.IWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.SystemPageNotFound;
-import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
 /**
  * The viewport renderer (menu + content area)
- * 
+ *
  * @author Philip Helger
  */
-public final class RendererConfig implements ILayoutAreaContentProvider
+public final class RendererConfig implements ILayoutAreaContentProvider <LayoutExecutionContext>
 {
   @Nonnull
-  private static IHCNode _getHeaderContent (final Locale aDisplayLocale)
+  private static IHCNode _getHeaderContent (@Nonnull final SimpleWebExecutionContext aSWEC)
   {
-    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getTree ()
-                                                                                        .getDefaultMenuItemID ());
+    final Locale aDisplayLocale = aSWEC.getDisplayLocale ();
+    final ISimpleURL aLinkToStartPage = aSWEC.getLinkToMenuItem (aSWEC.getMenuTree ().getDefaultMenuItemID ());
 
     final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (HCNodeList.create (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1),
@@ -79,22 +81,27 @@ public final class RendererConfig implements ILayoutAreaContentProvider
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     aNavbar.addText (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT,
                      HCP.create ("Logged in as ")
-                        .addChild (HCStrong.create (SecurityUI.getUserDisplayName (aUser, aDisplayLocale))));
+                        .addChild (HCStrong.create (SecurityUtils.getUserDisplayName (aUser, aDisplayLocale))));
 
     final BootstrapNav aNav = new BootstrapNav ();
-    aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));
+    aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
+                  LinkUtils.getURLWithContext (aSWEC.getRequestScope (), "/logout"));
     aNavbar.addNav (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT, aNav);
     return aNavbar;
   }
 
   @Nonnull
-  public static IHCElement <?> getMenuContent (@Nonnull final Locale aDisplayLocale)
+  public static IHCElement <?> getMenuContent (@Nonnull final LayoutExecutionContext aLEC)
   {
-    final IHCElement <?> ret = BootstrapMenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getTree (),
-                                                                            aDisplayLocale);
-    return ret;
+    // Main menu
+    final IMenuTree aMenuTree = aLEC.getMenuTree ();
+    final MenuItemDeterminatorCallback aCallback = new MenuItemDeterminatorCallback (aMenuTree,
+                                                                                     aLEC.getSelectedMenuItemID ());
+    final IHCElement <?> aMenu = BootstrapMenuItemRenderer.createSideBarMenu (aLEC, aMenuTree, aCallback);
+    return aMenu;
   }
 
+  @SuppressWarnings ("unchecked")
   @Nonnull
   private static IHCNode _getMainContent (@Nonnull final LayoutExecutionContext aLEC)
   {
@@ -102,21 +109,23 @@ public final class RendererConfig implements ILayoutAreaContentProvider
     final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
 
     // Resolve the page of the selected menu item (if found)
-    IWebPage aDisplayPage = SystemPageNotFound.getInstance ();
+    IWebPage <WebPageExecutionContext> aDisplayPage;
     if (aSelectedMenuItem != null)
     {
       // Only if we have display rights!
       if (aSelectedMenuItem.matchesDisplayFilter ())
-        aDisplayPage = (IWebPage) aSelectedMenuItem.getPage ();
+        aDisplayPage = (IWebPage <WebPageExecutionContext>) aSelectedMenuItem.getPage ();
       else
       {
         // No rights -> goto start page
-        aDisplayPage = (IWebPage) ApplicationRequestManager.getInstance ()
-                                                           .getMenuTree ()
-                                                           .getDefaultMenuItem ()
-                                                           .getPage ();
+        aDisplayPage = (IWebPage <WebPageExecutionContext>) ApplicationRequestManager.getInstance ()
+                                                                                     .getMenuTree ()
+                                                                                     .getDefaultMenuItem ()
+                                                                                     .getPage ();
       }
     }
+    else
+      aDisplayPage = new SystemPageNotFound <WebPageExecutionContext> ();
 
     final WebPageExecutionContext aWPEC = new WebPageExecutionContext (aLEC, aDisplayPage);
 
@@ -139,13 +148,12 @@ public final class RendererConfig implements ILayoutAreaContentProvider
 
     // Header
     {
-      aOuterContainer.addChild (_getHeaderContent (aLEC.getDisplayLocale ()));
+      aOuterContainer.addChild (_getHeaderContent (aLEC));
     }
 
     // Breadcrumbs
     {
-      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getTree (),
-                                                                                                aLEC.getDisplayLocale ());
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (aLEC);
       aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);
     }
@@ -158,7 +166,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
 
       // left
       // We need a wrapper span for easy AJAX content replacement
-      aCol1.addChild (HCSpan.create (getMenuContent (aLEC.getDisplayLocale ())).setID (CLayout.LAYOUT_AREAID_MENU));
+      aCol1.addChild (HCSpan.create (getMenuContent (aLEC)).setID (CLayout.LAYOUT_AREAID_MENU));
       aCol1.addChild (new HCDiv ().setID (CLayout.LAYOUT_AREAID_SPECIAL));
 
       // content

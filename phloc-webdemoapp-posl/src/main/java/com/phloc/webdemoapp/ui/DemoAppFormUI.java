@@ -17,8 +17,6 @@
  */
 package com.phloc.webdemoapp.ui;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -28,6 +26,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webbasics.userdata.UserUploadManager;
 import com.phloc.webctrls.fineupload.FineUploader;
@@ -42,13 +41,14 @@ public final class DemoAppFormUI
   {}
 
   @Nonnull
-  public static FineUploader createFineUploader (@Nonnull final Locale aDisplayLocale,
+  public static FineUploader createFineUploader (@Nonnull final IWebPageExecutionContext aWPEC,
                                                  @Nullable final String sDirectory,
                                                  @Nonnull @Nonempty final String sID)
   {
-    final FineUploader aFU = new FineUploader (aDisplayLocale);
+    final FineUploader aFU = new FineUploader (aWPEC.getDisplayLocale ());
     aFU.setDebug (GlobalDebug.isDebugMode ())
-       .setEndpoint (LinkUtils.getURLWithContext (DemoAppUserUploadServlet.SERVLET_DEFAULT_PATH))
+       .setEndpoint (LinkUtils.getURLWithContext (aWPEC.getRequestScope (),
+                                                  DemoAppUserUploadServlet.SERVLET_DEFAULT_PATH))
        .setMultiple (false)
        .setAutoUpload (false)
        .setForceMultipart (true)
@@ -63,18 +63,18 @@ public final class DemoAppFormUI
   }
 
   @Nonnull
-  public static IHCNode createImageUploadCtrl (@Nonnull final Locale aDisplayLocale,
+  public static IHCNode createImageUploadCtrl (@Nonnull final IWebPageExecutionContext aWPEC,
                                                @Nullable final String sDirectory,
                                                @Nonnull @Nonempty final String sID)
   {
     // Is something in progress?
     final UserDataObject aUDO = UserUploadManager.getInstance ().getUploadedFile (sID);
     if (aUDO == null)
-      return new HCFineUploaderBasic (createFineUploader (aDisplayLocale, sDirectory, sID)).setButtonToUse (WebPageStylerManager.getStyler ()
-                                                                                                                               .createUploadButton (aDisplayLocale))
-                                                                                           .build ();
+      return new HCFineUploaderBasic (createFineUploader (aWPEC, sDirectory, sID)).setButtonToUse (WebPageStylerManager.getStyler ()
+                                                                                                                       .createUploadButton (aWPEC))
+                                                                                  .build ();
     // add preview
-    return WebPageStylerManager.getStyler ().createImageView (aUDO, aDisplayLocale);
+    return WebPageStylerManager.getStyler ().createImageView (aWPEC, aUDO);
   }
 
 }

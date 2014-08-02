@@ -18,7 +18,6 @@
 package com.phloc.webdemoapp.servlet;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -32,6 +31,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
+import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
 import com.phloc.webctrls.datatables.ajax.ActionExecutorDataTablesI18N;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
@@ -45,10 +46,10 @@ import com.phloc.webdemoapp.app.init.InitializerView;
 
 /**
  * Callbacks for the application server
- * 
+ *
  * @author Philip Helger
  */
-public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
+public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap <LayoutExecutionContext>
 {
   private static final Map <Integer, String> LENGTH_MENU = ContainerHelper.newOrderedMap (new Integer [] { Integer.valueOf (25),
                                                                                                           Integer.valueOf (50),
@@ -62,9 +63,9 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
   @Override
   @Nonnull
   @Nonempty
-  protected Map <String, IApplicationInitializer> getAllInitializers ()
+  protected Map <String, IApplicationInitializer <LayoutExecutionContext>> getAllInitializers ()
   {
-    final Map <String, IApplicationInitializer> ret = new HashMap <String, IApplicationInitializer> ();
+    final Map <String, IApplicationInitializer <LayoutExecutionContext>> ret = new HashMap <String, IApplicationInitializer <LayoutExecutionContext>> ();
     ret.put (CDemoApp.APP_CONFIG_ID, new InitializerConfig ());
     ret.put (CDemoApp.APP_VIEW_ID, new InitializerView ());
     return ret;
@@ -86,15 +87,15 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     {
       @Override
       @Nonnull
-      public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
-                                                          @Nonnull final Locale aDisplayLocale)
+      public BootstrapDataTables createDefaultDataTables (@Nonnull final IWebPageExecutionContext aWPEC,
+                                                          @Nonnull final IHCTable <?> aTable)
       {
-        final BootstrapDataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
+        final BootstrapDataTables ret = super.createDefaultDataTables (aWPEC, aTable);
         ret.setAutoWidth (false)
            .setLengthMenu (LENGTH_MENU)
            .setDisplayLength (ContainerHelper.getFirstKey (LENGTH_MENU).intValue ())
            .setUseJQueryAjax (true)
-           .setAjaxSource (CDemoAppAjaxView.DATATABLES.getInvocationURL ())
+           .setAjaxSource (CDemoAppAjaxView.DATATABLES.getInvocationURL (aWPEC.getRequestScope ()))
            .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
            .setServerFilterType (EDataTablesFilterType.ALL_TERMS_PER_ROW)
            .setTextLoadingURL (DemoAppViewActionServlet.getActionPath (CDemoAppActionView.DATATABLES_I18N),

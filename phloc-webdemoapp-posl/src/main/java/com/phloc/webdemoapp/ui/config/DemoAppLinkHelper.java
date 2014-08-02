@@ -28,7 +28,7 @@ import com.phloc.webdemoapp.servlet.DemoAppConfigActionServlet;
 
 /**
  * Several helper methods for consistently creating links.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -47,12 +47,5 @@ public final class DemoAppLinkHelper
   public static ISimpleURL getActionURL (final String sAction, final Map <String, String> aParams)
   {
     return LinkUtils.getURLWithContext (DemoAppConfigActionServlet.SERVLET_DEFAULT_PATH + '/' + sAction, aParams);
-  }
-
-  @Nonnull
-  public static ISimpleURL getStreamURL (@Nonnull final String sURL)
-  {
-    // We're using the default path!
-    return LinkUtils.getStreamURL (sURL);
   }
 }

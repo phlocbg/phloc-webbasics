@@ -19,22 +19,14 @@ package com.phloc.webdemoapp.page.config;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.menu.ApplicationMenuTree;
-import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.form.BasePageSavedStates;
 
-public final class PageSavedStates extends BasePageSavedStates
+public final class PageSavedStates extends BasePageSavedStates <WebPageExecutionContext>
 {
   public PageSavedStates (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
-  }
-
-  @Override
-  @Nonnull
-  protected IMenuTree getMenuTree ()
-  {
-    return ApplicationMenuTree.getTree ();
   }
 }

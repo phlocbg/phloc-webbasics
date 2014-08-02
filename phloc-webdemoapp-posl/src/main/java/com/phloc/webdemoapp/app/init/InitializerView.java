@@ -32,6 +32,7 @@ import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.html.HTMLConfigManager;
 import com.phloc.webbasics.app.init.DefaultApplicationInitializer;
 import com.phloc.webbasics.app.layout.ILayoutManager;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.datatables.ajax.ActionExecutorDataTablesI18N;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
 import com.phloc.webdemoapp.app.CDemoApp;
@@ -41,7 +42,7 @@ import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.layout.view.LayoutView;
 import com.phloc.webdemoapp.app.menu.view.MenuView;
 
-public class InitializerView extends DefaultApplicationInitializer
+public class InitializerView extends DefaultApplicationInitializer <LayoutExecutionContext>
 {
   @Override
   public void initLocales (@Nonnull final ILocaleManager aLocaleMgr)
@@ -51,7 +52,7 @@ public class InitializerView extends DefaultApplicationInitializer
   }
 
   @Override
-  public void initLayout (@Nonnull final ILayoutManager aLayoutMgr)
+  public void initLayout (@Nonnull final ILayoutManager <LayoutExecutionContext> aLayoutMgr)
   {
     LayoutView.init (aLayoutMgr);
   }

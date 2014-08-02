@@ -5,6 +5,18 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
+        <dependent-module archiveName="phloc-html-4.2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-html/phloc-html">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="phloc-webbasics-3.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-webbasics/phloc-webbasics">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="phloc-webctrls-2.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-webctrls/phloc-webctrls">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="phloc-bootstrap3-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-bootstrap3/phloc-bootstrap3">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/phloc-webdemoapp/target/classes"/>
         <property name="context-root" value="phloc-webdemoapp-posl"/>
     </wb-module>

@@ -19,13 +19,13 @@
 
 -->
 <items>
-  <js path="/stream/jquery/jquery-1.11.0.js" />
+  <js path="/stream/jquery/jquery-1.11.1.js" />
   <js path="/stream/bootstrap/3.1.1/js/bootstrap.js" />
   <js path="/stream/bootstrap/bootstrap3-phloc.js" />
   <js path="/stream/js/jquery-utils.js" />
   <js path="/stream/js/form.js" />
   <js path="/js/default.js" />
-  <js path="/stream/html5shiv/3.7.0/html5shiv.js" condcomment="if lt IE 9"/>
+  <js path="/stream/html5shiv/3.7.2/html5shiv.js" condcomment="if lt IE 9"/>
   <js path="/stream/js/respond.js" condcomment="if lt IE 9"/>
   <js path="/stream/placeholder/placeholder-fix.js" condcomment="if lte IE 9"/>
 </items>

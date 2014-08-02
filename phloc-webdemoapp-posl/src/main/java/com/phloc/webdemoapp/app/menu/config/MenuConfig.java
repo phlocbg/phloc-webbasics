@@ -25,6 +25,7 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.filter.AbstractMenuObjectFilter;
 import com.phloc.appbasics.app.menu.filter.MenuItemFilterUserAssignedToUserGroup;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.mgr.MetaSystemManager;
@@ -47,13 +48,17 @@ public final class MenuConfig
 
     // Administrator
     {
-      final IMenuItemPage aAdmin = aMenuTree.createRootItem (new PageShowChildren (CDemoAppMenuConfig.MENU_ADMIN,
-                                                                                   "Administration",
-                                                                                   aMenuTree))
+      final IMenuItemPage aAdmin = aMenuTree.createRootItem (new PageShowChildren <WebPageExecutionContext> (CDemoAppMenuConfig.MENU_ADMIN,
+                                                                                                             "Administration",
+                                                                                                             aMenuTree))
                                             .setDisplayFilter (aFilterSuperUser);
 
       DefaultMenuConfigurator.addSecurityItems (aMenuTree, aAdmin, aFilterSuperUser, CDemoApp.DEFAULT_LOCALE);
-      DefaultMenuConfigurator.addMonitoringItems (aMenuTree, aAdmin, aFilterSuperUser, MetaSystemManager.getAuditMgr ());
+      DefaultMenuConfigurator.addMonitoringItems (aMenuTree,
+                                                  aAdmin,
+                                                  aFilterSuperUser,
+                                                  MetaSystemManager.getAuditMgr (),
+                                                  MetaSystemManager.getFailedMailQueue ());
       DefaultMenuConfigurator.addSysInfoItems (aMenuTree, aAdmin, aFilterSuperUser);
       DefaultMenuConfigurator.addDataItems (aMenuTree, aAdmin, aFilterSuperUser);
       DefaultMenuConfigurator.addSettingsItems (aMenuTree,

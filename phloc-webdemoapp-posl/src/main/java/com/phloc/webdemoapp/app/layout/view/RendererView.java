@@ -19,7 +19,6 @@ package com.phloc.webdemoapp.app.layout.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
@@ -54,7 +53,6 @@ import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.layout.CLayout;
 import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
@@ -65,10 +63,10 @@ import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
 /**
  * The viewport renderer (menu + content area)
- * 
+ *
  * @author Philip Helger
  */
-public final class RendererView implements ILayoutAreaContentProvider
+public final class RendererView implements ILayoutAreaContentProvider <LayoutExecutionContext>
 {
   private static final ICSSClassProvider CSS_CLASS_FOOTER_LINKS = DefaultCSSClassProvider.create ("footer-links");
 
@@ -88,23 +86,25 @@ public final class RendererView implements ILayoutAreaContentProvider
   }
 
   @Nonnull
-  private static BootstrapNavbar _getNavbar (final Locale aDisplayLocale)
+  private static BootstrapNavbar _getNavbar (@Nonnull final LayoutExecutionContext aLEC)
   {
-    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getTree ()
-                                                                                        .getDefaultMenuItemID ());
+    final ISimpleURL aLinkToStartPage = aLEC.getLinkToMenuItem (aLEC.getMenuTree ().getDefaultMenuItemID ());
 
-    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
+    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP,
+                                                         true,
+                                                         aLEC.getDisplayLocale ());
     aNavbar.addBrand (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
 
     return aNavbar;
   }
 
   @Nonnull
-  public static IHCNode getMenuContent (@Nonnull final Locale aDisplayLocale)
+  public static IHCNode getMenuContent (@Nonnull final LayoutExecutionContext aLEC)
   {
     // Main menu
-    final IMenuTree aMenuTree = ApplicationMenuTree.getTree ();
-    final MenuItemDeterminatorCallback aCallback = new MenuItemDeterminatorCallback (aMenuTree)
+    final IMenuTree aMenuTree = aLEC.getMenuTree ();
+    final MenuItemDeterminatorCallback aCallback = new MenuItemDeterminatorCallback (aMenuTree,
+                                                                                     aLEC.getSelectedMenuItemID ())
     {
       @Override
       protected boolean isMenuItemValidToBeDisplayed (@Nonnull final IMenuObject aMenuObj)
@@ -117,11 +117,12 @@ public final class RendererView implements ILayoutAreaContentProvider
         return super.isMenuItemValidToBeDisplayed (aMenuObj);
       }
     };
-    final IHCElement <?> aMenu = BootstrapMenuItemRenderer.createSideBarMenu (aMenuTree, aCallback, aDisplayLocale);
+    final IHCElement <?> aMenu = BootstrapMenuItemRenderer.createSideBarMenu (aLEC, aCallback);
 
     return aMenu;
   }
 
+  @SuppressWarnings ("unchecked")
   @Nonnull
   private static IHCNode _getMainContent (@Nonnull final LayoutExecutionContext aLEC)
   {
@@ -129,19 +130,19 @@ public final class RendererView implements ILayoutAreaContentProvider
     final IMenuItemPage aSelectedMenuItem = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
 
     // Resolve the page of the selected menu item (if found)
-    IWebPage aDisplayPage;
+    IWebPage <WebPageExecutionContext> aDisplayPage;
     if (aSelectedMenuItem.matchesDisplayFilter ())
     {
       // Only if we have display rights!
-      aDisplayPage = (IWebPage) aSelectedMenuItem.getPage ();
+      aDisplayPage = (IWebPage <WebPageExecutionContext>) aSelectedMenuItem.getPage ();
     }
     else
     {
       // No rights -> goto start page
-      aDisplayPage = (IWebPage) ApplicationRequestManager.getInstance ()
-                                                         .getMenuTree ()
-                                                         .getDefaultMenuItem ()
-                                                         .getPage ();
+      aDisplayPage = (IWebPage <WebPageExecutionContext>) ApplicationRequestManager.getInstance ()
+                                                                                   .getMenuTree ()
+                                                                                   .getDefaultMenuItem ()
+                                                                                   .getPage ();
     }
 
     final WebPageExecutionContext aWPEC = new WebPageExecutionContext (aLEC, aDisplayPage);
@@ -165,13 +166,12 @@ public final class RendererView implements ILayoutAreaContentProvider
 
     // Header
     {
-      aOuterContainer.addChild (_getNavbar (aLEC.getDisplayLocale ()));
+      aOuterContainer.addChild (_getNavbar (aLEC));
     }
 
     // Breadcrumbs
     {
-      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getTree (),
-                                                                                                aLEC.getDisplayLocale ());
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (aLEC);
       aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);
     }
@@ -184,7 +184,7 @@ public final class RendererView implements ILayoutAreaContentProvider
 
       // left
       // We need a wrapper span for easy AJAX content replacement
-      aCol1.addChild (HCSpan.create (getMenuContent (aLEC.getDisplayLocale ())).setID (CLayout.LAYOUT_AREAID_MENU));
+      aCol1.addChild (HCSpan.create (getMenuContent (aLEC)).setID (CLayout.LAYOUT_AREAID_MENU));
       aCol1.addChild (new HCDiv ().setID (CLayout.LAYOUT_AREAID_SPECIAL));
 
       // content
@@ -203,13 +203,13 @@ public final class RendererView implements ILayoutAreaContentProvider
       for (final IMenuObject aMenuObj : m_aFooterObjects)
       {
         if (aMenuObj instanceof IMenuSeparator)
-          aUL.addItem (aRenderer.renderSeparator ((IMenuSeparator) aMenuObj));
+          aUL.addItem (aRenderer.renderSeparator (aLEC, (IMenuSeparator) aMenuObj));
         else
           if (aMenuObj instanceof IMenuItemPage)
-            aUL.addItem (aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj, false, false, false));
+            aUL.addItem (aRenderer.renderMenuItemPage (aLEC, (IMenuItemPage) aMenuObj, false, false, false));
           else
             if (aMenuObj instanceof IMenuItemExternal)
-              aUL.addItem (aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, false, false, false));
+              aUL.addItem (aRenderer.renderMenuItemExternal (aLEC, (IMenuItemExternal) aMenuObj, false, false, false));
             else
               throw new IllegalStateException ("Unsupported menu object type!");
       }
