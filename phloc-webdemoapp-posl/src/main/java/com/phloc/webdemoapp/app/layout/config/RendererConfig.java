@@ -57,7 +57,6 @@ import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.IWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webbasics.app.page.system.SystemPageNotFound;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
 /**
@@ -110,22 +109,17 @@ public final class RendererConfig implements ILayoutAreaContentProvider <LayoutE
 
     // Resolve the page of the selected menu item (if found)
     IWebPage <WebPageExecutionContext> aDisplayPage;
-    if (aSelectedMenuItem != null)
-    {
-      // Only if we have display rights!
-      if (aSelectedMenuItem.matchesDisplayFilter ())
-        aDisplayPage = (IWebPage <WebPageExecutionContext>) aSelectedMenuItem.getPage ();
-      else
-      {
-        // No rights -> goto start page
-        aDisplayPage = (IWebPage <WebPageExecutionContext>) ApplicationRequestManager.getInstance ()
-                                                                                     .getMenuTree ()
-                                                                                     .getDefaultMenuItem ()
-                                                                                     .getPage ();
-      }
-    }
+    // Only if we have display rights!
+    if (aSelectedMenuItem.matchesDisplayFilter ())
+      aDisplayPage = (IWebPage <WebPageExecutionContext>) aSelectedMenuItem.getPage ();
     else
-      aDisplayPage = new SystemPageNotFound <WebPageExecutionContext> ();
+    {
+      // No rights -> goto start page
+      aDisplayPage = (IWebPage <WebPageExecutionContext>) ApplicationRequestManager.getInstance ()
+                                                                                   .getMenuTree ()
+                                                                                   .getDefaultMenuItem ()
+                                                                                   .getPage ();
+    }
 
     final WebPageExecutionContext aWPEC = new WebPageExecutionContext (aLEC, aDisplayPage);
 
