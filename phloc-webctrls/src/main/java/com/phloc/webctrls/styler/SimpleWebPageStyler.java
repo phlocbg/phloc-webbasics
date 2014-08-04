@@ -24,8 +24,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.email.IEmailAddress;
-import com.phloc.commons.gfx.ImageDataManager;
-import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLValidator;
@@ -39,14 +37,11 @@ import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.html.HCEM;
-import com.phloc.html.hc.html.HCImg;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
-import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.HCTableForm;
 import com.phloc.webctrls.custom.table.HCTableFormView;
@@ -62,31 +57,6 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public static final ICSSClassProvider CSS_CLASS_INFOBOX = DefaultCSSClassProvider.create ("infobox");
   public static final ICSSClassProvider CSS_CLASS_SUCCESSBOX = DefaultCSSClassProvider.create ("successbox");
   public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
-
-  @Nonnull
-  public IHCNode createImageView (@Nonnull final IWebPageExecutionContext aWPEC, @Nullable final UserDataObject aUDO)
-  {
-    return createImageView (aWPEC, aUDO, 200);
-  }
-
-  @Nonnull
-  public IHCNode createImageView (@Nonnull final IWebPageExecutionContext aWPEC,
-                                  @Nullable final UserDataObject aUDO,
-                                  final int nMaxWidth)
-  {
-    if (aUDO == null)
-      return HCEM.create (EWebPageStylerText.IMAGE_NONE.getDisplayText (aWPEC.getDisplayLocale ()));
-
-    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL (aWPEC.getRequestScope ()));
-    ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());
-    if (aSize != null)
-    {
-      if (nMaxWidth > 0 && nMaxWidth < aSize.getWidth ())
-        aSize = aSize.getScaledToWidth (nMaxWidth);
-      aImg.setExtent (aSize);
-    }
-    return aImg;
-  }
 
   @Nullable
   public IHCNode createEmailLink (@Nullable final String sEmailAddress)

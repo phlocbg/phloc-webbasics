@@ -27,7 +27,6 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
-import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
@@ -36,12 +35,6 @@ import com.phloc.webctrls.datatables.DataTables;
 
 public interface IWebPageStyler
 {
-  @Nonnull
-  IHCNode createImageView (@Nonnull IWebPageExecutionContext aWPEC, @Nullable UserDataObject aUDO);
-
-  @Nonnull
-  IHCNode createImageView (@Nonnull IWebPageExecutionContext aWPEC, @Nullable UserDataObject aUDO, int nMaxWidth);
-
   @Nullable
   IHCNode createEmailLink (@Nullable String sEmailAddress);
 
@@ -57,7 +50,7 @@ public interface IWebPageStyler
   /**
    * Create a box that shows a constant note, that changes could not be saved,
    * because the user did not enter all form data correctly.
-   * 
+   *
    * @param aWPEC
    *        Simple web execution context. Never <code>null</code>.
    * @return The control to display

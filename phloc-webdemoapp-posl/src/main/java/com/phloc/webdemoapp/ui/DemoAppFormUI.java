@@ -24,14 +24,9 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
-import com.phloc.webbasics.userdata.UserDataObject;
-import com.phloc.webbasics.userdata.UserUploadManager;
 import com.phloc.webctrls.fineupload.FineUploader;
-import com.phloc.webctrls.fineupload.HCFineUploaderBasic;
-import com.phloc.webctrls.styler.WebPageStylerManager;
 import com.phloc.webdemoapp.servlet.DemoAppUserUploadServlet;
 
 @Immutable
@@ -61,20 +56,4 @@ public final class DemoAppFormUI
     aFU.addParam (DemoAppUserUploadServlet.PARAM_ID, sID);
     return aFU;
   }
-
-  @Nonnull
-  public static IHCNode createImageUploadCtrl (@Nonnull final IWebPageExecutionContext aWPEC,
-                                               @Nullable final String sDirectory,
-                                               @Nonnull @Nonempty final String sID)
-  {
-    // Is something in progress?
-    final UserDataObject aUDO = UserUploadManager.getInstance ().getUploadedFile (sID);
-    if (aUDO == null)
-      return new HCFineUploaderBasic (createFineUploader (aWPEC, sDirectory, sID)).setButtonToUse (WebPageStylerManager.getStyler ()
-                                                                                                                       .createUploadButton (aWPEC))
-                                                                                  .build ();
-    // add preview
-    return WebPageStylerManager.getStyler ().createImageView (aWPEC, aUDO);
-  }
-
 }
