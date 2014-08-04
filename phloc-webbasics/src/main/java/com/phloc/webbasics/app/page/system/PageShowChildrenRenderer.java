@@ -26,13 +26,15 @@ import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * The default renderer used for {@link PageShowChildren}.
- * 
+ *
  * @author Philip Helger
  */
 public class PageShowChildrenRenderer implements Serializable
@@ -42,7 +44,7 @@ public class PageShowChildrenRenderer implements Serializable
 
   /**
    * Render a menu separator
-   * 
+   *
    * @param aWPEC
    *        Web page execution context. May not be <code>null</code>.
    * @param aMenuSeparator
@@ -59,7 +61,7 @@ public class PageShowChildrenRenderer implements Serializable
 
   /**
    * Render a menu item to an internal page
-   * 
+   *
    * @param aWPEC
    *        Web page execution context. May not be <code>null</code>.
    * @param aMenuItemPage
@@ -78,7 +80,7 @@ public class PageShowChildrenRenderer implements Serializable
 
   /**
    * Render a menu item to an external page
-   * 
+   *
    * @param aWPEC
    *        Web page execution context. May not be <code>null</code>.
    * @param aMenuItemExternal
@@ -92,6 +94,12 @@ public class PageShowChildrenRenderer implements Serializable
   {
     if (!aMenuItemExternal.matchesDisplayFilter ())
       return null;
-    return new HCA (aMenuItemExternal.getURL ()).addChild (aMenuItemExternal.getDisplayText (aWPEC.getDisplayLocale ()));
+
+    final HCA ret = new HCA (aMenuItemExternal.getURL ());
+    // Set window target (if defined)
+    if (StringHelper.hasText (aMenuItemExternal.getTarget ()))
+      ret.setTarget (new HCA_Target (aMenuItemExternal.getTarget ()));
+    ret.addChild (aMenuItemExternal.getDisplayText (aWPEC.getDisplayLocale ()));
+    return ret;
   }
 }
