@@ -17,6 +17,9 @@
  */
 package com.phloc.webbasics.smtp;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -39,7 +42,7 @@ import com.phloc.web.smtp.failed.FailedMailQueue;
 
 /**
  * A special {@link FailedMailQueue} that supports persistent storage.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -57,7 +60,7 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
 
     /**
      * Initial read - just to make initialRead accessible
-     * 
+     *
      * @throws DAOException
      *         In case of error
      */
@@ -101,10 +104,32 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
     }
   }
 
-  private final transient FMQDAO m_aDAO;
+  private transient FMQDAO m_aDAO;
 
   public FailedMailQueueWithDAO (@Nullable final String sFilename)
   {
+    try
+    {
+      m_aDAO = new FMQDAO (sFilename);
+      // Read outside FMQDAO constructor, so that the DAO can be used
+      m_aDAO.myInitialRead ();
+    }
+    catch (final DAOException ex)
+    {
+      throw new InitializationException ("Failed to init FailedMailQueueWithDAO with filename '" + sFilename + "'", ex);
+    }
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
+  {
+    aOOS.defaultWriteObject ();
+    aOOS.writeUTF (m_aDAO.getFilenameProvider ().getFilename ());
+  }
+
+  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException, ClassNotFoundException
+  {
+    aOIS.defaultReadObject ();
+    final String sFilename = aOIS.readUTF ();
     try
     {
       m_aDAO = new FMQDAO (sFilename);
