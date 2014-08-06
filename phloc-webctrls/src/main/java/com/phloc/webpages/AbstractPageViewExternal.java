@@ -35,14 +35,14 @@ import com.phloc.commons.microdom.utils.MicroWalker;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.EHTMLVersion;
-import com.phloc.html.parser.XHTMLParser;
+import com.phloc.html.parser.XHTMLParser2;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.app.page.IWebPageExecutionContext;
 
 /**
  * Base class for pages consisting of external HTML code that is provided from
  * an external resource (e.g. for static pages).
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -72,7 +72,7 @@ public abstract class AbstractPageViewExternal <WPECTYPE extends IWebPageExecuti
       throw new IllegalStateException ("Failed to read resource " + aResource.toString ());
 
     // Parse content
-    final IMicroContainer ret = XHTMLParser.unescapeXHTML (eHTMLVersion, sContent);
+    final IMicroContainer ret = new XHTMLParser2 (eHTMLVersion).unescapeXHTMLFragment (sContent);
     if (ret == null)
       throw new IllegalStateException ("Failed to parse HTML code of resource " + aResource.toString ());
 
@@ -137,7 +137,7 @@ public abstract class AbstractPageViewExternal <WPECTYPE extends IWebPageExecuti
   /**
    * Re-read the content from the underlying resource. This only makes sense, if
    * {@link #isReadEveryTime()} is <code>false</code>.
-   * 
+   *
    * @see #isReadEveryTime()
    * @see #setReadEveryTime(boolean)
    */
