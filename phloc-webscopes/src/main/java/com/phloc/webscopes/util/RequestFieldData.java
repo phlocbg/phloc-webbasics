@@ -17,6 +17,7 @@
  */
 package com.phloc.webscopes.util;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -37,18 +38,18 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Represents a wrapper around a single request value. It allows gathering the
  * current value, optionally using a default value.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
-public class RequestFieldData
+public class RequestFieldData implements Serializable
 {
   private final String m_sFieldName;
   private final String m_sDefaultValue;
 
   /**
    * Copy constructor
-   * 
+   *
    * @param aRF
    *        The request field to copy the values from. May not be
    *        <code>null</code>.
@@ -60,7 +61,7 @@ public class RequestFieldData
 
   /**
    * Create a new request field that has no default value
-   * 
+   *
    * @param sFieldName
    *        The field name to use. May neither be <code>null</code> nor empty.
    */
@@ -71,7 +72,7 @@ public class RequestFieldData
 
   /**
    * Default constructor.
-   * 
+   *
    * @param sFieldName
    *        The field name to use. May neither be <code>null</code> nor empty.
    * @param sDefaultValue
@@ -87,7 +88,7 @@ public class RequestFieldData
   /**
    * Utility constructor that uses an optional default value provider that has
    * an ID
-   * 
+   *
    * @param sFieldName
    *        The field name to use. May neither be <code>null</code> nor empty.
    * @param aDefaultValueProvider
@@ -102,7 +103,7 @@ public class RequestFieldData
 
   /**
    * Helper constructor using an int instead of a String.
-   * 
+   *
    * @param sFieldName
    *        The field name to use. May neither be <code>null</code> nor empty.
    * @param nDefaultValue
@@ -115,7 +116,7 @@ public class RequestFieldData
 
   /**
    * Helper constructor using a long instead of a String.
-   * 
+   *
    * @param sFieldName
    *        The field name to use. May neither be <code>null</code> nor empty.
    * @param nDefaultValue
@@ -150,7 +151,7 @@ public class RequestFieldData
 
   /**
    * This is a utility method to always retrieve the correct scope.
-   * 
+   *
    * @return The current request scope to use.
    */
   @Nonnull
@@ -162,7 +163,7 @@ public class RequestFieldData
   /**
    * Helper method to get the request value without falling back to the provided
    * default value.
-   * 
+   *
    * @return <code>null</code> if no such request value is present
    */
   @Nullable
@@ -174,7 +175,7 @@ public class RequestFieldData
   /**
    * Get the value of the request - optionally falling back to the provided
    * default value if no such request parameter is present
-   * 
+   *
    * @return A single request value as string.
    */
   @Nonnull
@@ -188,7 +189,7 @@ public class RequestFieldData
    * multi-selects or checkboxes) this method retrieves all request values. If
    * no such request value is present a list with one entry (the default value)
    * is returned, in case the default value is non-empty
-   * 
+   *
    * @return A list of simple request values with the same key or
    *         <code>null</code> if no such request parameter is present and no
    *         default value was provided
@@ -206,7 +207,7 @@ public class RequestFieldData
   /**
    * Utility method that checks if the passed expected value matches the request
    * parameter (considering the fallback mechanism)
-   * 
+   *
    * @param sExpectedValue
    *        The expected value. May not be <code>null</code>.
    * @return <code>true</code> if the passed value equals the actual request
