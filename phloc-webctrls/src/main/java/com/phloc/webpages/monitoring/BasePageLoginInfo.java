@@ -35,7 +35,6 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
@@ -62,7 +61,7 @@ import com.phloc.webpages.EWebPageText;
 
 /**
  * Show information on all logged in users.
- * 
+ *
  * @author Philip Helger
  */
 public class BasePageLoginInfo <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <LoginInfo, WPECTYPE>
@@ -86,7 +85,7 @@ public class BasePageLoginInfo <WPECTYPE extends IWebPageExecutionContext> exten
     LOGOUT_SUCCESS ("Benutzer ''{0}'' wurde erfolgreich abgemeldet.", "User ''{0}'' was successfully logged out."),
     LOGOUT_ERROR ("Benutzer ''{0}'' konnte nicht abgemeldet werden, weil er nicht mehr angemeldet war.", "User ''{0}'' could not be logged out because he was not logged in.");
 
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
@@ -261,17 +260,20 @@ public class BasePageLoginInfo <WPECTYPE extends IWebPageExecutionContext> exten
 
         // Check if logout worked
         if (aSelectedObject.isLogout ())
-          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC,
+                                                             EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                           sUserName)));
         else
-          aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.LOGOUT_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+          aNodeList.addChild (getStyler ().createErrorBox (aWPEC,
+                                                           EText.LOGOUT_ERROR.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                       sUserName)));
       }
       else
       {
         // Show question
         final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf (aWPEC));
-        aForm.addChild (getStyler ().createSuccessBox (aWPEC, EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
+        aForm.addChild (getStyler ().createSuccessBox (aWPEC,
+                                                       EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                      sUserName)));
 
         final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar (aWPEC));

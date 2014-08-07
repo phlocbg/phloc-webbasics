@@ -27,6 +27,7 @@ import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.appbasics.migration.SystemMigrationManager;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.web.smtp.failed.FailedMailQueue;
@@ -42,6 +43,7 @@ import com.phloc.webpages.monitoring.BasePageFailedMails;
 import com.phloc.webpages.monitoring.BasePageLoginInfo;
 import com.phloc.webpages.monitoring.BasePageScopes;
 import com.phloc.webpages.monitoring.BasePageSessions;
+import com.phloc.webpages.monitoring.BasePageSystemMigrations;
 import com.phloc.webpages.security.BasePageRoleManagement;
 import com.phloc.webpages.security.BasePageUserGroupManagement;
 import com.phloc.webpages.security.BasePageUserManagement;
@@ -68,6 +70,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_MONITORING_LOGININFO = "admin_monitoring_logininfo";
   public static final String MENU_ADMIN_MONITORING_SCOPES = "admin_monitoring_scopes";
   public static final String MENU_ADMIN_MONITORING_SESSIONS = "admin_monitoring_sessions";
+  public static final String MENU_ADMIN_MONITORING_SYSTEMMIGRATIONS = "admin_monitoring_systemmigrations";
   public static final String MENU_ADMIN_SETTINGS = "admin_settings";
   public static final String MENU_ADMIN_SETTINGS_GLOBAL = "admin_settings_global";
   public static final String MENU_ADMIN_SETTINGS_SMTP = "admin_settings_smtp";
@@ -92,15 +95,16 @@ public final class DefaultMenuConfigurator
   public static <WPECTYPE extends IWebPageExecutionContext> IMenuItemPage addMonitoringItems (@Nonnull final IMenuTree aMenuTree,
                                                                                               @Nonnull final IMenuItem aParent,
                                                                                               @Nullable final IFilter <IMenuObject> aDisplayFilter,
-                                                                                              @Nonnull final IAuditManager aAuditManager,
-                                                                                              @Nonnull final FailedMailQueue aFailedMailQueue)
+                                                                                              @Nonnull final IAuditManager aAuditMgr,
+                                                                                              @Nonnull final FailedMailQueue aFailedMailQueue,
+                                                                                              @Nonnull final SystemMigrationManager aSystemMigrationMgr)
   {
     final IMenuItemPage aAdminMonitoring = aMenuTree.createItem (aParent,
                                                                  new PageShowChildren <WPECTYPE> (MENU_ADMIN_MONITORING,
                                                                                                   EWebPageText.PAGE_NAME_MONITORING.getAsMLT (),
                                                                                                   aMenuTree))
                                                     .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminMonitoring, new BasePageAudit <WPECTYPE> (MENU_ADMIN_MONITORING_AUDIT, aAuditManager))
+    aMenuTree.createItem (aAdminMonitoring, new BasePageAudit <WPECTYPE> (MENU_ADMIN_MONITORING_AUDIT, aAuditMgr))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring,
                           new BasePageFailedMails <WPECTYPE> (MENU_ADMIN_MONITORING_FAILEDMAILS, aFailedMailQueue))
@@ -110,6 +114,10 @@ public final class DefaultMenuConfigurator
     aMenuTree.createItem (aAdminMonitoring, new BasePageScopes <WPECTYPE> (MENU_ADMIN_MONITORING_SCOPES))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring, new BasePageSessions <WPECTYPE> (MENU_ADMIN_MONITORING_SESSIONS))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminMonitoring,
+                          new BasePageSystemMigrations <WPECTYPE> (MENU_ADMIN_MONITORING_SYSTEMMIGRATIONS,
+                                                                   aSystemMigrationMgr))
              .setDisplayFilter (aDisplayFilter);
     return aAdminMonitoring;
   }

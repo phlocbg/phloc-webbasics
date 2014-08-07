@@ -54,7 +54,6 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
@@ -89,7 +88,7 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
  * Show all failed mails.
- * 
+ *
  * @author Philip Helger
  */
 public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageFormExt <FailedMailData, WPECTYPE>
@@ -124,7 +123,7 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
     DELETE_ALL_SUCCESS_N ("Es wurden {0} E-Mails erfolgreich gelöscht.", "{0} emails were successfully deleted.");
 
     @Nonnull
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (@Nonnull final String sDE, @Nonnull final String sEN)
     {
@@ -345,7 +344,8 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
     if (m_aFailedMailQueue.remove (aSelectedObject.getID ()) != null)
     {
       s_aLogger.info ("Deleted single failed mail with ID " + aSelectedObject.getID () + "!");
-      aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+      aNodeList.addChild (getStyler ().createSuccessBox (aWPEC,
+                                                         EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
     }
     return true;
   }
@@ -378,7 +378,8 @@ public class BasePageFailedMails <WPECTYPE extends IWebPageExecutionContext> ext
         {
           s_aLogger.info ("Trying to resend single failed mail with ID " + aFailedMailData.getID () + "!");
           ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
-          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC,
+                                                             EText.RESENT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale)));
         }
       }
       else

@@ -40,9 +40,9 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.migration.SystemMigrationManager;
+import com.phloc.appbasics.migration.SystemMigrationResult;
 import com.phloc.appbasics.security.audit.IAuditItem;
-import com.phloc.appbasics.security.audit.IAuditManager;
-import com.phloc.appbasics.security.util.SecurityUtils;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -66,21 +66,20 @@ import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 
 /**
- * Show audit items.
+ * Show system migration status.
  *
  * @author Philip Helger
  */
-public class BasePageAudit <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
+public class BasePageSystemMigrations <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
     BUTTON_REFRESH ("Aktualisieren", "Refresh"),
+    MSG_ID ("ID", "ID"),
     MSG_DATE ("Datum", "Date"),
-    MSG_USER ("Benutzer", "User"),
-    MSG_TYPE ("Typ", "Type"),
     MSG_SUCCESS ("Erfolg?", "Success?"),
-    MSG_ACTION ("Aktion", "Action");
+    MSG_ERRORMESSAGE ("Fehlermeldung", "Error message");
 
     @Nonnull
     private final TextProvider m_aTP;
@@ -97,44 +96,45 @@ public class BasePageAudit <WPECTYPE extends IWebPageExecutionContext> extends A
     }
   }
 
-  private final IAuditManager m_aAuditMgr;
+  private final SystemMigrationManager m_aSystemMigrationMgr;
 
-  public BasePageAudit (@Nonnull @Nonempty final String sID, @Nonnull final IAuditManager aAuditMgr)
+  public BasePageSystemMigrations (@Nonnull @Nonempty final String sID,
+                                   @Nonnull final SystemMigrationManager aSystemMigrationMgr)
   {
-    super (sID, EWebPageText.PAGE_NAME_MONITORING_AUDIT.getAsMLT ());
-    m_aAuditMgr = ValueEnforcer.notNull (aAuditMgr, "AuditManager");
+    super (sID, EWebPageText.PAGE_NAME_MONITORING_SYSTEMMIGRATIONS.getAsMLT ());
+    m_aSystemMigrationMgr = ValueEnforcer.notNull (aSystemMigrationMgr, "SystemMigrationMgr");
   }
 
-  public BasePageAudit (@Nonnull @Nonempty final String sID,
-                        @Nonnull final String sName,
-                        @Nonnull final IAuditManager aAuditMgr)
+  public BasePageSystemMigrations (@Nonnull @Nonempty final String sID,
+                                   @Nonnull final String sName,
+                                   @Nonnull final SystemMigrationManager aSystemMigrationMgr)
   {
     super (sID, sName);
-    m_aAuditMgr = ValueEnforcer.notNull (aAuditMgr, "AuditManager");
+    m_aSystemMigrationMgr = ValueEnforcer.notNull (aSystemMigrationMgr, "SystemMigrationMgr");
   }
 
-  public BasePageAudit (@Nonnull @Nonempty final String sID,
-                        @Nonnull final String sName,
-                        @Nullable final String sDescription,
-                        @Nonnull final IAuditManager aAuditMgr)
+  public BasePageSystemMigrations (@Nonnull @Nonempty final String sID,
+                                   @Nonnull final String sName,
+                                   @Nullable final String sDescription,
+                                   @Nonnull final SystemMigrationManager aSystemMigrationMgr)
   {
     super (sID, sName, sDescription);
-    m_aAuditMgr = ValueEnforcer.notNull (aAuditMgr, "AuditManager");
+    m_aSystemMigrationMgr = ValueEnforcer.notNull (aSystemMigrationMgr, "SystemMigrationMgr");
   }
 
-  public BasePageAudit (@Nonnull @Nonempty final String sID,
-                        @Nonnull final IReadonlyMultiLingualText aName,
-                        @Nullable final IReadonlyMultiLingualText aDescription,
-                        @Nonnull final IAuditManager aAuditMgr)
+  public BasePageSystemMigrations (@Nonnull @Nonempty final String sID,
+                                   @Nonnull final IReadonlyMultiLingualText aName,
+                                   @Nullable final IReadonlyMultiLingualText aDescription,
+                                   @Nonnull final SystemMigrationManager aSystemMigrationMgr)
   {
     super (sID, aName, aDescription);
-    m_aAuditMgr = ValueEnforcer.notNull (aAuditMgr, "AuditManager");
+    m_aSystemMigrationMgr = ValueEnforcer.notNull (aSystemMigrationMgr, "SystemMigrationMgr");
   }
 
   @Nonnull
-  protected final IAuditManager getAuditMgr ()
+  protected final SystemMigrationManager getSystemMigrationMgr ()
   {
-    return m_aAuditMgr;
+    return m_aSystemMigrationMgr;
   }
 
   @Nonnull
@@ -155,34 +155,32 @@ public class BasePageAudit <WPECTYPE extends IWebPageExecutionContext> extends A
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 
-    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (140),
-                                                          new HCCol (120),
-                                                          new HCCol (60),
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
+                                                          new HCCol (140),
                                                           new HCCol (60),
                                                           HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_DATE.getDisplayText (aDisplayLocale),
-                                     EText.MSG_USER.getDisplayText (aDisplayLocale),
-                                     EText.MSG_TYPE.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
+                                     EText.MSG_DATE.getDisplayText (aDisplayLocale),
                                      EText.MSG_SUCCESS.getDisplayText (aDisplayLocale),
-                                     EText.MSG_ACTION.getDisplayText (aDisplayLocale));
+                                     EText.MSG_ERRORMESSAGE.getDisplayText (aDisplayLocale));
 
-    for (final IAuditItem aItem : m_aAuditMgr.getLastAuditItems (250))
+    for (final SystemMigrationResult aItem : m_aSystemMigrationMgr.getAllMigrationResultsFlattened ())
     {
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (PDTToString.getAsString (aItem.getDateTime (), aDisplayLocale));
-      aRow.addCell (SecurityUtils.getUserDisplayName (aItem.getUserID (), aDisplayLocale));
-      aRow.addCell (aItem.getType ().getID ());
-      aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
-      aRow.addCell (getActionString (aItem));
+      aRow.addCell (aItem.getID ());
+      aRow.addCell (PDTToString.getAsString (aItem.getExecutionDateTime (), aDisplayLocale));
+      aRow.addCell (EWebBasicsText.getYesOrNo (aItem.isSuccess (), aDisplayLocale));
+      aRow.addCell (aItem.getErrorMessage ());
     }
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
-    aDataTables.getOrCreateColumnOfTarget (0)
+    aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));
-    aDataTables.getOrCreateColumnOfTarget (4).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
-    aDataTables.setInitialSorting (0, ESortOrder.DESCENDING);
+    aDataTables.getOrCreateColumnOfTarget (2).setDataSort (2, 1);
+    aDataTables.getOrCreateColumnOfTarget (3).setDataSort (3, 2, 1);
+    aDataTables.setInitialSorting (1, ESortOrder.DESCENDING);
     aNodeList.addChild (aDataTables);
   }
 }

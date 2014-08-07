@@ -31,7 +31,6 @@ import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
@@ -52,7 +51,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Show information on global and application scopes
- * 
+ *
  * @author Philip Helger
  */
 public class BasePageScopes <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
@@ -73,7 +72,7 @@ public class BasePageScopes <WPECTYPE extends IWebPageExecutionContext> extends 
     MSG_TYPE ("Typ", "Type"),
     MSG_VALUE ("Wert", "Value");
 
-    private final ITextProvider m_aTP;
+    private final TextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
