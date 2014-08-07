@@ -106,12 +106,13 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
     AuditUtils.onAuditCreateSuccess (OT_SYSTEM_MIGRATION_RESULT,
                                      aMigrationResult.getID (),
-                                     Boolean.valueOf (aMigrationResult.isSuccess ()));
+                                     Boolean.valueOf (aMigrationResult.isSuccess ()),
+                                     aMigrationResult.getErrorMessage ());
   }
 
   /**
    * Mark the specified migration as success.
-   * 
+   *
    * @param sMigrationID
    *        The migration ID to be added. May neither be <code>null</code> nor
    *        empty.
@@ -123,7 +124,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
   /**
    * Mark the specified migration as failed.
-   * 
+   *
    * @param sMigrationID
    *        The migration ID to be added. May neither be <code>null</code> nor
    *        empty.
@@ -148,6 +149,24 @@ public class SystemMigrationManager extends AbstractSimpleDAO
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <SystemMigrationResult> getAllMigrationResultsFlattened ()
+  {
+    final List <SystemMigrationResult> ret = new ArrayList <SystemMigrationResult> ();
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      for (final List <SystemMigrationResult> aResults : m_aMap.values ())
+        ret.addAll (aResults);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+    return ret;
   }
 
   @Nonnull
@@ -189,7 +208,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
    * Perform a migration if it was not performed yet. The performed callback may
    * not throw an error or return an error. All migrations executed with this
    * method will be handled as a success only.
-   * 
+   *
    * @param sMigrationID
    *        The migration ID to handle. May neither be <code>null</code> nor
    *        empty.
@@ -204,17 +223,24 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
     if (!wasMigrationExecutedSuccessfully (sMigrationID))
     {
-      // Invoke the callback
-      aMigrationAction.run ();
+      try
+      {
+        // Invoke the callback
+        aMigrationAction.run ();
 
-      // Always assume success
-      addMigrationResultSuccess (sMigrationID);
+        // Always assume success
+        addMigrationResultSuccess (sMigrationID);
+      }
+      catch (final RuntimeException ex)
+      {
+        addMigrationResultError (sMigrationID, ex.getClass () + ": " + ex.getMessage ());
+      }
     }
   }
 
   /**
    * Perform a migration if it was not performed yet.
-   * 
+   *
    * @param sMigrationID
    *        The migration ID to handle. May neither be <code>null</code> nor
    *        empty.
@@ -229,14 +255,21 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
     if (!wasMigrationExecutedSuccessfully (sMigrationID))
     {
-      // Invoke the callback
-      final SuccessWithValue <String> ret = aMigrationAction.call ();
+      try
+      {
+        // Invoke the callback
+        final SuccessWithValue <String> ret = aMigrationAction.call ();
 
-      // Success or error
-      if (ret.isSuccess ())
-        addMigrationResultSuccess (sMigrationID);
-      else
-        addMigrationResultError (sMigrationID, ret.get ());
+        // Success or error
+        if (ret.isSuccess ())
+          addMigrationResultSuccess (sMigrationID);
+        else
+          addMigrationResultError (sMigrationID, ret.get ());
+      }
+      catch (final RuntimeException ex)
+      {
+        addMigrationResultError (sMigrationID, ex.getClass () + ": " + ex.getMessage ());
+      }
     }
   }
 
