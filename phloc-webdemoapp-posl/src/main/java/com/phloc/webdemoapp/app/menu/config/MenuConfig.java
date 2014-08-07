@@ -58,7 +58,8 @@ public final class MenuConfig
                                                   aAdmin,
                                                   aFilterSuperUser,
                                                   MetaSystemManager.getAuditMgr (),
-                                                  MetaSystemManager.getFailedMailQueue ());
+                                                  MetaSystemManager.getFailedMailQueue (),
+                                                  MetaSystemManager.getSystemMigrationMgr ());
       DefaultMenuConfigurator.addSysInfoItems (aMenuTree, aAdmin, aFilterSuperUser);
       DefaultMenuConfigurator.addDataItems (aMenuTree, aAdmin, aFilterSuperUser);
       DefaultMenuConfigurator.addSettingsItems (aMenuTree,
