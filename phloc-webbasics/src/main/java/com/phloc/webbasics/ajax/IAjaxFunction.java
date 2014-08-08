@@ -29,7 +29,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Interface for all ajax function declarations
- * 
+ *
  * @author Philip Helger
  */
 public interface IAjaxFunction extends IHasName
@@ -44,6 +44,21 @@ public interface IAjaxFunction extends IHasName
   @Nonnull
   @Nonempty
   String getInvocationURI (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
+
+  /**
+   * @param aRequestScope
+   *        The request web scope to be used. Required for cookie-less handling.
+   *        May not be <code>null</code>.
+   * @param aParams
+   *        An optional map with URL parameters to be used in the URL. May be
+   *        <code>null</code> or empty.
+   * @return The URI where the AJAX function can be invoked. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  String getInvocationURI (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nullable Map <String, String> aParams);
 
   /**
    * @param aRequestScope

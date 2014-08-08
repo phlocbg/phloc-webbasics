@@ -25,7 +25,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Abstract base implementation of {@link IAjaxFunction}
- * 
+ *
  * @author Philip Helger
  */
 @Immutable

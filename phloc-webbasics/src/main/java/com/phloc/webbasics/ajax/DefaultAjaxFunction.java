@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -32,7 +33,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Default AjaxFunction implementation assuming that the Ajax servlet is
  * listening on "/ajax/"
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -63,16 +64,29 @@ public class DefaultAjaxFunction extends AbstractAjaxFunction
   }
 
   @Nonnull
-  @Nonempty
   public String getInvocationURI (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return LinkUtils.getURIWithContext (aRequestScope, getPathWithoutContext ());
   }
 
   @Nonnull
+  @Nonempty
+  public String getInvocationURI (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nullable final Map <String, String> aParams)
+  {
+    if (ContainerHelper.isEmpty (aParams))
+    {
+      // No need to convert to SimpleURL and back
+      return getInvocationURI (aRequestScope);
+    }
+
+    return getInvocationURL (aRequestScope, aParams).getAsString ();
+  }
+
+  @Nonnull
   public ISimpleURL getInvocationURL (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return getInvocationURL (aRequestScope, null);
+    return getInvocationURL (aRequestScope, (Map <String, String>) null);
   }
 
   @Nonnull
