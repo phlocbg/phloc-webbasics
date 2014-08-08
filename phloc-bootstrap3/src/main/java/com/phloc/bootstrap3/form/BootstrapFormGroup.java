@@ -17,6 +17,8 @@
  */
 package com.phloc.bootstrap3.form;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -75,7 +77,7 @@ public class BootstrapFormGroup
 
   /**
    * Called after the label cell was altered.
-   * 
+   *
    * @param aLabel
    *        The newly set label. May be <code>null</code>
    */
@@ -99,7 +101,7 @@ public class BootstrapFormGroup
 
   /**
    * Called after the control was changed
-   * 
+   *
    * @param aCtrl
    *        The new control. May be <code>null</code>.
    */
@@ -166,7 +168,7 @@ public class BootstrapFormGroup
 
   /**
    * Called after the help text was altered.
-   * 
+   *
    * @param aNote
    *        The new note
    */
@@ -186,6 +188,12 @@ public class BootstrapFormGroup
     m_aHelpText = aHelpText;
     onHelpTextModified (aHelpText);
     return this;
+  }
+
+  @Nonnull
+  public final BootstrapFormGroup setHelpText (@Nullable final List <? extends IHCNode> aHelpTexts)
+  {
+    return setHelpText (new HCNodeList ().addChildren (aHelpTexts));
   }
 
   @Nullable
