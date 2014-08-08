@@ -34,7 +34,7 @@ import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
 
 /**
  * Bootstrap specific initialization listener
- * 
+ *
  * @author Philip Helger
  */
 public abstract class WebAppListenerMultiAppBootstrap <LECTYPE extends ILayoutExecutionContext> extends WebAppListenerMultiApp <LECTYPE>
@@ -43,7 +43,7 @@ public abstract class WebAppListenerMultiAppBootstrap <LECTYPE extends ILayoutEx
   @OverrideOnDemand
   protected Version getBoostrapVersion ()
   {
-    return CBootstrap.BOOTSTRAP_VERSION_311;
+    return CBootstrap.BOOTSTRAP_VERSION_320;
   }
 
   @Override

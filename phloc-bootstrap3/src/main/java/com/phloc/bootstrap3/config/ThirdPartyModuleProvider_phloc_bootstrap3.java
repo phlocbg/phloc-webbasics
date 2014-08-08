@@ -30,7 +30,7 @@ import com.phloc.commons.version.Version;
 /**
  * Implement this SPI interface if your JAR file contains external third party
  * modules.
- * 
+ *
  * @author Philip Helger
  */
 @IsSPIImplementation
@@ -39,7 +39,7 @@ public final class ThirdPartyModuleProvider_phloc_bootstrap3 implements IThirdPa
   public static final IThirdPartyModule BOOTSTRAP3 = new ThirdPartyModule ("Bootstrap",
                                                                            "Twitter",
                                                                            ELicense.MIT,
-                                                                           CBootstrap.BOOTSTRAP_VERSION_311,
+                                                                           CBootstrap.BOOTSTRAP_VERSION_320,
                                                                            "http://getbootstrap.com/");
 
   public static final IThirdPartyModule BOOTSTRAP_DATETIME_PICKER = new ThirdPartyModule ("Bootstrap Datetime Picker",

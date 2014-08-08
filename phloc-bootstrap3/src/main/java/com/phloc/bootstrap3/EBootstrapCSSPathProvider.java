@@ -25,13 +25,15 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 
 /**
  * Contains default CSS paths within this library.
- * 
+ *
  * @author Philip Helger
  */
 public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {
   BOOTSTRAP_3_1_1 ("bootstrap/3.1.1/css/bootstrap.css"),
   BOOTSTRAP_THEME_3_1_1 ("bootstrap/3.1.1/css/bootstrap-theme.css"),
+  BOOTSTRAP_3_2_0 ("bootstrap/3.2.0/css/bootstrap.css"),
+  BOOTSTRAP_THEME_3_2_0 ("bootstrap/3.2.0/css/bootstrap-theme.css"),
   BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap3-datatables.css"),
   BOOTSTRAP_IE9 ("bootstrap/bootstrap3-ie9.css"),
   BOOTSTRAP_PHLOC ("bootstrap/bootstrap3-phloc.css");
