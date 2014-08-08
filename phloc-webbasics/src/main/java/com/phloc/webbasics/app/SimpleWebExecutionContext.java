@@ -56,7 +56,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This object is instantiated per page view and contains the current request
  * scope, the display locale and a set of custom attributes.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -352,7 +352,7 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
   @Nonnull
   public SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
-    final String sPath = m_aRequestScope.encodeURL (m_aRequestScope.getFullContextAndServletPath ());
+    final String sPath = m_aRequestScope.encodeURL (m_aRequestScope.getContextAndServletPath ());
     return new SimpleURL (sPath).add (m_sRequestParamNameMenuItem, sMenuItemID);
   }
 
