@@ -86,7 +86,7 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
  * A handler for internal errors
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -217,7 +217,7 @@ public final class InternalErrorHandler
    * Enable the creation of a dump of all threads. Warning: this takes a lot of
    * CPU, so enable this only when you are not running a performance critical
    * application! The default is {@value #DEFAULT_ENABLE_FULL_THREAD_DUMPS}.
-   * 
+   *
    * @param bEnableFullThreadDumps
    *        <code>true</code> to enabled, <code>false</code> to disable.
    */
@@ -267,7 +267,7 @@ public final class InternalErrorHandler
 
   /**
    * Set the custom exception handler.
-   * 
+   *
    * @param aCustomExceptionHandler
    *        The exception handler to be used. May be <code>null</code> to
    *        indicate none.
@@ -287,7 +287,7 @@ public final class InternalErrorHandler
 
   /**
    * Create a new unique error ID.
-   * 
+   *
    * @return This is either a new persistent int ID or a non-persistent ID
    *         together with the timestamp. Neither <code>null</code> nor empty.
    */
@@ -308,7 +308,7 @@ public final class InternalErrorHandler
 
   /**
    * Create a new unique internal error ID.
-   * 
+   *
    * @return The created error ID. Neither <code>null</code> nor empty.
    */
   @Nonnull
@@ -363,12 +363,10 @@ public final class InternalErrorHandler
       final String sMailSubject = StringHelper.getConcatenatedOnDemand ("Internal error", ' ', sErrorNumber);
 
       // Main error thread dump
-      String sMailBody = aMetaData.getAsString () +
-                         "\n---------------------------------------------------------------\n" +
-                         aCurrentDescriptor.getAsString () +
-                         "\n---------------------------------------------------------------\n";
+      final String sSeparator = "\n---------------------------------------------------------------\n";
+      String sMailBody = aMetaData.getAsString () + sSeparator + aCurrentDescriptor.getAsString () + sSeparator;
       if (aAllThreads != null)
-        sMailBody += aAllThreads.getAsString () + "\n---------------------------------------------------------------";
+        sMailBody += aAllThreads.getAsString () + sSeparator;
 
       final EmailData aEmailData = new EmailData (EEmailType.TEXT);
       aEmailData.setFrom (aSender);
@@ -629,7 +627,7 @@ public final class InternalErrorHandler
 
   /**
    * Default handling for an internal error
-   * 
+   *
    * @param aParent
    *        The parent list to append the nodes to. May be <code>null</code>.
    * @param t
@@ -676,6 +674,7 @@ public final class InternalErrorHandler
 
     if (GlobalDebug.isDebugMode ())
     {
+      // Debug mode - show on screen but don't send an email
       if (t != null)
       {
         // Show stack trace details
@@ -703,6 +702,7 @@ public final class InternalErrorHandler
     }
     else
     {
+      // GlobalDebug is disabled -> send mail
       sendInternalErrorMailToVendor (t, aRequestScope, sErrorID, sCustomData, aEmailAttachments);
     }
 

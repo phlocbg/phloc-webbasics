@@ -36,7 +36,7 @@ import com.phloc.commons.url.ISimpleURL;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class MenuItemExternal extends AbstractMenuObject <MenuItemExternal> implements IMenuItemExternal
+public class MenuItemExternal extends AbstractMenuObject <MenuItemExternal> implements IMenuItemExternal
 {
   private final ISimpleURL m_aURL;
   private final IHasDisplayText m_aDisplayText;

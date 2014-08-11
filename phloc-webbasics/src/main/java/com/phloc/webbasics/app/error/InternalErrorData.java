@@ -23,20 +23,22 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.IHasStringRepresentation;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IHasMicroNodeRepresentation;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
-import com.phloc.commons.string.StringHelper;
 
-public final class InternalErrorData implements IHasStringRepresentation, IHasMicroNodeRepresentation
+@NotThreadSafe
+public class InternalErrorData implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
   @Immutable
   public static final class Entry implements IHasStringRepresentation, IHasMicroNodeRepresentation
@@ -46,9 +48,7 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
 
     public Entry (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
     {
-      if (StringHelper.hasNoText (sKey))
-        throw new IllegalArgumentException ("key");
-      m_sKey = sKey;
+      m_sKey = ValueEnforcer.notEmpty (sKey, "Key");
       m_sValue = sValue;
     }
 
@@ -93,12 +93,12 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
   public InternalErrorData ()
   {}
 
-  public void addField (@Nonnull final String sKey, @Nullable final String sValue)
+  public void addField (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
   {
     m_aFields.add (new Entry (sKey, sValue));
   }
 
-  public void addField (@Nonnull final String sKey, @Nonnull final Throwable t)
+  public void addField (@Nonnull @Nonempty final String sKey, @Nonnull final Throwable t)
   {
     final String sValue = "Failed to get " + sKey + ": " + t.getMessage () + " -- " + t.getClass ().getName ();
     s_aLogger.warn (sValue);
@@ -112,7 +112,7 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
     return ContainerHelper.newList (m_aFields);
   }
 
-  public void addRequestField (@Nonnull final String sKey, @Nullable final String sValue)
+  public void addRequestField (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
   {
     m_aRequestFields.add (new Entry (sKey, sValue));
   }
@@ -124,7 +124,7 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
     return ContainerHelper.newList (m_aRequestFields);
   }
 
-  public void addRequestHeader (@Nonnull final String sKey, @Nullable final String sValue)
+  public void addRequestHeader (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
   {
     m_aRequestHeaders.add (new Entry (sKey, sValue));
   }
@@ -136,7 +136,7 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
     return ContainerHelper.newList (m_aRequestHeaders);
   }
 
-  public void addRequestParameter (@Nonnull final String sKey, @Nullable final String sValue)
+  public void addRequestParameter (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
   {
     m_aRequestParameters.add (new Entry (sKey, sValue));
   }
@@ -148,7 +148,7 @@ public final class InternalErrorData implements IHasStringRepresentation, IHasMi
     return ContainerHelper.newList (m_aRequestParameters);
   }
 
-  public void addRequestCookie (@Nonnull final String sKey, @Nullable final String sValue)
+  public void addRequestCookie (@Nonnull @Nonempty final String sKey, @Nullable final String sValue)
   {
     m_aRequestCookies.add (new Entry (sKey, sValue));
   }
