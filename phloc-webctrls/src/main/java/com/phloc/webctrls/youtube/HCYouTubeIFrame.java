@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.html.HCIFrame;
 
@@ -49,6 +50,12 @@ public class HCYouTubeIFrame extends HCIFrame
     this (sVideoID);
     setWidth (nWidth);
     setHeight (nHeight);
+  }
+
+  @Nonnull
+  public ISimpleURL getVideoURL ()
+  {
+    return m_aVideoURL;
   }
 
   @Nonnull
