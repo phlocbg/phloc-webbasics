@@ -85,6 +85,12 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     MSG_SCOPE_DESTROYED ("Kontext zerstört?", "Scope destroyed?"),
     MSG_SESSION_APPLICATION_SCOPES ("Session Application Kontexte", "Session application scopes"),
     MSG_SCOPE_ATTRS ("Attribute", "Attributes"),
+    MSG_SCOPE_CREATION_DT ("Erstellungszeit", "Creation date time"),
+    MSG_SCOPE_LASTACCESS_DT ("Letzter Zugriff", "Last access date time"),
+    MSG_SCOPE_SESSION_TIMEOUT ("Session Timeout", "Session timeout"),
+    MSG_SCOPE_SESSION_TIMEOUT_TEXT ("{0} Sekunden (={1} Minuten)", "{0} seconds (={1} minutes)"),
+    MSG_SCOPE_EXPIRATION_DT ("Geplanter Ablauf", "Planned expiration date time"),
+    MSG_SCOPE_IS_NEW ("Neue Session?", "Is new session?"),
     MSG_NAME ("Name", "Wert"),
     MSG_TYPE ("Typ", "Type"),
     MSG_VALUE ("Wert", "Value");
@@ -180,23 +186,23 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
       final LocalDateTime aLastAccessDT = PDTFactory.createLocalDateTimeFromMillis (aWebScope.getLastAccessedTime ());
 
       aTableScope.createItemRow ()
-                 .setLabel ("Creation date time")
+                 .setLabel (EText.MSG_SCOPE_CREATION_DT.getDisplayText (aDisplayLocale))
                  .setCtrl (PDTToString.getAsString (aCreationDT, aDisplayLocale));
       aTableScope.createItemRow ()
-                 .setLabel ("Last access date time")
+                 .setLabel (EText.MSG_SCOPE_LASTACCESS_DT.getDisplayText (aDisplayLocale))
                  .setCtrl (PDTToString.getAsString (aLastAccessDT, aDisplayLocale));
       aTableScope.createItemRow ()
-                 .setLabel ("Max inactive interval")
-                 .setCtrl (Long.toString (aWebScope.getMaxInactiveInterval ()) +
-                           " seconds (=" +
-                           Long.toString (aWebScope.getMaxInactiveInterval () / CGlobal.SECONDS_PER_MINUTE) +
-                           " minutes)");
+                 .setLabel (EText.MSG_SCOPE_SESSION_TIMEOUT.getDisplayText (aDisplayLocale))
+                 .setCtrl (EText.MSG_SCOPE_SESSION_TIMEOUT_TEXT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                        Long.toString (aWebScope.getMaxInactiveInterval ()),
+                                                                                        Long.toString (aWebScope.getMaxInactiveInterval () /
+                                                                                                       CGlobal.SECONDS_PER_MINUTE)));
       aTableScope.createItemRow ()
-                 .setLabel ("Planned expiration date time")
+                 .setLabel (EText.MSG_SCOPE_EXPIRATION_DT.getDisplayText (aDisplayLocale))
                  .setCtrl (PDTToString.getAsString (aLastAccessDT.plusSeconds ((int) aWebScope.getMaxInactiveInterval ()),
                                                     aDisplayLocale));
       aTableScope.createItemRow ()
-                 .setLabel ("Is new?")
+                 .setLabel (EText.MSG_SCOPE_IS_NEW.getDisplayText (aDisplayLocale))
                  .setCtrl (EWebBasicsText.getYesOrNo (aWebScope.isNew (), aDisplayLocale));
     }
 
@@ -277,6 +283,7 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
 
     // Refresh button
     final IButtonToolbar <?> aToolbar = getStyler ().createToolbar (aWPEC);
+    aToolbar.addButton (EWebBasicsText.MSG_BACK_TO_OVERVIEW.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), createViewURL (aWPEC, aScope));
     aNodeList.addChild (aToolbar);
 
