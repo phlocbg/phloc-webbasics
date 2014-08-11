@@ -29,7 +29,7 @@ import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Bootstrap3 icons
- * 
+ *
  * @author Philip Helger
  */
 public enum EBootstrapIcon implements IIcon

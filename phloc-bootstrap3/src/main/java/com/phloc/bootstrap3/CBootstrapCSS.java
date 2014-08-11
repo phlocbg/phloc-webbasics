@@ -26,19 +26,20 @@ import com.phloc.html.css.ICSSClassProvider;
 
 /**
  * CSS Constants for the Twitter Bootstrap3 framework
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
 public final class CBootstrapCSS
 {
   // Note: all CSS classes were created via MainExtractBootstrap3CSSClasses for
-  // 3.1.0
+  // 3.2.0
   public static final ICSSClassProvider ACTIVE = DefaultCSSClassProvider.create ("active");
   public static final ICSSClassProvider AFFIX = DefaultCSSClassProvider.create ("affix");
   public static final ICSSClassProvider ALERT = DefaultCSSClassProvider.create ("alert");
   public static final ICSSClassProvider ALERT_DANGER = DefaultCSSClassProvider.create ("alert-danger");
   public static final ICSSClassProvider ALERT_DISMISSABLE = DefaultCSSClassProvider.create ("alert-dismissable");
+  public static final ICSSClassProvider ALERT_DISMISSIBLE = DefaultCSSClassProvider.create ("alert-dismissible");
   public static final ICSSClassProvider ALERT_INFO = DefaultCSSClassProvider.create ("alert-info");
   public static final ICSSClassProvider ALERT_LINK = DefaultCSSClassProvider.create ("alert-link");
   public static final ICSSClassProvider ALERT_SUCCESS = DefaultCSSClassProvider.create ("alert-success");
@@ -307,11 +308,17 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider DROPDOWN_MENU_RIGHT = DefaultCSSClassProvider.create ("dropdown-menu-right");
   public static final ICSSClassProvider DROPDOWN_TOGGLE = DefaultCSSClassProvider.create ("dropdown-toggle");
   public static final ICSSClassProvider DROPUP = DefaultCSSClassProvider.create ("dropup");
+  public static final ICSSClassProvider EMBED_RESPONSIVE = DefaultCSSClassProvider.create ("embed-responsive");
+  public static final ICSSClassProvider EMBED_RESPONSIVE_16BY9 = DefaultCSSClassProvider.create ("embed-responsive-16by9");
+  public static final ICSSClassProvider EMBED_RESPONSIVE_4BY3 = DefaultCSSClassProvider.create ("embed-responsive-4by3");
+  public static final ICSSClassProvider EMBED_RESPONSIVE_ITEM = DefaultCSSClassProvider.create ("embed-responsive-item");
   public static final ICSSClassProvider FADE = DefaultCSSClassProvider.create ("fade");
   public static final ICSSClassProvider FORM_CONTROL = DefaultCSSClassProvider.create ("form-control");
   public static final ICSSClassProvider FORM_CONTROL_FEEDBACK = DefaultCSSClassProvider.create ("form-control-feedback");
   public static final ICSSClassProvider FORM_CONTROL_STATIC = DefaultCSSClassProvider.create ("form-control-static");
   public static final ICSSClassProvider FORM_GROUP = DefaultCSSClassProvider.create ("form-group");
+  public static final ICSSClassProvider FORM_GROUP_LG = DefaultCSSClassProvider.create ("form-group-lg");
+  public static final ICSSClassProvider FORM_GROUP_SM = DefaultCSSClassProvider.create ("form-group-sm");
   public static final ICSSClassProvider FORM_HORIZONTAL = DefaultCSSClassProvider.create ("form-horizontal");
   public static final ICSSClassProvider FORM_INLINE = DefaultCSSClassProvider.create ("form-inline");
   public static final ICSSClassProvider GLYPHICON = DefaultCSSClassProvider.create ("glyphicon");
@@ -572,6 +579,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider LIST_GROUP_ITEM_WARNING = DefaultCSSClassProvider.create ("list-group-item-warning");
   public static final ICSSClassProvider LIST_INLINE = DefaultCSSClassProvider.create ("list-inline");
   public static final ICSSClassProvider LIST_UNSTYLED = DefaultCSSClassProvider.create ("list-unstyled");
+  public static final ICSSClassProvider MARK = DefaultCSSClassProvider.create ("mark");
   public static final ICSSClassProvider MEDIA = DefaultCSSClassProvider.create ("media");
   public static final ICSSClassProvider MEDIA_BODY = DefaultCSSClassProvider.create ("media-body");
   public static final ICSSClassProvider MEDIA_HEADING = DefaultCSSClassProvider.create ("media-heading");
@@ -586,6 +594,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider MODAL_HEADER = DefaultCSSClassProvider.create ("modal-header");
   public static final ICSSClassProvider MODAL_LG = DefaultCSSClassProvider.create ("modal-lg");
   public static final ICSSClassProvider MODAL_OPEN = DefaultCSSClassProvider.create ("modal-open");
+  public static final ICSSClassProvider MODAL_SCROLLBAR_MEASURE = DefaultCSSClassProvider.create ("modal-scrollbar-measure");
   public static final ICSSClassProvider MODAL_SM = DefaultCSSClassProvider.create ("modal-sm");
   public static final ICSSClassProvider MODAL_TITLE = DefaultCSSClassProvider.create ("modal-title");
   public static final ICSSClassProvider NAV = DefaultCSSClassProvider.create ("nav");
@@ -642,6 +651,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider PROGRESS_BAR = DefaultCSSClassProvider.create ("progress-bar");
   public static final ICSSClassProvider PROGRESS_BAR_DANGER = DefaultCSSClassProvider.create ("progress-bar-danger");
   public static final ICSSClassProvider PROGRESS_BAR_INFO = DefaultCSSClassProvider.create ("progress-bar-info");
+  public static final ICSSClassProvider PROGRESS_BAR_STRIPED = DefaultCSSClassProvider.create ("progress-bar-striped");
   public static final ICSSClassProvider PROGRESS_BAR_SUCCESS = DefaultCSSClassProvider.create ("progress-bar-success");
   public static final ICSSClassProvider PROGRESS_BAR_WARNING = DefaultCSSClassProvider.create ("progress-bar-warning");
   public static final ICSSClassProvider PROGRESS_STRIPED = DefaultCSSClassProvider.create ("progress-striped");
@@ -654,6 +664,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider SHOW = DefaultCSSClassProvider.create ("show");
   public static final ICSSClassProvider SMALL = DefaultCSSClassProvider.create ("small");
   public static final ICSSClassProvider SR_ONLY = DefaultCSSClassProvider.create ("sr-only");
+  public static final ICSSClassProvider SR_ONLY_FOCUSABLE = DefaultCSSClassProvider.create ("sr-only-focusable");
   public static final ICSSClassProvider SUCCESS = DefaultCSSClassProvider.create ("success");
   public static final ICSSClassProvider TAB_CONTENT = DefaultCSSClassProvider.create ("tab-content");
   public static final ICSSClassProvider TAB_PANE = DefaultCSSClassProvider.create ("tab-pane");
@@ -663,16 +674,20 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider TABLE_HOVER = DefaultCSSClassProvider.create ("table-hover");
   public static final ICSSClassProvider TABLE_RESPONSIVE = DefaultCSSClassProvider.create ("table-responsive");
   public static final ICSSClassProvider TABLE_STRIPED = DefaultCSSClassProvider.create ("table-striped");
+  public static final ICSSClassProvider TEXT_CAPITALIZE = DefaultCSSClassProvider.create ("text-capitalize");
   public static final ICSSClassProvider TEXT_CENTER = DefaultCSSClassProvider.create ("text-center");
   public static final ICSSClassProvider TEXT_DANGER = DefaultCSSClassProvider.create ("text-danger");
   public static final ICSSClassProvider TEXT_HIDE = DefaultCSSClassProvider.create ("text-hide");
   public static final ICSSClassProvider TEXT_INFO = DefaultCSSClassProvider.create ("text-info");
   public static final ICSSClassProvider TEXT_JUSTIFY = DefaultCSSClassProvider.create ("text-justify");
   public static final ICSSClassProvider TEXT_LEFT = DefaultCSSClassProvider.create ("text-left");
+  public static final ICSSClassProvider TEXT_LOWERCASE = DefaultCSSClassProvider.create ("text-lowercase");
   public static final ICSSClassProvider TEXT_MUTED = DefaultCSSClassProvider.create ("text-muted");
+  public static final ICSSClassProvider TEXT_NOWRAP = DefaultCSSClassProvider.create ("text-nowrap");
   public static final ICSSClassProvider TEXT_PRIMARY = DefaultCSSClassProvider.create ("text-primary");
   public static final ICSSClassProvider TEXT_RIGHT = DefaultCSSClassProvider.create ("text-right");
   public static final ICSSClassProvider TEXT_SUCCESS = DefaultCSSClassProvider.create ("text-success");
+  public static final ICSSClassProvider TEXT_UPPERCASE = DefaultCSSClassProvider.create ("text-uppercase");
   public static final ICSSClassProvider TEXT_WARNING = DefaultCSSClassProvider.create ("text-warning");
   public static final ICSSClassProvider THUMBNAIL = DefaultCSSClassProvider.create ("thumbnail");
   public static final ICSSClassProvider TOOLTIP = DefaultCSSClassProvider.create ("tooltip");
@@ -682,10 +697,25 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider TOP_LEFT = DefaultCSSClassProvider.create ("top-left");
   public static final ICSSClassProvider TOP_RIGHT = DefaultCSSClassProvider.create ("top-right");
   public static final ICSSClassProvider VISIBLE_LG = DefaultCSSClassProvider.create ("visible-lg");
+  public static final ICSSClassProvider VISIBLE_LG_BLOCK = DefaultCSSClassProvider.create ("visible-lg-block");
+  public static final ICSSClassProvider VISIBLE_LG_INLINE = DefaultCSSClassProvider.create ("visible-lg-inline");
+  public static final ICSSClassProvider VISIBLE_LG_INLINE_BLOCK = DefaultCSSClassProvider.create ("visible-lg-inline-block");
   public static final ICSSClassProvider VISIBLE_MD = DefaultCSSClassProvider.create ("visible-md");
+  public static final ICSSClassProvider VISIBLE_MD_BLOCK = DefaultCSSClassProvider.create ("visible-md-block");
+  public static final ICSSClassProvider VISIBLE_MD_INLINE = DefaultCSSClassProvider.create ("visible-md-inline");
+  public static final ICSSClassProvider VISIBLE_MD_INLINE_BLOCK = DefaultCSSClassProvider.create ("visible-md-inline-block");
   public static final ICSSClassProvider VISIBLE_PRINT = DefaultCSSClassProvider.create ("visible-print");
+  public static final ICSSClassProvider VISIBLE_PRINT_BLOCK = DefaultCSSClassProvider.create ("visible-print-block");
+  public static final ICSSClassProvider VISIBLE_PRINT_INLINE = DefaultCSSClassProvider.create ("visible-print-inline");
+  public static final ICSSClassProvider VISIBLE_PRINT_INLINE_BLOCK = DefaultCSSClassProvider.create ("visible-print-inline-block");
   public static final ICSSClassProvider VISIBLE_SM = DefaultCSSClassProvider.create ("visible-sm");
+  public static final ICSSClassProvider VISIBLE_SM_BLOCK = DefaultCSSClassProvider.create ("visible-sm-block");
+  public static final ICSSClassProvider VISIBLE_SM_INLINE = DefaultCSSClassProvider.create ("visible-sm-inline");
+  public static final ICSSClassProvider VISIBLE_SM_INLINE_BLOCK = DefaultCSSClassProvider.create ("visible-sm-inline-block");
   public static final ICSSClassProvider VISIBLE_XS = DefaultCSSClassProvider.create ("visible-xs");
+  public static final ICSSClassProvider VISIBLE_XS_BLOCK = DefaultCSSClassProvider.create ("visible-xs-block");
+  public static final ICSSClassProvider VISIBLE_XS_INLINE = DefaultCSSClassProvider.create ("visible-xs-inline");
+  public static final ICSSClassProvider VISIBLE_XS_INLINE_BLOCK = DefaultCSSClassProvider.create ("visible-xs-inline-block");
   public static final ICSSClassProvider WARNING = DefaultCSSClassProvider.create ("warning");
   public static final ICSSClassProvider WELL = DefaultCSSClassProvider.create ("well");
   public static final ICSSClassProvider WELL_LG = DefaultCSSClassProvider.create ("well-lg");
