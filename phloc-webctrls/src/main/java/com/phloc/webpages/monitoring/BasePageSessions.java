@@ -23,6 +23,9 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.joda.time.LocalDateTime;
+
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
@@ -34,6 +37,8 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
@@ -51,9 +56,12 @@ import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.UITextFormatter;
+import com.phloc.webscopes.domain.ISessionWebScope;
 
 /**
  * Show information on all active sessions
@@ -69,6 +77,8 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     MSG_SESSION ("Session Kontext", "Session scope"),
     MSG_SESSION_APPLICATION_SCOPE ("Session Application Kontext ''{0}''", "Session app scope ''{0}''"),
     MSG_ID ("ID", "ID"),
+    MSG_ATTRCOUNT ("Attribute", "Attributes"),
+    MSG_LAST_ACCESS ("Letzter Zugriff", "Last access"),
     MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
     MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
     MSG_SCOPE_IN_DESTRUCTION ("Kontext in Zerstörung?", "Scope in destruction?"),
@@ -162,6 +172,33 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     aTableScope.createItemRow ()
                .setLabel (EText.MSG_SCOPE_ATTRS.getDisplayText (aDisplayLocale))
                .setCtrl (Integer.toString (aScope.getAttributeCount ()));
+
+    if (aScope instanceof ISessionWebScope)
+    {
+      final ISessionWebScope aWebScope = (ISessionWebScope) aScope;
+      final LocalDateTime aCreationDT = PDTFactory.createLocalDateTimeFromMillis (aWebScope.getCreationTime ());
+      final LocalDateTime aLastAccessDT = PDTFactory.createLocalDateTimeFromMillis (aWebScope.getLastAccessedTime ());
+
+      aTableScope.createItemRow ()
+                 .setLabel ("Creation date time")
+                 .setCtrl (PDTToString.getAsString (aCreationDT, aDisplayLocale));
+      aTableScope.createItemRow ()
+                 .setLabel ("Last access date time")
+                 .setCtrl (PDTToString.getAsString (aLastAccessDT, aDisplayLocale));
+      aTableScope.createItemRow ()
+                 .setLabel ("Max inactive interval")
+                 .setCtrl (Long.toString (aWebScope.getMaxInactiveInterval ()) +
+                           " seconds (=" +
+                           Long.toString (aWebScope.getMaxInactiveInterval () / CGlobal.SECONDS_PER_MINUTE) +
+                           " minutes)");
+      aTableScope.createItemRow ()
+                 .setLabel ("Planned expiration date time")
+                 .setCtrl (PDTToString.getAsString (aLastAccessDT.plusSeconds ((int) aWebScope.getMaxInactiveInterval ()),
+                                                    aDisplayLocale));
+      aTableScope.createItemRow ()
+                 .setLabel ("Is new?")
+                 .setCtrl (EWebBasicsText.getYesOrNo (aWebScope.isNew (), aDisplayLocale));
+    }
 
     // All scope attributes
     final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (),
@@ -284,15 +321,28 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     aToolbar.addButton (EText.BUTTON_REFRESH.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
     aNodeList.addChild (aToolbar);
 
-    final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), createActionCol (1)).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
+                                                          new HCCol (60),
+                                                          new HCCol (140),
+                                                          createActionCol (1)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
+                                     EText.MSG_ATTRCOUNT.getDisplayText (aDisplayLocale),
+                                     EText.MSG_LAST_ACCESS.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     for (final ISessionScope aSessionScope : ScopeSessionManager.getInstance ().getAllSessionScopes ())
     {
+      final ISessionWebScope aWebScope = aSessionScope instanceof ISessionWebScope ? (ISessionWebScope) aSessionScope
+                                                                                  : null;
       final ISimpleURL aViewLink = createViewURL (aWPEC, aSessionScope);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aSessionScope.getID ()));
+      aRow.addCell (Integer.toString (aSessionScope.getAttributeCount ()));
+      if (aWebScope != null)
+        aRow.addCell (PDTToString.getAsString (PDTFactory.createLocalDateTimeFromMillis (aWebScope.getLastAccessedTime ()),
+                                               aDisplayLocale));
+      else
+        aRow.addCell ();
 
       // Actions
       aRow.addCell ();
@@ -301,7 +351,13 @@ public class BasePageSessions <WPECTYPE extends IWebPageExecutionContext> extend
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aWPEC, aTable);
-    aDataTables.getOrCreateColumnOfTarget (1).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
+    aDataTables.getOrCreateColumnOfTarget (1)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableInteger (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (2)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableDateTime (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (3).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
