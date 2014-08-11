@@ -31,7 +31,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 
 /**
  * Contains some global texts.
- * 
+ *
  * @author Philip Helger
  */
 @Translatable
@@ -104,6 +104,7 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
   MSG_BUTTON_SAVE_CLOSE ("Speichern und schließen", "Save and close"),
   MSG_BUTTON_RESET ("Zurücksetzen", "Reset"),
   MSG_BUTTON_CANCEL ("Abbrechen", "Cancel"),
+  MSG_BUTTON_CLOSE ("Schließen", "Close"),
   MSG_BUTTON_SELECT ("Auswählen...", "Select..."),
   MSG_BUTTON_DELETE ("Löschen", "Delete"),
   MSG_BUTTON_EDIT ("Bearbeiten", "Edit"),
