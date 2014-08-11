@@ -317,7 +317,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     // Read input parameters and ensure non negativeness
     final int nDisplayStart = Math.max (aRequestScope.getAttributeAsInt (DISPLAY_START, 0), 0);
-    final int nDisplayLength = Math.max (aRequestScope.getAttributeAsInt (DISPLAY_LENGTH, 0), 0);
+    // -1 means show all
+    final int nDisplayLength = Math.max (aRequestScope.getAttributeAsInt (DISPLAY_LENGTH, 0), -1);
     final int nColumns = Math.max (aRequestScope.getAttributeAsInt (COLUMNS, 0), 0);
     final String sSearch = aRequestScope.getAttributeAsString (SEARCH);
     final boolean bRegEx = aRequestScope.getAttributeAsBoolean (REGEX, false);
