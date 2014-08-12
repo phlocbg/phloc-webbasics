@@ -32,6 +32,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.html.HCSpan;
@@ -42,7 +43,7 @@ import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 
-public class BootstrapTooltip
+public class BootstrapTooltip implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_ANIMATION = true;
   public static final boolean DEFAULT_HTML = false;
@@ -308,57 +309,65 @@ public class BootstrapTooltip
         aOptions.add ("delay", new JSAssocArray ().add ("show", m_nShowDelay).add ("hide", m_nHideDelay));
     }
     if (m_aContainer != null)
-      aOptions.add ("container", m_aContainer.getJSCode ());
+      aOptions.add ("container", m_aContainer.getExpression ());
     return aOptions;
+  }
+
+  @Nonnull
+  public JSInvocation jsInvoke ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip");
   }
 
   @Nonnull
   public JSInvocation jsAttach ()
   {
-    return m_aSelector.invoke ().invoke ("tooltip").arg (getJSOptions ());
+    return jsInvoke ().arg (getJSOptions ());
   }
 
   @Nonnull
   public JSInvocation jsShow ()
   {
-    return m_aSelector.invoke ().invoke ("tooltip").arg ("show");
+    return jsInvoke ().arg ("show");
   }
 
   @Nonnull
   public JSInvocation jsHide ()
   {
-    return m_aSelector.invoke ().invoke ("tooltip").arg ("hide");
+    return jsInvoke ().arg ("hide");
   }
 
   @Nonnull
   public JSInvocation jsToggle ()
   {
-    return m_aSelector.invoke ().invoke ("tooltip").arg ("toggle");
+    return jsInvoke ().arg ("toggle");
   }
 
   @Nonnull
   public JSInvocation jsDestroy ()
   {
-    return m_aSelector.invoke ().invoke ("tooltip").arg ("destroy");
+    return jsInvoke ().arg ("destroy");
+  }
+
+  @Nullable
+  public IHCNode build ()
+  {
+    return new HCScriptOnDocumentReady (jsAttach ());
   }
 
   @Nonnull
   public static IHCNode createSimpleTooltip (@Nonnull final String sTitle)
   {
-    final HCSpan aSpan = new HCSpan ();
-    aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
+    final HCSpan aSpan = new HCSpan ().addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
     final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (aSpan)).setTitle (sTitle);
-    final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
-    return HCNodeList.create (aSpan, aScript);
+    return new HCNodeList ().addChild (aSpan).addChild (aTooltip);
   }
 
   @Nonnull
   public static IHCNode createSimpleTooltip (@Nonnull final IHCNode aTitle)
   {
-    final HCSpan aSpan = new HCSpan ();
-    aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
+    final HCSpan aSpan = new HCSpan ().addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
     final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (aSpan)).setTitle (aTitle);
-    final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
-    return HCNodeList.create (aSpan, aScript);
+    return new HCNodeList ().addChild (aSpan).addChild (aTooltip);
   }
 }
