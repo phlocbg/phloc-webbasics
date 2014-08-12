@@ -18,14 +18,16 @@
 package com.phloc.bootstrap3.panel;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCDiv;
 
 /**
  * Wrapper for a Bootstrap3 panel.
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapPanel extends AbstractHCDiv <BootstrapPanel>
@@ -45,8 +47,7 @@ public class BootstrapPanel extends AbstractHCDiv <BootstrapPanel>
    */
   public BootstrapPanel (@Nonnull final EBootstrapPanelType eType)
   {
-    if (eType == null)
-      throw new NullPointerException ("Type");
+    ValueEnforcer.notNull (eType, "Type");
 
     addClasses (CBootstrapCSS.PANEL, eType);
     m_eType = eType;
@@ -75,6 +76,12 @@ public class BootstrapPanel extends AbstractHCDiv <BootstrapPanel>
     return m_aHeader;
   }
 
+  @Nullable
+  public HCDiv getHeader ()
+  {
+    return m_aHeader;
+  }
+
   @Nonnull
   public HCDiv getBody ()
   {
@@ -94,6 +101,12 @@ public class BootstrapPanel extends AbstractHCDiv <BootstrapPanel>
       m_aFooter = new HCDiv ().addClass (CBootstrapCSS.PANEL_FOOTER);
       addChild (m_aFooter);
     }
+    return m_aFooter;
+  }
+
+  @Nullable
+  public HCDiv getFooter ()
+  {
     return m_aFooter;
   }
 }
