@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCElement;
 
@@ -71,15 +72,13 @@ public final class BootstrapGridSpec implements Serializable
 
   public void applyTo (@Nonnull final IHCElement <?> aElement)
   {
-    if (aElement == null)
-      throw new NullPointerException ("element");
+    ValueEnforcer.notNull (aElement, "Element");
     aElement.addClasses (m_eXS, m_eSM, m_eMD, m_eLG);
   }
 
   public void applyOffsetTo (@Nonnull final IHCElement <?> aElement)
   {
-    if (aElement == null)
-      throw new NullPointerException ("element");
+    ValueEnforcer.notNull (aElement, "Element");
     aElement.addClasses (m_eXS == null ? null : m_eXS.getCSSClassOffset (),
                          m_eSM == null ? null : m_eSM.getCSSClassOffset (),
                          m_eMD == null ? null : m_eMD.getCSSClassOffset (),
@@ -88,8 +87,7 @@ public final class BootstrapGridSpec implements Serializable
 
   public void applyPullTo (@Nonnull final IHCElement <?> aElement)
   {
-    if (aElement == null)
-      throw new NullPointerException ("element");
+    ValueEnforcer.notNull (aElement, "Element");
     aElement.addClasses (m_eXS == null ? null : m_eXS.getCSSClassPull (),
                          m_eSM == null ? null : m_eSM.getCSSClassPull (),
                          m_eMD == null ? null : m_eMD.getCSSClassPull (),
@@ -98,8 +96,7 @@ public final class BootstrapGridSpec implements Serializable
 
   public void applyPushTo (@Nonnull final IHCElement <?> aElement)
   {
-    if (aElement == null)
-      throw new NullPointerException ("element");
+    ValueEnforcer.notNull (aElement, "Element");
     aElement.addClasses (m_eXS == null ? null : m_eXS.getCSSClassPush (),
                          m_eSM == null ? null : m_eSM.getCSSClassPush (),
                          m_eMD == null ? null : m_eMD.getCSSClassPush (),

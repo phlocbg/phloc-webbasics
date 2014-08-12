@@ -22,13 +22,14 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.base.BootstrapCloseIcon;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
  * Bootstrap alert box
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends AbstractHCDiv <THISTYPE>
@@ -54,9 +55,7 @@ public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrap
   @Nonnull
   public THISTYPE setType (@Nonnull final EBootstrapAlertType eType)
   {
-    if (eType == null)
-      throw new NullPointerException ("type");
-    m_eType = eType;
+    m_eType = ValueEnforcer.notNull (eType, "Type");
     return thisAsT ();
   }
 

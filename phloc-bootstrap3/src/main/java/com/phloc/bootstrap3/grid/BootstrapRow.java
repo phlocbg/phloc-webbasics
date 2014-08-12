@@ -22,12 +22,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCDiv;
 
 /**
  * Defines a Bootstrap row that contains columns.
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
@@ -61,8 +62,7 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   @Nonnull
   public HCDiv createColumn (@Nonnull final BootstrapGridSpec aGridSpec)
   {
-    if (aGridSpec == null)
-      throw new NullPointerException ("GridSpec");
+    ValueEnforcer.notNull (aGridSpec, "GridSpec");
 
     final HCDiv aDiv = addAndReturnChild (new HCDiv ());
     aGridSpec.applyTo (aDiv);

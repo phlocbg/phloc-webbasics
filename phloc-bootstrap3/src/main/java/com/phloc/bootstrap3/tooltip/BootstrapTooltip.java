@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.EBootstrapIcon;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
@@ -66,8 +67,7 @@ public class BootstrapTooltip
 
   public BootstrapTooltip (@Nonnull final IJQuerySelector aSelector)
   {
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
+    ValueEnforcer.notNull (aSelector, "Selector");
     m_aSelector = aSelector;
   }
 
@@ -115,8 +115,7 @@ public class BootstrapTooltip
   @Nonnull
   public BootstrapTooltip setPlacement (@Nonnull final EBootstrapTooltipPosition ePosition, final boolean bAutoAlign)
   {
-    if (ePosition == null)
-      throw new NullPointerException ("Position");
+    ValueEnforcer.notNull (ePosition, "Position");
     m_ePlacement = ePosition;
     m_bPlacementAuto = bAutoAlign;
     m_aPlacementFunc = null;
@@ -132,8 +131,7 @@ public class BootstrapTooltip
   @Nonnull
   public BootstrapTooltip setPlacement (@Nonnull final JSAnonymousFunction aFunction)
   {
-    if (aFunction == null)
-      throw new NullPointerException ("Function");
+    ValueEnforcer.notNull (aFunction, "Function");
     m_ePlacement = null;
     m_bPlacementAuto = DEFAULT_PLACEMENT_AUTO;
     m_aPlacementFunc = aFunction;
@@ -257,8 +255,7 @@ public class BootstrapTooltip
   @Nonnull
   public BootstrapTooltip setContainer (@Nonnull final EHTMLElement eContainer)
   {
-    if (eContainer == null)
-      throw new NullPointerException ("container");
+    ValueEnforcer.notNull (eContainer, "Container");
 
     return setContainer (JQuerySelector.element (eContainer));
   }

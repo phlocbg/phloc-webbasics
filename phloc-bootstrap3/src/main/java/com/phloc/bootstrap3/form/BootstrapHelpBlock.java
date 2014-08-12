@@ -21,13 +21,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCSpan;
 
 /**
  * Wrapper for a Bootstrap3 help block.
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
@@ -39,33 +38,7 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 
   /**
    * Create a new element with the passed child text
-   * 
-   * @param aChild
-   *        The child text provider to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapHelpBlock create (@Nullable final IPredefinedLocaleTextProvider aChild)
-  {
-    return new BootstrapHelpBlock ().addChild (aChild);
-  }
-
-  /**
-   * Create a new element with the passed child texts
-   * 
-   * @param aChildren
-   *        The child texts to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapHelpBlock create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
-  {
-    return new BootstrapHelpBlock ().addChildren (aChildren);
-  }
-
-  /**
-   * Create a new element with the passed child text
-   * 
+   *
    * @param sChild
    *        The child to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -78,7 +51,7 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 
   /**
    * Create a new element with the passed child texts
-   * 
+   *
    * @param aChildren
    *        The child texts to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -91,7 +64,7 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 
   /**
    * Create a new element with the passed child node
-   * 
+   *
    * @param aChild
    *        The child node to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -104,7 +77,7 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -117,7 +90,7 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>

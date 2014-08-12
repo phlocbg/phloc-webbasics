@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.base.BootstrapCloseIcon;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -64,8 +65,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
 
   public BootstrapModal (@Nonnull final EBootstrapModalSize eSize)
   {
-    if (eSize == null)
-      throw new NullPointerException ("Size");
+    ValueEnforcer.notNull (eSize, "Size");
     m_sID = GlobalIDFactory.getNewStringID ();
     m_eSize = eSize;
   }
@@ -203,7 +203,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
 
   /**
    * Activates your content as a modal. Accepts an optional options object.
-   * 
+   *
    * @param aBackdrop
    *        Includes a modal-backdrop element. Alternatively, specify static for
    *        a backdrop which doesn't close the modal on click.
@@ -238,7 +238,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
    * Manually toggles a modal. Returns to the caller before the modal has
    * actually been shown or hidden (i.e. before the shown.bs.modal or
    * hidden.bs.modal event occurs).
-   * 
+   *
    * @return JS invocation
    */
   @Nonnull
@@ -250,7 +250,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
   /**
    * Manually opens a modal. Returns to the caller before the modal has actually
    * been shown (i.e. before the shown.bs.modal event occurs).
-   * 
+   *
    * @return JS invocation
    */
   @Nonnull
@@ -262,7 +262,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
   /**
    * Manually hides a modal. Returns to the caller before the modal has actually
    * been hidden (i.e. before the hidden.bs.modal event occurs).
-   * 
+   *
    * @return JS invocation
    */
   @Nonnull

@@ -21,13 +21,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
  * Wrapper for a Bootstrap3 well.
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
@@ -44,8 +44,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    */
   public BootstrapWell (@Nonnull final EBootstrapWellType eType)
   {
-    if (eType == null)
-      throw new NullPointerException ("Type");
+    ValueEnforcer.notNull (eType, "Type");
 
     addClasses (CBootstrapCSS.WELL, eType);
     m_eType = eType;
@@ -59,33 +58,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 
   /**
    * Create a new element with the passed child text
-   * 
-   * @param aChild
-   *        The child text provider to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider aChild)
-  {
-    return new BootstrapWell ().addChild (aChild);
-  }
-
-  /**
-   * Create a new element with the passed child texts
-   * 
-   * @param aChildren
-   *        The child texts to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
-  {
-    return new BootstrapWell ().addChildren (aChildren);
-  }
-
-  /**
-   * Create a new element with the passed child text
-   * 
+   *
    * @param sChild
    *        The child to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -98,7 +71,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 
   /**
    * Create a new element with the passed child texts
-   * 
+   *
    * @param aChildren
    *        The child texts to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -111,7 +84,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 
   /**
    * Create a new element with the passed child node
-   * 
+   *
    * @param aChild
    *        The child node to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -124,7 +97,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>
@@ -137,7 +110,7 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapWell element and never <code>null</code>

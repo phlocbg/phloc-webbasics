@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCLabel;
@@ -44,12 +43,6 @@ public class BootstrapFormGroup
 
   public BootstrapFormGroup ()
   {}
-
-  @Nonnull
-  public final BootstrapFormGroup setLabel (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
-  {
-    return setLabel (aTextProvider.getText ());
-  }
 
   @Nonnull
   public final BootstrapFormGroup setLabel (@Nullable final String sLabel)

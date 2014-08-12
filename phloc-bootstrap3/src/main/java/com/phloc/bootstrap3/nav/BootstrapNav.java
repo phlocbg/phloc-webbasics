@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.dropdown.BootstrapDropdownMenu;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
@@ -35,7 +36,7 @@ import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Navigation items
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapNav extends HCUL
@@ -52,8 +53,7 @@ public class BootstrapNav extends HCUL
 
   public BootstrapNav (@Nonnull final EBootstrapNavType eNavType)
   {
-    if (eNavType == null)
-      throw new NullPointerException ("NavType");
+    ValueEnforcer.notNull (eNavType, "NavType");
 
     addClass (CBootstrapCSS.NAV);
     addClasses (eNavType.getAllCSSClasses ());

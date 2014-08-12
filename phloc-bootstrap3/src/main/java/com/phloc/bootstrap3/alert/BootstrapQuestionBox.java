@@ -20,12 +20,11 @@ package com.phloc.bootstrap3.alert;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 
 /**
  * Bootstrap3 question box
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuestionBox>
@@ -37,35 +36,7 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
 
   /**
    * Create a new element with the passed child text
-   * 
-   * @param aChild
-   *        The child text provider to be appended. May be <code>null</code>
-   * @return The created BootstrapQuestionBox element and never
-   *         <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapQuestionBox create (@Nullable final IPredefinedLocaleTextProvider aChild)
-  {
-    return new BootstrapQuestionBox ().addChild (aChild);
-  }
-
-  /**
-   * Create a new element with the passed child texts
-   * 
-   * @param aChildren
-   *        The child texts to be appended. May be <code>null</code>
-   * @return The created BootstrapQuestionBox element and never
-   *         <code>null</code>
-   */
-  @Nonnull
-  public static BootstrapQuestionBox create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
-  {
-    return new BootstrapQuestionBox ().addChildren (aChildren);
-  }
-
-  /**
-   * Create a new element with the passed child text
-   * 
+   *
    * @param sChild
    *        The child to be appended. May be <code>null</code>
    * @return The created BootstrapQuestionBox element and never
@@ -79,7 +50,7 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
 
   /**
    * Create a new element with the passed child texts
-   * 
+   *
    * @param aChildren
    *        The child texts to be appended. May be <code>null</code>
    * @return The created BootstrapQuestionBox element and never
@@ -93,7 +64,7 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
 
   /**
    * Create a new element with the passed child node
-   * 
+   *
    * @param aChild
    *        The child node to be appended. May be <code>null</code>
    * @return The created BootstrapQuestionBox element and never
@@ -107,7 +78,7 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapQuestionBox element and never
@@ -121,7 +92,7 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
 
   /**
    * Create a new element with the passed child nodes
-   * 
+   *
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
    * @return The created BootstrapQuestionBox element and never

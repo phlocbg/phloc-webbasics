@@ -119,7 +119,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   /**
    * Set the left part of a horizontal form. This implies setting the correct
    * right parts (= 12 - left).
-   * 
+   *
    * @param nLeftParts
    *        The left parts. Must be &ge; 1 and &lt; 12!
    * @return this
@@ -128,15 +128,40 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @OverridingMethodsMustInvokeSuper
   public BootstrapForm setLeft (@Nonnegative final int nLeftParts)
   {
-    ValueEnforcer.isBetweenInclusive (nLeftParts, "LeftParts", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
-    final BootstrapGridSpec aNewLeft = BootstrapGridSpec.create (nLeftParts);
-    final BootstrapGridSpec aNewRight = BootstrapGridSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
+    return setLeft (nLeftParts, nLeftParts, nLeftParts, nLeftParts);
+  }
+
+  /**
+   * Set the left part of a horizontal form. This implies setting the correct
+   * right parts (= 12 - left).
+   *
+   * @param nLeftParts
+   *        The left parts. Must be &ge; 1 and &lt; 12!
+   * @return this
+   */
+  @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public BootstrapForm setLeft (@Nonnegative final int nLeftPartsXS,
+                                @Nonnegative final int nLeftPartsSM,
+                                @Nonnegative final int nLeftPartsMD,
+                                @Nonnegative final int nLeftPartsLG)
+  {
+    ValueEnforcer.isBetweenInclusive (nLeftPartsXS, "LeftPartsXS", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
+    ValueEnforcer.isBetweenInclusive (nLeftPartsSM, "LeftPartsSM", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
+    ValueEnforcer.isBetweenInclusive (nLeftPartsMD, "LeftPartsMD", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
+    ValueEnforcer.isBetweenInclusive (nLeftPartsLG, "LeftPartsLG", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
+
+    final BootstrapGridSpec aNewLeft = BootstrapGridSpec.create (nLeftPartsXS, nLeftPartsSM, nLeftPartsMD, nLeftPartsLG);
+    final BootstrapGridSpec aNewRight = BootstrapGridSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftPartsXS,
+                                                                  CBootstrap.GRID_SYSTEM_MAX - nLeftPartsSM,
+                                                                  CBootstrap.GRID_SYSTEM_MAX - nLeftPartsMD,
+                                                                  CBootstrap.GRID_SYSTEM_MAX - nLeftPartsLG);
     return setSplitting (aNewLeft, aNewRight);
   }
 
   /**
    * Set the left part of a horizontal form.
-   * 
+   *
    * @param aLeft
    *        The left parts. Must not be <code>null</code>.
    * @param aRight
@@ -257,8 +282,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
                                        @Nullable final IHCNode aHelpText,
                                        @Nullable final IErrorList aErrorList)
   {
-    if (aCtrls == null)
-      throw new NullPointerException ("ctrl");
+    ValueEnforcer.notNull (aCtrls, "Ctrls");
 
     final List <IHCControl <?>> aAllCtrls = HCUtils.getAllHCControls (aCtrls);
 
