@@ -25,6 +25,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.audit.AuditUtils;
@@ -50,6 +53,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 {
   public static final ObjectType OT_SYSTEM_MIGRATION_RESULT = new ObjectType ("systemmigrationresult");
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (SystemMigrationManager.class);
   private static final String ELEMENT_SYSTEM_MIGRATION_RESULTS = "systemmigrationresults";
   private static final String ELEMENT_SYSTEM_MIGRATION_RESULT = "systemmigrationresult";
 
@@ -112,7 +116,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
   /**
    * Mark the specified migration as success.
-   *
+   * 
    * @param sMigrationID
    *        The migration ID to be added. May neither be <code>null</code> nor
    *        empty.
@@ -124,7 +128,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
   /**
    * Mark the specified migration as failed.
-   *
+   * 
    * @param sMigrationID
    *        The migration ID to be added. May neither be <code>null</code> nor
    *        empty.
@@ -208,7 +212,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
    * Perform a migration if it was not performed yet. The performed callback may
    * not throw an error or return an error. All migrations executed with this
    * method will be handled as a success only.
-   *
+   * 
    * @param sMigrationID
    *        The migration ID to handle. May neither be <code>null</code> nor
    *        empty.
@@ -233,6 +237,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
       }
       catch (final RuntimeException ex)
       {
+        s_aLogger.error ("Error execution system migration '" + sMigrationID + "'", ex);
         addMigrationResultError (sMigrationID, ex.getClass () + ": " + ex.getMessage ());
       }
     }
@@ -240,7 +245,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
 
   /**
    * Perform a migration if it was not performed yet.
-   *
+   * 
    * @param sMigrationID
    *        The migration ID to handle. May neither be <code>null</code> nor
    *        empty.
@@ -268,6 +273,7 @@ public class SystemMigrationManager extends AbstractSimpleDAO
       }
       catch (final RuntimeException ex)
       {
+        s_aLogger.error ("Error execution system migration '" + sMigrationID + "'", ex);
         addMigrationResultError (sMigrationID, ex.getClass () + ": " + ex.getMessage ());
       }
     }
