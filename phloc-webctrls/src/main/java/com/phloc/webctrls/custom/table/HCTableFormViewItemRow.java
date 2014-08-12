@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
@@ -41,12 +40,6 @@ public class HCTableFormViewItemRow extends HCRow
     super (bHeader);
     m_aLabelCell = addCell ();
     m_aCtrlCell = addCell ();
-  }
-
-  @Nonnull
-  public HCTableFormViewItemRow setLabel (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
-  {
-    return setLabel (aTextProvider.getText ());
   }
 
   @Nonnull
