@@ -105,7 +105,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   /**
    * Success constructor for HC nodes
-   * 
+   *
    * @param aNode
    *        The response HTML node. May be <code>null</code>.
    */
@@ -316,6 +316,12 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   {
     // Special case required
     return new AjaxDefaultResponse (aRequestScope, aNode, aConverter);
+  }
+
+  @Nonnull
+  public static AjaxDefaultResponse createError ()
+  {
+    return createError ((String) null);
   }
 
   @Nonnull
