@@ -30,6 +30,8 @@ import com.phloc.html.hc.IHCElement;
 @Immutable
 public final class BootstrapGridSpec implements Serializable
 {
+  public static final BootstrapGridSpec NONE = new BootstrapGridSpec (null, null, null, null);
+
   private final EBootstrapGridXS m_eXS;
   private final EBootstrapGridSM m_eSM;
   private final EBootstrapGridMD m_eMD;
