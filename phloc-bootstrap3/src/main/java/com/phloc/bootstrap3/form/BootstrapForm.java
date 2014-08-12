@@ -119,7 +119,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   /**
    * Set the left part of a horizontal form. This implies setting the correct
    * right parts (= 12 - left).
-   *
+   * 
    * @param nLeftParts
    *        The left parts. Must be &ge; 1 and &lt; 12!
    * @return this
@@ -134,9 +134,15 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   /**
    * Set the left part of a horizontal form. This implies setting the correct
    * right parts (= 12 - left).
-   *
-   * @param nLeftParts
-   *        The left parts. Must be &ge; 1 and &lt; 12!
+   * 
+   * @param nLeftPartsXS
+   *        The left parts XS. Must be &ge; 1 and &lt; 12!
+   * @param nLeftPartsSM
+   *        The left parts SM. Must be &ge; 1 and &lt; 12!
+   * @param nLeftPartsMD
+   *        The left parts MD. Must be &ge; 1 and &lt; 12!
+   * @param nLeftPartsLG
+   *        The left parts LG. Must be &ge; 1 and &lt; 12!
    * @return this
    */
   @Nonnull
@@ -161,7 +167,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
   /**
    * Set the left part of a horizontal form.
-   *
+   * 
    * @param aLeft
    *        The left parts. Must not be <code>null</code>.
    * @param aRight
