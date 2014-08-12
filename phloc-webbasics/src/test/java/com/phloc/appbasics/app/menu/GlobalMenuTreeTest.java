@@ -31,11 +31,11 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.scopes.mock.ScopeTestRule;
 
 /**
- * Test class for class {@link GlobalMenuTree}
- * 
+ * Test class for class GlobalMenuTree
+ *
  * @author Philip Helger
  */
-@SuppressWarnings ({ "deprecation", "javadoc" })
+@SuppressWarnings ("deprecation")
 public final class GlobalMenuTreeTest
 {
   @Rule
