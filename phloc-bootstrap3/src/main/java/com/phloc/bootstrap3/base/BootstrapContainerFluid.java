@@ -21,14 +21,14 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
- * A responsive fixed width container.
- * 
+ * A full width container, spanning the entire width of your viewport.
+ *
  * @author Philip Helger
  */
-public class BootstrapContainer extends AbstractHCDiv <BootstrapContainer>
+public class BootstrapContainerFluid extends AbstractHCDiv <BootstrapContainerFluid>
 {
-  public BootstrapContainer ()
+  public BootstrapContainerFluid ()
   {
-    addClass (CBootstrapCSS.CONTAINER);
+    addClass (CBootstrapCSS.CONTAINER_FLUID);
   }
 }
