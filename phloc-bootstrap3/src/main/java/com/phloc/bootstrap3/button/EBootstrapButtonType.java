@@ -17,7 +17,6 @@
  */
 package com.phloc.bootstrap3.button;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
@@ -25,11 +24,12 @@ import com.phloc.html.css.ICSSClassProvider;
 
 /**
  * Button type
- * 
+ *
  * @author Philip Helger
  */
 public enum EBootstrapButtonType implements ICSSClassProvider
 {
+  NONE (null),
   DEFAULT (CBootstrapCSS.BTN_DEFAULT),
   PRIMARY (CBootstrapCSS.BTN_PRIMARY),
   SUCCESS (CBootstrapCSS.BTN_SUCCESS),
@@ -40,7 +40,7 @@ public enum EBootstrapButtonType implements ICSSClassProvider
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapButtonType (@Nonnull final ICSSClassProvider aCSSClass)
+  private EBootstrapButtonType (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
@@ -48,6 +48,6 @@ public enum EBootstrapButtonType implements ICSSClassProvider
   @Nullable
   public String getCSSClass ()
   {
-    return m_aCSSClass.getCSSClass ();
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }
