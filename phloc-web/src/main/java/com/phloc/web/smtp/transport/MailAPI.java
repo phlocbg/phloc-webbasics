@@ -59,7 +59,7 @@ import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 /**
  * This class simplifies the task of sending an email.<br>
  * Note: do NOT use directly in pDAF3 - use the ScopedMailAPI instead.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -110,7 +110,7 @@ public final class MailAPI
 
   /**
    * Set a new global failed mail queue. Updates all existing queues.
-   * 
+   *
    * @param aFailedMailQueue
    *        The new failed mail queue to set. May not be <code>null</code>.
    */
@@ -178,7 +178,7 @@ public final class MailAPI
 
   /**
    * Queue a single mail.
-   * 
+   *
    * @param aSMTPSettings
    *        The SMTP settings to be used.
    * @param aMailData
@@ -194,7 +194,7 @@ public final class MailAPI
 
   /**
    * Queue more than one mail.
-   * 
+   *
    * @param aSMTPSettings
    *        The SMTP settings to be used.
    * @param aMailDataList
@@ -240,6 +240,12 @@ public final class MailAPI
     // submit all messages
     for (final IEmailData aEmailData : aMailDataList)
     {
+      if (aEmailData == null)
+      {
+        s_aLogger.error ("Mail data is null! Ignoring this item completely.");
+        continue;
+      }
+
       // queue the mail
       s_aQueuedMailHdl.increment ();
 
@@ -360,7 +366,7 @@ public final class MailAPI
   /**
    * Stop taking new mails, and wait until all mails already in the queue are
    * delivered.
-   * 
+   *
    * @return {@link EChange}
    */
   @Nonnull
@@ -372,7 +378,7 @@ public final class MailAPI
   /**
    * Stop taking new mails, and wait until all mails already in the queue are
    * delivered.
-   * 
+   *
    * @param bStopImmediately
    *        <code>true</code> if all mails currently in the queue should be
    *        removed and put in the failed mail queue. Only the emails currently
