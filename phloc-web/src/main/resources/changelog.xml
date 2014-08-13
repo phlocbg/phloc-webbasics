@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2014-08-13" version="5.5.1" />
+  <entry date="2014-08-13" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed equality issue when serializing and deserializing FailedMailData without an error message</text>
+    </change>
+  </entry>
+  <entry date="2014-08-13" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed potential NPE when queuing an email without MailData</text>
+    </change>
+  </entry>
   <release date="2014-05-21" version="5.5.0" />
   <entry date="2014-05-21" category="tech" action="change">
     <change>

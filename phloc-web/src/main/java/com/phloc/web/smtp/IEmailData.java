@@ -19,6 +19,7 @@ package com.phloc.web.smtp;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,7 +31,7 @@ import com.phloc.commons.email.IEmailAddress;
 /**
  * Contains all possible fields for mail sending.<br>
  * Note: the attribute container may only contain String values!
- * 
+ *
  * @author Philip Helger
  */
 public interface IEmailData extends IReadonlyEmailData, IAttributeContainer
@@ -90,10 +91,16 @@ public interface IEmailData extends IReadonlyEmailData, IAttributeContainer
   IEmailAttachmentList getAttachments ();
 
   /**
+   * @return The number of contained attachments. Always &ge; 0.
+   */
+  @Nonnegative
+  int getAttachmentCount ();
+
+  /**
    * Specify a set of attachments to be send together with the mail. Pass
    * <code>null</code> to indicate that no attachments are desired (this is the
    * default).
-   * 
+   *
    * @param aAttachments
    *        The attachments to be used. May be <code>null</code> or empty.
    * @return this

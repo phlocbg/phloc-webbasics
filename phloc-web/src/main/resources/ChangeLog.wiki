@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>8/13/14</td><td colspan="4">_Release *5.5.1*_</td></tr>
+<tr><td>8/13/14</td><td>fix</td><td>tech</td><td></td><td>Fixed equality issue when serializing and deserializing FailedMailData without an error message</td></tr>
+<tr><td>8/13/14</td><td>fix</td><td>tech</td><td></td><td>Fixed potential NPE when queuing an email without MailData</td></tr>
 <tr border="1"><td>5/21/14</td><td colspan="4">_Release *5.5.0*_</td></tr>
 <tr><td>5/21/14</td><td>change</td><td>tech</td><td></td><td>Prepared for Maven central release</td></tr>
 <tr><td>5/21/14</td><td>update</td><td>tech</td><td></td><td>Updated to javax.mail 1.5.2</td></tr>

@@ -74,15 +74,15 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     eEmailData.setAttribute (ATTR_TYPE, aEmailData.getEmailType ().getID ());
 
     if (aEmailData.getFrom () != null)
-      _writeEmailAddress (eEmailData.appendElement (ELEMENT_FROM), aEmailData.getFrom ());
+      _writeEmailAddress (eEmailData.appendElement (sNamespaceURI, ELEMENT_FROM), aEmailData.getFrom ());
     for (final IEmailAddress aReplyTo : aEmailData.getReplyTo ())
-      _writeEmailAddress (eEmailData.appendElement (ELEMENT_REPLYTO), aReplyTo);
+      _writeEmailAddress (eEmailData.appendElement (sNamespaceURI, ELEMENT_REPLYTO), aReplyTo);
     for (final IEmailAddress aTo : aEmailData.getTo ())
-      _writeEmailAddress (eEmailData.appendElement (ELEMENT_TO), aTo);
+      _writeEmailAddress (eEmailData.appendElement (sNamespaceURI, ELEMENT_TO), aTo);
     for (final IEmailAddress aCc : aEmailData.getCc ())
-      _writeEmailAddress (eEmailData.appendElement (ELEMENT_CC), aCc);
+      _writeEmailAddress (eEmailData.appendElement (sNamespaceURI, ELEMENT_CC), aCc);
     for (final IEmailAddress aBcc : aEmailData.getBcc ())
-      _writeEmailAddress (eEmailData.appendElement (ELEMENT_BCC), aBcc);
+      _writeEmailAddress (eEmailData.appendElement (sNamespaceURI, ELEMENT_BCC), aBcc);
 
     if (aEmailData.getSentDate () != null)
       eEmailData.setAttribute (ELEMENT_SENTDATE,
@@ -93,7 +93,7 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
       eEmailData.setAttribute (ATTR_SUBJECT, aEmailData.getSubject ());
 
     if (aEmailData.getBody () != null)
-      eEmailData.appendElement (ELEMENT_BODY).appendText (aEmailData.getBody ());
+      eEmailData.appendElement (sNamespaceURI, ELEMENT_BODY).appendText (aEmailData.getBody ());
 
     eEmailData.appendChild (MicroTypeConverter.convertToMicroElement (aEmailData.getAttachments (),
                                                                       sNamespaceURI,
@@ -102,7 +102,7 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aEmailData.getAllAttributes ())
                                                                   .entrySet ())
     {
-      final IMicroElement eCustom = eEmailData.appendElement (ELEMENT_CUSTOM);
+      final IMicroElement eCustom = eEmailData.appendElement (sNamespaceURI, ELEMENT_CUSTOM);
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
       eCustom.appendText (String.valueOf (aEntry.getValue ()));
     }
@@ -154,7 +154,7 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     {
       final DateTime aDT = PDTWebDateUtils.getDateTimeFromXSD (sSentDate);
       if (aDT != null)
-        aEmailData.setSentDate (aDT);
+        aEmailData.setSentDate (aDT.withChronology (PDTConfig.getDefaultChronology ()));
     }
 
     aEmailData.setSubject (eEmailData.getAttribute (ATTR_SUBJECT));

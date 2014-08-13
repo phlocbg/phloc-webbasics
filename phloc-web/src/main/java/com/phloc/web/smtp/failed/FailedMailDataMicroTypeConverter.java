@@ -29,6 +29,9 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
+import com.phloc.commons.microdom.utils.MicroUtils;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.datetime.config.PDTConfig;
 import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.ISMTPSettings;
@@ -62,12 +65,16 @@ public final class FailedMailDataMicroTypeConverter implements IMicroTypeConvert
 
     // SMTP settings
     eFailedMail.appendChild (MicroTypeConverter.convertToMicroElement (aFailedMail.getSMTPSettings (),
+                                                                       sNamespaceURI,
                                                                        ELEMENT_SMTPSETTINGS));
 
     // email data
-    eFailedMail.appendChild (MicroTypeConverter.convertToMicroElement (aFailedMail.getEmailData (), ELEMENT_EMAILDATA));
+    eFailedMail.appendChild (MicroTypeConverter.convertToMicroElement (aFailedMail.getEmailData (),
+                                                                       sNamespaceURI,
+                                                                       ELEMENT_EMAILDATA));
 
-    eFailedMail.appendElement (ELEMENT_ERRORMSG).appendText (aFailedMail.getMessageDisplayText ());
+    if (StringHelper.hasText (aFailedMail.getMessageDisplayText ()))
+      eFailedMail.appendElement (sNamespaceURI, ELEMENT_ERRORMSG).appendText (aFailedMail.getMessageDisplayText ());
     return eFailedMail;
   }
 
@@ -106,6 +113,8 @@ public final class FailedMailDataMicroTypeConverter implements IMicroTypeConvert
       if (aOriginalSentDT == null)
         aOriginalSentDT = PDTWebDateUtils.getDateTimeFromW3C (sOriginalSentDT);
     }
+    if (aOriginalSentDT != null)
+      aOriginalSentDT = aOriginalSentDT.withChronology (PDTConfig.getDefaultChronology ());
 
     // SMTP settings
     final IMicroElement eSMTPSettings = eFailedMail.getFirstChildElement (ELEMENT_SMTPSETTINGS);
@@ -121,13 +130,8 @@ public final class FailedMailDataMicroTypeConverter implements IMicroTypeConvert
     final IEmailData aEmailData = MicroTypeConverter.convertToNative (eEmailData, EmailData.class);
 
     // error message
-    final IMicroElement eErrorMessage = eFailedMail.getFirstChildElement (ELEMENT_ERRORMSG);
-    if (eErrorMessage == null)
-    {
-      s_aLogger.error ("Failed to get child element of errormessage!");
-      return null;
-    }
-    final Exception aError = new Exception (eErrorMessage.getTextContent ());
+    final String sErrorMessage = MicroUtils.getChildTextContent (eFailedMail, ELEMENT_ERRORMSG);
+    final Exception aError = StringHelper.hasNoText (sErrorMessage) ? null : new Exception (sErrorMessage);
 
     return new FailedMailData (sID, aErrorDT, aSMTPSettings, aOriginalSentDT, aEmailData, aError);
   }

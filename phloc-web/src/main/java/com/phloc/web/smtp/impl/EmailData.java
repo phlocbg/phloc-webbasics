@@ -46,8 +46,9 @@ import com.phloc.web.smtp.InternetAddressUtils;
 
 /**
  * Default implementation of the {@link IEmailData} interface. Note: the
- * attribute container may only contain String values!
- * 
+ * attribute container may only contain String values, otherwise the
+ * serialization and deserialization will result in different results!
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -408,10 +409,16 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
     return m_aAttachments;
   }
 
+  @Nonnegative
+  public int getAttachmentCount ()
+  {
+    return m_aAttachments == null ? 0 : m_aAttachments.size ();
+  }
+
   @Nonnull
   public final EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
-    if (aAttachments != null && aAttachments.size () > 0)
+    if (aAttachments != null && !aAttachments.isEmpty ())
       m_aAttachments = aAttachments;
     else
       m_aAttachments = null;
@@ -472,7 +479,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   /**
    * Utility method for converting different fields to a single
    * {@link IEmailData}.
-   * 
+   *
    * @param eEmailType
    *        The type of the email.
    * @param aSender
