@@ -20,16 +20,16 @@ package com.phloc.appbasics.app.menu;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.collections.flags.IFlagContainer;
+import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.id.IHasID;
 
 /**
  * Base interface for menu items and menu separators.
- * 
+ *
  * @author Philip Helger
  */
-public interface IMenuObject extends IHasID <String>, IFlagContainer
+public interface IMenuObject extends IHasID <String>, IAttributeContainer
 {
   /**
    * @return An optional filter that toggles visibility.
@@ -39,7 +39,7 @@ public interface IMenuObject extends IHasID <String>, IFlagContainer
 
   /**
    * Set a new display filter for this menu object.
-   * 
+   *
    * @param aDisplayFilter
    *        The new display filter to set. Maybe <code>null</code> to indicate
    *        that no filter is required.

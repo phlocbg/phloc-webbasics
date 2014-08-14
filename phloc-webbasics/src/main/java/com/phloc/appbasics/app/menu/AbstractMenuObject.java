@@ -23,18 +23,18 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.collections.flags.FlagContainer;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Implementation base class for menu items.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
-public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> extends FlagContainer implements IMenuObject
+public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> extends MapBasedAttributeContainer implements IMenuObject
 {
   private final String m_sID;
   private IFilter <IMenuObject> m_aDisplayFilter;
