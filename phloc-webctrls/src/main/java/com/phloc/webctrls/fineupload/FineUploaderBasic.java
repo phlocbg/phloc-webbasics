@@ -41,7 +41,7 @@ import com.phloc.html.js.builder.jquery.JQuery;
 
 /**
  * Wrapper for Fineuploader 3.1.1
- * 
+ *
  * @author Philip Helger
  */
 public class FineUploaderBasic
@@ -114,7 +114,7 @@ public class FineUploaderBasic
    * the [window.console
    * object](https://developer.mozilla.org/en-US/docs/DOM/console.log), the
    * value of this option is irrelevant.
-   * 
+   *
    * @param bDebug
    *        New value
    * @return this
@@ -137,7 +137,7 @@ public class FineUploaderBasic
    * the form uploader, it is part of the form's action attribute value along
    * with all parameters. In the case of the ajax uploader, it is makes up part
    * of the URL of the XHR request (again, along with the parameters).
-   * 
+   *
    * @param aRequestEndpoint
    *        The new action URL. May not be <code>null</code>.
    * @return this
@@ -159,7 +159,7 @@ public class FineUploaderBasic
   /**
    * These parameters are sent with the request to the endpoint specified in the
    * action option.
-   * 
+   *
    * @param aParams
    *        New parameters to be set.
    * @return this
@@ -176,7 +176,7 @@ public class FineUploaderBasic
   /**
    * These parameters are sent with the request to the endpoint specified in the
    * action option.
-   * 
+   *
    * @param aParams
    *        New parameters to be added.
    * @return this
@@ -192,7 +192,7 @@ public class FineUploaderBasic
   /**
    * These parameters are sent with the request to the endpoint specified in the
    * action option.
-   * 
+   *
    * @param sKey
    *        Parameter name
    * @param sValue
@@ -222,7 +222,7 @@ public class FineUploaderBasic
    * (http://blog.fineuploader
    * .com/2012/11/include-params-in-request-body-or-query.html) for more
    * details.
-   * 
+   *
    * @param bRequestParamsInBody
    *        <code>true</code> to put request params in bodx
    * @return this
@@ -244,7 +244,7 @@ public class FineUploaderBasic
   /**
    * Additional headers sent along with the XHR POST request. Note that is
    * option is only relevant to the ajax/XHR uploader.
-   * 
+   *
    * @param aCustomHeaders
    *        Custom headers to be set.
    * @return this
@@ -261,7 +261,7 @@ public class FineUploaderBasic
   /**
    * Additional headers sent along with the XHR POST request. Note that is
    * option is only relevant to the ajax/XHR uploader.
-   * 
+   *
    * @param aCustomHeaders
    *        Custom headers to be added.
    * @return this
@@ -277,7 +277,7 @@ public class FineUploaderBasic
   /**
    * Additional headers sent along with the XHR POST request. Note that is
    * option is only relevant to the ajax/XHR uploader.
-   * 
+   *
    * @param sKey
    *        Custom header name
    * @param sValue
@@ -302,7 +302,7 @@ public class FineUploaderBasic
   /**
    * While form-based uploads will always be multipart requests, this forces XHR
    * uploads to send files using multipart requests as well.
-   * 
+   *
    * @param bForceMultipart
    *        <code>true</code> to force
    * @return this
@@ -322,9 +322,9 @@ public class FineUploaderBasic
 
   /**
    * Specify an element to use as the "select files" button. Note that this may
-   * <b>NOT</b> be a &lt;button>, otherwise it will not work in Internet
+   * <b>NOT</b> be a &lt;button&gt;, otherwise it will not work in Internet
    * Explorer. Please see issue #33 for details.
-   * 
+   *
    * @param sButtonElementID
    *        Element ID of the button
    * @return this
@@ -344,7 +344,7 @@ public class FineUploaderBasic
   /**
    * Set to false puts the uploader into what is best described as 'single-file
    * upload mode'. See the [demo](http://fineuploader.com) for an example.
-   * 
+   *
    * @param bMultiple
    *        <code>true</code> for multiple, <code>false</code> for single
    * @return this
@@ -364,7 +364,7 @@ public class FineUploaderBasic
 
   /**
    * Maximum allowable concurrent uploads.
-   * 
+   *
    * @param nMaxConnections
    *        Maximum number. Must be &gt; 0.
    * @return this
@@ -387,7 +387,7 @@ public class FineUploaderBasic
    * If true, the cancel link does not appear next to files when the form
    * uploader is used. This may be desired since it may not be possible to
    * interrupt a form-based upload in some cases.
-   * 
+   *
    * @param bDisableCancelForFormUploads
    *        disable?
    * @return this
@@ -407,7 +407,7 @@ public class FineUploaderBasic
   /**
    * Set to false if you want to be able to begin uploading selected/queued
    * files later, by calling uploadStoredFiles().
-   * 
+   *
    * @param bAutoUpload
    *        <code>false</code> to disable auto upload
    * @return this
@@ -433,7 +433,7 @@ public class FineUploaderBasic
    * file type, you should use, for example, magic byte file identification on
    * the server side and return {"success": false} in the response if the file
    * type is not on your whitelist.
-   * 
+   *
    * @param aAllowedExtensions
    *        The allowed extensions to be set.
    * @return this
@@ -454,7 +454,7 @@ public class FineUploaderBasic
    * file type, you should use, for example, magic byte file identification on
    * the server side and return {"success": false} in the response if the file
    * type is not on your whitelist.
-   * 
+   *
    * @param aAllowedExtensions
    *        The allowed extensions to be added.
    * @return this
@@ -474,7 +474,7 @@ public class FineUploaderBasic
    * file type, you should use, for example, magic byte file identification on
    * the server side and return {"success": false} in the response if the file
    * type is not on your whitelist.
-   * 
+   *
    * @param sAllowedExtension
    *        The allowed extension to be added. E.g. ("jpeg", "jpg", "gif")
    * @return this
@@ -496,7 +496,7 @@ public class FineUploaderBasic
 
   /**
    * Maximum allowable size, in bytes, for a file.
-   * 
+   *
    * @param nSizeLimit
    *        Size limit. 0 == unlimited
    * @return this
@@ -518,7 +518,7 @@ public class FineUploaderBasic
 
   /**
    * Minimum allowable size, in bytes, for a file.
-   * 
+   *
    * @param nMinSizeLimit
    *        Minimum size limit. 0 == unlimited
    * @return this
@@ -546,7 +546,7 @@ public class FineUploaderBasic
    * not continue until the dialog is dismissed. If this is bothersome, simply
    * override showMessage with a desirable implementation. 3.0 will likely have
    * a showMessage default implementation that does not use the alert function.
-   * 
+   *
    * @param bStopOnFirstInvalidFile
    *        <code>false</code> to not stop
    * @return this
@@ -570,7 +570,7 @@ public class FineUploaderBasic
    * the file as a parameter, using a key name equal to the value of this
    * options. In the case of the form uploader, this is simply the value of the
    * name attribute of the file's associated input element.
-   * 
+   *
    * @param sInputName
    *        The input name
    * @return this
@@ -594,7 +594,7 @@ public class FineUploaderBasic
    * If set to <code>true</code>, any error or non-200 response will prompt the
    * uploader to automatically attempt to upload the file again. Default:
    * <code>false</code>
-   * 
+   *
    * @param bRetryEnableAuto
    *        <code>true</code> or <code>false</code>
    * @return this
@@ -614,7 +614,7 @@ public class FineUploaderBasic
   /**
    * The maximum number of times the uploader will attempt to retry a failed
    * upload. Ignored if retryEnableAuto is <code>false</code>.
-   * 
+   *
    * @param nRetryMaxAutoAttempts
    *        The number of retry attempts.
    * @return this
@@ -634,7 +634,7 @@ public class FineUploaderBasic
   /**
    * The number of seconds the uploader will wait in between automatic retry
    * attempts. Ignored if enableAuto is false.
-   * 
+   *
    * @param nRetryAutoAttemptDelay
    *        Number of seconds
    * @return this
@@ -655,7 +655,7 @@ public class FineUploaderBasic
    * If this property is present in the server response and contains a value of
    * true, the uploader will not allow any further retries of this file (manual
    * or automatic).
-   * 
+   *
    * @param sRetryPreventRetryResponseProperty
    *        property name
    * @return this

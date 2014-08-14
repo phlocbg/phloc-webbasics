@@ -26,7 +26,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 public enum EWebCtrlsCSSPathProvider implements ICSSPathProvider
 {
   WEBCTRLS ("css/webctrls.css"),
-  /** Edit placeholder fix for IE < 10 */
+  /** Edit placeholder fix for IE &lt; 10 */
   PLACEHOLDER_FIX ("placeholder/placeholder-fix.css");
 
   private final String m_sPath;

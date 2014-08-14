@@ -125,7 +125,7 @@ public class BloodhoundOptions implements ICloneable <BloodhoundOptions>
    * Set a datum tokenizer that uses pre-tokenized tokens (e.g. from remote) as
    * contained in the datum. It therefore uses the field
    * {@link BloodhoundDatum#JSON_TOKENS} of each datum.
-   * 
+   *
    * @return this
    */
   @Nonnull
@@ -203,8 +203,11 @@ public class BloodhoundOptions implements ICloneable <BloodhoundOptions>
   }
 
   /**
+   * <pre>
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+   * </pre>
+   * 
    * @return A compare function used to sort matched datums for a given query.
-   * @see "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"
    */
   @Nullable
   public IJSExpression getSorter ()
