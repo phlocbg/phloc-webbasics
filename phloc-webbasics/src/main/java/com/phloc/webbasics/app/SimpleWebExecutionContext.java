@@ -336,7 +336,7 @@ public class SimpleWebExecutionContext implements ISimpleWebExecutionContext
     return UserAgentDatabase.getUserAgent (m_aRequestScope.getRequest ());
   }
 
-  @Nonnull
+  @Nullable
   public BrowserInfo getBrowserInfo ()
   {
     return getUserAgent ().getBrowserInfo ();

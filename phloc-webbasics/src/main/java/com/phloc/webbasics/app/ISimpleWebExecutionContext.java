@@ -59,7 +59,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Use {@link #getAttributeAsString(String)} instead
-   * 
+   *
    * @param sName
    *        Attribute name
    * @return <code>null</code> if no such attribute exists,
@@ -69,7 +69,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Check if a request parameter with the given value is present.
-   * 
+   *
    * @param sName
    *        The name of the request parameter.
    * @param sValue
@@ -84,7 +84,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all attribute values with the same name.
-   * 
+   *
    * @param sName
    *        The name of the attribute to query.
    * @return <code>null</code> if no such attribute value exists
@@ -94,7 +94,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all attribute values with the same name.
-   * 
+   *
    * @param sName
    *        The name of the attribute to query.
    * @param aDefault
@@ -107,7 +107,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
   /**
    * Check if a attribute with the given name is present in the request and has
    * the specified value.
-   * 
+   *
    * @param sName
    *        The name of the attribute to check
    * @param sDesiredValue
@@ -121,7 +121,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
    * Check if a attribute with the given name is present in the request and has
    * the specified value. If no such attribute is present, the passed default
    * value is returned.
-   * 
+   *
    * @param sName
    *        The name of the attribute to check
    * @param sDesiredValue
@@ -138,7 +138,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Get the value of the checkbox of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @param bDefaultValue
@@ -149,7 +149,7 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
 
   /**
    * Get the uploaded file with the specified request parameter.
-   * 
+   *
    * @param sName
    *        The parameter name.
    * @return <code>null</code> if no such uploaded file is present.
@@ -159,6 +159,10 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
   @Nullable
   IFileItem getFileItem (@Nullable String sName);
 
+  /**
+   * @return A cached request param map for this request.
+   */
+  @Nonnull
   IRequestParamMap getRequestParamMap ();
 
   /**
@@ -168,6 +172,13 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
   @Nullable
   String getAction ();
 
+  /**
+   * Check if the specified action is present in the request scope.
+   *
+   * @param sAction
+   *        Action to check.
+   * @return <code>true</code> if <code>getAction().equals (sAction)</code>
+   */
   boolean hasAction (@Nullable String sAction);
 
   /**
@@ -177,30 +188,51 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
   @Nullable
   String getSubAction ();
 
+  /**
+   * Check if the specified sub action is present in the request scope.
+   *
+   * @param sSubAction
+   *        Sub action to check.
+   * @return <code>true</code> if
+   *         <code>getSubAction().equals (sSubAction)</code>
+   */
   boolean hasSubAction (@Nullable String sSubAction);
 
+  /**
+   * Get the user agent object of this HTTP request.
+   *
+   * @return A non-<code>null</code> user agent object.
+   */
+  @Nonnull
   IUserAgent getUserAgent ();
 
+  /**
+   * @return The information about the matching browser or <code>null</code> if
+   *         no known browser was detected.
+   */
+  @Nullable
   BrowserInfo getBrowserInfo ();
 
   /**
    * @return The custom attributes for this execution context. Never
    *         <code>null</code>.
    */
+  @Nonnull
   IAttributeContainer getCustomAttrs ();
 
   /**
    * Get the URL of the specified menu it.
-   * 
+   *
    * @param sMenuItemID
    *        The ID of the menu item to link to. May not be <code>null</code>.
    * @return The non-<code>null</code> URL to the specified menu item.
    */
-  SimpleURL getLinkToMenuItem (String sMenuItemID);
+  @Nonnull
+  SimpleURL getLinkToMenuItem (@Nonnull String sMenuItemID);
 
   /**
    * Get the URL of the specified menu it.
-   * 
+   *
    * @param aParams
    *        The optional request parameters to be used. May be <code>null</code>
    *        or empty.
@@ -209,6 +241,6 @@ public interface ISimpleWebExecutionContext extends IReadonlyAttributeContainer
    * @return The non-<code>null</code> URL to the specified menu item with the
    *         passed parameters.
    */
-  SimpleURL getLinkToMenuItem (String sMenuItemID, @Nullable Map <String, String> aParams);
-
+  @Nonnull
+  SimpleURL getLinkToMenuItem (@Nonnull String sMenuItemID, @Nullable Map <String, String> aParams);
 }
