@@ -43,7 +43,7 @@ public final class MenuView
     aMenuTree.createRootItem (new PageViewExternal <WebPageExecutionContext> (CDemoAppMenuView.MENU_GTC,
                                                                               "GTC",
                                                                               new ClassPathResource ("viewpages/en/gtc.xml")))
-             .addFlag (CDemoAppMenuView.FLAG_FOOTER);
+             .setAttribute (CDemoAppMenuView.FLAG_FOOTER, Boolean.TRUE);
 
     // Set default
     aMenuTree.setDefaultMenuItemID (CDemoAppMenuView.MENU_SITENOTICE);

@@ -79,7 +79,7 @@ public final class RendererView implements ILayoutAreaContentProvider <LayoutExe
     {
       public void run (@Nonnull final IMenuObject aCurrentObject)
       {
-        if (aCurrentObject.containsFlag (CDemoAppMenuView.FLAG_FOOTER))
+        if (aCurrentObject.containsAttribute (CDemoAppMenuView.FLAG_FOOTER))
           m_aFooterObjects.add (aCurrentObject);
       }
     });
@@ -110,7 +110,7 @@ public final class RendererView implements ILayoutAreaContentProvider <LayoutExe
       protected boolean isMenuItemValidToBeDisplayed (@Nonnull final IMenuObject aMenuObj)
       {
         // Don't show items that belong to the footer
-        if (aMenuObj.containsFlag (CDemoAppMenuView.FLAG_FOOTER))
+        if (aMenuObj.containsAttribute (CDemoAppMenuView.FLAG_FOOTER))
           return false;
 
         // Use default code
