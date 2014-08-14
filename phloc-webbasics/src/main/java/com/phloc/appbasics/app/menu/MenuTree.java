@@ -45,7 +45,7 @@ import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Represents a single menu tree
- * 
+ *
  * @author Philip Helger
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
@@ -270,6 +270,28 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
     final IMenuItemPage ret = new MenuItemPage (sID, aNewPage);
     aItem.setData (ret);
     return ret;
+  }
+
+  @Nullable
+  public DefaultTreeItemWithID <String, IMenuObject> getRootItemOfItemWithID (@Nullable final String sMenuItemID)
+  {
+    // Resolve tree item
+    final DefaultTreeItemWithID <String, IMenuObject> aItem = getItemWithID (sMenuItemID);
+    if (aItem == null || aItem.isRootItem ())
+      return null;
+
+    // Find root item of selected item
+    DefaultTreeItemWithID <String, IMenuObject> aCurRootItem = aItem;
+    while (!aCurRootItem.getParent ().isRootItem ())
+      aCurRootItem = aCurRootItem.getParent ();
+    return aCurRootItem;
+  }
+
+  @Nullable
+  public IMenuObject getRootItemDataOfItemWithID (@Nullable final String sMenuItemID)
+  {
+    final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = getRootItemOfItemWithID (sMenuItemID);
+    return aTreeItem == null ? null : aTreeItem.getData ();
   }
 
   @Override

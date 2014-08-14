@@ -17,15 +17,21 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import javax.annotation.Nullable;
+
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.ITreeWithGlobalUniqueID;
 
 /**
  * A combination of a tree and the menu operations
- * 
+ *
  * @author philip
  */
 public interface IMenuTree extends ITreeWithGlobalUniqueID <String, IMenuObject, DefaultTreeItemWithID <String, IMenuObject>>, IMenuOperations
 {
-  /* empty */
+  @Nullable
+  DefaultTreeItemWithID <String, IMenuObject> getRootItemOfItemWithID (@Nullable String sMenuItemID);
+
+  @Nullable
+  IMenuObject getRootItemDataOfItemWithID (@Nullable String sMenuItemID);
 }
