@@ -31,7 +31,7 @@ import com.phloc.commons.xml.CXML;
 
 /**
  * Represents a link in the ATOM feed
- * 
+ *
  * @author Philip Helger
  */
 public final class FeedLink extends AbstractFeedElement
@@ -75,7 +75,7 @@ public final class FeedLink extends AbstractFeedElement
   /**
    * The "href" attribute contains the link's IRI. atom:link elements MUST have
    * an href attribute, whose value MUST be a IRI reference [RFC3987].
-   * 
+   *
    * @return href
    */
   @Nullable
@@ -120,11 +120,11 @@ public final class FeedLink extends AbstractFeedElement
    * containing element. For example, the feed for a site that discusses the
    * performance of the search engine at "http://search.example.com" might
    * contain, as a child of atom:feed:
-   * 
+   *
    * <pre>
-   * <link rel="related" href="http://search.example.com/"/>
+   * &lt;link rel="related" href="http://search.example.com/"/&gt;
    * </pre>
-   * 
+   *
    * An identical link might appear as a child of any atom:entry whose content
    * contains a discussion of that same search engine.</li>
    * <li>The value "self" signifies that the IRI in the value of the href
@@ -137,7 +137,7 @@ public final class FeedLink extends AbstractFeedElement
    * attribute identifies a resource that is the source of the information
    * provided in the containing element.</li>
    * </ol>
-   * 
+   *
    * @return rel
    */
   @Nullable
@@ -158,7 +158,7 @@ public final class FeedLink extends AbstractFeedElement
    * the type attribute does not override the actual media type returned with
    * the representation. Link elements MAY have a type attribute, whose value
    * MUST conform to the syntax of a MIME media type [MIMEREG].
-   * 
+   *
    * @return type
    */
   @Nullable
@@ -178,7 +178,7 @@ public final class FeedLink extends AbstractFeedElement
    * rel="alternate", it implies a translated version of the entry. Link
    * elements MAY have an hreflang attribute, whose value MUST be a language tag
    * [RFC3066].
-   * 
+   *
    * @return href language
    */
   @Nullable
@@ -198,7 +198,7 @@ public final class FeedLink extends AbstractFeedElement
    * as "&amp;amp;" and "&amp;lt;" represent their corresponding characters
    * ("&amp;" and "&lt;", respectively), not markup. Link elements MAY have a
    * title attribute.
-   * 
+   *
    * @return title
    */
   @Nullable
@@ -219,7 +219,7 @@ public final class FeedLink extends AbstractFeedElement
    * dereferenced. Note that the length attribute does not override the actual
    * content length of the representation as reported by the underlying
    * protocol. Link elements MAY have a length attribute.
-   * 
+   *
    * @return length
    */
   public int getLength ()

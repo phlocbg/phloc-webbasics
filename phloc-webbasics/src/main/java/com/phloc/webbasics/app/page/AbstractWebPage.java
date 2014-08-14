@@ -46,7 +46,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Abstract base implementation for {@link IWebPage}.
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext> extends AbstractPage implements IWebPage <WPECTYPE>
@@ -58,7 +58,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
@@ -69,7 +69,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param sName
@@ -83,7 +83,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param sName
@@ -102,7 +102,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param aName
@@ -115,7 +115,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param aName
@@ -211,7 +211,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
   /**
    * Check some pre-requisites. This is called as the very first action on each
    * page view.
-   * 
+   *
    * @param aWPEC
    *        The web page execution context
    * @return Never <code>null</code>.
@@ -234,7 +234,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
   /**
    * Abstract method to be implemented by subclasses, that creates the main page
    * content, without the help icon.
-   * 
+   *
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.
    */
@@ -250,7 +250,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Get the help URL of the current page
-   * 
+   *
    * @param aRequestScope
    *        The request web scope to be used. Required for cookie-less handling.
    *        May not be <code>null</code>.
@@ -272,10 +272,10 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
    * Create the HC node to represent the help icon. This method is only called,
    * if help is available for this page. The created code looks like this by
    * default:<br>
-   * <code>&lt;a href="<i>helpURL</i>" title="Show help for page <i>pageName</i>" target="simplehelpwindow"><br>
-   * &lt;span class="page_help_icon">&lt;/span><br>
-   * &lt;/a></code>
-   * 
+   * <code>&lt;a href="<i>helpURL</i>" title="Show help for page <i>pageName</i>" target="simplehelpwindow"&gt;<br>
+   * &lt;span class="page_help_icon"&gt;&lt;/span&gt;<br>
+   * &lt;/a&gt;</code>
+   *
    * @param aWPEC
    *        The web page execution context
    * @return The created help icon node. May be <code>null</code>.
@@ -297,7 +297,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
 
   /**
    * Check if is help is available for the current execution context
-   * 
+   *
    * @param aWPEC
    *        The web page execution context
    * @return <code>true</code> if help is available, <code>false</code> if not
@@ -311,7 +311,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
   /**
    * Overridable method to attach the help node to the page. This is called as
    * the last action.
-   * 
+   *
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.
    * @param aHelpNode
