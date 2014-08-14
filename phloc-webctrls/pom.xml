@@ -170,7 +170,9 @@
             <exclude>src/main/resources/js/big.*</exclude>
             <exclude>src/main/resources/js/respond.*</exclude>
             <exclude>src/main/resources/js/stacktrace.*</exclude>
+            <exclude>src/main/resources/pdfobject/**</exclude>
             <exclude>src/main/resources/placeholder/**</exclude>
+            <exclude>src/main/resources/swf/**</exclude>
             <exclude>src/main/resources/tiptip/**</exclude>
             <exclude>src/main/resources/typeahead/**</exclude>
           </excludes>
