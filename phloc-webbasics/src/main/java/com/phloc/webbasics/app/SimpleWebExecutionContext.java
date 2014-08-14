@@ -56,7 +56,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This object is instantiated per page view and contains the current request
  * scope, the display locale and a set of custom attributes.
- *
+ * 
  * @author Philip Helger
  */
 @NotThreadSafe
