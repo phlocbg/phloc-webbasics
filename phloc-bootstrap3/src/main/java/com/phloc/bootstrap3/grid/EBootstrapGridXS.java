@@ -26,8 +26,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Bootstrap3 grid columns. Extra small - Phones (<768px)
- * 
+ * Bootstrap3 grid columns. Extra small - Phones (&lt;768px)
+ *
  * @author Philip Helger
  */
 public enum EBootstrapGridXS implements IBootstrapGridElementExtended

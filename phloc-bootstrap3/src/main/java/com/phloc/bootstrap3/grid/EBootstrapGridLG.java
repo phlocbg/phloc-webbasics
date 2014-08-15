@@ -24,8 +24,8 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Bootstrap3 grid columns. Large - Desktops (≥1200px)
- * 
+ * Bootstrap3 grid columns. Large - Desktops (&ge;1200px)
+ *
  * @author Philip Helger
  */
 public enum EBootstrapGridLG implements IBootstrapGridElementExtended
