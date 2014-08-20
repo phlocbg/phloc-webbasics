@@ -29,19 +29,13 @@ import com.phloc.webctrls.custom.IIcon;
 import com.phloc.webctrls.custom.toolbar.AbstractButtonToolbar;
 
 /**
- * Bootstrap3 button toolbar
+ * Bootstrap3 button toolbar. Should only be used to group button groups and not
+ * simple buttons.
  *
  * @author Philip Helger
  */
 public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButtonToolbar>
 {
-  @Deprecated
-  public BootstrapButtonToolbar ()
-  {
-    addClass (CBootstrapCSS.BTN_TOOLBAR);
-    setRole (EHTMLRole.TOOLBAR);
-  }
-
   public BootstrapButtonToolbar (@Nonnull final ILayoutExecutionContext aLEC)
   {
     this (aLEC.getSelfHref ());
@@ -51,6 +45,7 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
   {
     super (aSelfHref);
     addClass (CBootstrapCSS.BTN_TOOLBAR);
+    setRole (EHTMLRole.TOOLBAR);
   }
 
   @Nonnull
