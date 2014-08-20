@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.html.EHTMLRole;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.app.layout.ILayoutExecutionContext;
 import com.phloc.webctrls.custom.IIcon;
@@ -29,7 +30,7 @@ import com.phloc.webctrls.custom.toolbar.AbstractButtonToolbar;
 
 /**
  * Bootstrap3 button toolbar
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButtonToolbar>
@@ -38,6 +39,7 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
   public BootstrapButtonToolbar ()
   {
     addClass (CBootstrapCSS.BTN_TOOLBAR);
+    setRole (EHTMLRole.TOOLBAR);
   }
 
   public BootstrapButtonToolbar (@Nonnull final ILayoutExecutionContext aLEC)
