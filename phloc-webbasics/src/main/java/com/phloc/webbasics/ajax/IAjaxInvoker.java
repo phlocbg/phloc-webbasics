@@ -34,6 +34,16 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  */
 public interface IAjaxInvoker
 {
+  @Nullable
+  IAjaxBeforeExecutionHandler getBeforeExecutionHandler ();
+
+  void setBeforeExecutionHandler (@Nullable IAjaxBeforeExecutionHandler aBeforeExecutionHdl);
+
+  @Nullable
+  IAjaxAfterExecutionHandler getAfterExecutionHandler ();
+
+  void setAfterExecutionHandler (@Nullable IAjaxAfterExecutionHandler aAfterExecutionHdl);
+
   /**
    * @return The milliseconds after which an execution is considered long
    *         running.

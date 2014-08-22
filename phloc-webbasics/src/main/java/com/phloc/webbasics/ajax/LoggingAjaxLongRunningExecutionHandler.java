@@ -12,7 +12,8 @@ public class LoggingAjaxLongRunningExecutionHandler implements IAjaxLongRunningE
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingAjaxLongRunningExecutionHandler.class);
 
-  public void onLongRunningExecution (@Nonnull final String sFunctionName,
+  public void onLongRunningExecution (@Nonnull final IAjaxInvoker aInvoker,
+                                      @Nonnull final String sFunctionName,
                                       @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope,
                                       @Nonnull final IAjaxHandler aHandler,
                                       @Nonnegative final long nExecutionMillis)

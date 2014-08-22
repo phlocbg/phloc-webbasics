@@ -54,6 +54,28 @@ public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjax
     return getGlobalSingleton (GlobalAjaxManager.class);
   }
 
+  @Nullable
+  public IAjaxBeforeExecutionHandler getBeforeExecutionHandler ()
+  {
+    return m_aInvoker.getBeforeExecutionHandler ();
+  }
+
+  public void setBeforeExecutionHandler (@Nullable final IAjaxBeforeExecutionHandler aBeforeExecutionHdl)
+  {
+    m_aInvoker.setBeforeExecutionHandler (aBeforeExecutionHdl);
+  }
+
+  @Nullable
+  public IAjaxAfterExecutionHandler getAfterExecutionHandler ()
+  {
+    return m_aInvoker.getAfterExecutionHandler ();
+  }
+
+  public void setAfterExecutionHandler (@Nullable final IAjaxAfterExecutionHandler aAfterExecutionHdl)
+  {
+    m_aInvoker.setAfterExecutionHandler (aAfterExecutionHdl);
+  }
+
   public long getLongRunningExecutionLimitTime ()
   {
     return m_aInvoker.getLongRunningExecutionLimitTime ();

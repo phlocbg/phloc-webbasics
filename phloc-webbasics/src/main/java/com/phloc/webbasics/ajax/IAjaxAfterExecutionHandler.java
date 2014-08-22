@@ -1,17 +1,16 @@
 package com.phloc.webbasics.ajax;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Callback interface to be used with the {@link IAjaxInvoker} to get notified
- * on long running executions.
+ * after an {@link IAjaxHandler} was invoked.
  *
  * @author Philip Helger
  */
-public interface IAjaxLongRunningExecutionHandler
+public interface IAjaxAfterExecutionHandler
 {
   /**
    * Callback method
@@ -23,13 +22,13 @@ public interface IAjaxLongRunningExecutionHandler
    * @param aRequestWebScope
    *        The request scope of the current invocation
    * @param aAjaxHandler
-   *        The handler that was used
-   * @param nExecutionMillis
-   *        The execution time in milliseconds
+   *        The handler that will be used
+   * @param aAjaxResponse
+   *        The created Ajax response
    */
-  void onLongRunningExecution (@Nonnull IAjaxInvoker aInvoker,
-                               @Nonnull String sFunctionName,
-                               @Nonnull IRequestWebScopeWithoutResponse aRequestWebScope,
-                               @Nonnull IAjaxHandler aAjaxHandler,
-                               @Nonnegative long nExecutionMillis);
+  void onAfterExecution (@Nonnull IAjaxInvoker aInvoker,
+                         @Nonnull String sFunctionName,
+                         @Nonnull IRequestWebScopeWithoutResponse aRequestWebScope,
+                         @Nonnull IAjaxHandler aAjaxHandler,
+                         @Nonnull IAjaxResponse aAjaxResponse);
 }

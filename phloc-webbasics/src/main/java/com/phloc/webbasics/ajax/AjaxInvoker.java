@@ -67,6 +67,10 @@ public class AjaxInvoker implements IAjaxInvoker
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
+  private IAjaxBeforeExecutionHandler m_aBeforeExecutionHdl;
+  @GuardedBy ("m_aRWLock")
+  private IAjaxAfterExecutionHandler m_aAfterExecutionHdl;
+  @GuardedBy ("m_aRWLock")
   private final Map <String, IFactory <? extends IAjaxHandler>> m_aMap = new HashMap <String, IFactory <? extends IAjaxHandler>> ();
   @GuardedBy ("m_aRWLock")
   private long m_nLongRunningExecutionLimitTime = DEFAULT_LONG_RUNNING_EXECUTION_LIMIT_MS;
@@ -81,6 +85,60 @@ public class AjaxInvoker implements IAjaxInvoker
     // All characters allowed should be valid in URLs without masking
     return StringHelper.hasText (sFunctionName) &&
            RegExHelper.stringMatchesPattern ("^[a-zA-Z0-9\\-_]+$", sFunctionName);
+  }
+
+  @Nullable
+  public IAjaxBeforeExecutionHandler getBeforeExecutionHandler ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aBeforeExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public void setBeforeExecutionHandler (@Nullable final IAjaxBeforeExecutionHandler aBeforeExecutionHdl)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aBeforeExecutionHdl = aBeforeExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public IAjaxAfterExecutionHandler getAfterExecutionHandler ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aAfterExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public void setAfterExecutionHandler (@Nullable final IAjaxAfterExecutionHandler aAfterExecutionHdl)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aAfterExecutionHdl = aAfterExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   public long getLongRunningExecutionLimitTime ()
@@ -246,18 +304,42 @@ public class AjaxInvoker implements IAjaxInvoker
     if (aAjaxHandler == null)
       throw new IllegalStateException ("Factory of '" + sFunctionName + "' created null-handler!");
 
+    // Invoke before handler
+    final IAjaxBeforeExecutionHandler aBeforeHdl = getBeforeExecutionHandler ();
+    if (aBeforeHdl != null)
+      try
+      {
+        aBeforeHdl.onBeforeExecution (this, sFunctionName, aRequestWebScope, aAjaxHandler);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Error invoking AJAX before execution callback handler " + aBeforeHdl, t);
+      }
+
     // Register all external resources, prior to handling the main request, as
     // the JS/CSS elements will be contained in the AjaxDefaultResponse in case
     // of success
     aAjaxHandler.registerExternalResources ();
 
     // Main handle request
-    final IAjaxResponse aReturnValue = aAjaxHandler.handleRequest (aRequestWebScope);
-    if (aReturnValue.isFailure ())
+    final IAjaxResponse aAjaxResponse = aAjaxHandler.handleRequest (aRequestWebScope);
+    if (aAjaxResponse.isFailure ())
     {
       // Execution failed
-      s_aLogger.warn ("Invoked AJAX function '" + sFunctionName + "' returned a failure: " + aReturnValue.toString ());
+      s_aLogger.warn ("Invoked AJAX function '" + sFunctionName + "' returned a failure: " + aAjaxResponse.toString ());
     }
+
+    // Invoke after handler
+    final IAjaxAfterExecutionHandler aAfterHdl = getAfterExecutionHandler ();
+    if (aAfterHdl != null)
+      try
+      {
+        aAfterHdl.onAfterExecution (this, sFunctionName, aRequestWebScope, aAjaxHandler, aAjaxResponse);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Error invoking AJAX after execution callback handler " + aAfterHdl, t);
+      }
 
     // Increment statistics after successful call
     s_aStatsFunctionInvoke.increment (sFunctionName);
@@ -269,18 +351,22 @@ public class AjaxInvoker implements IAjaxInvoker
     if (nLimitMS > 0 && nExecutionMillis > nLimitMS)
     {
       // Long running execution
-      final IAjaxLongRunningExecutionHandler aHdl = getLongRunningExecutionHandler ();
-      if (aHdl != null)
+      final IAjaxLongRunningExecutionHandler aLongRunningExecutionHdl = getLongRunningExecutionHandler ();
+      if (aLongRunningExecutionHdl != null)
         try
         {
-          aHdl.onLongRunningExecution (sFunctionName, aRequestWebScope, aAjaxHandler, nExecutionMillis);
+          aLongRunningExecutionHdl.onLongRunningExecution (this,
+                                                           sFunctionName,
+                                                           aRequestWebScope,
+                                                           aAjaxHandler,
+                                                           nExecutionMillis);
         }
         catch (final Throwable t)
         {
-          s_aLogger.error ("Error invoking AJAX long running execution callback handler " + aHdl, t);
+          s_aLogger.error ("Error invoking AJAX long running execution callback handler " + aLongRunningExecutionHdl, t);
         }
     }
-    return aReturnValue;
+    return aAjaxResponse;
   }
 
   @Override
