@@ -265,14 +265,20 @@ public class AjaxInvoker implements IAjaxInvoker
     // Long running AJAX request?
     final long nExecutionMillis = aSW.stopAndGetMillis ();
     s_aStatsFunctionTimer.addTime (sFunctionName, nExecutionMillis);
-
     final long nLimitMS = getLongRunningExecutionLimitTime ();
     if (nLimitMS > 0 && nExecutionMillis > nLimitMS)
     {
       // Long running execution
       final IAjaxLongRunningExecutionHandler aHdl = getLongRunningExecutionHandler ();
       if (aHdl != null)
-        aHdl.onLongRunningExecution (sFunctionName, aAjaxHandler, nExecutionMillis);
+        try
+        {
+          aHdl.onLongRunningExecution (sFunctionName, aRequestWebScope, aAjaxHandler, nExecutionMillis);
+        }
+        catch (final Throwable t)
+        {
+          s_aLogger.error ("Error invoking AJAX long running execution callback handler " + aHdl, t);
+        }
     }
     return aReturnValue;
   }

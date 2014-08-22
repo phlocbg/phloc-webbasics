@@ -6,11 +6,14 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+
 public class LoggingAjaxLongRunningExecutionHandler implements IAjaxLongRunningExecutionHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingAjaxLongRunningExecutionHandler.class);
 
   public void onLongRunningExecution (@Nonnull final String sFunctionName,
+                                      @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope,
                                       @Nonnull final IAjaxHandler aHandler,
                                       @Nonnegative final long nExecutionMillis)
   {

@@ -53,6 +53,15 @@ public interface IAjaxInvoker
 
   void setLongRunningExecutionHandler (@Nullable IAjaxLongRunningExecutionHandler aLongRunningExecutionHdl);
 
+  @Nonnull
+  @ReturnsMutableCopy
+  Map <String, IFactory <? extends IAjaxHandler>> getAllRegisteredHandlers ();
+
+  @Nullable
+  IFactory <? extends IAjaxHandler> getRegisteredHandler (@Nullable String sFunctionName);
+
+  boolean isRegisteredFunction (@Nullable String sFunctionName);
+
   /**
    * Add a handler function that is used as a callback.
    *
@@ -99,15 +108,6 @@ public interface IAjaxInvoker
    *        <code>null</code>.
    */
   void addHandlerFunction (@Nonnull String sFunctionName, @Nonnull IFactory <? extends IAjaxHandler> aFactory);
-
-  @Nonnull
-  @ReturnsMutableCopy
-  Map <String, IFactory <? extends IAjaxHandler>> getAllRegisteredHandlers ();
-
-  @Nullable
-  IFactory <? extends IAjaxHandler> getRegisteredHandler (@Nullable String sFunctionName);
-
-  boolean isRegisteredFunction (@Nullable String sFunctionName);
 
   /**
    * Invoke the specified AJAX function.
