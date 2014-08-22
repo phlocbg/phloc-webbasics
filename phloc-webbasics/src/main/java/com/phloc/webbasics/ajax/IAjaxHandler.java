@@ -22,15 +22,23 @@ import javax.annotation.Nonnull;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Base interface for an AJAX handling function.
- * 
+ * Base interface for a single AJAX function handler.
+ *
  * @author Philip Helger
  */
 public interface IAjaxHandler
 {
   /**
+   * Registers all external resources (CSS or JS files) needed by controls
+   * potentially spawned by an AJAX request of this handler. This method is
+   * called BEFORE {@link #handleRequest(IRequestWebScopeWithoutResponse)} is
+   * invoked!
+   */
+  void registerExternalResources ();
+
+  /**
    * Called to handle a specific request.
-   * 
+   *
    * @param aRequestScope
    *        the request scope values to be used
    * @return the result object. May never be <code>null</code>
@@ -39,10 +47,4 @@ public interface IAjaxHandler
    */
   @Nonnull
   IAjaxResponse handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
-
-  /**
-   * Registers all external resources (CSS or JS files) needed by controls
-   * potentially pawned by an AJAX request of this handler
-   */
-  void registerExternalResources ();
 }

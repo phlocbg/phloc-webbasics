@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -32,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
-import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.factory.FactoryNewInstance;
@@ -49,12 +48,15 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * The default implementation of {@link IAjaxInvoker}.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
 public class AjaxInvoker implements IAjaxInvoker
 {
+  /** Default milliseconds until an implementation is considered long running. */
+  public static final long DEFAULT_LONG_RUNNING_EXECUTION_LIMIT_MS = CGlobal.MILLISECONDS_PER_SECOND;
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (AjaxInvoker.class);
   private static final IStatisticsHandlerCounter s_aStatsGlobalInvoke = StatisticsManager.getCounterHandler (AjaxInvoker.class.getName () +
                                                                                                              "$invocations");
@@ -66,6 +68,10 @@ public class AjaxInvoker implements IAjaxInvoker
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
   private final Map <String, IFactory <? extends IAjaxHandler>> m_aMap = new HashMap <String, IFactory <? extends IAjaxHandler>> ();
+  @GuardedBy ("m_aRWLock")
+  private long m_nLongRunningExecutionLimitTime = DEFAULT_LONG_RUNNING_EXECUTION_LIMIT_MS;
+  @GuardedBy ("m_aRWLock")
+  private IAjaxLongRunningExecutionHandler m_aLongRunningExecutionHdl = new LoggingAjaxLongRunningExecutionHandler ();
 
   public AjaxInvoker ()
   {}
@@ -75,6 +81,59 @@ public class AjaxInvoker implements IAjaxInvoker
     // All characters allowed should be valid in URLs without masking
     return StringHelper.hasText (sFunctionName) &&
            RegExHelper.stringMatchesPattern ("^[a-zA-Z0-9\\-_]+$", sFunctionName);
+  }
+
+  public long getLongRunningExecutionLimitTime ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_nLongRunningExecutionLimitTime;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public void setLongRunningExecutionLimitTime (final long nLongRunningExecutionLimitTime)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_nLongRunningExecutionLimitTime = nLongRunningExecutionLimitTime;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public IAjaxLongRunningExecutionHandler getLongRunningExecutionHandler ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aLongRunningExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public void setLongRunningExecutionHandler (@Nullable final IAjaxLongRunningExecutionHandler aLongRunningExecutionHdl)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aLongRunningExecutionHdl = aLongRunningExecutionHdl;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -119,16 +178,26 @@ public class AjaxInvoker implements IAjaxInvoker
     }
   }
 
-  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
-                                  @Nonnull final Class <? extends IAjaxHandler> aFactory)
+  public void addHandlerFunction (@Nonnull final IAjaxFunctionDeclaration aFunction,
+                                  @Nonnull final Class <? extends IAjaxHandler> aClass)
   {
-    addHandlerFunction (aFunction, FactoryNewInstance.create (aFactory));
+    ValueEnforcer.notNull (aFunction, "Function");
+    ValueEnforcer.notNull (aClass, "Class");
+    addHandlerFunction (aFunction, FactoryNewInstance.create (aClass));
   }
 
-  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+  public void addHandlerFunction (@Nonnull final IAjaxFunctionDeclaration aFunction,
                                   @Nonnull final IFactory <? extends IAjaxHandler> aFactory)
   {
+    ValueEnforcer.notNull (aFunction, "Function");
     addHandlerFunction (aFunction.getName (), aFactory);
+  }
+
+  public void addHandlerFunction (@Nonnull final String sFunctionName,
+                                  @Nonnull final Class <? extends IAjaxHandler> aClass)
+  {
+    ValueEnforcer.notNull (aClass, "Class");
+    addHandlerFunction (sFunctionName, FactoryNewInstance.create (aClass));
   }
 
   public void addHandlerFunction (@Nonnull final String sFunctionName,
@@ -136,8 +205,7 @@ public class AjaxInvoker implements IAjaxInvoker
   {
     if (!isValidFunctionName (sFunctionName))
       throw new IllegalArgumentException ("Invalid function name '" + sFunctionName + "' specified");
-    if (aFactory == null)
-      throw new NullPointerException ("No handler class specified");
+    ValueEnforcer.notNull (aFactory, "Factory");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -154,16 +222,6 @@ public class AjaxInvoker implements IAjaxInvoker
     {
       m_aRWLock.writeLock ().unlock ();
     }
-  }
-
-  @OverrideOnDemand
-  protected void onLongRunningExecution (@Nonnull final String sFunctionName, @Nonnegative final long nExecutionMillis)
-  {
-    s_aLogger.warn ("Finished invoking AJAX function '" +
-                    sFunctionName +
-                    "' which took " +
-                    nExecutionMillis +
-                    " milliseconds (which is too long)");
   }
 
   @Nonnull
@@ -184,17 +242,17 @@ public class AjaxInvoker implements IAjaxInvoker
     s_aStatsGlobalInvoke.increment ();
 
     // create handler instance
-    final IAjaxHandler aHandlerObj = aHandlerFactory.create ();
-    if (aHandlerObj == null)
+    final IAjaxHandler aAjaxHandler = aHandlerFactory.create ();
+    if (aAjaxHandler == null)
       throw new IllegalStateException ("Factory of '" + sFunctionName + "' created null-handler!");
 
     // Register all external resources, prior to handling the main request, as
     // the JS/CSS elements will be contained in the AjaxDefaultResponse in case
     // of success
-    aHandlerObj.registerExternalResources ();
+    aAjaxHandler.registerExternalResources ();
 
     // Main handle request
-    final IAjaxResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
+    final IAjaxResponse aReturnValue = aAjaxHandler.handleRequest (aRequestWebScope);
     if (aReturnValue.isFailure ())
     {
       // Execution failed
@@ -204,17 +262,27 @@ public class AjaxInvoker implements IAjaxInvoker
     // Increment statistics after successful call
     s_aStatsFunctionInvoke.increment (sFunctionName);
 
-    // Extremely long running AJAX request?
+    // Long running AJAX request?
     final long nExecutionMillis = aSW.stopAndGetMillis ();
     s_aStatsFunctionTimer.addTime (sFunctionName, nExecutionMillis);
-    if (nExecutionMillis > CGlobal.MILLISECONDS_PER_SECOND)
-      onLongRunningExecution (sFunctionName, nExecutionMillis);
+
+    final long nLimitMS = getLongRunningExecutionLimitTime ();
+    if (nLimitMS > 0 && nExecutionMillis > nLimitMS)
+    {
+      // Long running execution
+      final IAjaxLongRunningExecutionHandler aHdl = getLongRunningExecutionHandler ();
+      if (aHdl != null)
+        aHdl.onLongRunningExecution (sFunctionName, aAjaxHandler, nExecutionMillis);
+    }
     return aReturnValue;
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
+    return new ToStringGenerator (this).append ("map", m_aMap)
+                                       .append ("longRunningExecutionLimitTime", m_nLongRunningExecutionLimitTime)
+                                       .appendIfNotNull ("longRunningExecutionHdl", m_aLongRunningExecutionHdl)
+                                       .toString ();
   }
 }

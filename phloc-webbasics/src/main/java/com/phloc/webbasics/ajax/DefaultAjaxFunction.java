@@ -37,7 +37,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * @author Philip Helger
  */
 @Immutable
-public class DefaultAjaxFunction extends AbstractAjaxFunction
+public class DefaultAjaxFunction extends AbstractAjaxFunctionDeclaration
 {
   public DefaultAjaxFunction (@Nonnull @Nonempty final String sFunctionName)
   {

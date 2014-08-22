@@ -27,15 +27,35 @@ import com.phloc.commons.factory.IFactory;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Base interface for an Ajax invoker
- * 
+ * Base interface for an Ajax invoker. It has a set of {@link IAjaxHandler}
+ * instances that it can invoke.
+ *
  * @author Philip Helger
  */
 public interface IAjaxInvoker
 {
   /**
+   * @return The milliseconds after which an execution is considered long
+   *         running.
+   */
+  long getLongRunningExecutionLimitTime ();
+
+  /**
+   * Set the milliseconds after which an execution is considered long running.
+   *
+   * @param nLongRunningExecutionLimitTime
+   *        The milliseconds to use. Value &le; 0 are considered "no limit"
+   */
+  void setLongRunningExecutionLimitTime (long nLongRunningExecutionLimitTime);
+
+  @Nullable
+  IAjaxLongRunningExecutionHandler getLongRunningExecutionHandler ();
+
+  void setLongRunningExecutionHandler (@Nullable IAjaxLongRunningExecutionHandler aLongRunningExecutionHdl);
+
+  /**
    * Add a handler function that is used as a callback.
-   * 
+   *
    * @param aFunction
    *        The Ajax function declaration to be invoked. May not be
    *        <code>null</code>.
@@ -43,11 +63,11 @@ public interface IAjaxInvoker
    *        The class to be instantiated each time the function is invoked. May
    *        not be <code>null</code>.
    */
-  void addHandlerFunction (@Nonnull IAjaxFunction aFunction, @Nonnull Class <? extends IAjaxHandler> aClass);
+  void addHandlerFunction (@Nonnull IAjaxFunctionDeclaration aFunction, @Nonnull Class <? extends IAjaxHandler> aClass);
 
   /**
    * Add a handler function that is used as a callback.
-   * 
+   *
    * @param aFunction
    *        The Ajax function declaration to be invoked. May not be
    *        <code>null</code>.
@@ -55,11 +75,23 @@ public interface IAjaxInvoker
    *        The factory creating the respective handler function. May not be
    *        <code>null</code>.
    */
-  void addHandlerFunction (@Nonnull IAjaxFunction aFunction, @Nonnull IFactory <? extends IAjaxHandler> aFactory);
+  void addHandlerFunction (@Nonnull IAjaxFunctionDeclaration aFunction,
+                           @Nonnull IFactory <? extends IAjaxHandler> aFactory);
 
   /**
    * Add a handler function that is used as a callback.
-   * 
+   *
+   * @param sFunctionName
+   *        Name AJAX function to be invoked. May not be <code>null</code>.
+   * @param aClass
+   *        The class to be instantiated each time the function is invoked. May
+   *        not be <code>null</code>.
+   */
+  void addHandlerFunction (@Nonnull String sFunctionName, @Nonnull Class <? extends IAjaxHandler> aClass);
+
+  /**
+   * Add a handler function that is used as a callback.
+   *
    * @param sFunctionName
    *        Name AJAX function to be invoked. May not be <code>null</code>.
    * @param aFactory
@@ -79,7 +111,7 @@ public interface IAjaxInvoker
 
   /**
    * Invoke the specified AJAX function.
-   * 
+   *
    * @param sFunctionName
    *        the alias of the AJAX function to invoke. May not be
    *        <code>null</code>.

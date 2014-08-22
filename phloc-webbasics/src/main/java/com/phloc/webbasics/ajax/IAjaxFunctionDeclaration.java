@@ -32,7 +32,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public interface IAjaxFunction extends IHasName
+public interface IAjaxFunctionDeclaration extends IHasName
 {
   /**
    * @param aRequestScope

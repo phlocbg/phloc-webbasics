@@ -27,7 +27,7 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
 {
   /**
    * Create the layout execution context
-   * 
+   *
    * @param aRequestScope
    *        The request scope to use. Never <code>null</code>.
    * @return Never <code>null</code>.
@@ -37,9 +37,9 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
 
   /**
    * This method must be overridden by every handler
-   * 
+   *
    * @param aLEC
-   *        The lyout execution context. Never <code>null</code>.
+   *        The layout execution context. Never <code>null</code>.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
    */
@@ -52,7 +52,7 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
   {
     final LECTYPE aLEC = createLayoutExecutionContext (aRequestScope);
     if (aLEC == null)
-      throw new IllegalStateException ("Failed to create layout execution context!");
+      throw new IllegalStateException ("Failed to create layout execution context for request scope " + aRequestScope);
     return mainHandleRequest (aLEC);
   }
 }

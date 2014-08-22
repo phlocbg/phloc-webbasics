@@ -25,11 +25,10 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json2.IJson;
-import com.phloc.json2.serialize.JsonWriter;
 
 /**
  * A simple AJAX response, based on an {@link IJson} value.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -63,7 +62,7 @@ public class AjaxSimpleResponse implements IAjaxResponse
   @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
-    return m_aValue == null ? "" : JsonWriter.getAsString (m_aValue);
+    return m_aValue == null ? "" : m_aValue.getAsString ();
   }
 
   @Override

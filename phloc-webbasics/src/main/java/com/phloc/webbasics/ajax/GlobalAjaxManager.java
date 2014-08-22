@@ -32,7 +32,7 @@ import com.phloc.webscopes.singleton.GlobalWebSingleton;
 
 /**
  * A global AJAX manager.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -54,6 +54,27 @@ public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjax
     return getGlobalSingleton (GlobalAjaxManager.class);
   }
 
+  public long getLongRunningExecutionLimitTime ()
+  {
+    return m_aInvoker.getLongRunningExecutionLimitTime ();
+  }
+
+  public void setLongRunningExecutionLimitTime (final long nLongRunningExecutionLimitTime)
+  {
+    m_aInvoker.setLongRunningExecutionLimitTime (nLongRunningExecutionLimitTime);
+  }
+
+  @Nullable
+  public IAjaxLongRunningExecutionHandler getLongRunningExecutionHandler ()
+  {
+    return m_aInvoker.getLongRunningExecutionHandler ();
+  }
+
+  public void setLongRunningExecutionHandler (@Nullable final IAjaxLongRunningExecutionHandler aLongRunningExecutionHdl)
+  {
+    m_aInvoker.setLongRunningExecutionHandler (aLongRunningExecutionHdl);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, IFactory <? extends IAjaxHandler>> getAllRegisteredHandlers ()
@@ -72,16 +93,22 @@ public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjax
     return m_aInvoker.isRegisteredFunction (sFunctionName);
   }
 
-  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+  public void addHandlerFunction (@Nonnull final IAjaxFunctionDeclaration aFunction,
                                   @Nonnull final Class <? extends IAjaxHandler> aClass)
   {
     m_aInvoker.addHandlerFunction (aFunction, aClass);
   }
 
-  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+  public void addHandlerFunction (@Nonnull final IAjaxFunctionDeclaration aFunction,
                                   @Nonnull final IFactory <? extends IAjaxHandler> aFactory)
   {
     m_aInvoker.addHandlerFunction (aFunction, aFactory);
+  }
+
+  public void addHandlerFunction (@Nonnull final String sFunctionName,
+                                  @Nonnull final Class <? extends IAjaxHandler> aClass)
+  {
+    m_aInvoker.addHandlerFunction (sFunctionName, aClass);
   }
 
   public void addHandlerFunction (@Nonnull final String sFunctionName,

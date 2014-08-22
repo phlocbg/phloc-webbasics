@@ -24,16 +24,16 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Abstract base implementation of {@link IAjaxFunction}
+ * Abstract base implementation of {@link IAjaxFunctionDeclaration}
  *
  * @author Philip Helger
  */
 @Immutable
-public abstract class AbstractAjaxFunction implements IAjaxFunction
+public abstract class AbstractAjaxFunctionDeclaration implements IAjaxFunctionDeclaration
 {
   private final String m_sFunctionName;
 
-  public AbstractAjaxFunction (@Nonnull @Nonempty final String sFunctionName)
+  public AbstractAjaxFunctionDeclaration (@Nonnull @Nonempty final String sFunctionName)
   {
     if (!AjaxInvoker.isValidFunctionName (sFunctionName))
       throw new IllegalArgumentException ("functionName");
