@@ -68,10 +68,12 @@ import com.phloc.webpages.EWebPageText;
 /**
  * Show system migration status.
  * 
- * @author Philip Helger
+ * @author Philip Helper, Boris Gregorcic
  */
 public class BasePageSystemMigrations <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
 {
+  private static final long serialVersionUID = -2114567848428370062L;
+
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
