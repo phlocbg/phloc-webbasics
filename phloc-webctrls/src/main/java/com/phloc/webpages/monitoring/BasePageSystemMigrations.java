@@ -67,7 +67,7 @@ import com.phloc.webpages.EWebPageText;
 
 /**
  * Show system migration status.
- *
+ * 
  * @author Philip Helger
  */
 public class BasePageSystemMigrations <WPECTYPE extends IWebPageExecutionContext> extends AbstractWebPageExt <WPECTYPE>
@@ -96,7 +96,7 @@ public class BasePageSystemMigrations <WPECTYPE extends IWebPageExecutionContext
     }
   }
 
-  private final SystemMigrationManager m_aSystemMigrationMgr;
+  private transient final SystemMigrationManager m_aSystemMigrationMgr;
 
   public BasePageSystemMigrations (@Nonnull @Nonempty final String sID,
                                    @Nonnull final SystemMigrationManager aSystemMigrationMgr)
