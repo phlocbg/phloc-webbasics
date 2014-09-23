@@ -160,7 +160,7 @@ public final class RequestHelper
   {
     ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
-    final String sRequestURI = getRequestURI (aHttpRequest);
+    final String sRequestURI = URLUtils.urlDecode (getRequestURI (aHttpRequest));
     if (StringHelper.hasNoText (sRequestURI))
     {
       // I just want to to know whether we get null or ""
@@ -169,6 +169,7 @@ public final class RequestHelper
     }
 
     final String sContextPath = aHttpRequest.getContextPath ();
+
     if (!sRequestURI.startsWith (sContextPath))
       return sRequestURI;
 

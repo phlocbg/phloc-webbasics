@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2014-09-23" version="5.5.2" />
+  <entry date="2014-09-23" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed determining path inside servlet context when servlet context contains blank</text>
+    </change>
+  </entry>
   <release date="2014-08-13" version="5.5.1" />
   <entry date="2014-08-13" category="tech" action="fix">
     <change>

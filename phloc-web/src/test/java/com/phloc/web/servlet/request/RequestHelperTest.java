@@ -29,7 +29,7 @@ import com.phloc.web.mock.MockServletContext;
 /**
  * Test class for class {@link RequestHelper}.
  * 
- * @author Philip Helger
+ * @author Philip Helger, Boris Gregorcic
  */
 public final class RequestHelperTest
 {
@@ -48,5 +48,15 @@ public final class RequestHelperTest
   {
     assertEquals ("http://server:517/context/servlet/index.xyz?x=1",
                   RequestHelper.getFullServerNameAndPath ("http", "server", 517, "/context/servlet/index.xyz", "x=1"));
+  }
+
+  @Test
+  public void testGetPathWithinServletContext ()
+  {
+    final String sContext = "/My App";
+    final MockHttpServletRequest aRequest = new MockHttpServletRequest ();
+    aRequest.setContextPath (sContext);
+    aRequest.setRequestURI ("/My%20App/dms/foobar");
+    assertEquals ("/dms/foobar", RequestHelper.getPathWithinServletContext (aRequest));
   }
 }
