@@ -50,7 +50,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
  * 
- * @author Philip Helger
+ * @author Philip Helger, Boris Gregorcic
  */
 @Immutable
 public final class RequestHelper
@@ -160,7 +160,7 @@ public final class RequestHelper
   {
     ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
-    final String sRequestURI = URLUtils.urlDecode (getRequestURI (aHttpRequest));
+    final String sRequestURI = getRequestURI (aHttpRequest);
     if (StringHelper.hasNoText (sRequestURI))
     {
       // I just want to to know whether we get null or ""
@@ -169,13 +169,53 @@ public final class RequestHelper
     }
 
     final String sContextPath = aHttpRequest.getContextPath ();
-
-    if (!sRequestURI.startsWith (sContextPath))
+    final String sPath = getWithoutParentPath (sContextPath, sRequestURI);
+    if (sPath == null)
       return sRequestURI;
 
     // Normal case: URI contains context path.
-    final String sPath = sRequestURI.substring (sContextPath.length ());
     return sPath.length () > 0 ? sPath : "/";
+  }
+
+  /**
+   * Checks if the passed parent path is an actual parent path of the passed URL
+   * path. That is it checks if URLPath starts with ParentPath. In this check,
+   * the URL path is decoded to also properly match requests where e.g. spaces
+   * are contained.
+   * 
+   * @param sParentURLPath
+   *        The URL base path, must not be URLencoded
+   * @param sURLPath
+   *        The full URL path, must be URLEncoded
+   * @return the URL path (still encoded in the same way as passed) where the
+   *         parent path has been trimmed (matching the decoded URL path), or
+   *         <code>null</code> if the URL path does not start with that parent
+   *         path
+   */
+  @Nullable
+  public static String getWithoutParentPath (final String sParentURLPath, final String sURLPath)
+  {
+    if (StringHelper.hasNoText (sParentURLPath) || StringHelper.hasNoText (sURLPath))
+    {
+      return null;
+    }
+    final boolean bDelimiterAdd = !StringHelper.endsWith (sParentURLPath, '/');
+    final String sParentPathToUse = sParentURLPath + (bDelimiterAdd ? "/" : "");
+    final String sDecodedURLPath = URLUtils.urlDecode (sURLPath);
+    if (StringHelper.startsWith (sDecodedURLPath, sParentPathToUse))
+    {
+      // go only for the slashes to determine trailing part, as the encoding and
+      // decoding can never reproduces without loosing information!
+      final int nParentEnd = StringHelper.getOccurrenceCount (sParentPathToUse, '/');
+      String sPath = sURLPath;
+      // TODO BG: extract to phloc-commons
+      for (int i = 0; i < nParentEnd; i++)
+      {
+        sPath = StringHelper.getFromFirstExcl (sPath, '/');
+      }
+      return (bDelimiterAdd ? "/" : "") + sPath;
+    }
+    return null;
   }
 
   /**

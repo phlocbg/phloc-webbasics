@@ -58,5 +58,15 @@ public final class RequestHelperTest
     aRequest.setContextPath (sContext);
     aRequest.setRequestURI ("/My%20App/dms/foobar");
     assertEquals ("/dms/foobar", RequestHelper.getPathWithinServletContext (aRequest));
+    aRequest.setRequestURI ("/My%20App/dms/foo+bar");
+    assertEquals ("/dms/foo+bar", RequestHelper.getPathWithinServletContext (aRequest));
+  }
+
+  @Test
+  public void testGetWithoutParentPath ()
+  {
+    final String sParent = "/My App/";
+    final String sPath = "/My%20App/foo+bar/s%20";
+    assertEquals ("foo+bar/s%20", RequestHelper.getWithoutParentPath (sParent, sPath));
   }
 }
