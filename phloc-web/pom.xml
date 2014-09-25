@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-web</artifactId>
-  <version>5.5.3</version>
+  <version>5.5.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-web</name>
   <description>Library with basic web functionality</description>
@@ -42,9 +42,9 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-web-5.5.3</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-web-5.5.3</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-web-5.5.3</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-web</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-web</developerConnection>
   </scm>
 
   <organization>
