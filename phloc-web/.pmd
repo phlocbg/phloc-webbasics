@@ -2,6 +2,15 @@
 <pmd>
     <useProjectRuleSet>false</useProjectRuleSet>
     <ruleSetFile>.ruleset</ruleSetFile>
+    <excludePatterns>
+        <excludePattern>**/*.xml</excludePattern>
+        <excludePattern>.*/target/.*</excludePattern>
+        <excludePattern>.*/registry/.*</excludePattern>
+    </excludePatterns>
+    <includePatterns>
+        <includePattern>**/*.java</includePattern>
+        <includePattern>**/*.js</includePattern>
+    </includePatterns>
     <rules>
         <rule>
             <name>DuplicateImports</name>
@@ -172,14 +181,6 @@
             <ruleset>Comments</ruleset>
         </rule>
         <rule>
-            <name>UseConcatOnce</name>
-            <ruleset>XPath in XSL</ruleset>
-        </rule>
-        <rule>
-            <name>AvoidAxisNavigation</name>
-            <ruleset>XPath in XSL</ruleset>
-        </rule>
-        <rule>
             <name>UseProperClassLoader</name>
             <ruleset>J2EE</ruleset>
         </rule>
@@ -238,46 +239,6 @@
         <rule>
             <name>MissingSerialVersionUID</name>
             <ruleset>JavaBeans</ruleset>
-        </rule>
-        <rule>
-            <name>NoLongScripts</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoScriptlets</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoInlineStyleInformation</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoClassAttribute</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoJspForward</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>IframeMissingSrcAttribute</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoHtmlComments</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>DuplicateJspImports</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>JspEncoding</name>
-            <ruleset>Basic JSP</ruleset>
-        </rule>
-        <rule>
-            <name>NoInlineScript</name>
-            <ruleset>Basic JSP</ruleset>
         </rule>
         <rule>
             <name>UnnecessaryConversionTemporary</name>
@@ -596,18 +557,6 @@
             <ruleset>Basic Ecmascript</ruleset>
         </rule>
         <rule>
-            <name>CallSuperFirst</name>
-            <ruleset>Android</ruleset>
-        </rule>
-        <rule>
-            <name>CallSuperLast</name>
-            <ruleset>Android</ruleset>
-        </rule>
-        <rule>
-            <name>DoNotHardCodeSDCard</name>
-            <ruleset>Android</ruleset>
-        </rule>
-        <rule>
             <name>EmptyFinalizer</name>
             <ruleset>Finalizer</ruleset>
         </rule>
@@ -630,10 +579,6 @@
         <rule>
             <name>AvoidCallingFinalize</name>
             <ruleset>Finalizer</ruleset>
-        </rule>
-        <rule>
-            <name>UseSingleton</name>
-            <ruleset>Design</ruleset>
         </rule>
         <rule>
             <name>SimplifyBooleanReturns</name>
@@ -976,10 +921,6 @@
             <ruleset>Java Logging</ruleset>
         </rule>
         <rule>
-            <name>DontNestJsfInJstlIteration</name>
-            <ruleset>Basic JSF</ruleset>
-        </rule>
-        <rule>
             <name>ShortVariable</name>
             <ruleset>Naming</ruleset>
         </rule>
@@ -1080,18 +1021,6 @@
             <ruleset>Unused Code</ruleset>
         </rule>
         <rule>
-            <name>UseCorrectExceptionLogging</name>
-            <ruleset>Jakarta Commons Logging</ruleset>
-        </rule>
-        <rule>
-            <name>ProperLogger</name>
-            <ruleset>Jakarta Commons Logging</ruleset>
-        </rule>
-        <rule>
-            <name>GuardDebugLogging</name>
-            <ruleset>Jakarta Commons Logging</ruleset>
-        </rule>
-        <rule>
             <name>JUnitStaticSuite</name>
             <ruleset>JUnit</ruleset>
         </rule>
@@ -1153,7 +1082,7 @@
         </rule>
         <rule>
             <name>AssignmentInOperand</name>
-            <ruleset>Controversial</ruleset>
+            <ruleset>Basic Ecmascript</ruleset>
         </rule>
         <rule>
             <name>AtLeastOneConstructor</name>
@@ -1173,7 +1102,7 @@
         </rule>
         <rule>
             <name>UnnecessaryParentheses</name>
-            <ruleset>Controversial</ruleset>
+            <ruleset>Unnecessary</ruleset>
         </rule>
         <rule>
             <name>DefaultPackage</name>
@@ -1244,16 +1173,8 @@
             <ruleset>Coupling</ruleset>
         </rule>
         <rule>
-            <name>LoosePackageCoupling</name>
-            <ruleset>Coupling</ruleset>
-        </rule>
-        <rule>
             <name>LawOfDemeter</name>
             <ruleset>Coupling</ruleset>
-        </rule>
-        <rule>
-            <name>MistypedCDATASection</name>
-            <ruleset>Basic XML</ruleset>
         </rule>
     </rules>
     <includeDerivedFiles>false</includeDerivedFiles>
