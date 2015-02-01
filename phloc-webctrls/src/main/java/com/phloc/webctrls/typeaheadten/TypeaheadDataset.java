@@ -19,9 +19,6 @@ package com.phloc.webctrls.typeaheadten;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.IJSExpression;
 
@@ -41,8 +38,6 @@ public class TypeaheadDataset
   public static final String JSON_TEMPLATES_FOOTER = "footer";
   public static final String JSON_TEMPLATES_HEADER = "header";
   public static final String JSON_TEMPLATES_SUGGESTION = "suggestion";
-
-  private static final Logger s_aLogger = LoggerFactory.getLogger (TypeaheadDataset.class);
 
   private IJSExpression m_aSource;
   private String m_sName;
