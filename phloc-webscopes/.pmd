@@ -2,6 +2,11 @@
 <pmd>
     <useProjectRuleSet>false</useProjectRuleSet>
     <ruleSetFile>.ruleset</ruleSetFile>
+    <excludePatterns>
+        <excludePattern>*.xml</excludePattern>
+        <excludePattern>*/src/main/webapp/*</excludePattern>
+        <excludePattern>*/target/*</excludePattern>
+    </excludePatterns>
     <rules>
         <rule>
             <name>DuplicateImports</name>
@@ -105,7 +110,7 @@
         </rule>
         <rule>
             <name>UnnecessaryParentheses</name>
-            <ruleset>Unnecessary</ruleset>
+            <ruleset>Controversial</ruleset>
         </rule>
         <rule>
             <name>UnnecessaryBlock</name>
@@ -337,7 +342,7 @@
         </rule>
         <rule>
             <name>CollapsibleIfStatements</name>
-            <ruleset>Basic</ruleset>
+            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>ClassCastExceptionWithToArray</name>
@@ -405,7 +410,7 @@
         </rule>
         <rule>
             <name>EmptyIfStmt</name>
-            <ruleset>Empty Code</ruleset>
+            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>EmptyWhileStmt</name>
@@ -525,7 +530,7 @@
         </rule>
         <rule>
             <name>EmptyIfStmt</name>
-            <ruleset>Empty Code</ruleset>
+            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>EmptyWhileStmt</name>
@@ -630,10 +635,6 @@
         <rule>
             <name>AvoidCallingFinalize</name>
             <ruleset>Finalizer</ruleset>
-        </rule>
-        <rule>
-            <name>UseSingleton</name>
-            <ruleset>Design</ruleset>
         </rule>
         <rule>
             <name>SimplifyBooleanReturns</name>
@@ -1153,7 +1154,7 @@
         </rule>
         <rule>
             <name>AssignmentInOperand</name>
-            <ruleset>Controversial</ruleset>
+            <ruleset>Basic Ecmascript</ruleset>
         </rule>
         <rule>
             <name>AtLeastOneConstructor</name>

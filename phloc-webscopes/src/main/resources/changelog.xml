@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <release date="2015-02-01" version="6.4.2" />
+  <entry date="2015-02-01" category="tech" action="fix">
+    <change>
+      <text locale="en">In AbstractObjectDeliveryServlet fixed so a possible leading slash is trimmed from the file name</text>
+    </change>
+  </entry>
   <release date="2014-06-10" version="6.4.1" />
   <entry date="2014-06-10" category="api" action="change">
     <change>

@@ -230,7 +230,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
     }
 
     // Filename seems to be safe
-    aRequestScope.setAttribute (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME, sFilename);
+    aRequestScope.setAttribute (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME, StringHelper.trimStart (sFilename, "/"));
     return EContinue.CONTINUE;
   }
 
