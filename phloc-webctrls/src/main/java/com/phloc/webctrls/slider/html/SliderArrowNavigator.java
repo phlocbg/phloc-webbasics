@@ -1,10 +1,13 @@
 package com.phloc.webctrls.slider.html;
 
+import javax.annotation.Nullable;
+
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webctrls.slider.skin.EArrowSkin;
@@ -20,7 +23,7 @@ import com.phloc.webctrls.slider.skin.EArrowSkin;
 
 public class SliderArrowNavigator implements IHCNodeBuilder
 {
-  private static final ICSSClassProvider CLASS = DefaultCSSClassProvider.create ("SliderArrowNavigator");
+  private static final ICSSClassProvider CLASS = DefaultCSSClassProvider.create ("SliderArrowNavigator"); //$NON-NLS-1$
   private final boolean m_bLeft;
   private final EArrowSkin m_eSkin;
 
@@ -29,6 +32,7 @@ public class SliderArrowNavigator implements IHCNodeBuilder
 
   protected final String ATTRIBUTE_USAGE = "u"; //$NON-NLS-1$
   private final String m_sUsage;
+  private IHCNode m_aContent = null;
 
   public SliderArrowNavigator (final boolean bLeft, final EArrowSkin eSkin)
   {
@@ -41,10 +45,19 @@ public class SliderArrowNavigator implements IHCNodeBuilder
     this.m_eSkin = eSkin;
   }
 
+  public void setContent (@Nullable final IHCNode aContent)
+  {
+    this.m_aContent = aContent;
+  }
+
   @Override
   public final HCSpan build ()
   {
     final HCSpan aNode = new HCSpan ();
+    if (this.m_aContent != null)
+    {
+      aNode.addChild (this.m_aContent);
+    }
     aNode.addClass (CLASS);
     if (StringHelper.hasText (this.m_sUsage))
     {

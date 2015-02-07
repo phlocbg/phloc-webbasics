@@ -10,6 +10,7 @@ import com.phloc.css.property.CCSSProperties;
 import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.webctrls.slider.skin.EArrowSkin;
 import com.phloc.webctrls.slider.skin.EBulletSkin;
@@ -17,7 +18,7 @@ import com.phloc.webctrls.slider.skin.EThumbnailSkin;
 
 public class SliderOuterContainer extends AbstractSliderHTMLElement
 {
-  private static final ICSSClassProvider CLASS = DefaultCSSClassProvider.create ("SliderOuterContainer");
+  private static final ICSSClassProvider CLASS = DefaultCSSClassProvider.create ("SliderOuterContainer"); //$NON-NLS-1$
   private final String m_sID;
   private int m_nHeight = 300;
   private int m_nWidth = 600;
@@ -42,6 +43,14 @@ public class SliderOuterContainer extends AbstractSliderHTMLElement
   {
     this.m_aArrowNavigatorLeft = new SliderArrowNavigator (true, eSkin);
     this.m_aArrowNavigatorRight = new SliderArrowNavigator (false, eSkin);
+    return this;
+  }
+
+  public SliderOuterContainer setArrowContent (@Nullable final IHCNode aContentLeft,
+                                               @Nullable final IHCNode aContentRight)
+  {
+    this.m_aArrowNavigatorLeft.setContent (aContentLeft);
+    this.m_aArrowNavigatorRight.setContent (aContentRight);
     return this;
   }
 

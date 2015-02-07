@@ -73,6 +73,12 @@ public class Slider implements IHCNodeBuilder
     return this;
   }
 
+  public Slider setArrowContent (@Nullable final IHCNode aContentLeft, @Nullable final IHCNode aContentRight)
+  {
+    this.m_aOuterContainer.setArrowContent (aContentLeft, aContentRight);
+    return this;
+  }
+
   public Slider setBulletNavigator (@Nonnull final EBulletSkin eSkin,
                                     @Nullable final Integer nTop,
                                     @Nullable final Integer nBottom,
