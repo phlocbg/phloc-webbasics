@@ -131,12 +131,12 @@ public class Slider implements IHCNodeBuilder
     {
       aJSPackageOnReady.add (this.m_aJSPackageOnReady);
     }
-    aResult.addAndReturnChild (new HCScript (aJSPackageGlobal));
-    aResult.addAndReturnChild (new HCScriptOnDocumentReady (aJSPackageOnReady));
+    aResult.addChild (new HCScript (aJSPackageGlobal));
+    aResult.addChild (new HCScriptOnDocumentReady (aJSPackageOnReady));
 
     // html container
     final HCDiv aOuterContainer = aResult.addAndReturnChild (this.m_aOuterContainer.build ());
-    aOuterContainer.addAndReturnChild (0, this.m_aSlidesContainer.build ());
+    aOuterContainer.addChild (0, this.m_aSlidesContainer.build ());
     return aResult;
   }
 

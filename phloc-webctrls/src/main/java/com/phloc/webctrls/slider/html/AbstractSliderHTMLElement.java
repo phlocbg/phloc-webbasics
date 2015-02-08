@@ -8,7 +8,7 @@ import com.phloc.html.hc.html.HCDiv;
 
 public abstract class AbstractSliderHTMLElement implements IHCNodeBuilder
 {
-  protected final String ATTRIBUTE_USAGE = "u"; //$NON-NLS-1$
+  protected static final String ATTRIBUTE_USAGE = "u"; //$NON-NLS-1$
   private final String m_sUsage;
 
   protected AbstractSliderHTMLElement ()
@@ -27,7 +27,7 @@ public abstract class AbstractSliderHTMLElement implements IHCNodeBuilder
     final HCDiv aNode = new HCDiv ();
     if (StringHelper.hasText (this.m_sUsage))
     {
-      aNode.setCustomAttr (this.ATTRIBUTE_USAGE, this.m_sUsage);
+      aNode.setCustomAttr (ATTRIBUTE_USAGE, this.m_sUsage);
     }
     onBuildNode (aNode);
     return aNode;

@@ -27,10 +27,10 @@ public class SliderArrowNavigator implements IHCNodeBuilder
   private final boolean m_bLeft;
   private final EArrowSkin m_eSkin;
 
-  private final int m_nTop = 123;
-  private final int m_nLeftRight = 8;
+  private int m_nTop = 123;
+  private int m_nLeftRight = 8;
 
-  protected final String ATTRIBUTE_USAGE = "u"; //$NON-NLS-1$
+  protected static final String ATTRIBUTE_USAGE = "u"; //$NON-NLS-1$
   private final String m_sUsage;
   private IHCNode m_aContent = null;
 
@@ -43,6 +43,16 @@ public class SliderArrowNavigator implements IHCNodeBuilder
     this.m_sUsage = (bLeft ? "arrowleft" : "arrowright"); //$NON-NLS-1$ //$NON-NLS-2$
     this.m_bLeft = bLeft;
     this.m_eSkin = eSkin;
+  }
+
+  public void setTop (final int nTop)
+  {
+    this.m_nTop = nTop;
+  }
+
+  public void setLeftRight (final int nLeftRight)
+  {
+    this.m_nLeftRight = nLeftRight;
   }
 
   public void setContent (@Nullable final IHCNode aContent)

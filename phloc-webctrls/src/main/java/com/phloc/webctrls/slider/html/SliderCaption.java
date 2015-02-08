@@ -16,8 +16,8 @@ import com.phloc.html.hc.html.HCDiv;
 //overflow  optional  hidden  style="overflow:hidden;"
 public class SliderCaption extends AbstractSliderHTMLElement
 {
-  private String m_sTransitionIn;
-  private String m_sTransitionOut;
+  // private String m_sTransitionIn;
+  // private String m_sTransitionOut;
 
   public SliderCaption ()
   {

@@ -3,6 +3,7 @@ package com.phloc.webctrls.slider.skin.thumbnail;
 import java.util.List;
 import java.util.Map;
 
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
@@ -25,8 +26,8 @@ public class ThumbnailSkin_WC implements IThumbnailSkin
 
   public ThumbnailSkin_WC (final ICSSProperty [] aProperties, final String [] aValues)
   {
-    this.m_aProperties = aProperties;
-    this.m_aValues = aValues;
+    this.m_aProperties = ArrayHelper.getCopy (aProperties);
+    this.m_aValues = ArrayHelper.getCopy (aValues);
   }
 
   @Override
