@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCLabel;
@@ -40,6 +41,7 @@ public class BootstrapFormGroup
   private IHCNode m_aCtrl;
   private IHCNode m_aHelpText;
   private IErrorList m_aErrorList;
+  private ICSSClassProvider m_aCSSClass;
 
   public BootstrapFormGroup ()
   {}
@@ -81,7 +83,7 @@ public class BootstrapFormGroup
   @Nonnull
   public final BootstrapFormGroup setLabel (@Nullable final HCLabel aLabel)
   {
-    m_aLabel = aLabel;
+    this.m_aLabel = aLabel;
     onLabelModified (aLabel);
     return this;
   }
@@ -89,7 +91,7 @@ public class BootstrapFormGroup
   @Nullable
   public final HCLabel getLabel ()
   {
-    return m_aLabel;
+    return this.m_aLabel;
   }
 
   /**
@@ -123,7 +125,7 @@ public class BootstrapFormGroup
   @Nonnull
   public final BootstrapFormGroup setCtrl (@Nullable final IHCNode aCtrl)
   {
-    m_aCtrl = aCtrl;
+    this.m_aCtrl = aCtrl;
     onCtrlModified (aCtrl);
     return this;
   }
@@ -143,20 +145,33 @@ public class BootstrapFormGroup
   @Nullable
   public final IHCNode getCtrl ()
   {
-    return m_aCtrl;
+    return this.m_aCtrl;
   }
 
   @Nonnull
   public final BootstrapFormGroup setErrorList (@Nullable final IErrorList aErrorList)
   {
-    m_aErrorList = aErrorList;
+    this.m_aErrorList = aErrorList;
     return this;
   }
 
   @Nullable
   public final IErrorList getErrorList ()
   {
-    return m_aErrorList;
+    return this.m_aErrorList;
+  }
+
+  @Nonnull
+  public final BootstrapFormGroup setCSSClass (@Nullable final ICSSClassProvider aCSSClass)
+  {
+    this.m_aCSSClass = aCSSClass;
+    return this;
+  }
+
+  @Nullable
+  public final ICSSClassProvider getCSSClass ()
+  {
+    return this.m_aCSSClass;
   }
 
   /**
@@ -178,7 +193,7 @@ public class BootstrapFormGroup
   @Nonnull
   public final BootstrapFormGroup setHelpText (@Nullable final IHCNode aHelpText)
   {
-    m_aHelpText = aHelpText;
+    this.m_aHelpText = aHelpText;
     onHelpTextModified (aHelpText);
     return this;
   }
@@ -192,6 +207,6 @@ public class BootstrapFormGroup
   @Nullable
   public final IHCNode getHelpText ()
   {
-    return m_aHelpText;
+    return this.m_aHelpText;
   }
 }

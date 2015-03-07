@@ -92,7 +92,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
     ValueEnforcer.notNull (eFormType, "FormType");
     if (sAction != null)
       setAction (sAction);
-    m_eFormType = eFormType;
+    this.m_eFormType = eFormType;
     setRole (EHTMLRole.FORM);
     addClass (eFormType);
   }
@@ -103,7 +103,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @Nonnull
   public final BootstrapGridSpec getLeft ()
   {
-    return m_aLeftGrid;
+    return this.m_aLeftGrid;
   }
 
   /**
@@ -113,7 +113,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @Nonnull
   public final BootstrapGridSpec getRight ()
   {
-    return m_aRightGrid;
+    return this.m_aRightGrid;
   }
 
   /**
@@ -180,8 +180,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   {
     ValueEnforcer.notNull (aLeft, "Left");
     ValueEnforcer.notNull (aRight, "Right");
-    m_aLeftGrid = aLeft;
-    m_aRightGrid = aRight;
+    this.m_aLeftGrid = aLeft;
+    this.m_aRightGrid = aRight;
     return this;
   }
 
@@ -249,7 +249,14 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
                                 @Nullable final IHCNode aHelpText,
                                 @Nullable final IErrorList aErrorList)
   {
-    return createFormGroup (m_eFormType, m_aLeftGrid, m_aRightGrid, aLabel, aCtrls, aHelpText, aErrorList);
+    return createFormGroup (this.m_eFormType,
+                            this.m_aLeftGrid,
+                            this.m_aRightGrid,
+                            aLabel,
+                            aCtrls,
+                            aHelpText,
+                            aErrorList,
+                            null);
   }
 
   @Nonnull
@@ -270,13 +277,14 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @Nonnull
   public HCDiv createFormGroup (@Nonnull final BootstrapFormGroup aFormGroup)
   {
-    return createFormGroup (m_eFormType,
-                            m_aLeftGrid,
-                            m_aRightGrid,
+    return createFormGroup (this.m_eFormType,
+                            this.m_aLeftGrid,
+                            this.m_aRightGrid,
                             aFormGroup.getLabel (),
                             aFormGroup.getCtrl (),
                             aFormGroup.getHelpText (),
-                            aFormGroup.getErrorList ());
+                            aFormGroup.getErrorList (),
+                            aFormGroup.getCSSClass ());
   }
 
   @Nonnull
@@ -286,7 +294,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
                                        @Nullable final IHCElementWithChildren <?> aLabel,
                                        @Nonnull final IHCNode aCtrls,
                                        @Nullable final IHCNode aHelpText,
-                                       @Nullable final IErrorList aErrorList)
+                                       @Nullable final IErrorList aErrorList,
+                                       @Nullable final ICSSClassProvider aCSSClass)
   {
     ValueEnforcer.notNull (aCtrls, "Ctrls");
 
@@ -445,6 +454,10 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
         }
         aFinalNode.addChild (aHelpBlock);
       }
+    }
+    if (aCSSClass != null)
+    {
+      aFinalNode.addClass (aCSSClass);
     }
     return aFinalNode;
   }
