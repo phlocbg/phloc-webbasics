@@ -73,6 +73,18 @@ public final class PerRequestCSSIncludes
   }
 
   /**
+   * Register all passed JS items only for this request
+   * 
+   * @param aJSPathProvider
+   *        The JS path provider to use. May not be <code>null</code>.
+   */
+  public static void registerCSSIncludesForThisRequest (@Nonnull final Set <ICSSPathProvider> aCSSPathProviders)
+  {
+    ValueEnforcer.notNull (aCSSPathProviders, "CSSPathProviders");
+    _getPerRequestSet (true).addAll (aCSSPathProviders);
+  }
+
+  /**
    * Unregister an existing CSS item only from this request
    * 
    * @param aCSSPathProvider

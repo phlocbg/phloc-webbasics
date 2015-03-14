@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -44,6 +43,7 @@ import com.phloc.json2.serialize.JsonWriter;
 import com.phloc.webbasics.IWebURIToURLConverter;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webbasics.app.html.ResourceInclusionSettings;
 import com.phloc.webbasics.app.html.StreamURIToURLConverter;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -92,14 +92,15 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     ValueEnforcer.notNull (aConverter, "URIToURLConverter");
 
     // Grab per-request CSS/JS only in success case!
-    final boolean bRegularFiles = GlobalDebug.isDebugMode ();
     for (final ISimpleURL aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludeURLsForThisRequest (aRequestScope,
                                                                                                          aConverter,
-                                                                                                         bRegularFiles))
+                                                                                                         ResourceInclusionSettings.getInstance ()
+                                                                                                                                  .isUseRegularCSS ()))
       addExternalCSS (aCSSPath.getAsString ());
     for (final ISimpleURL aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludeURLsForThisRequest (aRequestScope,
                                                                                                       aConverter,
-                                                                                                      bRegularFiles))
+                                                                                                      ResourceInclusionSettings.getInstance ()
+                                                                                                                               .isUseRegularJS ()))
       addExternalJS (aJSPath.getAsString ());
   }
 
@@ -138,9 +139,9 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
       // Serialize remaining node to HTML
       aObj.add (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aRealNode));
     }
-    m_bSuccess = true;
-    m_sErrorMessage = null;
-    m_aSuccessValue = aObj;
+    this.m_bSuccess = true;
+    this.m_sErrorMessage = null;
+    this.m_aSuccessValue = aObj;
   }
 
   protected AjaxDefaultResponse (final boolean bSuccess,
@@ -149,9 +150,9 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
                                  @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
                                  @Nullable final IWebURIToURLConverter aConverter)
   {
-    m_bSuccess = bSuccess;
-    m_sErrorMessage = sErrorMessage;
-    m_aSuccessValue = aSuccessValue;
+    this.m_bSuccess = bSuccess;
+    this.m_sErrorMessage = sErrorMessage;
+    this.m_aSuccessValue = aSuccessValue;
     if (bSuccess)
       _addCSSAndJS (aRequestScope, aConverter);
   }
@@ -185,14 +186,16 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     }
   }
 
+  @Override
   public boolean isSuccess ()
   {
-    return m_bSuccess;
+    return this.m_bSuccess;
   }
 
+  @Override
   public boolean isFailure ()
   {
-    return !m_bSuccess;
+    return !this.m_bSuccess;
   }
 
   /**
@@ -202,7 +205,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nullable
   public String getErrorMessage ()
   {
-    return m_sErrorMessage;
+    return this.m_sErrorMessage;
   }
 
   /**
@@ -212,18 +215,19 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nullable
   public IJson getSuccessValue ()
   {
-    return m_aSuccessValue;
+    return this.m_aSuccessValue;
   }
 
+  @Override
   @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
     final JsonObject aAssocArray = new JsonObject ();
-    aAssocArray.add (PROPERTY_SUCCESS, m_bSuccess);
-    if (m_bSuccess)
+    aAssocArray.add (PROPERTY_SUCCESS, this.m_bSuccess);
+    if (this.m_bSuccess)
     {
-      if (m_aSuccessValue != null)
-        aAssocArray.add (PROPERTY_VALUE, m_aSuccessValue);
+      if (this.m_aSuccessValue != null)
+        aAssocArray.add (PROPERTY_VALUE, this.m_aSuccessValue);
       if (hasExternalCSSs ())
         aAssocArray.add (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
       if (hasInlineCSS ())
@@ -235,7 +239,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     }
     else
     {
-      aAssocArray.add (PROPERTY_ERRORMESSAGE, m_sErrorMessage != null ? m_sErrorMessage : "");
+      aAssocArray.add (PROPERTY_ERRORMESSAGE, this.m_sErrorMessage != null ? this.m_sErrorMessage : "");
     }
     return JsonWriter.getAsString (aAssocArray);
   }
@@ -248,18 +252,18 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     if (!super.equals (o))
       return false;
     final AjaxDefaultResponse rhs = (AjaxDefaultResponse) o;
-    return m_bSuccess == rhs.m_bSuccess &&
-           EqualsUtils.equals (m_sErrorMessage, rhs.m_sErrorMessage) &&
-           EqualsUtils.equals (m_aSuccessValue, rhs.m_aSuccessValue);
+    return this.m_bSuccess == rhs.m_bSuccess &&
+           EqualsUtils.equals (this.m_sErrorMessage, rhs.m_sErrorMessage) &&
+           EqualsUtils.equals (this.m_aSuccessValue, rhs.m_aSuccessValue);
   }
 
   @Override
   public int hashCode ()
   {
     return HashCodeGenerator.getDerived (super.hashCode ())
-                            .append (m_bSuccess)
-                            .append (m_sErrorMessage)
-                            .append (m_aSuccessValue)
+                            .append (this.m_bSuccess)
+                            .append (this.m_sErrorMessage)
+                            .append (this.m_aSuccessValue)
                             .getHashCode ();
   }
 
@@ -267,9 +271,9 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("success", m_bSuccess)
-                            .appendIfNotNull ("errorMsg", m_sErrorMessage)
-                            .appendIfNotNull ("successValue", m_aSuccessValue)
+                            .append ("success", this.m_bSuccess)
+                            .appendIfNotNull ("errorMsg", this.m_sErrorMessage)
+                            .appendIfNotNull ("successValue", this.m_aSuccessValue)
                             .toString ();
   }
 

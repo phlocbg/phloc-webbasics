@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2015-03-14" version="3.1.1" />
+  <entry date="2015-03-13" category="api" action="add">
+    <change>
+      <text locale="en">Added possibility to register multiple JS and CSS per request includes at a time</text>
+    </change>
+  </entry>
+  <entry date="2015-03-13" category="tech" action="add">
+    <change>
+      <text locale="en">Added ResourceInclusionSettings which determine if regular files (or minified) are to be included</text>
+    </change>
+  </entry>
   <release date="2014-08-14" version="3.1.0" />
   <release date="2014-05-21" version="3.0.0" />
   <entry date="2014-05-21" category="api" action="add">
