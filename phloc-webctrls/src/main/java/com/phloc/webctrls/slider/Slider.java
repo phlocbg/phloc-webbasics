@@ -145,6 +145,11 @@ public class Slider implements IHCNodeBuilder
     return this.m_sID;
   }
 
+  public SliderOptions getOptions ()
+  {
+    return this.m_aOptions;
+  }
+
   public IJSCodeProvider getJSGoTo (final int nIndex)
   {
     return JSExpr.ref (JS_VAR_SLIDERS).component (this.m_sID).invoke ("$GoTo").arg (nIndex); //$NON-NLS-1$

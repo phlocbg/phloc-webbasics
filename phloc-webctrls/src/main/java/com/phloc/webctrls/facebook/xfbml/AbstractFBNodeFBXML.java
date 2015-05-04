@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.facebook;
+package com.phloc.webctrls.facebook.xfbml;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -28,19 +28,24 @@ import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.impl.AbstractHCNode;
+import com.phloc.webctrls.facebook.CFacebook;
 
 /**
- * Abstract base class for FB nodes
+ * Abstract base class for FBXML nodes
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
-public abstract class AbstractFBNode extends AbstractHCNode
+public abstract class AbstractFBNodeFBXML extends AbstractHCNode
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 4529454194136370762L;
   private final String m_sElementName;
 
-  public AbstractFBNode (@Nonnull @Nonempty final String sElementName)
+  public AbstractFBNodeFBXML (@Nonnull @Nonempty final String sElementName)
   {
-    m_sElementName = ValueEnforcer.notEmpty (sElementName, "ElementName");
+    this.m_sElementName = ValueEnforcer.notEmpty (sElementName, "ElementName");
   }
 
   /**
@@ -53,7 +58,7 @@ public abstract class AbstractFBNode extends AbstractHCNode
   @Nonnull
   protected IMicroElement createElement (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    return new MicroElement (CFacebook.FACEBOOK_NAMESPACE_URI, m_sElementName);
+    return new MicroElement (CFacebook.FACEBOOK_NAMESPACE_URI, this.m_sElementName);
   }
 
   /**

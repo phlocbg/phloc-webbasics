@@ -20,6 +20,10 @@ package com.phloc.webctrls.facebook;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCDiv;
@@ -29,10 +33,14 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 public class HCFacebookSDK extends HCNodeList
 {
+  private static String REQUEST_ATTR_FB_SDK_INCLUDED = "fb-sdk-included";
   private static final String FB_ROOT_ID = "fb-root";
+  private static final Logger LOG = LoggerFactory.getLogger (HCFacebookSDK.class);
 
   public HCFacebookSDK (@Nonnull @Nonempty final String sAppID,
                         @Nonnull final Locale aDisplayLocale,
@@ -40,6 +48,11 @@ public class HCFacebookSDK extends HCNodeList
                         final boolean bEnableCookies,
                         final boolean bUseXFBML)
   {
+    if (isIncludedInRequest ())
+    {
+      LOG.info ("FB SDK already included!");
+      return;
+    }
     addChild (new HCDiv ().setID (FB_ROOT_ID));
     if (true)
     {
@@ -64,7 +77,29 @@ public class HCFacebookSDK extends HCNodeList
                                                                        .arg (bEnableCookies)
                                                                        .arg (bUseXFBML)));
     }
+    markIncludedInRequest ();
     registerExternalResources ();
+  }
+
+  @Nullable
+  private static boolean isIncludedInRequest ()
+  {
+    final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScopeOrNull ();
+    if (aRequestScope != null)
+    {
+      return aRequestScope.getAttributeAsBoolean (REQUEST_ATTR_FB_SDK_INCLUDED);
+    }
+    return false;
+  }
+
+  @Nullable
+  private static void markIncludedInRequest ()
+  {
+    final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScopeOrNull ();
+    if (aRequestScope != null)
+    {
+      aRequestScope.setAttribute (REQUEST_ATTR_FB_SDK_INCLUDED, true);
+    }
   }
 
   /**

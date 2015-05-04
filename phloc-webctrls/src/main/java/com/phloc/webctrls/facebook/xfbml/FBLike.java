@@ -27,10 +27,11 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.webctrls.facebook.AbstractFBNode;
 
-public class FBLike extends AbstractFBNode
+public class FBLike extends AbstractFBNodeFBXML
 {
+  private static final long serialVersionUID = 9145379725593321414L;
+
   /**
    * The default width of this plugin
    */
@@ -115,17 +116,17 @@ public class FBLike extends AbstractFBNode
                  @Nullable final EFBColorScheme aColorScheme,
                  @Nullable final String sRefInfo)
   {
-    super ("like");
-    ValueEnforcer.notNull (aURL, "URL");
-    m_aURL = aURL;
-    m_bWithSendButton = bWithSendButton;
-    m_aLayout = aLayout;
-    m_bShowFaces = bShowFaces;
-    m_nWidth = nWidth;
-    m_aAction = aAction;
-    m_aFont = aFont;
-    m_aColorScheme = aColorScheme;
-    m_sRefInfo = StringHelper.hasText (sRefInfo) ? createRefText (sRefInfo) : null;
+    super ("like"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aURL, "URL"); //$NON-NLS-1$
+    this.m_aURL = aURL;
+    this.m_bWithSendButton = bWithSendButton;
+    this.m_aLayout = aLayout;
+    this.m_bShowFaces = bShowFaces;
+    this.m_nWidth = nWidth;
+    this.m_aAction = aAction;
+    this.m_aFont = aFont;
+    this.m_aColorScheme = aColorScheme;
+    this.m_sRefInfo = StringHelper.hasText (sRefInfo) ? createRefText (sRefInfo) : null;
   }
 
   @Override
@@ -133,22 +134,22 @@ public class FBLike extends AbstractFBNode
   protected void applyProperties (@Nonnull final IMicroElement aElement,
                                   @Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    aElement.setAttribute ("href", m_aURL.getAsString ());
-    if (m_bWithSendButton)
-      aElement.setAttribute ("send", Boolean.TRUE.toString ());
-    if (m_aLayout != null)
-      aElement.setAttribute ("layout", m_aLayout.getID ());
-    if (m_bShowFaces)
-      aElement.setAttribute ("show_faces", Boolean.TRUE.toString ());
-    aElement.setAttribute ("width", m_nWidth);
-    if (m_aAction != null)
-      aElement.setAttribute ("action", m_aAction.getID ());
-    if (m_aFont != null)
-      aElement.setAttribute ("font", m_aFont.getID ());
-    if (m_aColorScheme != null)
-      aElement.setAttribute ("colorscheme", m_aColorScheme.getID ());
-    if (StringHelper.hasText (m_sRefInfo))
-      aElement.setAttribute ("ref", m_sRefInfo);
+    aElement.setAttribute ("href", this.m_aURL.getAsString ()); //$NON-NLS-1$
+    if (this.m_bWithSendButton)
+      aElement.setAttribute ("send", Boolean.TRUE.toString ()); //$NON-NLS-1$
+    if (this.m_aLayout != null)
+      aElement.setAttribute ("layout", this.m_aLayout.getID ()); //$NON-NLS-1$
+    if (this.m_bShowFaces)
+      aElement.setAttribute ("show_faces", Boolean.TRUE.toString ()); //$NON-NLS-1$
+    aElement.setAttribute ("width", this.m_nWidth); //$NON-NLS-1$
+    if (this.m_aAction != null)
+      aElement.setAttribute ("action", this.m_aAction.getID ()); //$NON-NLS-1$
+    if (this.m_aFont != null)
+      aElement.setAttribute ("font", this.m_aFont.getID ()); //$NON-NLS-1$
+    if (this.m_aColorScheme != null)
+      aElement.setAttribute ("colorscheme", this.m_aColorScheme.getID ()); //$NON-NLS-1$
+    if (StringHelper.hasText (this.m_sRefInfo))
+      aElement.setAttribute ("ref", this.m_sRefInfo); //$NON-NLS-1$
   }
 
   /**
@@ -162,8 +163,8 @@ public class FBLike extends AbstractFBNode
   protected static String createRefText (@Nullable final String sText)
   {
     if (StringHelper.hasNoText (sText))
-      return "";
-    final String sReplaced = RegExHelper.stringReplacePattern ("[^A-Za-z0-9\\+/=\\-\\.\\:_]", sText, "");
+      return ""; //$NON-NLS-1$
+    final String sReplaced = RegExHelper.stringReplacePattern ("[^A-Za-z0-9\\+/=\\-\\.\\:_]", sText, ""); //$NON-NLS-1$ //$NON-NLS-2$
     return StringHelper.getCutAfterLength (sReplaced, 49);
   }
 }
