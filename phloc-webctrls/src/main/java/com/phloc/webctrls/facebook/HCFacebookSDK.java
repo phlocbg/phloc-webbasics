@@ -38,8 +38,10 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 public class HCFacebookSDK extends HCNodeList
 {
-  private static String REQUEST_ATTR_FB_SDK_INCLUDED = "fb-sdk-included";
-  private static final String FB_ROOT_ID = "fb-root";
+  private static final long serialVersionUID = 8777348152828970837L;
+  private static String REQUEST_ATTR_FB_SDK_INCLUDED = "fb-sdk-included"; //$NON-NLS-1$
+  private static final String FB_ROOT_ID = "fb-root"; //$NON-NLS-1$
+  private static final String FB_API_VERSION = "v2.2"; //$NON-NLS-1$
   private static final Logger LOG = LoggerFactory.getLogger (HCFacebookSDK.class);
 
   public HCFacebookSDK (@Nonnull @Nonempty final String sAppID,
@@ -48,15 +50,25 @@ public class HCFacebookSDK extends HCNodeList
                         final boolean bEnableCookies,
                         final boolean bUseXFBML)
   {
+    this (sAppID, aDisplayLocale, bCheckLoginStatus, bEnableCookies, bUseXFBML, FB_API_VERSION);
+  }
+
+  public HCFacebookSDK (@Nonnull @Nonempty final String sAppID,
+                        @Nonnull final Locale aDisplayLocale,
+                        final boolean bCheckLoginStatus,
+                        final boolean bEnableCookies,
+                        final boolean bUseXFBML,
+                        final String sAPIVersion)
+  {
     if (isIncludedInRequest ())
     {
-      LOG.info ("FB SDK already included!");
+      LOG.info ("FB SDK already included!"); //$NON-NLS-1$
       return;
     }
     addChild (new HCDiv ().setID (FB_ROOT_ID));
     if (true)
     {
-      addChild (new HCScriptOnDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery")
+      addChild (new HCScriptOnDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery") //$NON-NLS-1$
                                                    .arg (sAppID)
                                                    .arg (FacebookLocaleMapping.getInstance ()
                                                                               .getFBLocale (aDisplayLocale)
@@ -64,25 +76,27 @@ public class HCFacebookSDK extends HCNodeList
                                                    .arg (FB_ROOT_ID)
                                                    .arg (bCheckLoginStatus)
                                                    .arg (bEnableCookies)
-                                                   .arg (bUseXFBML)));
+                                                   .arg (bUseXFBML)
+                                                   .arg (sAPIVersion)));
     }
     else
     {
-      addChild (new HCScript (new JSInvocation ("facebookLoadSDKAsync").arg (sAppID)
+      addChild (new HCScript (new JSInvocation ("facebookLoadSDKAsync").arg (sAppID) //$NON-NLS-1$
                                                                        .arg (FacebookLocaleMapping.getInstance ()
                                                                                                   .getFBLocale (aDisplayLocale)
                                                                                                   .toString ())
                                                                        .arg (FB_ROOT_ID)
                                                                        .arg (bCheckLoginStatus)
                                                                        .arg (bEnableCookies)
-                                                                       .arg (bUseXFBML)));
+                                                                       .arg (bUseXFBML)
+                                                                       .arg (sAPIVersion)));
     }
     markIncludedInRequest ();
     registerExternalResources ();
   }
 
   @Nullable
-  private static boolean isIncludedInRequest ()
+  public static boolean isIncludedInRequest ()
   {
     final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScopeOrNull ();
     if (aRequestScope != null)
