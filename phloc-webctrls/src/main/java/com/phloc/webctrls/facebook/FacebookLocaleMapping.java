@@ -131,18 +131,22 @@ public final class FacebookLocaleMapping extends GlobalWebSingleton
   @Nonnull
   private Locale _getFBCompatibleLocale (@Nonnull final Locale aLocale)
   {
-    if (m_aFBLocales.contains (aLocale))
+    if (this.m_aFBLocales.contains (aLocale))
+    {
       return aLocale;
-    for (final Locale aCompatibleLocale : m_aFBLocales)
+    }
+    for (final Locale aCompatibleLocale : this.m_aFBLocales)
+    {
       if (aCompatibleLocale.getLanguage ().equals (aLocale.getLanguage ()))
       {
-        s_aLogger.warn ("Using compatible locale '" +
-                        aCompatibleLocale +
-                        "' for facebook integration as requested locale '" +
-                        aLocale +
-                        "' is not supported!");
+        s_aLogger.debug ("Using compatible locale '" +
+                         aCompatibleLocale +
+                         "' for facebook integration as requested locale '" +
+                         aLocale +
+                         "' is not supported!");
         return aCompatibleLocale;
       }
+    }
 
     s_aLogger.warn ("Using fallback locale '" +
                     FALLBACK +
@@ -157,7 +161,7 @@ public final class FacebookLocaleMapping extends GlobalWebSingleton
   public FacebookLocaleMapping ()
   {
     for (final String sLocale : FB_LOCALES)
-      m_aFBLocales.add (LocaleCache.getLocale (sLocale));
+      this.m_aFBLocales.add (LocaleCache.getLocale (sLocale));
   }
 
   @Nonnull
@@ -175,12 +179,12 @@ public final class FacebookLocaleMapping extends GlobalWebSingleton
   @Nullable
   public Locale getFBLocale (@Nonnull final Locale aLocale)
   {
-    return m_aCache.getFromCache (aLocale);
+    return this.m_aCache.getFromCache (aLocale);
   }
 
   public void clearCache ()
   {
-    if (m_aCache.clearCache ().isChanged ())
+    if (this.m_aCache.clearCache ().isChanged ())
       s_aLogger.info ("Cache was cleared: " + getClass ().getName ());
   }
 }
