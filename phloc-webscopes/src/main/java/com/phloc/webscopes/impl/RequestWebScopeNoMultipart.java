@@ -38,14 +38,20 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.json.IJSONObject;
+import com.phloc.json.impl.JSONParsingException;
+import com.phloc.json.impl.JSONReader;
 import com.phloc.scopes.AbstractMapBasedScope;
 import com.phloc.scopes.ScopeUtils;
 import com.phloc.web.fileupload.IFileItem;
@@ -63,12 +69,13 @@ import com.phloc.webscopes.domain.IRequestWebScope;
  */
 public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements IRequestWebScope
 {
+  private static final Logger LOG = LoggerFactory.getLogger (RequestWebScopeNoMultipart.class);
   // Because of transient field
   private static final long serialVersionUID = 78563987233146L;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestWebScopeNoMultipart.class);
-  private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited";
-  private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap";
+  private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited"; //$NON-NLS-1$
+  private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap"; //$NON-NLS-1$
 
   protected final transient HttpServletRequest m_aHttpRequest;
   protected final transient HttpServletResponse m_aHttpResponse;
@@ -77,9 +84,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Nonempty
   private static String _createScopeID (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
 
-    return GlobalIDFactory.getNewIntID () + "@" + aHttpRequest.getRequestURI ();
+    return GlobalIDFactory.getNewIntID () + "@" + aHttpRequest.getRequestURI (); //$NON-NLS-1$
   }
 
   public RequestWebScopeNoMultipart (@Nonnull final HttpServletRequest aHttpRequest,
@@ -87,16 +94,15 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   {
     super (_createScopeID (aHttpRequest));
 
-    m_aHttpRequest = aHttpRequest;
-    m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
+    this.m_aHttpRequest = aHttpRequest;
+    this.m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse"); //$NON-NLS-1$
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Created request web scope '" +
-                          getID () +
-                          "' of class " +
-                          CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      s_aLogger.info ("Created request web scope '" + //$NON-NLS-1$
+                      getID () +
+                      "' of class " + //$NON-NLS-1$
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 
   @OverrideOnDemand
@@ -109,6 +115,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   protected void postAttributeInit ()
   {}
 
+  @Override
   public final void initScope ()
   {
     // Avoid double initialization of a scope, because for file uploads, the
@@ -117,7 +124,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     // loosing any data here!
     if (getAndSetAttributeFlag (REQUEST_ATTR_SCOPE_INITED))
     {
-      s_aLogger.warn ("Scope was already inited: " + toString ());
+      s_aLogger.warn ("Scope was already inited: " + toString ()); //$NON-NLS-1$
       return;
     }
 
@@ -125,7 +132,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     final boolean bAddedSpecialRequestAttrs = addSpecialRequestAttributes ();
 
     // set parameters as attributes (handles GET and POST parameters)
-    final Enumeration <?> aEnum = m_aHttpRequest.getParameterNames ();
+    final Enumeration <?> aEnum = this.m_aHttpRequest.getParameterNames ();
     while (aEnum.hasMoreElements ())
     {
       final String sParamName = (String) aEnum.nextElement ();
@@ -135,35 +142,67 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
         continue;
 
       // Check if it is a single value or not
-      final String [] aParamValues = m_aHttpRequest.getParameterValues (sParamName);
+      final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
       if (aParamValues.length == 1)
         setAttribute (sParamName, aParamValues[0]);
       else
         setAttribute (sParamName, aParamValues);
     }
 
+    initJSONBody ();
+
     postAttributeInit ();
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Initialized request web scope '" +
-                          getID () +
-                          "' of class " +
-                          CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      s_aLogger.info ("Initialized request web scope '" + //$NON-NLS-1$
+                      getID () +
+                      "' of class " + //$NON-NLS-1$
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
+  }
+
+  /**
+   * If the request body contains data that is valid JSON, all JSON properties
+   * will be added as attributes. This mechanism can be used to transfer big
+   * data.
+   */
+  private void initJSONBody ()
+  {
+    if (this.m_aHttpRequest.getContentLength () > 0 &&
+        CMimeType.APPLICATION_JSON.getAsString ().equals (this.m_aHttpRequest.getContentType ()))
+    {
+      try
+      {
+        final String sJSON = StreamUtils.getAllBytesAsString (this.m_aHttpRequest.getInputStream (),
+                                                              CCharset.CHARSET_UTF_8_OBJ);
+        final IJSONObject aJSON = JSONReader.parseObject (sJSON);
+        for (final String sProperty : aJSON.getAllPropertyNames ())
+        {
+          setAttribute (sProperty, aJSON.getPropertyValueData (sProperty));
+        }
+      }
+      catch (final IOException aEx)
+      {
+        LOG.error ("Error reading request body", aEx); //$NON-NLS-1$
+      }
+      catch (final JSONParsingException aEx)
+      {
+        LOG.error ("Error parsing JSON request body", aEx); //$NON-NLS-1$
+      }
+    }
   }
 
   @Override
   protected void postDestroy ()
   {
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Destroyed request web scope '" +
-                          getID () +
-                          "' of class " +
-                          CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      s_aLogger.info ("Destroyed request web scope '" + //$NON-NLS-1$
+                      getID () +
+                      "' of class " + //$NON-NLS-1$
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public final String getSessionID ()
@@ -171,19 +210,22 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return getSessionID (true);
   }
 
+  @Override
   @Nullable
   public final String getSessionID (final boolean bCreateIfNotExisting)
   {
-    final HttpSession aSession = m_aHttpRequest.getSession (bCreateIfNotExisting);
+    final HttpSession aSession = this.m_aHttpRequest.getSession (bCreateIfNotExisting);
     return aSession == null ? null : aSession.getId ();
   }
 
+  @Override
   @Nullable
   public List <String> getAttributeValues (@Nullable final String sName)
   {
     return getAttributeValues (sName, null);
   }
 
+  @Override
   @Nullable
   public List <String> getAttributeValues (@Nullable final String sName, @Nullable final List <String> aDefault)
   {
@@ -202,11 +244,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return aDefault;
   }
 
+  @Override
   public boolean hasAttributeValue (@Nullable final String sName, @Nullable final String sDesiredValue)
   {
     return EqualsUtils.equals (getAttributeAsString (sName), sDesiredValue);
   }
 
+  @Override
   public boolean hasAttributeValue (@Nullable final String sName,
                                     @Nullable final String sDesiredValue,
                                     final boolean bDefault)
@@ -227,9 +271,10 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Nullable
   public String getCharacterEncoding ()
   {
-    return m_aHttpRequest.getCharacterEncoding ();
+    return this.m_aHttpRequest.getCharacterEncoding ();
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, IFileItem> getAllUploadedFileItems ()
@@ -246,6 +291,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return ret;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, IFileItem []> getAllUploadedFileItemsComplete ()
@@ -265,6 +311,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return ret;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <IFileItem> getAllUploadedFileItemValues ()
@@ -285,6 +332,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return ret;
   }
 
+  @Override
   @Nullable
   public IFileItem getAttributeAsFileItem (@Nullable final String sAttrName)
   {
@@ -292,6 +340,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return aObject instanceof IFileItem ? (IFileItem) aObject : null;
   }
 
+  @Override
   @Nonnull
   public IRequestParamMap getRequestParamMap ()
   {
@@ -309,147 +358,172 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return aValue;
   }
 
+  @Override
   public String getScheme ()
   {
-    return m_aHttpRequest.getScheme ();
+    return this.m_aHttpRequest.getScheme ();
   }
 
+  @Override
   public String getServerName ()
   {
-    return m_aHttpRequest.getServerName ();
+    return this.m_aHttpRequest.getServerName ();
   }
 
   /**
    * @deprecated Use {@link #getProtocol()} instead
    */
+  @Override
   @Deprecated
   public String getServerProtocolVersion ()
   {
     return getProtocol ();
   }
 
+  @Override
   public String getProtocol ()
   {
-    return m_aHttpRequest.getProtocol ();
+    return this.m_aHttpRequest.getProtocol ();
   }
 
+  @Override
   @Nullable
   public EHTTPVersion getHttpVersion ()
   {
-    return RequestHelper.getHttpVersion (m_aHttpRequest);
+    return RequestHelper.getHttpVersion (this.m_aHttpRequest);
   }
 
+  @Override
   public int getServerPort ()
   {
-    return m_aHttpRequest.getServerPort ();
+    return this.m_aHttpRequest.getServerPort ();
   }
 
+  @Override
   public String getMethod ()
   {
-    return m_aHttpRequest.getMethod ();
+    return this.m_aHttpRequest.getMethod ();
   }
 
+  @Override
   @Nullable
   public EHTTPMethod getHttpMethod ()
   {
-    return RequestHelper.getHttpMethod (m_aHttpRequest);
+    return RequestHelper.getHttpMethod (this.m_aHttpRequest);
   }
 
+  @Override
   @Nullable
   public String getPathInfo ()
   {
-    return RequestHelper.getPathInfo (m_aHttpRequest);
+    return RequestHelper.getPathInfo (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public String getPathWithinServletContext ()
   {
-    return RequestHelper.getPathWithinServletContext (m_aHttpRequest);
+    return RequestHelper.getPathWithinServletContext (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public String getPathWithinServlet ()
   {
-    return RequestHelper.getPathWithinServlet (m_aHttpRequest);
+    return RequestHelper.getPathWithinServlet (this.m_aHttpRequest);
   }
 
+  @Override
   public String getPathTranslated ()
   {
-    return m_aHttpRequest.getPathTranslated ();
+    return this.m_aHttpRequest.getPathTranslated ();
   }
 
+  @Override
   public String getQueryString ()
   {
-    return m_aHttpRequest.getQueryString ();
+    return this.m_aHttpRequest.getQueryString ();
   }
 
+  @Override
   public String getRemoteHost ()
   {
-    return m_aHttpRequest.getRemoteHost ();
+    return this.m_aHttpRequest.getRemoteHost ();
   }
 
+  @Override
   public String getRemoteAddr ()
   {
-    return m_aHttpRequest.getRemoteAddr ();
+    return this.m_aHttpRequest.getRemoteAddr ();
   }
 
+  @Override
   public String getAuthType ()
   {
-    return m_aHttpRequest.getAuthType ();
+    return this.m_aHttpRequest.getAuthType ();
   }
 
+  @Override
   public String getRemoteUser ()
   {
-    return m_aHttpRequest.getRemoteUser ();
+    return this.m_aHttpRequest.getRemoteUser ();
   }
 
+  @Override
   public String getContentType ()
   {
-    return m_aHttpRequest.getContentType ();
+    return this.m_aHttpRequest.getContentType ();
   }
 
+  @Override
   public long getContentLength ()
   {
-    return RequestHelper.getContentLength (m_aHttpRequest);
+    return RequestHelper.getContentLength (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public String getRequestURI ()
   {
-    return RequestHelper.getRequestURI (m_aHttpRequest);
+    return RequestHelper.getRequestURI (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public String getServletPath ()
   {
-    return m_aHttpRequest.getServletPath ();
+    return this.m_aHttpRequest.getServletPath ();
   }
 
+  @Override
   public HttpSession getSession (final boolean bCreateIfNotExisting)
   {
-    return m_aHttpRequest.getSession (bCreateIfNotExisting);
+    return this.m_aHttpRequest.getSession (bCreateIfNotExisting);
   }
 
   @Nonnull
   private StringBuilder _getFullServerPath ()
   {
-    return RequestHelper.getFullServerName (m_aHttpRequest.getScheme (),
-                                            m_aHttpRequest.getServerName (),
-                                            m_aHttpRequest.getServerPort ());
+    return RequestHelper.getFullServerName (this.m_aHttpRequest.getScheme (),
+                                            this.m_aHttpRequest.getServerName (),
+                                            this.m_aHttpRequest.getServerPort ());
   }
 
+  @Override
   @Nonnull
   public String getFullServerPath ()
   {
     return _getFullServerPath ().toString ();
   }
 
+  @Override
   @Nonnull
   public String getContextPath ()
   {
-    return m_aHttpRequest.getContextPath ();
+    return this.m_aHttpRequest.getContextPath ();
   }
 
+  @Override
   @Nonnull
   public String getFullContextPath ()
   {
@@ -471,6 +545,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return sServletPath.indexOf ('.') >= 0;
   }
 
+  @Override
   @Nonnull
   public String getContextAndServletPath ()
   {
@@ -481,6 +556,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return getContextPath () + sServletPath + '/';
   }
 
+  @Override
   @Nonnull
   public String getFullContextAndServletPath ()
   {
@@ -491,91 +567,102 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return getFullContextPath () + sServletPath + '/';
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getURL ()
   {
-    return RequestHelper.getURL (m_aHttpRequest);
+    return RequestHelper.getURL (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public String encodeURL (@Nonnull final String sURL)
   {
-    return m_aHttpResponse.encodeURL (sURL);
+    return this.m_aHttpResponse.encodeURL (sURL);
   }
 
+  @Override
   @Nonnull
   public ISimpleURL encodeURL (@Nonnull final ISimpleURL aURL)
   {
-    ValueEnforcer.notNull (aURL, "URL");
+    ValueEnforcer.notNull (aURL, "URL"); //$NON-NLS-1$
 
     // Encode only the path and copy params and anchor
     return new SimpleURL (encodeURL (aURL.getPath ()), aURL.getAllParams (), aURL.getAnchor ());
   }
 
+  @Override
   @Nonnull
   public String encodeRedirectURL (@Nonnull final String sURL)
   {
-    return m_aHttpResponse.encodeRedirectURL (sURL);
+    return this.m_aHttpResponse.encodeRedirectURL (sURL);
   }
 
+  @Override
   @Nonnull
   public ISimpleURL encodeRedirectURL (@Nonnull final ISimpleURL aURL)
   {
-    ValueEnforcer.notNull (aURL, "URL");
+    ValueEnforcer.notNull (aURL, "URL"); //$NON-NLS-1$
 
     // Encode only the path and copy params and anchor
     return new SimpleURL (encodeRedirectURL (aURL.getPath ()), aURL.getAllParams (), aURL.getAnchor ());
   }
 
+  @Override
   public boolean areCookiesEnabled ()
   {
     // Just check whether the session ID is appended to the URL or not
-    return "a".equals (encodeURL ("a"));
+    return "a".equals (encodeURL ("a")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
+  @Override
   @Nullable
   public String getRequestHeader (@Nullable final String sName)
   {
-    return m_aHttpRequest.getHeader (sName);
+    return this.m_aHttpRequest.getHeader (sName);
   }
 
+  @Override
   @Nullable
   public Enumeration <String> getRequestHeaders (@Nullable final String sName)
   {
-    return RequestHelper.getRequestHeaders (m_aHttpRequest, sName);
+    return RequestHelper.getRequestHeaders (this.m_aHttpRequest, sName);
   }
 
+  @Override
   @Nullable
   public Enumeration <String> getRequestHeaderNames ()
   {
-    return RequestHelper.getRequestHeaderNames (m_aHttpRequest);
+    return RequestHelper.getRequestHeaderNames (this.m_aHttpRequest);
   }
 
+  @Override
   @Nonnull
   public HttpServletRequest getRequest ()
   {
-    return m_aHttpRequest;
+    return this.m_aHttpRequest;
   }
 
+  @Override
   @Nonnull
   public HttpServletResponse getResponse ()
   {
-    return m_aHttpResponse;
+    return this.m_aHttpResponse;
   }
 
+  @Override
   @Nonnull
   public OutputStream getOutputStream () throws IOException
   {
-    return m_aHttpResponse.getOutputStream ();
+    return this.m_aHttpResponse.getOutputStream ();
   }
 
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ())
-                            .append ("httpRequest", m_aHttpRequest)
-                            .append ("httpResponse", m_aHttpResponse)
+    return ToStringGenerator.getDerived (super.toString ()).append ("httpRequest", this.m_aHttpRequest) //$NON-NLS-1$
+                            .append ("httpResponse", this.m_aHttpResponse) //$NON-NLS-1$
                             .toString ();
   }
 }
