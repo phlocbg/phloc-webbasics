@@ -7,6 +7,6 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.phloc</groupId>
   <artifactId>phloc-webscopes</artifactId>
-  <version>6.4.0</version>
+  <version>6.7.1</version>
 </dependency>
 ```

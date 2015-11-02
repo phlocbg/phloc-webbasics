@@ -67,7 +67,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>4.4.0</version>
+      <version>4.4.4</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -87,7 +87,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-json</artifactId>
-      <version>2.6.0</version>
+      <version>2.6.1</version>
     </dependency>    
     <dependency>
       <groupId>javax.servlet</groupId>
