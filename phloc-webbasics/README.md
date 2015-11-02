@@ -7,6 +7,6 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.phloc</groupId>
   <artifactId>phloc-webbasics</artifactId>
-  <version>3.2.0</version>
+  <version>3.2.1</version>
 </dependency>
 ```

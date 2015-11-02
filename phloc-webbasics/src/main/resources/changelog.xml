@@ -20,6 +20,27 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2015-11-02" version="3.2.1" />
+  <entry date="2015-11-02" category="tech" action="update">
+    <change>
+      <text locale="en">update phloc-commons to 4.4.4</text>
+    </change>
+  </entry>
+  <entry date="2015-11-02" category="tech" action="update">
+    <change>
+      <text locale="en">update phloc-html to 4.4.1</text>
+    </change>
+  </entry>
+  <entry date="2015-11-02" category="tech" action="update">
+    <change>
+      <text locale="en">update phloc-json to 2.6.1</text>
+    </change>
+  </entry>
+  <entry date="2015-11-02" category="tech" action="update">
+    <change>
+      <text locale="en">update phloc-json2 to 1.2.1</text>
+    </change>
+  </entry>
   <release date="2015-11-01" version="3.2.0" />
   <release date="2015-03-14" version="3.1.1" />
   <entry date="2015-03-13" category="api" action="add">
