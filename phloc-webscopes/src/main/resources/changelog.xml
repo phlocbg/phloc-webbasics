@@ -25,6 +25,12 @@
     <change>
       <text locale="en">update phloc-json to 3.0.0</text>
     </change>
+    <change>
+      <text locale="en">update phloc-html to 4.4.2</text>
+    </change>
+    <change>
+      <text locale="en">update phloc-webscopes to 6.7.2</text>
+    </change>
   </entry>
 <release date="2015-11-02" version="6.7.1" />
   <entry date="2015-11-02" category="tech" action="update">
