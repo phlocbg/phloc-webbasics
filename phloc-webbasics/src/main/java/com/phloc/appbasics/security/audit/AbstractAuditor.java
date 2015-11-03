@@ -91,7 +91,12 @@ public abstract class AbstractAuditor implements IAuditor
       final List <Object> aData = ContainerHelper.newList ();
       if (aArgs != null)
         for (final Object aArg : aArgs)
-          aData.add (aArg);
+        {
+          if (aArg != null)
+          {
+            aData.add (aArg);
+          }
+        }
       return new JSONObject ().setMixedListProperty (sObjectType, aData).getJSONString ();
     }
 
