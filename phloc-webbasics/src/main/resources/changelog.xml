@@ -26,6 +26,11 @@
       <text locale="en">update phloc-json to 3.0.0</text>
     </change>
   </entry>
+  <entry date="2015-11-03" category="tech" action="update">
+    <change>
+      <text locale="en">removed support for phloc-json2 (converted references of IJson to IJSON)</text>
+    </change>
+  </entry>
   <release date="2015-11-02" version="3.2.1" />
   <entry date="2015-11-02" category="tech" action="update">
     <change>

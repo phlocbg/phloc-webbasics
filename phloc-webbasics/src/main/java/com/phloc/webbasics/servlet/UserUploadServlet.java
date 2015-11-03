@@ -31,8 +31,8 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.json2.IJsonObject;
-import com.phloc.json2.impl.JsonObject;
+import com.phloc.json.IJSONObject;
+import com.phloc.json.impl.JSONObject;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.servlet.response.UnifiedResponse;
@@ -59,22 +59,24 @@ public class UserUploadServlet extends AbstractUnifiedResponseServlet
   }
 
   @Nonnull
-  private static IJsonObject _createSuccess ()
+  private static IJSONObject _createSuccess ()
   {
-    return new JsonObject ().add ("success", true);
+    return new JSONObject ().setBooleanProperty ("success", true);
   }
 
   @Nonnull
-  private static IJsonObject _createError (@Nonnull final String sErrorMsg)
+  private static IJSONObject _createError (@Nonnull final String sErrorMsg)
   {
     s_aLogger.error ("User upload error: " + sErrorMsg);
-    return new JsonObject ().add ("success", false).add ("error", sErrorMsg).add ("preventRetry", true);
+    return new JSONObject ().setBooleanProperty ("success", false)
+                            .setStringProperty ("error", sErrorMsg)
+                            .setBooleanProperty ("preventRetry", true);
   }
 
   private void _post (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                       @Nonnull final UnifiedResponse aUnifiedResponse)
   {
-    IJsonObject ret;
+    IJSONObject ret;
 
     final Object aFile = aRequestScope.getAttributeObject (PARAM_FILE);
     if (!(aFile instanceof IFileItem))
@@ -122,7 +124,7 @@ public class UserUploadServlet extends AbstractUnifiedResponseServlet
         }
       }
     }
-    aUnifiedResponse.setMimeType (CMimeType.APPLICATION_JSON).setContentAndCharset (ret.getAsString (),
+    aUnifiedResponse.setMimeType (CMimeType.APPLICATION_JSON).setContentAndCharset (ret.getJSONString (),
                                                                                     CCharset.CHARSET_UTF_8_OBJ);
   }
 

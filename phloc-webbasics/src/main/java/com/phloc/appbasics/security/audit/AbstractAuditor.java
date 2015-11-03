@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.security.audit;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -25,10 +27,10 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.json2.impl.JsonArray;
-import com.phloc.json2.impl.JsonObject;
+import com.phloc.json.impl.JSONObject;
 
 /**
  * Abstract base class for interface {@link IAuditor}.
@@ -47,7 +49,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public final void setCurrentUserIDProvider (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
-    m_aCurrentUserIDProvider = ValueEnforcer.notNull (aCurrentUserIDProvider, "CurrentUserIDProvider");
+    this.m_aCurrentUserIDProvider = ValueEnforcer.notNull (aCurrentUserIDProvider, "CurrentUserIDProvider");
   }
 
   /**
@@ -72,7 +74,10 @@ public abstract class AbstractAuditor implements IAuditor
                                  @Nonnull final ESuccess eSuccess,
                                  @Nonnull final String sAction)
   {
-    final AuditItem aAuditItem = new AuditItem (m_aCurrentUserIDProvider.getCurrentUserID (), eType, eSuccess, sAction);
+    final AuditItem aAuditItem = new AuditItem (this.m_aCurrentUserIDProvider.getCurrentUserID (),
+                                                eType,
+                                                eSuccess,
+                                                sAction);
     handleAuditItem (aAuditItem);
   }
 
@@ -83,11 +88,11 @@ public abstract class AbstractAuditor implements IAuditor
     if (useJsonNotation ())
     {
       // Get Json representation for easy evaluation afterwards
-      final JsonArray aData = new JsonArray ();
+      final List <Object> aData = ContainerHelper.newList ();
       if (aArgs != null)
         for (final Object aArg : aArgs)
           aData.add (aArg);
-      return new JsonObject ().add (sObjectType, aData).getAsString ();
+      return new JSONObject ().setMixedListProperty (sObjectType, aData).getJSONString ();
     }
 
     // Use regular formatting
@@ -104,6 +109,7 @@ public abstract class AbstractAuditor implements IAuditor
     return aSB.append (')').toString ();
   }
 
+  @Override
   public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -113,6 +119,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -122,6 +129,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onModifySuccess (@Nonnull final ObjectType aObjectType,
                                @Nonnull final String sWhat,
                                @Nullable final Object... aArgs)
@@ -134,6 +142,7 @@ public abstract class AbstractAuditor implements IAuditor
                                          ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
+  @Override
   public void onModifyFailure (@Nonnull final ObjectType aObjectType,
                                @Nonnull final String sWhat,
                                @Nullable final Object... aArgs)
@@ -146,6 +155,7 @@ public abstract class AbstractAuditor implements IAuditor
                                          ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
+  @Override
   public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -155,6 +165,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -164,6 +175,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -173,6 +185,7 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final Object... aArgs)
   {
     ValueEnforcer.notNull (aObjectType, "ObjectType");
@@ -182,16 +195,19 @@ public abstract class AbstractAuditor implements IAuditor
                       createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  @Override
   public void onExecuteSuccess (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     _createAuditItem (EAuditActionType.EXECUTE, ESuccess.SUCCESS, createAuditString (sWhat, aArgs));
   }
 
+  @Override
   public void onExecuteFailure (@Nonnull final String sWhat, @Nullable final Object... aArgs)
   {
     _createAuditItem (EAuditActionType.EXECUTE, ESuccess.FAILURE, createAuditString (sWhat, aArgs));
   }
 
+  @Override
   public void onExecuteSuccess (@Nonnull final ObjectType aObjectType,
                                 @Nonnull final String sWhat,
                                 @Nullable final Object... aArgs)
@@ -204,6 +220,7 @@ public abstract class AbstractAuditor implements IAuditor
                                          ArrayHelper.getConcatenated (sWhat, aArgs, Object.class)));
   }
 
+  @Override
   public void onExecuteFailure (@Nonnull final ObjectType aObjectType,
                                 @Nonnull final String sWhat,
                                 @Nullable final Object... aArgs)

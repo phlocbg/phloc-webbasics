@@ -27,6 +27,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ITypedObject;
@@ -34,7 +35,7 @@ import com.phloc.commons.type.ObjectType;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.json2.impl.JsonObject;
+import com.phloc.json.impl.JSONObject;
 
 @Immutable
 public class FormState implements ITypedObject <String>, Serializable
@@ -54,12 +55,13 @@ public class FormState implements ITypedObject <String>, Serializable
     ValueEnforcer.notEmpty (sFlowID, "FlowID");
     ValueEnforcer.notNull (aAttrs, "Attrs");
 
-    m_sPageID = sPageID;
-    m_aDT = PDTFactory.getCurrentDateTime ();
-    m_sFlowID = sFlowID;
-    m_aAttrs = aAttrs;
+    this.m_sPageID = sPageID;
+    this.m_aDT = PDTFactory.getCurrentDateTime ();
+    this.m_sFlowID = sFlowID;
+    this.m_aAttrs = aAttrs;
   }
 
+  @Override
   @Nonnull
   public ObjectType getTypeID ()
   {
@@ -70,15 +72,16 @@ public class FormState implements ITypedObject <String>, Serializable
   @Nonempty
   public String getPageID ()
   {
-    return m_sPageID;
+    return this.m_sPageID;
   }
 
   @Nonnull
   public DateTime getDateTime ()
   {
-    return m_aDT;
+    return this.m_aDT;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getID ()
@@ -90,20 +93,20 @@ public class FormState implements ITypedObject <String>, Serializable
   @Nonempty
   public String getFlowID ()
   {
-    return m_sFlowID;
+    return this.m_sFlowID;
   }
 
   @Nonnull
   public MapBasedAttributeContainer getAttributes ()
   {
-    return m_aAttrs;
+    return this.m_aAttrs;
   }
 
   @Nonnull
   public JSAssocArray getAsAssocArray ()
   {
     final JSAssocArray ret = new JSAssocArray ();
-    for (final Map.Entry <String, Object> aEntry : m_aAttrs.getAllAttributes ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : this.m_aAttrs.getAllAttributes ().entrySet ())
     {
       final String sKey = aEntry.getKey ();
       final Object aValue = aEntry.getValue ();
@@ -123,18 +126,18 @@ public class FormState implements ITypedObject <String>, Serializable
   }
 
   @Nonnull
-  public JsonObject getAsJsonObject ()
+  public JSONObject getAsJsonObject ()
   {
-    final JsonObject ret = new JsonObject ();
-    for (final Map.Entry <String, Object> aEntry : m_aAttrs.getAllAttributes ().entrySet ())
+    final JSONObject ret = new JSONObject ();
+    for (final Map.Entry <String, Object> aEntry : this.m_aAttrs.getAllAttributes ().entrySet ())
     {
       final String sKey = aEntry.getKey ();
       final Object aValue = aEntry.getValue ();
       if (aValue instanceof String)
-        ret.add (sKey, aValue);
+        ret.setStringProperty (sKey, (String) aValue);
       else
         if (aValue instanceof String [])
-          ret.add (sKey, aValue);
+          ret.setStringListProperty (sKey, ContainerHelper.newList ((String []) aValue));
       // else e.g. fileitem -> ignore
     }
     return ret;
@@ -143,10 +146,10 @@ public class FormState implements ITypedObject <String>, Serializable
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("pageID", m_sPageID)
-                                       .append ("DT", m_aDT)
-                                       .append ("flowID", m_sFlowID)
-                                       .append ("attrs", m_aAttrs)
+    return new ToStringGenerator (this).append ("pageID", this.m_sPageID)
+                                       .append ("DT", this.m_aDT)
+                                       .append ("flowID", this.m_sFlowID)
+                                       .append ("attrs", this.m_aAttrs)
                                        .toString ();
   }
 }

@@ -37,9 +37,9 @@ import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.hc.utils.HCSpecialNodeHandler;
-import com.phloc.json2.IJson;
-import com.phloc.json2.impl.JsonObject;
-import com.phloc.json2.serialize.JsonWriter;
+import com.phloc.json.IJSON;
+import com.phloc.json.IJSONObject;
+import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.IWebURIToURLConverter;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -51,26 +51,26 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements IAjaxResponse
 {
   /** Success property */
-  public static final String PROPERTY_SUCCESS = "success";
+  public static final String PROPERTY_SUCCESS = "success"; //$NON-NLS-1$
   /**
    * Response value property - only in case of success - contains the response
    * data as object
    */
-  public static final String PROPERTY_VALUE = "value";
+  public static final String PROPERTY_VALUE = "value"; //$NON-NLS-1$
   /**
    * Additional CSS files - only in case of success - contains a list of strings
    */
-  public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
+  public static final String PROPERTY_EXTERNAL_CSS = "externalcss"; //$NON-NLS-1$
   /** Additional inline CSS - only in case of success - contains a string */
-  public static final String PROPERTY_INLINE_CSS = "inlinecss";
+  public static final String PROPERTY_INLINE_CSS = "inlinecss"; //$NON-NLS-1$
   /** Additional JS files - only in case of success - contains a list of strings */
-  public static final String PROPERTY_EXTERNAL_JS = "externaljs";
+  public static final String PROPERTY_EXTERNAL_JS = "externaljs"; //$NON-NLS-1$
   /** Additional inline JS - only in case of success - contains a string */
-  public static final String PROPERTY_INLINE_JS = "inlinejs";
+  public static final String PROPERTY_INLINE_JS = "inlinejs"; //$NON-NLS-1$
   /** Error message property - only in case of error */
-  public static final String PROPERTY_ERRORMESSAGE = "errormessage";
+  public static final String PROPERTY_ERRORMESSAGE = "errormessage"; //$NON-NLS-1$
   /** Default property for HTML content */
-  public static final String PROPERTY_HTML = "html";
+  public static final String PROPERTY_HTML = "html"; //$NON-NLS-1$
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
@@ -83,13 +83,13 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
-  private final IJson m_aSuccessValue;
+  private final IJSONObject m_aSuccessValue;
 
   private void _addCSSAndJS (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                              @Nonnull final IWebURIToURLConverter aConverter)
   {
-    ValueEnforcer.notNull (aRequestScope, "RequestScope");
-    ValueEnforcer.notNull (aConverter, "URIToURLConverter");
+    ValueEnforcer.notNull (aRequestScope, "RequestScope"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aConverter, "URIToURLConverter"); //$NON-NLS-1$
 
     // Grab per-request CSS/JS only in success case!
     for (final ISimpleURL aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludeURLsForThisRequest (aRequestScope,
@@ -118,7 +118,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     _addCSSAndJS (aRequestScope, aConverter);
 
     // Now decompose the HCNode itself
-    final JsonObject aObj = new JsonObject ();
+    final JSONObject aObj = new JSONObject ();
     if (aNode != null)
     {
       // Customize before extracting special content
@@ -137,7 +137,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
         aRealNode = aNode;
 
       // Serialize remaining node to HTML
-      aObj.add (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aRealNode));
+      aObj.setStringProperty (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aRealNode));
     }
     this.m_bSuccess = true;
     this.m_sErrorMessage = null;
@@ -146,7 +146,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
-                                 @Nullable final IJson aSuccessValue,
+                                 @Nullable final IJSONObject aSuccessValue,
                                  @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
                                  @Nullable final IWebURIToURLConverter aConverter)
   {
@@ -159,7 +159,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   public static void setDefaultURIToURLConverter (@Nonnull final IWebURIToURLConverter aConverter)
   {
-    ValueEnforcer.notNull (aConverter, "Converter");
+    ValueEnforcer.notNull (aConverter, "Converter"); //$NON-NLS-1$
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -213,7 +213,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
    *         May be <code>null</code>.
    */
   @Nullable
-  public IJson getSuccessValue ()
+  public IJSON getSuccessValue ()
   {
     return this.m_aSuccessValue;
   }
@@ -222,26 +222,26 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
-    final JsonObject aAssocArray = new JsonObject ();
-    aAssocArray.add (PROPERTY_SUCCESS, this.m_bSuccess);
+    final JSONObject aAssocArray = new JSONObject ();
+    aAssocArray.setBooleanProperty (PROPERTY_SUCCESS, this.m_bSuccess);
     if (this.m_bSuccess)
     {
       if (this.m_aSuccessValue != null)
-        aAssocArray.add (PROPERTY_VALUE, this.m_aSuccessValue);
+        aAssocArray.setObjectProperty (PROPERTY_VALUE, this.m_aSuccessValue);
       if (hasExternalCSSs ())
-        aAssocArray.add (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
+        aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
       if (hasInlineCSS ())
-        aAssocArray.add (PROPERTY_INLINE_CSS, getInlineCSS ());
+        aAssocArray.setStringProperty (PROPERTY_INLINE_CSS, getInlineCSS ().toString ());
       if (hasExternalJSs ())
-        aAssocArray.add (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
+        aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
       if (hasInlineJS ())
-        aAssocArray.add (PROPERTY_INLINE_JS, getInlineJS ().getJSCode ());
+        aAssocArray.setStringProperty (PROPERTY_INLINE_JS, getInlineJS ().getJSCode ());
     }
     else
     {
-      aAssocArray.add (PROPERTY_ERRORMESSAGE, this.m_sErrorMessage != null ? this.m_sErrorMessage : "");
+      aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, this.m_sErrorMessage != null ? this.m_sErrorMessage : ""); //$NON-NLS-1$
     }
-    return JsonWriter.getAsString (aAssocArray);
+    return aAssocArray.getJSONString ();
   }
 
   @Override
@@ -270,10 +270,9 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ())
-                            .append ("success", this.m_bSuccess)
-                            .appendIfNotNull ("errorMsg", this.m_sErrorMessage)
-                            .appendIfNotNull ("successValue", this.m_aSuccessValue)
+    return ToStringGenerator.getDerived (super.toString ()).append ("success", this.m_bSuccess) //$NON-NLS-1$
+                            .appendIfNotNull ("errorMsg", this.m_sErrorMessage) //$NON-NLS-1$
+                            .appendIfNotNull ("successValue", this.m_aSuccessValue) //$NON-NLS-1$
                             .toString ();
   }
 
@@ -287,19 +286,19 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                                    @Nonnull final IWebURIToURLConverter aConverter)
   {
-    return createSuccess (aRequestScope, (IJson) null, aConverter);
+    return createSuccess (aRequestScope, (IJSONObject) null, aConverter);
   }
 
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nullable final IJson aSuccessValue)
+                                                   @Nullable final IJSONObject aSuccessValue)
   {
     return createSuccess (aRequestScope, aSuccessValue, getDefaultURIToURLConverter ());
   }
 
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nullable final IJson aSuccessValue,
+                                                   @Nullable final IJSONObject aSuccessValue,
                                                    @Nonnull final IWebURIToURLConverter aConverter)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue, aRequestScope, aConverter);
@@ -335,7 +334,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     // No converter needed in case of error!
     return new AjaxDefaultResponse (false,
                                     sErrorMessage,
-                                    (IJson) null,
+                                    (IJSONObject) null,
                                     (IRequestWebScopeWithoutResponse) null,
                                     (IWebURIToURLConverter) null);
   }
