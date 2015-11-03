@@ -112,8 +112,8 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-json2</artifactId>
-      <version>1.0.3</version>
+      <artifactId>phloc-json</artifactId>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
