@@ -1,12 +1,16 @@
 #phloc-webscopes
 Library for handling scopes in web applications.
 
+------------------------------------------------------------
+
+**Java 7 or higher** 
+
 #Maven usage
 Add the following to your pom.xml to use this artifact:
 ```
 <dependency>
   <groupId>com.phloc</groupId>
   <artifactId>phloc-webscopes</artifactId>
-  <version>6.7.2</version>
+  <version>6.7.3</version>
 </dependency>
 ```

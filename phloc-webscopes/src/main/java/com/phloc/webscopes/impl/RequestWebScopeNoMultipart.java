@@ -46,6 +46,8 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.MimeType;
+import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
@@ -128,6 +130,8 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       return;
     }
 
+    propagateDisaptcherErrors ();
+
     // where some extra items (like file items) handled?
     final boolean bAddedSpecialRequestAttrs = addSpecialRequestAttributes ();
 
@@ -140,7 +144,6 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       // Avoid double setting a parameter!
       if (bAddedSpecialRequestAttrs && containsAttribute (sParamName))
         continue;
-
       // Check if it is a single value or not
       final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
       if (aParamValues.length == 1)
@@ -149,7 +152,10 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
         setAttribute (sParamName, aParamValues);
     }
 
-    initJSONBody ();
+    if (RequestInitializerHandler.getInstance ().initRequestScope (this))
+    {
+      initJSONBody ();
+    }
 
     postAttributeInit ();
 
@@ -168,26 +174,46 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    */
   private void initJSONBody ()
   {
-    if (this.m_aHttpRequest.getContentLength () > 0 &&
-        CMimeType.APPLICATION_JSON.getAsString ().equals (this.m_aHttpRequest.getContentType ()))
+    if (this.m_aHttpRequest.getContentLength () > 0)
     {
-      try
+      final MimeType aMimeType = MimeTypeParser.parseMimeType (this.m_aHttpRequest.getContentType ());
+      if (aMimeType != null &&
+          aMimeType.getAsStringWithoutParameters ().equals (CMimeType.APPLICATION_JSON.getAsStringWithoutParameters ()))
       {
-        final String sJSON = StreamUtils.getAllBytesAsString (this.m_aHttpRequest.getInputStream (),
-                                                              CCharset.CHARSET_UTF_8_OBJ);
-        final IJSONObject aJSON = JSONReader.parseObject (sJSON);
-        for (final String sProperty : aJSON.getAllPropertyNames ())
+        try
         {
-          setAttribute (sProperty, aJSON.getPropertyValueData (sProperty));
+          final String sJSON = StreamUtils.getAllBytesAsString (this.m_aHttpRequest.getInputStream (),
+                                                                CCharset.CHARSET_UTF_8_OBJ);
+          final IJSONObject aJSON = JSONReader.parseObject (sJSON);
+          for (final String sProperty : aJSON.getAllPropertyNames ())
+          {
+            setAttribute (sProperty, aJSON.getPropertyValueData (sProperty));
+          }
+        }
+        catch (final IOException aEx)
+        {
+          LOG.error ("Error reading request body", aEx); //$NON-NLS-1$
+        }
+        catch (final JSONParsingException aEx)
+        {
+          LOG.error ("Error parsing JSON request body", aEx); //$NON-NLS-1$
         }
       }
-      catch (final IOException aEx)
+    }
+  }
+
+  /**
+   * Copy error attributes added by the Servlet Container also to the scope
+   * attributes
+   */
+  private void propagateDisaptcherErrors ()
+  {
+    for (final ERequestDispatcherErrors eDispatcherError : ERequestDispatcherErrors.values ())
+    {
+      final Object aValue = this.m_aHttpRequest.getAttribute (eDispatcherError.getID ());
+      if (aValue != null)
       {
-        LOG.error ("Error reading request body", aEx); //$NON-NLS-1$
-      }
-      catch (final JSONParsingException aEx)
-      {
-        LOG.error ("Error parsing JSON request body", aEx); //$NON-NLS-1$
+        setAttribute (eDispatcherError.getID (), aValue);
       }
     }
   }
