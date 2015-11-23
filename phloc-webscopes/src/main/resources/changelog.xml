@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <release date="2015-11-23" version="6.7.4" />
+  <entry date="2015-11-23" category="feature" action="add">
+    <change>
+      <text locale="en">Added better handling of session scopes during destruction (now available via the WebScopeManager)</text>
+    </change>
+  </entry>
+  <entry date="2015-11-23" category="feature" action="add">
+    <change>
+      <text locale="en">Added new base class for session listener providing methods for before and after session creation & destrution</text>
+    </change>
+  </entry>
   <release date="2015-11-05" version="6.7.3" />
   <entry date="2015-11-05" category="feature" action="fix">
     <change>
