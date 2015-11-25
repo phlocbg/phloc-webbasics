@@ -65,9 +65,9 @@ import com.phloc.web.servlet.request.RequestParamMap;
 import com.phloc.webscopes.domain.IRequestWebScope;
 
 /**
- * A request web scopes that does not parse multipart requests.
+ * A request web scopes that does not parse multi-part requests.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements IRequestWebScope
 {
@@ -107,6 +107,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
                       CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 
+  @SuppressWarnings ("static-method")
   @OverrideOnDemand
   protected boolean addSpecialRequestAttributes ()
   {
@@ -115,7 +116,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
   @OverrideOnDemand
   protected void postAttributeInit ()
-  {}
+  {
+    // empty by default
+  }
 
   @Override
   public final void initScope ()
@@ -174,13 +177,14 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    */
   private void initJSONBody ()
   {
-    if (this.m_aHttpRequest.getContentLength () > 0)
+    try
     {
-      final MimeType aMimeType = MimeTypeParser.parseMimeType (this.m_aHttpRequest.getContentType ());
-      if (aMimeType != null &&
-          aMimeType.getAsStringWithoutParameters ().equals (CMimeType.APPLICATION_JSON.getAsStringWithoutParameters ()))
+      if (this.m_aHttpRequest.getContentLength () > 0)
       {
-        try
+        final MimeType aMimeType = MimeTypeParser.parseMimeType (this.m_aHttpRequest.getContentType ());
+        if (aMimeType != null &&
+            aMimeType.getAsStringWithoutParameters ()
+                     .equals (CMimeType.APPLICATION_JSON.getAsStringWithoutParameters ()))
         {
           final String sJSON = StreamUtils.getAllBytesAsString (this.m_aHttpRequest.getInputStream (),
                                                                 CCharset.CHARSET_UTF_8_OBJ);
@@ -190,15 +194,19 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
             setAttribute (sProperty, aJSON.getPropertyValueData (sProperty));
           }
         }
-        catch (final IOException aEx)
-        {
-          LOG.error ("Error reading request body", aEx); //$NON-NLS-1$
-        }
-        catch (final JSONParsingException aEx)
-        {
-          LOG.error ("Error parsing JSON request body", aEx); //$NON-NLS-1$
-        }
       }
+    }
+    catch (final IOException aEx)
+    {
+      LOG.error ("Error reading request body", aEx); //$NON-NLS-1$
+    }
+    catch (final JSONParsingException aEx)
+    {
+      LOG.error ("Error parsing JSON request body", aEx); //$NON-NLS-1$
+    }
+    catch (final UnsupportedOperationException aEx)
+    {
+      // for mock requests it is not possible to get the content length
     }
   }
 
