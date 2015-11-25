@@ -43,7 +43,7 @@ public abstract class SessionWebSingleton extends AbstractSingleton implements S
 {
   protected SessionWebSingleton ()
   {
-    super ("getSessionSingleton");
+    super ("getSessionSingleton"); //$NON-NLS-1$
   }
 
   private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException

@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <release date="2015-11-25" version="6.7.5" />
+  <entry date="2015-11-25" category="feature" action="add">
+    <change>
+      <text locale="en">Added new method for retrieving SessionApplicationWebSingletons explicitly passing the application ID</text>
+    </change>
+  </entry>
   <release date="2015-11-23" version="6.7.4" />
   <entry date="2015-11-23" category="feature" action="add">
     <change>

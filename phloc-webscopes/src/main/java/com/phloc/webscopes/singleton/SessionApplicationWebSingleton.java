@@ -41,7 +41,7 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
 {
   protected SessionApplicationWebSingleton ()
   {
-    super ("getSessionApplicationSingleton");
+    super ("getSessionApplicationSingleton"); //$NON-NLS-1$
   }
 
   private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
@@ -63,6 +63,28 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
   private static ISessionApplicationWebScope _getStaticScope (final boolean bCreateIfNotExisting)
   {
     return WebScopeManager.getSessionApplicationScope (bCreateIfNotExisting);
+  }
+
+  /**
+   * Get the singleton object for the passed class in the session application
+   * web scope corresponding to the passed application ID. If the singleton is
+   * not yet instantiated, a new instance is created.<br>
+   * <br>
+   * <b>NOTE: </b>This is useful when no request scope is available
+   * 
+   * @param aClass
+   *        The class to be used. May not be <code>null</code>. The class must
+   *        be public as needs to have a public no-argument constructor.
+   * @param sApplicationID
+   *        The application ID to use for determining the application session
+   *        scope
+   * @return The singleton object and never <code>null</code>.
+   */
+  @Nonnull
+  protected static final <T extends SessionApplicationWebSingleton> T getSessionApplicationSingleton (@Nonnull final Class <T> aClass,
+                                                                                                      @Nonnull final String sApplicationID)
+  {
+    return getSingleton (WebScopeManager.getSessionApplicationScope (sApplicationID, true), aClass);
   }
 
   /**
