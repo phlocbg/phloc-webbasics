@@ -37,17 +37,22 @@ public class RequestInitializerHandler
     return SingletonHolder.INSTANCE;
   }
 
-  public boolean initRequestScope (final IRequestWebScope aRequestScope)
+  public void initRequestScope (final IRequestWebScope aRequestScope)
+  {
+    for (final IRequestWebScopeInitializer aCustomInitializer : this.m_aCustomInitializers)
+    {
+      aCustomInitializer.initRequestWebScope (aRequestScope);
+    }
+  }
+
+  public boolean isReadBodyAsJSON (final IRequestWebScope aRequestScope)
   {
     Boolean bInitBody = null;
     for (final IRequestWebScopeInitializer aCustomInitializer : this.m_aCustomInitializers)
     {
-      bInitBody = bInitBody == null ? Boolean.TRUE : bInitBody;
-      if (aCustomInitializer.initRequestWebScope (aRequestScope))
-      {
-        bInitBody = Boolean.TRUE;
-      }
+      final boolean bCurInitBody = aCustomInitializer.isReadBodyAsJSON (aRequestScope);
+      bInitBody = bInitBody == Boolean.FALSE ? bInitBody : Boolean.valueOf (bCurInitBody);
     }
-    return bInitBody == null || bInitBody.booleanValue ();
+    return bInitBody != null && bInitBody.booleanValue ();
   }
 }

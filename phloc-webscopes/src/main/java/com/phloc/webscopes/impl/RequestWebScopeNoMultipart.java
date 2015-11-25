@@ -155,7 +155,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
         setAttribute (sParamName, aParamValues);
     }
 
-    if (RequestInitializerHandler.getInstance ().initRequestScope (this))
+    RequestInitializerHandler.getInstance ().initRequestScope (this);
+
+    if (RequestInitializerHandler.getInstance ().isReadBodyAsJSON (this))
     {
       initJSONBody ();
     }
@@ -177,6 +179,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    */
   private void initJSONBody ()
   {
+    LOG.debug ("Performing JSON body initialization...");
     try
     {
       if (this.m_aHttpRequest.getContentLength () > 0)

@@ -21,6 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
+  <release date="2015-11-25" version="6.7.7" />
+  <entry date="2015-11-25" category="tech" action="fix">
+    <change>
+      <text locale="en">Disabled handling for JSON body initialization in RequestWebScopeNoMultipart by default and changed the logic for enabling it via the IRequestWebScopeInitializer</text>
+    </change>
+  </entry>
   <release date="2015-11-25" version="6.7.6" />
   <entry date="2015-11-25" category="tech" action="fix">
     <change>
