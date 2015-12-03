@@ -78,6 +78,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestWebScopeNoMultipart.class);
   private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited"; //$NON-NLS-1$
   private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap"; //$NON-NLS-1$
+  public static final String REQUEST_ATTR_PARSE_JSON_BODY = "$request.scope.jsonbody"; //$NON-NLS-1$
 
   protected final transient HttpServletRequest m_aHttpRequest;
   protected final transient HttpServletResponse m_aHttpResponse;
@@ -157,7 +158,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
     RequestInitializerHandler.getInstance ().initRequestScope (this);
 
-    if (RequestInitializerHandler.getInstance ().isReadBodyAsJSON (this))
+    if (getAttributeAsBoolean (REQUEST_ATTR_PARSE_JSON_BODY))
     {
       initJSONBody ();
     }
@@ -179,7 +180,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    */
   private void initJSONBody ()
   {
-    LOG.debug ("Performing JSON body initialization...");
+    LOG.debug ("Performing JSON body initialization..."); //$NON-NLS-1$
     try
     {
       if (this.m_aHttpRequest.getContentLength () > 0)

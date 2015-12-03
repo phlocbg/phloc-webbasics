@@ -44,15 +44,4 @@ public class RequestInitializerHandler
       aCustomInitializer.initRequestWebScope (aRequestScope);
     }
   }
-
-  public boolean isReadBodyAsJSON (final IRequestWebScope aRequestScope)
-  {
-    Boolean bInitBody = null;
-    for (final IRequestWebScopeInitializer aCustomInitializer : this.m_aCustomInitializers)
-    {
-      final boolean bCurInitBody = aCustomInitializer.isReadBodyAsJSON (aRequestScope);
-      bInitBody = bInitBody == Boolean.FALSE ? bInitBody : Boolean.valueOf (bCurInitBody);
-    }
-    return bInitBody != null && bInitBody.booleanValue ();
-  }
 }

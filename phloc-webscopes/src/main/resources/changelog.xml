@@ -21,6 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
+  <release date="2015-12-03" version="6.7.8" />
+  <entry date="2015-12-03" category="tech" action="update">
+    <change>
+      <text locale="en">Changed handling for JSON body initialization in RequestWebScopeNoMultipart to be OPT-IN directly using a request attribute '$request.scope.jsonbody=true'</text>
+    </change>
+  </entry>
   <release date="2015-11-25" version="6.7.7" />
   <entry date="2015-11-25" category="tech" action="fix">
     <change>
