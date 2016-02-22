@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-webscopes</artifactId>
-  <version>6.7.10-SNAPSHOT</version>
+  <version>6.7.10</version>
   <packaging>bundle</packaging>
   <name>phloc-webscopes</name>
   <description>Library for handling scopes in web applications</description>
@@ -45,7 +45,7 @@
     <connection>scm:git:https://github.com/phlocbg/phloc-webbasics</connection>
     <developerConnection>scm:git:https://github.com/phlocbg/phloc-webbasics</developerConnection>
   <url>http://github.com/phlocbg/phloc-webbasics</url>
-    <tag>HEAD</tag>
+    <tag>phloc-webscopes-6.7.10</tag>
 
 </scm>
 <organization>
