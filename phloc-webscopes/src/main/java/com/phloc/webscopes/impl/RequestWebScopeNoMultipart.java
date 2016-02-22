@@ -155,10 +155,17 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       else
         setAttribute (sParamName, aParamValues);
     }
+    try
+    {
+      RequestInitializerHandler.getInstance ().initRequestScope (this);
+    }
+    catch (final Exception aEx)
+    {
+      LOG.error ("Exception caught while initializing request scope:", aEx); //$NON-NLS-1$
+    }
 
-    RequestInitializerHandler.getInstance ().initRequestScope (this);
-
-    if (getAttributeAsBoolean (REQUEST_ATTR_PARSE_JSON_BODY))
+    if (getAttributeAsBoolean (REQUEST_ATTR_PARSE_JSON_BODY) &&
+        getAttributeObject (ERequestDispatcherErrors.ERROR_STATUS_CODE.getID ()) == null)
     {
       initJSONBody ();
     }
