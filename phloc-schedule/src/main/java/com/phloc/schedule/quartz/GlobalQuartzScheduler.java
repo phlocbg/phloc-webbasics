@@ -52,7 +52,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  */
 public class GlobalQuartzScheduler extends GlobalSingleton
 {
-  public static final String GROUP_NAME = "phloc";
+  public static final String GROUP_NAME = "phloc"; //$NON-NLS-1$
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
@@ -64,7 +64,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   public GlobalQuartzScheduler ()
   {
     // main scheduler
-    m_aScheduler = QuartzSchedulerHelper.getScheduler ();
+    this.m_aScheduler = QuartzSchedulerHelper.getScheduler ();
 
     // Always add the statistics listener
     addJobListener (new StatisticsJobListener ());
@@ -84,7 +84,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   @Nonempty
   public String getGroupName ()
   {
-    return m_sGroupName;
+    return this.m_sGroupName;
   }
 
   /**
@@ -97,8 +97,8 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   public void setGroupName (@Nonnull @Nonempty final String sGroupName)
   {
     if (StringHelper.hasNoText (sGroupName))
-      throw new IllegalArgumentException ("GroupName");
-    m_sGroupName = sGroupName;
+      throw new IllegalArgumentException ("GroupName"); //$NON-NLS-1$
+    this.m_sGroupName = sGroupName;
   }
 
   /**
@@ -110,15 +110,15 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   public void addJobListener (@Nonnull final JobListener aJobListener)
   {
     if (aJobListener == null)
-      throw new NullPointerException ("jobListener");
+      throw new NullPointerException ("jobListener"); //$NON-NLS-1$
 
     try
     {
-      m_aScheduler.getListenerManager ().addJobListener (aJobListener, EverythingMatcher.allJobs ());
+      this.m_aScheduler.getListenerManager ().addJobListener (aJobListener, EverythingMatcher.allJobs ());
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to add job listener " + aJobListener, ex);
+      throw new IllegalStateException ("Failed to add job listener " + aJobListener, ex); //$NON-NLS-1$
     }
   }
 
@@ -128,7 +128,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   @Nonnull
   protected final Scheduler getScheduler ()
   {
-    return m_aScheduler;
+    return this.m_aScheduler;
   }
 
   /**
@@ -138,9 +138,12 @@ public class GlobalQuartzScheduler extends GlobalSingleton
    * @param aJobDataMap
    *        The job data map to modify. Never <code>null</code>.
    */
+  @SuppressWarnings ("unused")
   @OverrideOnDemand
   protected void modifyJobDataMap (@Nonnull final JobDataMap aJobDataMap)
-  {}
+  {
+    // override on demand
+  }
 
   /**
    * This method is only for testing purposes.
@@ -161,14 +164,14 @@ public class GlobalQuartzScheduler extends GlobalSingleton
                                  @Nullable final Map <String, ? extends Object> aJobData)
   {
     if (sJobName == null)
-      throw new NullPointerException ("name");
+      throw new NullPointerException ("name"); //$NON-NLS-1$
     if (aTriggerBuilder == null)
-      throw new NullPointerException ("triggerBuilder");
+      throw new NullPointerException ("triggerBuilder"); //$NON-NLS-1$
     if (aJobClass == null)
-      throw new NullPointerException ("class");
+      throw new NullPointerException ("class"); //$NON-NLS-1$
 
     // what to do
-    final JobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
+    final JobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, this.m_sGroupName).build ();
 
     // add custom parameters
     final JobDataMap aJobDataMap = aJobDetail.getJobDataMap ();
@@ -183,9 +186,9 @@ public class GlobalQuartzScheduler extends GlobalSingleton
     {
       // Schedule now
       final Trigger aTrigger = aTriggerBuilder.build ();
-      m_aScheduler.scheduleJob (aJobDetail, aTrigger);
+      this.m_aScheduler.scheduleJob (aJobDetail, aTrigger);
 
-      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with trigger " + aTrigger);
+      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with trigger " + aTrigger); //$NON-NLS-1$ //$NON-NLS-2$
     }
     catch (final SchedulerException ex)
     {
@@ -226,12 +229,12 @@ public class GlobalQuartzScheduler extends GlobalSingleton
     try
     {
       // Shutdown but wait for jobs to complete
-      m_aScheduler.shutdown (true);
-      s_aLogger.info ("Successfully shutdown GlobalQuartzScheduler");
+      this.m_aScheduler.shutdown (true);
+      s_aLogger.info ("Successfully shutdown GlobalQuartzScheduler"); //$NON-NLS-1$
     }
     catch (final SchedulerException ex)
     {
-      s_aLogger.error ("Failed to shutdown GlobalQuartzScheduler", ex);
+      s_aLogger.error ("Failed to shutdown GlobalQuartzScheduler", ex); //$NON-NLS-1$
       throw ex;
     }
   }

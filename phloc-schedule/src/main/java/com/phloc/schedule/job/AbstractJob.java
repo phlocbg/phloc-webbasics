@@ -43,18 +43,18 @@ import com.phloc.schedule.longrun.ILongRunningJob;
 /**
  * Abstract {@link Job} implementation with an exception handler etc.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @ThreadSafe
 public abstract class AbstractJob implements Job
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJob.class);
-  private static final IStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                         "$success");
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterFailure = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
-                                                                                                                         "$failure");
-  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private static final Logger LOG = LoggerFactory.getLogger (AbstractJob.class);
+  private static final IStatisticsHandlerKeyedTimer STATS_TIMER = StatisticsManager.getKeyedTimerHandler (AbstractJob.class);
+  private static final IStatisticsHandlerKeyedCounter STATS_COUNTER_SUCCESS = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                        "$success"); //$NON-NLS-1$
+  private static final IStatisticsHandlerKeyedCounter STATS_COUNTER_FAILURE = StatisticsManager.getKeyedCounterHandler (AbstractJob.class +
+                                                                                                                        "$failure"); //$NON-NLS-1$
+  private static final ReadWriteLock LOCK = new ReentrantReadWriteLock ();
   @GuardedBy ("s_aRWLock")
   private static IJobExceptionHandler s_aCustomExceptionHandler;
 
@@ -72,14 +72,14 @@ public abstract class AbstractJob implements Job
    */
   public static void setCustomExceptionHandler (@Nullable final IJobExceptionHandler aCustomExceptionHandler)
   {
-    s_aRWLock.writeLock ().lock ();
+    LOCK.writeLock ().lock ();
     try
     {
       s_aCustomExceptionHandler = aCustomExceptionHandler;
     }
     finally
     {
-      s_aRWLock.writeLock ().unlock ();
+      LOCK.writeLock ().unlock ();
     }
   }
 
@@ -89,14 +89,14 @@ public abstract class AbstractJob implements Job
   @Nullable
   public static IJobExceptionHandler getCustomExceptionHandler ()
   {
-    s_aRWLock.readLock ().lock ();
+    LOCK.readLock ().lock ();
     try
     {
       return s_aCustomExceptionHandler;
     }
     finally
     {
-      s_aRWLock.readLock ().unlock ();
+      LOCK.readLock ().unlock ();
     }
   }
 
@@ -108,8 +108,10 @@ public abstract class AbstractJob implements Job
    *        The current job data map. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap)
-  {}
+  protected void beforeExecute (@SuppressWarnings ("unused") @Nonnull final JobDataMap aJobDataMap)
+  {
+    // override on demand
+  }
 
   /**
    * This is the method with the main actions to be executed.
@@ -131,8 +133,11 @@ public abstract class AbstractJob implements Job
    *        The execution success state. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
-  {}
+  protected void afterExecute (@SuppressWarnings ("unused") @Nonnull final JobDataMap aJobDataMap,
+                               @SuppressWarnings ("unused") @Nonnull final ESuccess eExecSuccess)
+  {
+    // override on demand
+  }
 
   /**
    * Called when an exception of the specified type occurred
@@ -156,14 +161,15 @@ public abstract class AbstractJob implements Job
       }
       catch (final Throwable t2)
       {
-        s_aLogger.error ("Exception in custom scheduled job exception handler " +
+        LOG.error ("Exception in custom scheduled job exception handler " + //$NON-NLS-1$
                          aCustomExceptionHandler +
-                         " for job class '" +
+                   " for job class '" + //$NON-NLS-1$
                          sJobClassName +
-                         "'", t2);
+                   "'", t2); //$NON-NLS-1$
       }
   }
 
+  @Override
   public final void execute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException
   {
     // State variables
@@ -179,8 +185,8 @@ public abstract class AbstractJob implements Job
       final String sJobClassName = getClass ().getName ();
       try
       {
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Executing scheduled job " + sJobClassName);
+        if (LOG.isDebugEnabled ())
+          LOG.debug ("Executing scheduled job " + sJobClassName); //$NON-NLS-1$
 
         final StopWatch aSW = new StopWatch (true);
 
@@ -191,23 +197,25 @@ public abstract class AbstractJob implements Job
         eExecSuccess = ESuccess.SUCCESS;
 
         // Increment statistics
-        s_aStatsTimer.addTime (sJobClassName, aSW.stopAndGetMillis ());
-        s_aStatsCounterSuccess.increment (sJobClassName);
+        STATS_TIMER.addTime (sJobClassName, aSW.stopAndGetMillis ());
+        STATS_COUNTER_SUCCESS.increment (sJobClassName);
 
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Successfully finished executing scheduled job " + sJobClassName);
+        if (LOG.isDebugEnabled ())
+          LOG.debug ("Successfully finished executing scheduled job " + sJobClassName); //$NON-NLS-1$
       }
       catch (final Throwable t)
       {
         // Increment statistics
-        s_aStatsCounterFailure.increment (sJobClassName);
+        STATS_COUNTER_FAILURE.increment (sJobClassName);
 
         // Notify custom exception handler
         triggerCustomExceptionHandler (t, sJobClassName, this instanceof ILongRunningJob);
 
         if (t instanceof JobExecutionException)
+        {
           throw (JobExecutionException) t;
-        throw new JobExecutionException ("Internal job execution error of " + sJobClassName, t);
+        }
+        throw new JobExecutionException ("Internal job execution error of " + sJobClassName, t); //$NON-NLS-1$
       }
     }
     finally

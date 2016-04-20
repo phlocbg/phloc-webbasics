@@ -72,7 +72,7 @@ public final class QuartzSchedulerHelper
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to create and start scheduler!", ex);
+      throw new IllegalStateException ("Failed to create and start scheduler!", ex); //$NON-NLS-1$
     }
   }
 
@@ -92,7 +92,7 @@ public final class QuartzSchedulerHelper
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Failed to get scheduler metadata", ex);
+      throw new IllegalStateException ("Failed to get scheduler metadata", ex); //$NON-NLS-1$
     }
   }
 
@@ -115,8 +115,8 @@ public final class QuartzSchedulerHelper
     }
     catch (final SchedulerException ex)
     {
-      throw new IllegalStateException ("Error retrieving scheduler state!", ex);
+      throw new IllegalStateException ("Error retrieving scheduler state!", ex); //$NON-NLS-1$
     }
-    throw new IllegalStateException ("Unknown scheduler state!");
+    throw new IllegalStateException ("Unknown scheduler state!"); //$NON-NLS-1$
   }
 }

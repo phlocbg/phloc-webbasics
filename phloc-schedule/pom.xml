@@ -88,7 +88,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webscopes</artifactId>
-      <version>6.7.0</version>
+      <version>6.7.12-SNAPSHOT</version>
     </dependency>
     
     <dependency>
