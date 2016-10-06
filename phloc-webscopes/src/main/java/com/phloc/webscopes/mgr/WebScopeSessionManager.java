@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
@@ -38,16 +37,12 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 /**
  * This is a specialization of {@link ScopeSessionManager} for web scopes.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public final class WebScopeSessionManager
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeSessionManager.class);
-
-  @SuppressWarnings ("unused")
-  @PresentForCodeCoverage
-  private static final WebScopeSessionManager s_aInstance = new WebScopeSessionManager ();
+  private static final Logger LOG = LoggerFactory.getLogger (WebScopeSessionManager.class);
 
   private WebScopeSessionManager ()
   {}
@@ -69,7 +64,7 @@ public final class WebScopeSessionManager
       return null;
     if (!(aSessionScope instanceof ISessionWebScope))
     {
-      s_aLogger.warn ("The passed scope ID '" + sScopeID + "' is not a session web scope: " + aSessionScope.toString ());
+      LOG.warn ("The passed scope ID '" + sScopeID + "' is not a session web scope: " + aSessionScope.toString ());
       return null;
     }
     return (ISessionWebScope) aSessionScope;

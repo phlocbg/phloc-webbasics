@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.IScopeRenewalAware;
@@ -41,16 +40,12 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 /**
  * Some utility methods to handle complex actions in session scopes.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public final class WebScopeSessionHelper
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeSessionHelper.class);
-
-  @SuppressWarnings ("unused")
-  @PresentForCodeCoverage
-  private static final WebScopeSessionHelper s_aInstance = new WebScopeSessionHelper ();
+  private static final Logger LOG = LoggerFactory.getLogger (WebScopeSessionHelper.class);
 
   private WebScopeSessionHelper ()
   {}
@@ -128,18 +123,19 @@ public final class WebScopeSessionHelper
     final Map <String, IScopeRenewalAware> aSessionScopeValues = aOldSessionScope.getAllScopeRenewalAwareAttributes ();
     final Map <String, Map <String, IScopeRenewalAware>> aSessionApplicationScopeValues = _getSessionApplicationScopeValues (aOldSessionScope);
 
+    // First do not invalidate the underlying session - only renew the session
+    // scope itself
+    ScopeSessionManager.getInstance ().onScopeEnd (aOldSessionScope);
     // Clear the old the session scope
     if (bInvalidateHttpSession)
     {
       // renew the session
-      s_aLogger.info ("Invalidating session " + aOldSessionScope.getID ());
+      LOG.info ("Invalidating session " + aOldSessionScope.getID ());
       aOldSessionScope.selfDestruct ();
     }
     else
     {
-      // Do not invalidate the underlying session - only renew the session scope
-      // itself
-      ScopeSessionManager.getInstance ().onScopeEnd (aOldSessionScope);
+      LOG.info ("Destroying session scope " + aOldSessionScope.getID ());
     }
 
     // Ensure that we get a new session!
@@ -185,7 +181,9 @@ public final class WebScopeSessionHelper
 
     // Ensure that we get a new session!
     // Here it is OK to create a new session scope explicitly!
-    final ISessionWebScope aNewSessionScope = WebScopeManager.internalGetOrCreateSessionScope (aHttpSession, true, true);
+    final ISessionWebScope aNewSessionScope = WebScopeManager.internalGetOrCreateSessionScope (aHttpSession,
+                                                                                               true,
+                                                                                               true);
     _restoreScopeAttributes (aNewSessionScope, aSessionScopeValues, aSessionApplicationScopeValues);
     return aNewSessionScope;
   }
