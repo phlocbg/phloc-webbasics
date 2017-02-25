@@ -32,15 +32,16 @@ import com.phloc.web.smtp.ISMTPSettings;
 
 public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
 {
-  private static final String ATTR_HOST = "host";
-  private static final String ATTR_PORT = "port";
-  private static final String ATTR_USER = "user";
-  private static final String ATTR_PASSWORD = "password";
-  private static final String ATTR_CHARSET = "charset";
-  private static final String ATTR_SSLENABLED = "sslenabled";
-  private static final String ATTR_STARTTLSENABLED = "starttlsenabled";
-  private static final String ATTR_CONNECTIONTIMEOUT = "connectiontimeout";
-  private static final String ATTR_TIMEOUT = "timeout";
+  private static final String ATTR_HOST = "host"; //$NON-NLS-1$
+  private static final String ATTR_HOSTNAME = "hostname"; //$NON-NLS-1$
+  private static final String ATTR_PORT = "port"; //$NON-NLS-1$
+  private static final String ATTR_USER = "user"; //$NON-NLS-1$
+  private static final String ATTR_PASSWORD = "password"; //$NON-NLS-1$
+  private static final String ATTR_CHARSET = "charset"; //$NON-NLS-1$
+  private static final String ATTR_SSLENABLED = "sslenabled"; //$NON-NLS-1$
+  private static final String ATTR_STARTTLSENABLED = "starttlsenabled"; //$NON-NLS-1$
+  private static final String ATTR_CONNECTIONTIMEOUT = "connectiontimeout"; //$NON-NLS-1$
+  private static final String ATTR_TIMEOUT = "timeout"; //$NON-NLS-1$
 
   @Nonnull
   public static IMicroElement convertToMicroElement (@Nonnull final ISMTPSettings aSMTPSettings,
@@ -60,6 +61,7 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     return eSMTPSettings;
   }
 
+  @Override
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
                                               @Nullable final String sNamespaceURI,
@@ -79,14 +81,14 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
   {
     String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
     if (sHost == null)
-      sHost = eSMTPSettings.getAttribute ("hostname");
+      sHost = eSMTPSettings.getAttribute (ATTR_HOSTNAME);
 
     final String sPort = eSMTPSettings.getAttribute (ATTR_PORT);
     final int nPort = StringParser.parseInt (sPort, CWeb.DEFAULT_PORT_SMTP);
 
     String sUser = eSMTPSettings.getAttribute (ATTR_USER);
     if (sUser == null)
-      sUser = eSMTPSettings.getAttribute ("username");
+      sUser = eSMTPSettings.getAttribute ("username"); //$NON-NLS-1$
 
     final String sPassword = eSMTPSettings.getAttribute (ATTR_PASSWORD);
 
@@ -96,7 +98,7 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     String sSSLEnabled = eSMTPSettings.getAttribute (ATTR_SSLENABLED);
 
     if (sSSLEnabled == null)
-      sSSLEnabled = eSMTPSettings.getAttribute ("usessl");
+      sSSLEnabled = eSMTPSettings.getAttribute ("usessl"); //$NON-NLS-1$
     final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled, EmailGlobalSettings.isUseSSL ());
 
     final String sSTARTTLSEnabled = eSMTPSettings.getAttribute (ATTR_STARTTLSENABLED);
@@ -125,6 +127,7 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
    * The alternative attributes are used to be consistent with old failed mail
    * conversions, as they did the transformation manually!
    */
+  @Override
   @Nonnull
   @ContainsSoftMigration
   public SMTPSettings convertToNative (@Nonnull final IMicroElement eSMTPSettings)

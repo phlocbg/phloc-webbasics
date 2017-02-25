@@ -34,6 +34,8 @@ import com.phloc.web.smtp.impl.EmailDataMicroTypeConverter;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettingsMicroTypeConverter;
 import com.phloc.web.smtp.impl.SMTPSettings;
+import com.phloc.web.smtp.impl.SMTPSettingsBundle;
+import com.phloc.web.smtp.impl.SMTPSettingsBundleMicroTypeConverter;
 import com.phloc.web.smtp.impl.SMTPSettingsMicroTypeConverter;
 
 /**
@@ -45,6 +47,7 @@ import com.phloc.web.smtp.impl.SMTPSettingsMicroTypeConverter;
 @IsSPIImplementation
 public final class MicroTypeConverterRegistrar_phloc_web implements IMicroTypeConverterRegistrarSPI
 {
+  @Override
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
     aRegistry.registerMicroElementTypeConverter (EmailAttachment.class, new EmailAttachmentMicroTypeConverter ());
@@ -55,5 +58,6 @@ public final class MicroTypeConverterRegistrar_phloc_web implements IMicroTypeCo
     aRegistry.registerMicroElementTypeConverter (ReadonlySMTPSettings.class,
                                                  new ReadonlySMTPSettingsMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (SMTPSettings.class, new SMTPSettingsMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (SMTPSettingsBundle.class, new SMTPSettingsBundleMicroTypeConverter ());
   }
 }

@@ -39,6 +39,7 @@ import com.phloc.web.smtp.ISMTPSettings;
 @Immutable
 public final class ReadonlySMTPSettings implements ISMTPSettings
 {
+  private static final long serialVersionUID = -7425491209978875323L;
   private final SMTPSettings m_aSettings;
 
   /**
@@ -49,7 +50,7 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    */
   ReadonlySMTPSettings (@Nonnull final SMTPSettings aOther)
   {
-    m_aSettings = ValueEnforcer.notNull (aOther, "Other");
+    this.m_aSettings = ValueEnforcer.notNull (aOther, "Other"); //$NON-NLS-1$
   }
 
   /**
@@ -151,75 +152,86 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
                                final long nConnectTimeoutMilliSecs,
                                final long nTimeoutMilliSecs)
   {
-    m_aSettings = new SMTPSettings (sHostName,
-                                    nPort,
-                                    sUserName,
-                                    sPassword,
-                                    sCharset,
-                                    bSSLEnabled,
-                                    bSTARTTLSEnabled,
-                                    nConnectTimeoutMilliSecs,
-                                    nTimeoutMilliSecs);
+    this.m_aSettings = new SMTPSettings (sHostName,
+                                         nPort,
+                                         sUserName,
+                                         sPassword,
+                                         sCharset,
+                                         bSSLEnabled,
+                                         bSTARTTLSEnabled,
+                                         nConnectTimeoutMilliSecs,
+                                         nTimeoutMilliSecs);
   }
 
+  @Override
   @Nonnull
   public String getHostName ()
   {
-    return m_aSettings.getHostName ();
+    return this.m_aSettings.getHostName ();
   }
 
+  @Override
   public int getPort ()
   {
-    return m_aSettings.getPort ();
+    return this.m_aSettings.getPort ();
   }
 
+  @Override
   @Nullable
   public String getUserName ()
   {
-    return m_aSettings.getUserName ();
+    return this.m_aSettings.getUserName ();
   }
 
+  @Override
   @Nullable
   public String getPassword ()
   {
-    return m_aSettings.getPassword ();
+    return this.m_aSettings.getPassword ();
   }
 
+  @Override
   @Nonnull
   public String getCharset ()
   {
-    return m_aSettings.getCharset ();
+    return this.m_aSettings.getCharset ();
   }
 
+  @Override
   @Nonnull
   public Charset getCharsetObj ()
   {
-    return m_aSettings.getCharsetObj ();
+    return this.m_aSettings.getCharsetObj ();
   }
 
+  @Override
   public boolean isSSLEnabled ()
   {
-    return m_aSettings.isSSLEnabled ();
+    return this.m_aSettings.isSSLEnabled ();
   }
 
+  @Override
   public boolean isSTARTTLSEnabled ()
   {
-    return m_aSettings.isSTARTTLSEnabled ();
+    return this.m_aSettings.isSTARTTLSEnabled ();
   }
 
+  @Override
   public long getConnectionTimeoutMilliSecs ()
   {
-    return m_aSettings.getConnectionTimeoutMilliSecs ();
+    return this.m_aSettings.getConnectionTimeoutMilliSecs ();
   }
 
+  @Override
   public long getTimeoutMilliSecs ()
   {
-    return m_aSettings.getTimeoutMilliSecs ();
+    return this.m_aSettings.getTimeoutMilliSecs ();
   }
 
+  @Override
   public boolean areRequiredFieldsSet ()
   {
-    return m_aSettings.areRequiredFieldsSet ();
+    return this.m_aSettings.areRequiredFieldsSet ();
   }
 
   @Override
@@ -230,18 +242,18 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
     if (!(o instanceof ReadonlySMTPSettings))
       return false;
     final ReadonlySMTPSettings rhs = (ReadonlySMTPSettings) o;
-    return m_aSettings.equals (rhs.m_aSettings);
+    return this.m_aSettings.equals (rhs.m_aSettings);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aSettings).getHashCode ();
+    return new HashCodeGenerator (this).append (this.m_aSettings).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("settings", m_aSettings).toString ();
+    return new ToStringGenerator (this).append ("settings", this.m_aSettings).toString (); //$NON-NLS-1$
   }
 }
