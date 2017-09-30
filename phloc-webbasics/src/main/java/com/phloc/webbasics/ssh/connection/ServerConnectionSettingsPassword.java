@@ -32,33 +32,50 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @Immutable
-public final class ServerConnectionSettingsPassword extends AbstractServerConnectionSettings implements
-                                                                                            IServerConnectionSettingsPassword
+public final class ServerConnectionSettingsPassword extends AbstractServerConnectionSettings implements IServerConnectionSettingsPassword
 {
   private final String m_sPassword;
+  private final boolean m_bPlain;
 
   public ServerConnectionSettingsPassword (@Nonnull @Nonempty final String sIP,
                                            @Nonnegative final int nPort,
                                            @Nonnull @Nonempty final String sUserName,
                                            @Nonnull @Nonempty final String sPassword)
   {
-    super (sIP, nPort, sUserName);
-    if (StringHelper.hasNoText (sPassword))
-      throw new IllegalArgumentException ("password");
-
-    m_sPassword = sPassword;
+    this (sIP, nPort, sUserName, sPassword, true);
   }
 
+  public ServerConnectionSettingsPassword (@Nonnull @Nonempty final String sIP,
+                                           @Nonnegative final int nPort,
+                                           @Nonnull @Nonempty final String sUserName,
+                                           @Nonnull @Nonempty final String sPassword,
+                                           @Nonnull @Nonempty final boolean bPlain)
+  {
+    super (sIP, nPort, sUserName);
+    if (StringHelper.hasNoText (sPassword))
+      throw new IllegalArgumentException ("password"); //$NON-NLS-1$
+
+    this.m_sPassword = sPassword;
+    this.m_bPlain = bPlain;
+  }
+
+  @Override
   @Nonnull
   @Nonempty
   public String getPassword ()
   {
-    return m_sPassword;
+    return this.m_sPassword;
   }
 
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).appendPassword ("password").toString ();
+    return ToStringGenerator.getDerived (super.toString ()).appendPassword ("password").toString (); //$NON-NLS-1$
+  }
+
+  @Override
+  public boolean isPlainPassword ()
+  {
+    return this.m_bPlain;
   }
 }

@@ -34,23 +34,40 @@ public class UserNamePasswordCredentials implements IUserNamePasswordCredentials
 {
   private final String m_sUserName;
   private final String m_sPassword;
+  private final boolean m_bPlain;
 
   public UserNamePasswordCredentials (@Nullable final String sUserName, @Nullable final String sPassword)
   {
-    m_sUserName = sUserName;
-    m_sPassword = sPassword;
+    this (sUserName, sPassword, true);
   }
 
+  public UserNamePasswordCredentials (@Nullable final String sUserName,
+                                      @Nullable final String sPassword,
+                                      final boolean bPlain)
+  {
+    this.m_sUserName = sUserName;
+    this.m_sPassword = sPassword;
+    this.m_bPlain = bPlain;
+  }
+
+  @Override
   @Nullable
   public final String getUserName ()
   {
-    return m_sUserName;
+    return this.m_sUserName;
   }
 
+  @Override
   @Nullable
   public final String getPassword ()
   {
-    return m_sPassword;
+    return this.m_sPassword;
+  }
+
+  @Override
+  public boolean isPlainPassword ()
+  {
+    return this.m_bPlain;
   }
 
   @Override
@@ -61,18 +78,19 @@ public class UserNamePasswordCredentials implements IUserNamePasswordCredentials
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final UserNamePasswordCredentials rhs = (UserNamePasswordCredentials) o;
-    return EqualsUtils.equals (m_sUserName, rhs.m_sUserName) && EqualsUtils.equals (m_sPassword, rhs.m_sPassword);
+    return EqualsUtils.equals (this.m_sUserName, rhs.m_sUserName) &&
+           EqualsUtils.equals (this.m_sPassword, rhs.m_sPassword);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sUserName).append (m_sPassword).getHashCode ();
+    return new HashCodeGenerator (this).append (this.m_sUserName).append (this.m_sPassword).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("userName", m_sUserName).appendPassword ("password").toString ();
+    return new ToStringGenerator (this).append ("userName", this.m_sUserName).appendPassword ("password").toString (); //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

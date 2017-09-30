@@ -40,4 +40,10 @@ public interface IUserNamePasswordCredentials extends IAuthCredentials
    */
   @Nullable
   String getPassword ();
+
+  /**
+   * @return Whether or not the password in these credentials is plain and
+   *         therefore needs to be encoded before comparison
+   */
+  boolean isPlainPassword ();
 }
