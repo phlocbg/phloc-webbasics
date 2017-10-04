@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+
+  <entry date="2017-10-03" category="tech" action="update">
+    <change>
+      <text locale="en">For UserNamePasswordCredentials, you can now specify if the password is passed in plain or encoded (formerly always plain)</text>
+    </change>
+  </entry>
   <release date="2015-11-03" version="3.2.2" />
   <entry date="2015-11-03" category="tech" action="update">
     <change>
