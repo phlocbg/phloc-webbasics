@@ -346,13 +346,9 @@ public final class WebScopeManager
         // This can e.g. happen in tests, when there are no registered
         // listeners for session events!
         LOG.warn ("Creating a new session web scope for ID '" //$NON-NLS-1$
-                  +
-                  sSessionID +
-                  "' but there should already be one!" //$NON-NLS-1$
-                  +
-                  " Check your HttpSessionListener implementation." //$NON-NLS-1$
-                  +
-                  " See com.phloc.scopes.web.servlet.WebScopeListener for an example."); //$NON-NLS-1$
+                  + sSessionID + "' but there should already be one!" //$NON-NLS-1$
+                  + " Check your HttpSessionListener implementation." //$NON-NLS-1$
+                  + " See com.phloc.scopes.web.servlet.WebScopeListener for an example."); //$NON-NLS-1$
       }
 
       // Create a new session scope
@@ -366,7 +362,8 @@ public final class WebScopeManager
     catch (final ClassCastException ex)
     {
       throw new IllegalStateException ("Session scope object is not a web scope but: " + //$NON-NLS-1$
-                                       String.valueOf (aSessionWebScope), ex);
+                                       String.valueOf (aSessionWebScope),
+                                       ex);
     }
   }
 
@@ -509,7 +506,11 @@ public final class WebScopeManager
         try
         {
           aHttpSession.invalidate ();
-          LOG.warn ("Found no session scope but invalidated session '" + sSessionID + "' anyway"); //$NON-NLS-1$ //$NON-NLS-2$
+          // this is actually fine when the scope is first ended and then
+          // triggers the session invalidate, then there is no scope on session
+          // invalidate ;-)
+          // LOG.warn("Found no session scope but invalidated session '" +
+          // sSessionID + "' anyway"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         catch (final IllegalStateException ex)
         {
@@ -557,8 +558,8 @@ public final class WebScopeManager
                                                                         final boolean bCreateIfNotExisting)
   {
     final ISessionWebScope aSessionScope = getSessionScope (bCreateIfNotExisting);
-    return aSessionScope == null ? null : aSessionScope.getSessionApplicationScope (sApplicationID,
-                                                                                    bCreateIfNotExisting);
+    return aSessionScope == null ? null
+                                 : aSessionScope.getSessionApplicationScope (sApplicationID, bCreateIfNotExisting);
   }
 
   // --- request scopes ---

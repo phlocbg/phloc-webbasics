@@ -21,6 +21,11 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
+  <release date="2017-10-26" version="1.6.2" />
+  <entry date="2017-10-26" category="tech" action="add">
+    <change>
+    <text locale="en">Added possibility for scope aware servlets to better steer the used application ID (can be used for servlets with dynamic application ID)</text>
+  </change>
   <release date="2016-10-06" version="1.6.1" />
   <entry date="2016-10-06" category="tech" action="fix">
     <change>

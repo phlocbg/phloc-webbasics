@@ -83,6 +83,17 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
   }
 
   /**
+   * @return The current application ID (may change at runtime). This can be
+   *         used to adopt the application ID of another servlet where the
+   *         current request is originating from (e.g. error handler forward)
+   */
+  @OverrideOnDemand
+  protected String getCurrentApplicationID ()
+  {
+    return this.m_sApplicationID;
+  }
+
+  /**
    * Add custom init code in overridden implementations of this method.
    * 
    * @throws ServletException
@@ -98,8 +109,8 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
   public final void init () throws ServletException
   {
     super.init ();
-    m_sApplicationID = getApplicationID ();
-    if (StringHelper.hasNoText (m_sApplicationID))
+    this.m_sApplicationID = getApplicationID ();
+    if (StringHelper.hasNoText (this.m_sApplicationID))
       throw new InitializationException ("Failed retrieve a valid application ID!");
     onInit ();
   }
@@ -149,7 +160,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
   protected RequestScopeInitializer beforeRequest (@Nonnull final HttpServletRequest aHttpRequest,
                                                    @Nonnull final HttpServletResponse aHttpResponse)
   {
-    final RequestScopeInitializer aRequestScopeInitializer = RequestScopeInitializer.create (m_sApplicationID,
+    final RequestScopeInitializer aRequestScopeInitializer = RequestScopeInitializer.create (getCurrentApplicationID (),
                                                                                              aHttpRequest,
                                                                                              aHttpResponse);
     _ensureResponseCharset (aHttpResponse);
@@ -298,8 +309,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   @Override
   protected final void doOptions (@Nonnull final HttpServletRequest aHttpRequest,
-                                  @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                   IOException
+                                  @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
   {
     final RequestScopeInitializer aRequestScopeInitializer = beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
