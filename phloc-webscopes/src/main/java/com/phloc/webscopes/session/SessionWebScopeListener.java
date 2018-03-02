@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2014 phloc systems
+ * Copyright (C) 2006-2018 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -18,6 +18,7 @@
 package com.phloc.webscopes.session;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -37,10 +38,31 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public class SessionWebScopeListener implements HttpSessionListener
 {
+  private static final ThreadLocal <String> SESSION_IN_CREATION = new ThreadLocal <String> ();
+
+  /**
+   * This will deliver the ID of the currently created session (for the current
+   * thread) during the {@link #sessionCreated(HttpSessionEvent)} method. <br>
+   * <b>ATTENTION:</b><br>
+   * If you need to access the session scope or session ID from a place that is
+   * potentially triggered from within the session creation, make sure you first
+   * check this method and use the returned session ID to avoid creating
+   * additional sessions!
+   * 
+   * @return The ID of the session which is currently in creation for the
+   *         current thread or <code>null</code>
+   */
+  @Nullable
+  public static String getSessionInCreation ()
+  {
+    return SESSION_IN_CREATION.get ();
+  }
+
   @Override
   public final void sessionCreated (@Nonnull final HttpSessionEvent aEvent)
   {
     final HttpSession aSession = aEvent.getSession ();
+    SESSION_IN_CREATION.set (aSession.getId ());
     try
     {
       this.onBeforeSessionCreated (aSession);
@@ -48,6 +70,7 @@ public class SessionWebScopeListener implements HttpSessionListener
     finally
     {
       this.onAfterSessionCreated (WebScopeManager.onSessionBegin (aSession));
+      SESSION_IN_CREATION.remove ();
     }
   }
 

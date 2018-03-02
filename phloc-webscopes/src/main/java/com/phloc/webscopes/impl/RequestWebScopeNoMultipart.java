@@ -48,6 +48,7 @@ import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
@@ -105,7 +106,8 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       s_aLogger.info ("Created request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
+                      CGStringHelper.getClassLocalName (this),
+                      ScopeUtils.getDebugStackTrace ());
   }
 
   @SuppressWarnings ("static-method")
@@ -177,7 +179,8 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       s_aLogger.info ("Initialized request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
+                      CGStringHelper.getClassLocalName (this),
+                      ScopeUtils.getDebugStackTrace ());
   }
 
   /**
@@ -199,6 +202,11 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
         {
           final String sJSON = StreamUtils.getAllBytesAsString (this.m_aHttpRequest.getInputStream (),
                                                                 CCharset.CHARSET_UTF_8_OBJ);
+          if (StringHelper.isEmpty (sJSON))
+          {
+            LOG.warn ("Received empty JSON body in request (may be due to previous IO problem)."); //$NON-NLS-1$
+            return;
+          }
           final IJSONObject aJSON = JSONReader.parseObject (sJSON);
           for (final String sProperty : aJSON.getAllPropertyNames ())
           {
@@ -244,7 +252,8 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       s_aLogger.info ("Destroyed request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
+                      CGStringHelper.getClassLocalName (this),
+                      ScopeUtils.getDebugStackTrace ());
   }
 
   @Override
@@ -706,7 +715,8 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("httpRequest", this.m_aHttpRequest) //$NON-NLS-1$
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("httpRequest", this.m_aHttpRequest) //$NON-NLS-1$
                             .append ("httpResponse", this.m_aHttpResponse) //$NON-NLS-1$
                             .toString ();
   }

@@ -21,16 +21,33 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
+  <release date="2018-03-02" version="6.8.1" />
+  <entry date="2018-03-02" category="tech" action="fix">
+    <change>
+      <text locale="en">Reverted faulty fix concerning scope renewal from 6.7.13. The session invalidation must happen before the scope ends in order to still be able to access the scope from listeners!</text>
+    </change>
+  </entry>  
+  <entry date="2018-03-02" category="tech" action="fix">
+    <change>
+      <text locale="en">Providing thread local access to session ID during createSession, can be used to avoid creating additional sessions in the course of a listener action.</text>
+    </change>
+  </entry>  
+  <entry date="2018-03-02" category="tech" action="add">
+    <change>
+      <text locale="en">Extended error handling on request initialization in filters and added possibility for custom exception handling.</text>
+    </change>
+  </entry>  
   <release date="2017-10-26" version="6.8.0" />
   <entry date="2017-10-26" category="tech" action="add">
     <change>
-    <text locale="en">Added possibility for scope aware servlets to better steer the used application ID (can be used for servlets with dynamic application ID)</text>
-  </change>
+      <text locale="en">Added possibility for scope aware servlets to better steer the used application ID (can be used for servlets with dynamic application ID)</text>
+    </change>
+  </entry>
   <release date="2016-10-06" version="6.7.13" />
   <entry date="2016-10-06" category="tech" action="fix">
     <change>
-    <text locale="en">Fixed so renewal of session scope will properly end the old scope in all cases</text>
-  </change>
+      <text locale="en">Fixed so renewal of session scope will properly end the old scope in all cases</text>
+    </change>
   </entry>
   <release date="2016-04-20" version="6.7.12" />
   <entry date="2016-04-20" category="tech" action="add">
