@@ -57,34 +57,37 @@ public class SessionWebScope extends SessionScope implements ISessionWebScope
   public SessionWebScope (@Nonnull final HttpSession aHttpSession)
   {
     super (aHttpSession.getId ());
-    m_aHttpSession = aHttpSession;
+    this.m_aHttpSession = aHttpSession;
   }
 
   @Override
   public void initScope ()
   {
     // Copy all attributes from the HTTP session in this scope
-    final Enumeration <?> aAttrNames = m_aHttpSession.getAttributeNames ();
+    final Enumeration <?> aAttrNames = this.m_aHttpSession.getAttributeNames ();
     if (aAttrNames != null)
+    {
       while (aAttrNames.hasMoreElements ())
       {
         final String sAttrName = (String) aAttrNames.nextElement ();
-        final Object aAttrValue = m_aHttpSession.getAttribute (sAttrName);
+        final Object aAttrValue = this.m_aHttpSession.getAttribute (sAttrName);
         setAttribute (sAttrName, aAttrValue);
       }
+    }
   }
 
   @Override
   @Nonnull
   public EContinue selfDestruct ()
   {
+
     // Since the session is still open when we're shutting down the global
     // context, the session must also be invalidated!
     try
     {
       // Should implicitly trigger a call to WebScopeManager.onSessionEnd, which
       // than triggers a call to aSessionScope.destroyScope
-      m_aHttpSession.invalidate ();
+      this.m_aHttpSession.invalidate ();
       // Do not continue with the regular destruction procedure!
       return EContinue.BREAK;
     }
@@ -102,7 +105,9 @@ public class SessionWebScope extends SessionScope implements ISessionWebScope
   public EChange setAttribute (@Nonnull final String sName, @Nullable final Object aNewValue)
   {
     if (aNewValue != null && !(aNewValue instanceof Serializable))
+    {
       s_aLogger.warn ("Value of class " + aNewValue.getClass ().getName () + " should implement Serializable!");
+    }
 
     return super.setAttribute (sName, aNewValue);
   }
@@ -122,35 +127,40 @@ public class SessionWebScope extends SessionScope implements ISessionWebScope
     return (ISessionApplicationWebScope) super.getSessionApplicationScope (sApplicationID, bCreateIfNotExisting);
   }
 
+  @Override
   @Nonnull
   public HttpSession getSession ()
   {
-    return m_aHttpSession;
+    return this.m_aHttpSession;
   }
 
+  @Override
   public long getCreationTime ()
   {
-    return m_aHttpSession.getCreationTime ();
+    return this.m_aHttpSession.getCreationTime ();
   }
 
+  @Override
   public long getLastAccessedTime ()
   {
-    return m_aHttpSession.getLastAccessedTime ();
+    return this.m_aHttpSession.getLastAccessedTime ();
   }
 
+  @Override
   public long getMaxInactiveInterval ()
   {
-    return m_aHttpSession.getMaxInactiveInterval ();
+    return this.m_aHttpSession.getMaxInactiveInterval ();
   }
 
+  @Override
   public boolean isNew ()
   {
-    return m_aHttpSession.isNew ();
+    return this.m_aHttpSession.isNew ();
   }
 
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("httpSession", m_aHttpSession).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("httpSession", this.m_aHttpSession).toString ();
   }
 }

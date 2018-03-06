@@ -74,7 +74,8 @@ public final class WebScopeManager
    * currently destroyed (necessary and available only inside the session
    * listener when reacting to the session destroyed event)
    */
-  private static final ThreadLocal <String> s_sDyingSessionID = new ThreadLocal <String> ();
+  private static final ThreadLocal <String> CREATING_SESSION_ID = new ThreadLocal <String> ();
+  private static final ThreadLocal <String> DYING_SESSION_ID = new ThreadLocal <String> ();
 
   private WebScopeManager ()
   {}
@@ -88,6 +89,18 @@ public final class WebScopeManager
   public static boolean isSessionPassivationAllowed ()
   {
     return s_aSessionPassivationAllowed.get ();
+  }
+
+  @Nullable
+  public static String getCreatingSessionID ()
+  {
+    return CREATING_SESSION_ID.get ();
+  }
+
+  @Nullable
+  public static String getDyingSessionID ()
+  {
+    return DYING_SESSION_ID.get ();
   }
 
   /**
@@ -115,8 +128,10 @@ public final class WebScopeManager
       {
         // Ensure the activator is present
         if (aHttpSession.getAttribute (SESSION_ATTR_SESSION_SCOPE_ACTIVATOR) == null)
+        {
           aHttpSession.setAttribute (SESSION_ATTR_SESSION_SCOPE_ACTIVATOR,
                                      new SessionWebScopeActivator (aSessionWebScope));
+        }
       }
       else
       {
@@ -184,7 +199,9 @@ public final class WebScopeManager
   {
     final IGlobalWebScope aGlobalScope = getGlobalScopeOrNull ();
     if (aGlobalScope == null)
+    {
       throw new IllegalStateException ("No global web scope object has been set!"); //$NON-NLS-1$
+    }
     return aGlobalScope;
   }
 
@@ -211,7 +228,9 @@ public final class WebScopeManager
   {
     final IApplicationWebScope aAppScope = getApplicationScope (true);
     if (aAppScope == null)
+    {
       throw new IllegalStateException ("No application web scope object has been set!"); //$NON-NLS-1$
+    }
     return aAppScope;
   }
 
@@ -253,9 +272,11 @@ public final class WebScopeManager
   {
     final IApplicationWebScope aAppScope = getApplicationScope (sApplicationID, true);
     if (aAppScope == null)
+    {
       throw new IllegalStateException ("No application web scope object for application ID '" + //$NON-NLS-1$
                                        sApplicationID +
                                        "' is present!"); //$NON-NLS-1$
+    }
     return aAppScope;
   }
 
@@ -343,6 +364,11 @@ public final class WebScopeManager
     {
       if (!bItsOkayToCreateANewScope)
       {
+        if (!isRequestSessionValid ())
+        {
+          LOG.warn ("Not creating scope for already invalidated session!"); //$NON-NLS-1$
+          return null;
+        }
         // This can e.g. happen in tests, when there are no registered
         // listeners for session events!
         LOG.warn ("Creating a new session web scope for ID '" //$NON-NLS-1$
@@ -350,7 +376,6 @@ public final class WebScopeManager
                   + " Check your HttpSessionListener implementation." //$NON-NLS-1$
                   + " See com.phloc.scopes.web.servlet.WebScopeListener for an example."); //$NON-NLS-1$
       }
-
       // Create a new session scope
       aSessionWebScope = onSessionBegin (aHttpSession);
     }
@@ -365,6 +390,16 @@ public final class WebScopeManager
                                        String.valueOf (aSessionWebScope),
                                        ex);
     }
+  }
+
+  public static boolean isRequestSessionValid ()
+  {
+    final IRequestWebScope aRequestScope = getRequestScopeOrNull ();
+    if (aRequestScope != null)
+    {
+      return aRequestScope.getRequest ().isRequestedSessionIdValid ();
+    }
+    return false;
   }
 
   /**
@@ -414,7 +449,7 @@ public final class WebScopeManager
   {
     // If there is a scope currently set to 'dying', use that one (we are inside
     // a session listener implementation!)
-    final String sDyingSessionID = s_sDyingSessionID.get ();
+    final String sDyingSessionID = DYING_SESSION_ID.get ();
     if (StringHelper.hasText (sDyingSessionID))
     {
       final ISessionWebScope aDyingSessionScope = WebScopeSessionManager.getSessionWebScopeOfID (sDyingSessionID);
@@ -430,15 +465,47 @@ public final class WebScopeManager
       // Check if we have an HTTP session object
       final HttpSession aHttpSession = aRequestScope.getSession (bCreateIfNotExisting);
       if (aHttpSession != null)
+      {
         return internalGetOrCreateSessionScope (aHttpSession, bCreateIfNotExisting, bItsOkayToCreateANewSession);
+      }
     }
     else
     {
       // If we want a session scope, we expect the return value to be non-null!
       if (bCreateIfNotExisting)
+      {
         throw new IllegalStateException ("No request scope is present, so no session scope can be retrieved!"); //$NON-NLS-1$
+      }
     }
     return null;
+  }
+
+  /**
+   * To be called when the session listener detects that a session was/is
+   * created. This will mark the session and allow reusing the session scope in
+   * the course of listener implementation without creating additional sessions
+   * 
+   * @param aHttpSession
+   */
+  public static void onDetectSessionStart (@Nonnull final HttpSession aHttpSession)
+  {
+    if (aHttpSession == null)
+    {
+      throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
+    }
+    CREATING_SESSION_ID.set (aHttpSession.getId ());
+  }
+
+  public static void onFinishedSessionStart (@Nonnull final HttpSession aHttpSession)
+  {
+    if (aHttpSession == null)
+    {
+      throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
+    }
+    if (aHttpSession.getId ().equals (CREATING_SESSION_ID.get ()))
+    {
+      CREATING_SESSION_ID.remove ();
+    }
   }
 
   /**
@@ -454,7 +521,7 @@ public final class WebScopeManager
     {
       throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
     }
-    s_sDyingSessionID.set (aHttpSession.getId ());
+    DYING_SESSION_ID.set (aHttpSession.getId ());
   }
 
   /**
@@ -472,8 +539,6 @@ public final class WebScopeManager
     {
       throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
     }
-    s_sDyingSessionID.remove ();
-
     final ScopeSessionManager aSSM = ScopeSessionManager.getInstance ();
     final String sSessionID = aHttpSession.getId ();
     final ISessionScope aSessionScope = aSSM.getSessionScopeOfID (sSessionID);
@@ -505,12 +570,10 @@ public final class WebScopeManager
       {
         try
         {
-          aHttpSession.invalidate ();
           // this is actually fine when the scope is first ended and then
           // triggers the session invalidate, then there is no scope on session
           // invalidate ;-)
-          // LOG.warn("Found no session scope but invalidated session '" +
-          // sSessionID + "' anyway"); //$NON-NLS-1$ //$NON-NLS-2$
+          aHttpSession.invalidate ();
         }
         catch (final IllegalStateException ex)
         {
@@ -530,6 +593,10 @@ public final class WebScopeManager
           }
         }
       }
+    }
+    if (sSessionID.equals (DYING_SESSION_ID.get ()))
+    {
+      DYING_SESSION_ID.remove ();
     }
   }
 
@@ -600,7 +667,9 @@ public final class WebScopeManager
   {
     final IRequestWebScope aRequestScope = getRequestScopeOrNull ();
     if (aRequestScope == null)
+    {
       throw new IllegalStateException ("No request web scope object has been set!"); //$NON-NLS-1$
+    }
     return aRequestScope;
   }
 

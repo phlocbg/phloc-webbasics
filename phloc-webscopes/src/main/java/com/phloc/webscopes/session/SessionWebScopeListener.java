@@ -18,7 +18,6 @@
 package com.phloc.webscopes.session;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -38,8 +37,6 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public class SessionWebScopeListener implements HttpSessionListener
 {
-  private static final ThreadLocal <String> SESSION_IN_CREATION = new ThreadLocal <String> ();
-
   /**
    * This will deliver the ID of the currently created session (for the current
    * thread) during the {@link #sessionCreated(HttpSessionEvent)} method. <br>
@@ -52,17 +49,12 @@ public class SessionWebScopeListener implements HttpSessionListener
    * @return The ID of the session which is currently in creation for the
    *         current thread or <code>null</code>
    */
-  @Nullable
-  public static String getSessionInCreation ()
-  {
-    return SESSION_IN_CREATION.get ();
-  }
 
   @Override
   public final void sessionCreated (@Nonnull final HttpSessionEvent aEvent)
   {
     final HttpSession aSession = aEvent.getSession ();
-    SESSION_IN_CREATION.set (aSession.getId ());
+    WebScopeManager.onDetectSessionStart (aSession);
     try
     {
       this.onBeforeSessionCreated (aSession);
@@ -70,7 +62,7 @@ public class SessionWebScopeListener implements HttpSessionListener
     finally
     {
       this.onAfterSessionCreated (WebScopeManager.onSessionBegin (aSession));
-      SESSION_IN_CREATION.remove ();
+      WebScopeManager.onFinishedSessionStart (aSession);
     }
   }
 

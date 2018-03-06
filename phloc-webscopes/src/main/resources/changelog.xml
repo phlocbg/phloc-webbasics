@@ -21,7 +21,17 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
-  <release date="2018-03-02" version="6.8.1" />
+  <release date="2018-03-06" version="6.8.1" />
+  <entry date="2018-03-06" category="tech" action="update">
+    <change>
+      <text locale="en">Added notion of sessions in creation or destruction on a thread basis for use in listener implementations and other cases where the scope is not available.</text>
+    </change>
+  </entry>  
+  <entry date="2018-03-06" category="tech" action="fix">
+    <change>
+      <text locale="en">No longer creating scopes for already invalidated sessions.</text>
+    </change>
+  </entry>  
   <entry date="2018-03-02" category="tech" action="fix">
     <change>
       <text locale="en">Reverted faulty fix concerning scope renewal from 6.7.13. The session invalidation must happen before the scope ends in order to still be able to access the scope from listeners!</text>
