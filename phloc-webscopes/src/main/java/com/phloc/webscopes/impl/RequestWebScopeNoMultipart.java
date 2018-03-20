@@ -80,6 +80,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited"; //$NON-NLS-1$
   private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap"; //$NON-NLS-1$
   public static final String REQUEST_ATTR_PARSE_JSON_BODY = "$request.scope.jsonbody"; //$NON-NLS-1$
+  public static final String REQUEST_ATTR_JSON_BODY_PARSED = "$request.scope.jsonbody.parsed"; //$NON-NLS-1$
 
   protected final transient HttpServletRequest m_aHttpRequest;
   protected final transient HttpServletResponse m_aHttpResponse;
@@ -103,11 +104,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    {
       s_aLogger.info ("Created request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
                       CGStringHelper.getClassLocalName (this),
                       ScopeUtils.getDebugStackTrace ());
+    }
   }
 
   @SuppressWarnings ("static-method")
@@ -149,13 +152,19 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
       // Avoid double setting a parameter!
       if (bAddedSpecialRequestAttrs && containsAttribute (sParamName))
+      {
         continue;
+      }
       // Check if it is a single value or not
       final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
       if (aParamValues.length == 1)
+      {
         setAttribute (sParamName, aParamValues[0]);
+      }
       else
+      {
         setAttribute (sParamName, aParamValues);
+      }
     }
     try
     {
@@ -176,11 +185,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    {
       s_aLogger.info ("Initialized request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
                       CGStringHelper.getClassLocalName (this),
                       ScopeUtils.getDebugStackTrace ());
+    }
   }
 
   /**
@@ -210,8 +221,16 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
           final IJSONObject aJSON = JSONReader.parseObject (sJSON);
           for (final String sProperty : aJSON.getAllPropertyNames ())
           {
-            setAttribute (sProperty, aJSON.getPropertyValueData (sProperty));
+            Object aVal;
+            // try as list (to really only store the internal list data values)
+            // aVal = aJSON.getListProperty (sProperty);
+            // if (aVal == null)
+            // {
+            aVal = aJSON.getPropertyValueData (sProperty);
+            // }
+            setAttribute (sProperty, aVal);
           }
+          setAttribute (REQUEST_ATTR_JSON_BODY_PARSED, true);
         }
       }
     }
@@ -249,11 +268,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   protected void postDestroy ()
   {
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    {
       s_aLogger.info ("Destroyed request web scope '" + //$NON-NLS-1$
                       getID () +
                       "' of class " + //$NON-NLS-1$
                       CGStringHelper.getClassLocalName (this),
                       ScopeUtils.getDebugStackTrace ());
+    }
   }
 
   @Override
@@ -340,7 +361,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       final String sAttrName = aEnum.nextElement ();
       final Object aAttrValue = getAttributeObject (sAttrName);
       if (aAttrValue instanceof IFileItem)
+      {
         ret.put (sAttrName, (IFileItem) aAttrValue);
+      }
     }
     return ret;
   }
@@ -357,10 +380,14 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       final String sAttrName = aEnum.nextElement ();
       final Object aAttrValue = getAttributeObject (sAttrName);
       if (aAttrValue instanceof IFileItem)
+      {
         ret.put (sAttrName, new IFileItem [] { (IFileItem) aAttrValue });
+      }
       else
         if (aAttrValue instanceof IFileItem [])
+        {
           ret.put (sAttrName, ArrayHelper.getCopy ((IFileItem []) aAttrValue));
+        }
     }
     return ret;
   }
@@ -377,11 +404,17 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       final String sAttrName = aEnum.nextElement ();
       final Object aAttrValue = getAttributeObject (sAttrName);
       if (aAttrValue instanceof IFileItem)
+      {
         ret.add ((IFileItem) aAttrValue);
+      }
       else
         if (aAttrValue instanceof IFileItem [])
+        {
           for (final IFileItem aChild : (IFileItem []) aAttrValue)
+          {
             ret.add (aChild);
+          }
+        }
     }
     return ret;
   }
@@ -605,7 +638,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   {
     final String sServletPath = getServletPath ();
     if (isFileBasedRequest (sServletPath))
+    {
       return getContextPath () + sServletPath;
+    }
     // For servlets that are not files, we need to append a trailing slash
     return getContextPath () + sServletPath + '/';
   }
@@ -616,7 +651,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   {
     final String sServletPath = getServletPath ();
     if (isFileBasedRequest (sServletPath))
+    {
       return getFullContextPath () + sServletPath;
+    }
     // For servlets, we need to append a trailing slash
     return getFullContextPath () + sServletPath + '/';
   }
