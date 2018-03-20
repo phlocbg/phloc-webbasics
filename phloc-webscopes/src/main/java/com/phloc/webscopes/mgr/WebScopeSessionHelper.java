@@ -32,6 +32,7 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.IScopeRenewalAware;
+import com.phloc.scopes.ScopeUtils;
 import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
@@ -139,12 +140,18 @@ public final class WebScopeSessionHelper
     if (bInvalidateHttpSession)
     {
       // renew the session
-      LOG.info ("Invalidating session " + aOldSessionScope.getID ()); //$NON-NLS-1$
+      if (ScopeUtils.isDebugSessionScopeEnabled ())
+      {
+        LOG.info ("Invalidating session " + aOldSessionScope.getID ()); //$NON-NLS-1$
+      }
       aOldSessionScope.selfDestruct ();
     }
     else
     {
-      LOG.info ("Destroying session scope " + aOldSessionScope.getID ()); //$NON-NLS-1$
+      if (ScopeUtils.isDebugSessionScopeEnabled ())
+      {
+        LOG.info ("Destroying session scope " + aOldSessionScope.getID ()); //$NON-NLS-1$
+      }
       ScopeSessionManager.getInstance ().onScopeEnd (aOldSessionScope);
     }
 

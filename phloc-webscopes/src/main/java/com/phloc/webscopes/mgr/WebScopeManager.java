@@ -34,6 +34,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
@@ -366,15 +367,31 @@ public final class WebScopeManager
       {
         if (!isRequestSessionValid ())
         {
-          LOG.warn ("Not creating scope for already invalidated session!"); //$NON-NLS-1$
+          final String sMessage = "Not creating scope for already invalidated session!";//$NON-NLS-1$
+          if (GlobalDebug.isDebugMode ())
+          {
+            LOG.error (sMessage, new Exception ("Illegal scope creation")); //$NON-NLS-1$
+          }
+          else
+          {
+            LOG.warn (sMessage);
+          }
           return null;
         }
         // This can e.g. happen in tests, when there are no registered
         // listeners for session events!
-        LOG.warn ("Creating a new session web scope for ID '" //$NON-NLS-1$
-                  + sSessionID + "' but there should already be one!" //$NON-NLS-1$
-                  + " Check your HttpSessionListener implementation." //$NON-NLS-1$
-                  + " See com.phloc.scopes.web.servlet.WebScopeListener for an example."); //$NON-NLS-1$
+        final String sMessage = "Creating a new session web scope for ID '" //$NON-NLS-1$
+                                + sSessionID + "' but there should already be one!" //$NON-NLS-1$
+                                + " Check your HttpSessionListener implementation." //$NON-NLS-1$
+                                + " See com.phloc.scopes.web.servlet.WebScopeListener for an example.";//$NON-NLS-1$
+        if (GlobalDebug.isDebugMode ())
+        {
+          LOG.error (sMessage, new Exception ("Illegal scope creation")); //$NON-NLS-1$
+        }
+        else
+        {
+          LOG.warn (sMessage);
+        }
       }
       // Create a new session scope
       aSessionWebScope = onSessionBegin (aHttpSession);
@@ -494,6 +511,7 @@ public final class WebScopeManager
       throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
     }
     CREATING_SESSION_ID.set (aHttpSession.getId ());
+    DYING_SESSION_ID.remove ();
   }
 
   public static void onFinishedSessionStart (@Nonnull final HttpSession aHttpSession)
@@ -502,10 +520,8 @@ public final class WebScopeManager
     {
       throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
     }
-    if (aHttpSession.getId ().equals (CREATING_SESSION_ID.get ()))
-    {
-      CREATING_SESSION_ID.remove ();
-    }
+    CREATING_SESSION_ID.remove ();
+    DYING_SESSION_ID.remove ();
   }
 
   /**
@@ -522,6 +538,7 @@ public final class WebScopeManager
       throw new NullPointerException ("aHttpSession"); //$NON-NLS-1$
     }
     DYING_SESSION_ID.set (aHttpSession.getId ());
+    CREATING_SESSION_ID.remove ();
   }
 
   /**
@@ -594,10 +611,8 @@ public final class WebScopeManager
         }
       }
     }
-    if (sSessionID.equals (DYING_SESSION_ID.get ()))
-    {
-      DYING_SESSION_ID.remove ();
-    }
+    CREATING_SESSION_ID.remove ();
+    DYING_SESSION_ID.remove ();
   }
 
   // --- session application scope ---
