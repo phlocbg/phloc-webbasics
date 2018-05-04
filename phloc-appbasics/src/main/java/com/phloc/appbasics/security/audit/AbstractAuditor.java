@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.security.audit;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -25,10 +27,10 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.json2.impl.JsonArray;
-import com.phloc.json2.impl.JsonObject;
+import com.phloc.json.impl.JSONObject;
 
 /**
  * Abstract base class for interface {@link IAuditor}.
@@ -82,12 +84,10 @@ public abstract class AbstractAuditor implements IAuditor
   {
     if (useJsonNotation ())
     {
-      // Get Json representation for easy evaluation afterwards
-      final JsonArray aData = new JsonArray ();
-      if (aArgs != null)
-        for (final Object aArg : aArgs)
-          aData.add (aArg);
-      return new JsonObject ().add (sObjectType, aData).getAsString ();
+      JSONObject aJSON = new JSONObject();
+      List<Object> aFields = aArgs == null ? ContainerHelper.newList () :  ContainerHelper.newList (aArgs);
+      aJSON.setMixedListProperty (sObjectType, aFields);
+      return aJSON.getJSONString ();
     }
 
     // Use regular formatting

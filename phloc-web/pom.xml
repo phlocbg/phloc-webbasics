@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2015 phloc systems
+    Copyright (C) 2006-2018 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -44,10 +44,9 @@
   <scm>
     <connection>scm:git:https://github.com/phlocbg/phloc-webbasics</connection>
     <developerConnection>scm:git:https://github.com/phlocbg/phloc-webbasics</developerConnection>
-  <url>http://github.com/phlocbg/phloc-webbasics</url>
+    <url>http://github.com/phlocbg/phloc-webbasics</url>
     <tag>HEAD</tag>
-
-</scm>
+  </scm>
   <organization>
     <name>phloc systems</name>
     <url>http://www.phloc.com</url>

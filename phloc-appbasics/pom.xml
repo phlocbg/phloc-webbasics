@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2014 phloc systems
+    Copyright (C) 2006-2018 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>23.2</version>
+    <version>24.0</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -30,7 +30,7 @@
   <version>2.8.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-appbasics</name>
-  <url>http://repo.phloc.com/apidocs/phloc-appbasics/${project.version}</url>
+  <url>https://github.com/phlocbg/phloc-webbasics/tree/master/phloc-appbasics</url>
  
   <licenses>
     <license>
@@ -41,9 +41,10 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-appbasics</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-appbasics</developerConnection>
+    <connection>scm:git:https://github.com/phlocbg/phloc-webbasics</connection>
+    <developerConnection>scm:git:https://github.com/phlocbg/phloc-webbasics</developerConnection>
+    <url>http://github.com/phlocbg/phloc-webbasics</url>
+    <tag>HEAD</tag>
   </scm>
 
   <organization>
@@ -61,49 +62,16 @@
     </developer>
   </developers>
   
-  <repositories>
-    <repository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>  
-
-  <distributionManagement>
-    <repository>
-      <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
-    </repository>
-  </distributionManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>4.3.6</version>
+      <version>4.4.13</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-datetime</artifactId>
-      <version>3.1.2</version>
+      <version>3.2.1</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -113,7 +81,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-json</artifactId>
-      <version>3.0.0</version>
+      <version>3.0.4</version>
     </dependency>
 
     <dependency>
