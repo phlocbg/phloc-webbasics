@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2014 phloc systems
+    Copyright (C) 2006-2018 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.7</version>
+    <version>24.0</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,8 @@
   <packaging>war</packaging>
   <name>phloc-webdemoapp</name>
   <inceptionYear>2013</inceptionYear>
-  
+
+<url>https://github.com/phlocbg/phloc-webbasics/tree/master/phloc-webdemoapp</url>  
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -47,9 +48,10 @@
   </properties>
        
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webdemoapp</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webdemoapp</developerConnection>
+    <connection>scm:git:https://github.com/phlocbg/phloc-webbasics</connection>
+    <developerConnection>scm:git:https://github.com/phlocbg/phloc-webbasics</developerConnection>
+    <url>http://github.com/phlocbg/phloc-webbasics</url>
+    <tag>HEAD</tag>
   </scm>
 
   <organization>
@@ -59,47 +61,14 @@
 
   <developers>
     <developer>
-      <id>philip</id>
-      <name>Philip Helger</name>
-      <email>ph(at)phloc.com</email>
+      <id>boris</id>
+      <name>Boris Gregorcic</name>
+      <email>bg(at)phloc.com</email>
       <url>http://www.phloc.com</url>
       <organization>phloc systems</organization>
     </developer>
   </developers>
   
-  <repositories>
-    <repository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>  
-
-  <distributionManagement>
-    <repository>
-      <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
-    </repository>
-  </distributionManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>

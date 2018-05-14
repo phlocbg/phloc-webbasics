@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.phloc.appbasics.mock.MockCurrentUserIDProvider;
 import com.phloc.commons.type.ObjectType;
+import com.phloc.json.impl.JSONObject;
 
 /**
  * Test class for class {@link LoggingAuditor}.
@@ -46,5 +47,8 @@ public class LoggingAuditorTest
     AuditUtils.onAuditExecuteFailure ("spawn", "this", "is", Integer.valueOf (2), "a", "test");
     AuditUtils.onAuditExecuteSuccess (aOT, "this", "is", Integer.valueOf (2), "a", "test");
     AuditUtils.onAuditExecuteFailure (aOT, "this", "is", Integer.valueOf (2), "a", "test");
+    JSONObject aJSON = new JSONObject();
+    aJSON.set ("a",  "B");
+    AuditUtils.onAuditExecuteFailure ("spawn", "this", "is", Integer.valueOf (2), "a", "test", aJSON, 18.34, false, Boolean.FALSE);
   }
 }
