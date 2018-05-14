@@ -109,7 +109,7 @@
     <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
-      <version>1.5.2</version>
+      <version>1.6.0</version>
       <exclusions>
         <!-- Ships with Java 1.6 -->
         <exclusion>
@@ -152,7 +152,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-schedule</artifactId>
-      <version>1.6.0</version>
+      <version>1.6.1</version>
       <optional>true</optional>
     </dependency>
     <dependency>
