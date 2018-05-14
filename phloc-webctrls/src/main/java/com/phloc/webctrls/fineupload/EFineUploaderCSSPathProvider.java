@@ -30,7 +30,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EFineUploaderCSSPathProvider implements ICSSPathProvider
 {
-  FINEUPLOADER_320 ("fineupload/320/fineuploader.css");
+ FINEUPLOADER_320 ("fineupload/320/fineuploader.css");
 
   private final String m_sPath;
 
@@ -38,13 +38,21 @@ public enum EFineUploaderCSSPathProvider implements ICSSPathProvider
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
-    m_sPath = sPath;
+    this.m_sPath = sPath;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
+    return bRegular ? this.m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (this.m_sPath);
   }
+
+  @Override
+  public boolean canBeBundled ()
+  {
+    return true;
+  }
+
 }

@@ -30,8 +30,8 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum ETipTipCSSPathProvider implements ICSSPathProvider
 {
-  TOOLTIP ("tiptip/tooltip.css"),
-  TIPTIP_13 ("tiptip/13/jquery.tiptip.css");
+ TOOLTIP ("tiptip/tooltip.css"),
+ TIPTIP_13 ("tiptip/13/jquery.tiptip.css");
 
   private final String m_sPath;
 
@@ -39,13 +39,20 @@ public enum ETipTipCSSPathProvider implements ICSSPathProvider
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
-    m_sPath = sPath;
+    this.m_sPath = sPath;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
+    return bRegular ? this.m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (this.m_sPath);
+  }
+
+  @Override
+  public boolean canBeBundled ()
+  {
+    return true;
   }
 }

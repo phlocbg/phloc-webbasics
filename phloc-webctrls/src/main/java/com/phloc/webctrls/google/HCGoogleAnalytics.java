@@ -41,6 +41,7 @@ import com.phloc.html.js.builder.html.JSHtml;
  */
 public class HCGoogleAnalytics extends HCScript
 {
+  private static final long serialVersionUID = -7348359349778311222L;
   private final String m_sAccount;
 
   @Nonnull
@@ -59,9 +60,10 @@ public class HCGoogleAnalytics extends HCScript
       // Source:
       // http://support.google.com/analytics/bin/answer.py?hl=en&answer=2558867
       // Must be before the _trackPageview!
-      aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_require")
-                                                       .add ("inpage_linkid")
-                                                       .add ("//www.google-analytics.com/plugins/ga/inpage_linkid.js")));
+      aPkg.add (gaq.invoke ("push")
+                   .arg (new JSArray ().add ("_require")
+                                       .add ("inpage_linkid")
+                                       .add ("//www.google-analytics.com/plugins/ga/inpage_linkid.js")));
     }
     if (bAnonymizeIP)
     {
@@ -76,11 +78,12 @@ public class HCGoogleAnalytics extends HCScript
     final JSVar ga = aAnonFunction.body ().var ("ga", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
     aAnonFunction.body ().add (ga.ref ("type").assign (CMimeType.TEXT_JAVASCRIPT.getAsString ()));
     aAnonFunction.body ().add (ga.ref ("async").assign (true));
-    aAnonFunction.body ().add (ga.ref ("src").assign (JSOp.cond (JSExpr.lit ("https:")
-                                                                       .eq (JSHtml.windowLocationProtocol ()),
-                                                                 JSExpr.lit ("https://ssl"),
-                                                                 JSExpr.lit ("http://www"))
-                                                          .plus (".google-analytics.com/ga.js")));
+    aAnonFunction.body ()
+                 .add (ga.ref ("src")
+                         .assign (JSOp.cond (JSExpr.lit ("https:").eq (JSHtml.windowLocationProtocol ()),
+                                             JSExpr.lit ("https://ssl"),
+                                             JSExpr.lit ("http://www"))
+                                      .plus (".google-analytics.com/ga.js")));
     final JSVar s = aAnonFunction.body ().var ("s",
                                                JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT).component0 ());
     aAnonFunction.body ().add (s.ref ("parentNode").invoke ("insertBefore").arg (ga).arg (s));
@@ -98,14 +101,14 @@ public class HCGoogleAnalytics extends HCScript
                             final boolean bEnhancedLinkAttribution)
   {
     super (_createJSCode (sAccount, bAnonymizeIP, bEnhancedLinkAttribution));
-    m_sAccount = sAccount;
+    this.m_sAccount = sAccount;
   }
 
   @Nonnull
   @Nonempty
   public String getAccount ()
   {
-    return m_sAccount;
+    return this.m_sAccount;
   }
 
   /**

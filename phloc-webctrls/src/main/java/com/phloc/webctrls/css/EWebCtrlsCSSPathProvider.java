@@ -25,9 +25,9 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 
 public enum EWebCtrlsCSSPathProvider implements ICSSPathProvider
 {
-  WEBCTRLS ("css/webctrls.css"),
-  /** Edit placeholder fix for IE &lt; 10 */
-  PLACEHOLDER_FIX ("placeholder/placeholder-fix.css");
+ WEBCTRLS ("css/webctrls.css"),
+ /** Edit placeholder fix for IE &lt; 10 */
+ PLACEHOLDER_FIX ("placeholder/placeholder-fix.css");
 
   private final String m_sPath;
 
@@ -35,13 +35,20 @@ public enum EWebCtrlsCSSPathProvider implements ICSSPathProvider
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
-    m_sPath = sPath;
+    this.m_sPath = sPath;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
+    return bRegular ? this.m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (this.m_sPath);
+  }
+
+  @Override
+  public boolean canBeBundled ()
+  {
+    return true;
   }
 }

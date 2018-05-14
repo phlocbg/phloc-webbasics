@@ -25,9 +25,9 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 
 public enum ESliderCSSPathProvider implements ICSSPathProvider
 {
-  ARROWS ("jssor/18.0/css/arrows.css"), //$NON-NLS-1$
-  BULLETS ("jssor/18.0/css/bullets.css"), //$NON-NLS-1$
-  THUMBNAILS ("jssor/18.0/css/thumbnails.css"); //$NON-NLS-1$
+ ARROWS ("jssor/18.0/css/arrows.css"), //$NON-NLS-1$
+ BULLETS ("jssor/18.0/css/bullets.css"), //$NON-NLS-1$
+ THUMBNAILS ("jssor/18.0/css/thumbnails.css"); //$NON-NLS-1$
 
   private final String m_sPath;
 
@@ -46,5 +46,11 @@ public enum ESliderCSSPathProvider implements ICSSPathProvider
   public String getCSSItemPath (final boolean bRegular)
   {
     return this.m_sPath;
+  }
+
+  @Override
+  public boolean canBeBundled ()
+  {
+    return true;
   }
 }

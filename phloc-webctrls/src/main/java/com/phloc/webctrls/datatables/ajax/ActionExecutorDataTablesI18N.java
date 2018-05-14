@@ -29,8 +29,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.json2.IJsonObject;
-import com.phloc.json2.serialize.JsonWriter;
+import com.phloc.json.IJSONObject;
 import com.phloc.web.servlet.response.ResponseHelperSettings;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.action.AbstractActionExecutor;
@@ -59,9 +58,10 @@ public class ActionExecutorDataTablesI18N extends AbstractActionExecutor
     ValueEnforcer.notNull (aDefaultLocale, "DefaultLocale");
     if (StringHelper.hasNoText (aDefaultLocale.getLanguage ()))
       throw new IllegalArgumentException ("defaultLocale muts have a language: " + aDefaultLocale);
-    m_aDefaultLocale = aDefaultLocale;
+    this.m_aDefaultLocale = aDefaultLocale;
   }
 
+  @Override
   public void execute (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                        @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
@@ -69,12 +69,12 @@ public class ActionExecutorDataTablesI18N extends AbstractActionExecutor
     final String sLanguage = aRequestScope.getAttributeAsString (LANGUAGE_ID);
     Locale aLanguage = LocaleCache.getLocale (sLanguage);
     if (aLanguage == null)
-      aLanguage = m_aDefaultLocale;
+      aLanguage = this.m_aDefaultLocale;
 
-    final IJsonObject aData = DataTables.createLanguageJson (aLanguage);
+    final IJSONObject aData = DataTables.createLanguageJson (aLanguage);
 
     final Charset aCharset = XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ;
-    aUnifiedResponse.setContentAndCharset (JsonWriter.getAsString (aData), aCharset)
+    aUnifiedResponse.setContentAndCharset (aData.getJSONString (), aCharset)
                     .setMimeType (new MimeType (CMimeType.APPLICATION_JSON).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
                                                                                           aCharset.name ()))
                     .enableCaching (ResponseHelperSettings.getExpirationSeconds ());
