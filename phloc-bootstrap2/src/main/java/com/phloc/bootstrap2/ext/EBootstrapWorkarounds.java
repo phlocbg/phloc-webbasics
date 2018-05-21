@@ -23,8 +23,8 @@ import com.phloc.bootstrap2.CBootstrapCSS;
 import com.phloc.commons.version.Version;
 import com.phloc.commons.version.VersionRange;
 import com.phloc.html.EHTMLElement;
+import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSVar;
@@ -38,32 +38,34 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public enum EBootstrapWorkarounds
 {
-  /**
-   * Fix the problem with the drop-down menu on IPad with Bootstrap 2.1.0 and
-   * 2.1.1.<br>
-   * Source:
-   * https://github.com/twitter/bootstrap/issues/2975#issuecomment-6659992
-   */
-  IPAD_DROPDOWN_FIX
-  {
-    @Override
-    public boolean isApplicable (@Nonnull final Version aBootstrapVersion)
-    {
-      return new VersionRange (new Version (2, 1, 0), true, new Version (2, 2, 1), true).versionMatches (aBootstrapVersion);
-    }
+ /**
+  * Fix the problem with the drop-down menu on IPad with Bootstrap 2.1.0 and
+  * 2.1.1.<br>
+  * Source:
+  * https://github.com/twitter/bootstrap/issues/2975#issuecomment-6659992
+  */
+ IPAD_DROPDOWN_FIX
+ {
+   @Override
+   public boolean isApplicable (@Nonnull final Version aBootstrapVersion)
+   {
+     return new VersionRange (new Version (2, 1, 0),
+                              true,
+                              new Version (2, 2, 1),
+                              true).versionMatches (aBootstrapVersion);
+   }
 
-    @Override
-    @Nonnull
-    public IHCNode createFixCode ()
-    {
-      final JSAnonymousFunction aAF = new JSAnonymousFunction ();
-      final JSVar e = aAF.param ("e");
-      aAF.body ().invoke (e, "stopPropagation");
-      return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY).on ("touchstart.dropdown",
-                                                                         JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU),
-                                                                         aAF));
-    }
-  };
+   @Override
+   @Nonnull
+   public IHCNode createFixCode ()
+   {
+     final JSAnonymousFunction aAF = new JSAnonymousFunction ();
+     final JSVar e = aAF.param ("e");
+     aAF.body ().invoke (e, "stopPropagation");
+     return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY)
+                                .on ("touchstart.dropdown", JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU), aAF));
+   }
+ };
 
   private EBootstrapWorkarounds ()
   {}
@@ -94,7 +96,7 @@ public enum EBootstrapWorkarounds
    *        <code>null</code>.
    */
   public void appendIfApplicable (@Nonnull final Version aBootstrapVersion,
-                                  @Nonnull final IHCNodeWithChildren <?> aParentElement)
+                                  @Nonnull final IHCHasChildrenMutable <?, ? super IHCNode> aParentElement)
   {
     if (isApplicable (aBootstrapVersion))
       if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag ("bootstrap-workaround-" + name ()))

@@ -30,11 +30,11 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {
-  BOOTSTRAP_232 ("bootstrap/232/css/bootstrap.css"),
-  BOOTSTRAP_RESPONSIVE_232 ("bootstrap/232/css/bootstrap-responsive.css"),
-  BOOTSTRAP_IE6 ("bootstrap/bootstrap-ie6.css"),
-  BOOTSTRAP_PHLOC ("bootstrap/bootstrap-phloc.css"),
-  BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap-datatables.css");
+ BOOTSTRAP_232 ("bootstrap/232/css/bootstrap.css"),
+ BOOTSTRAP_RESPONSIVE_232 ("bootstrap/232/css/bootstrap-responsive.css"),
+ BOOTSTRAP_IE6 ("bootstrap/bootstrap-ie6.css"),
+ BOOTSTRAP_PHLOC ("bootstrap/bootstrap-phloc.css"),
+ BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap-datatables.css");
 
   private final String m_sPath;
 
@@ -42,13 +42,20 @@ public enum EBootstrapCSSPathProvider implements ICSSPathProvider
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
-    m_sPath = sPath;
+    this.m_sPath = sPath;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
+    return bRegular ? this.m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (this.m_sPath);
+  }
+
+  @Override
+  public boolean canBeBundled ()
+  {
+    return true;
   }
 }

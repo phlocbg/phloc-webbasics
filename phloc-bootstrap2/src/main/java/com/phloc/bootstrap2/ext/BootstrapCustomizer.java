@@ -25,8 +25,8 @@ import com.phloc.commons.version.Version;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.EHTMLVersion;
+import com.phloc.html.hc.IHCHasChildrenMutable;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.customize.HCEmptyCustomizer;
 import com.phloc.html.hc.html.HCImg;
 
@@ -38,11 +38,11 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
   {
     if (aBootstrapVersion == null)
       throw new NullPointerException ("bootstrapVersion");
-    m_aBootstrapVersion = aBootstrapVersion;
+    this.m_aBootstrapVersion = aBootstrapVersion;
   }
 
   @Override
-  public void customizeNode (@Nonnull final IHCNodeWithChildren <?> aParentElement,
+  public void customizeNode (@Nonnull final IHCHasChildrenMutable <?, ? super IHCNode> aParentElement,
                              @Nonnull final IHCNode aNode,
                              @Nonnull final EHTMLVersion eHTMLVersion)
   {
@@ -61,7 +61,7 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
     else
       if (aNode instanceof BootstrapDropDownMenu)
       {
-        EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (m_aBootstrapVersion, aParentElement);
+        EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (this.m_aBootstrapVersion, aParentElement);
       }
   }
 }
