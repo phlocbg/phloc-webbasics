@@ -21,6 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
 
+  <release date="2018-05-22" version="3.2.4" />
+  <entry date="2018-05-21" category="tech" action="update">
+    <change>
+      <text locale="en">AbstractPagedDataProviderWithFilter can now implement a checker function to selectively allow or disallow a certain filter from being set.</text>
+    </change>
+  </entry>
   <release date="2017-10-04" version="3.2.3" />
   <entry date="2017-10-03" category="tech" action="update">
     <change>
