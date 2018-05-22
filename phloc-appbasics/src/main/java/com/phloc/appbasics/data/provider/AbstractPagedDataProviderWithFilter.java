@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2014 phloc systems
+ * Copyright (C) 2006-2018 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,34 +23,47 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.data.select.IHasOrderAndLimit;
 import com.phloc.appbasics.data.select.ISelectFilterable;
 import com.phloc.appbasics.data.select.SelectConstraints;
+import com.phloc.commons.annotations.OverrideOnDemand;
 
 public abstract class AbstractPagedDataProviderWithFilter <T> implements IPagedDataProviderWithFilter <T>
 {
+  private static final long serialVersionUID = -4759093584402814052L;
   @Nonnull
   private final SelectConstraints m_aSC = new SelectConstraints ();
 
   protected AbstractPagedDataProviderWithFilter ()
   {}
 
+  @Override
   @Nullable
   public final ISelectFilterable getFilter ()
   {
-    return m_aSC.getFilter ();
+    return this.m_aSC.getFilter ();
   }
 
+  @Override
   public final void setFilter (@Nullable final ISelectFilterable aFilter)
   {
-    m_aSC.setFilter (aFilter);
+    if (isAllowSetFilter (aFilter))
+    {
+      this.m_aSC.setFilter (aFilter);
+    }
+  }
+
+  @OverrideOnDemand
+  protected boolean isAllowSetFilter (@Nullable final ISelectFilterable aFilter)
+  {
+    return true;
   }
 
   @Nonnull
   protected final SelectConstraints getSelectConstraints (final IHasOrderAndLimit aTable)
   {
     // order
-    m_aSC.setOrderBy (aTable.getOrderBy ());
+    this.m_aSC.setOrderBy (aTable.getOrderBy ());
 
     // limits must be evaluated every time, since the filter may influence it!
-    m_aSC.setLimit (aTable.getLimit ());
-    return m_aSC;
+    this.m_aSC.setLimit (aTable.getLimit ());
+    return this.m_aSC;
   }
 }
