@@ -22,6 +22,8 @@ import com.phloc.commons.compare.CompareUtils;
 
 public class ComparatorFacebookObjectProviderSpecifity extends AbstractComparator <IFacebookObjectProvider>
 {
+  private static final long serialVersionUID = 1460545384457918015L;
+
   @Override
   protected int mainCompare (final IFacebookObjectProvider aProvider1, final IFacebookObjectProvider aProvider2)
   {

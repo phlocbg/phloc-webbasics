@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 
 /**
@@ -31,25 +30,26 @@ import com.phloc.commons.lang.EnumHelper;
  * 
  * @author Boris Gregorcic
  */
-public enum EOpenGraphObjectTypeVideo implements IHasID <String>
+public enum EOpenGraphObjectTypeVideo implements IOpenGraphObjectType
 {
-  OTHER ("video.other"),
-  TV_SHOW ("video.tv_show"),
-  MOVIE ("video.movie"),
-  EPISODE ("video.episode");
+ OTHER ("video.other"),
+ TV_SHOW ("video.tv_show"),
+ MOVIE ("video.movie"),
+ EPISODE ("video.episode");
 
   private final String m_sID;
 
   private EOpenGraphObjectTypeVideo (@Nonnull @Nonempty final String sID)
   {
-    m_sID = sID;
+    this.m_sID = sID;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getID ()
   {
-    return m_sID;
+    return this.m_sID;
   }
 
   @Nullable

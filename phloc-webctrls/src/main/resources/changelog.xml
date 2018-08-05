@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webctrls">
+  <release date="2018-08-05" version="2.1.5" />
+  <entry date="2018-08-05" category="feature" action="add">
+    <change>
+      <text locale="en">Extended OpenGraph object types for a common interface</text>
+    </change>
+  </entry>
   <release date="2015-07-24" version="2.1.4" />
   <entry date="2015-05-04" category="feature" action="add">
     <change>

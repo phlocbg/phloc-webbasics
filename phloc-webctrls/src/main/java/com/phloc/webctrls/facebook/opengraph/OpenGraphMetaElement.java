@@ -26,6 +26,8 @@ import com.phloc.html.meta.MetaElement;
 
 public class OpenGraphMetaElement extends MetaElement
 {
+  private static final long serialVersionUID = 4085238931195464592L;
+
   public OpenGraphMetaElement (@Nonnull final EOpenGraphObjectProperty eProperty, @Nullable final String sContent)
   {
     super (eProperty.getID (), false, sContent);

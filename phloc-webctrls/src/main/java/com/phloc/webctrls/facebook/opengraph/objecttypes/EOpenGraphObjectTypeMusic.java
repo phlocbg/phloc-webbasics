@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 
 /**
@@ -31,25 +30,26 @@ import com.phloc.commons.lang.EnumHelper;
  * 
  * @author Boris Gregorcic
  */
-public enum EOpenGraphObjectTypeMusic implements IHasID <String>
+public enum EOpenGraphObjectTypeMusic implements IOpenGraphObjectType
 {
-  SONG ("music.song"),
-  RADIO_STATION ("music.radio_station"),
-  PLAYLIST ("music.playlist"),
-  ALBUM ("music.album");
+ SONG ("music.song"),
+ RADIO_STATION ("music.radio_station"),
+ PLAYLIST ("music.playlist"),
+ ALBUM ("music.album");
 
   private final String m_sID;
 
   private EOpenGraphObjectTypeMusic (@Nonnull @Nonempty final String sID)
   {
-    m_sID = sID;
+    this.m_sID = sID;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getID ()
   {
-    return m_sID;
+    return this.m_sID;
   }
 
   @Nullable

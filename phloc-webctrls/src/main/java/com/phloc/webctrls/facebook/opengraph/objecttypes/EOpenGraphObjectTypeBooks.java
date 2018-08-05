@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 
 /**
@@ -31,24 +30,25 @@ import com.phloc.commons.lang.EnumHelper;
  * 
  * @author Boris Gregorcic
  */
-public enum EOpenGraphObjectTypeBooks implements IHasID <String>
+public enum EOpenGraphObjectTypeBooks implements IOpenGraphObjectType
 {
-  AUTHOR ("books.author"),
-  BOOK ("books.book"),
-  GENRE ("books.genre");
+ AUTHOR ("books.author"),
+ BOOK ("books.book"),
+ GENRE ("books.genre");
 
   private final String m_sID;
 
   private EOpenGraphObjectTypeBooks (@Nonnull @Nonempty final String sID)
   {
-    m_sID = sID;
+    this.m_sID = sID;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getID ()
   {
-    return m_sID;
+    return this.m_sID;
   }
 
   @Nullable

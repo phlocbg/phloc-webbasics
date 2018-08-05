@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 
 /**
@@ -31,22 +30,23 @@ import com.phloc.commons.lang.EnumHelper;
  * 
  * @author Boris Gregorcic
  */
-public enum EOpenGraphObjectTypeInvalid implements IHasID <String>
+public enum EOpenGraphObjectTypeInvalid implements IOpenGraphObjectType
 {
-  PLACE ("invalid.place");
+ PLACE ("invalid.place");
 
   private final String m_sID;
 
   private EOpenGraphObjectTypeInvalid (@Nonnull @Nonempty final String sID)
   {
-    m_sID = sID;
+    this.m_sID = sID;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getID ()
   {
-    return m_sID;
+    return this.m_sID;
   }
 
   @Nullable
