@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>24.2</version>
+    <version>24.3</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -66,27 +66,27 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>4.3.1</version>
+      <version>4.4.13</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-datetime</artifactId>
-      <version>3.1.2</version>
+      <version>3.2.1</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-scopes</artifactId>
-      <version>6.2.1</version>
+      <version>6.4.0</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-web</artifactId>
-      <version>5.4.2</version>
+      <version>5.8.1</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webscopes</artifactId>
-      <version>6.3.1</version>
+      <version>6.9.0</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -176,7 +176,7 @@
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.2.0</version><!--$NO-MVN-MAN-VER$-->
+        <version>1.2.2</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <goals>
