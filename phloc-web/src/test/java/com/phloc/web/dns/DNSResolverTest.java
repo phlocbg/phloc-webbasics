@@ -45,7 +45,6 @@ public final class DNSResolverTest
       assertEquals (aAddr, DNSResolver.resolveByName ("jh<adsjkhd<a asd kjh "));
     }
     assertNotNull (DNSResolver.getMyIpAddress ());
-    if (false)
-      s_aLogger.info ("My IP address: " + DNSResolver.getMyIpAddress ());
+
   }
 }

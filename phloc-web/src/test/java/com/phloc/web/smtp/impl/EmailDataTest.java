@@ -59,9 +59,7 @@ public final class EmailDataTest
     assertEquals (2, aEmailData.getAttributeCount ());
 
     PhlocTestUtils.testMicroTypeConversion (aEmailData);
-    // Fails with JDK 1.7 :(
-    if (false)
-      PhlocTestUtils.testDefaultSerialization (aEmailData);
+    PhlocTestUtils.testDefaultSerialization (aEmailData);
 
     // Non serializable
     aEmailData.setAttribute ("test3", new Object ());

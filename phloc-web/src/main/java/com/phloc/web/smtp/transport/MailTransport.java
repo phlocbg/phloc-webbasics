@@ -76,76 +76,78 @@ final class MailTransport
   private final Properties m_aMailProperties = new Properties ();
   private final Session m_aSession;
 
+  @SuppressWarnings ("unused")
   public MailTransport (@Nonnull final ISMTPSettings aSettings)
   {
     ValueEnforcer.notNull (aSettings, "Settings");
 
-    m_aSMTPSettings = aSettings;
-    m_bSMTPS = aSettings.isSSLEnabled () || aSettings.isSTARTTLSEnabled ();
+    this.m_aSMTPSettings = aSettings;
+    this.m_bSMTPS = aSettings.isSSLEnabled () || aSettings.isSTARTTLSEnabled ();
 
     // Enable SSL?
     if (aSettings.isSSLEnabled ())
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_ENABLE.getPropertyName (m_bSMTPS),
-                                     Boolean.TRUE.toString ());
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_ENABLE.getPropertyName (this.m_bSMTPS),
+                                          Boolean.TRUE.toString ());
 
     // Check if authentication is required
     if (StringHelper.hasText (aSettings.getUserName ()))
-      m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getPropertyName (m_bSMTPS), Boolean.TRUE.toString ());
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getPropertyName (this.m_bSMTPS),
+                                          Boolean.TRUE.toString ());
 
     // Enable STARTTLS?
     if (aSettings.isSTARTTLSEnabled ())
-      m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getPropertyName (m_bSMTPS),
-                                     Boolean.TRUE.toString ());
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getPropertyName (this.m_bSMTPS),
+                                          Boolean.TRUE.toString ());
 
-    if (m_bSMTPS)
+    if (this.m_bSMTPS)
     {
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
-                                     SSLSocketFactory.class.getName ());
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
-                                     Integer.toString (aSettings.getPort ()));
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_CLASS.getPropertyName (this.m_bSMTPS),
+                                          SSLSocketFactory.class.getName ());
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_PORT.getPropertyName (this.m_bSMTPS),
+                                          Integer.toString (aSettings.getPort ()));
     }
 
     // Set connection timeout
     final long nConnectionTimeoutMilliSecs = aSettings.getConnectionTimeoutMilliSecs ();
     if (nConnectionTimeoutMilliSecs > 0)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.CONNECTIONTIMEOUT.getPropertyName (m_bSMTPS),
-                                     Long.toString (nConnectionTimeoutMilliSecs));
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.CONNECTIONTIMEOUT.getPropertyName (this.m_bSMTPS),
+                                          Long.toString (nConnectionTimeoutMilliSecs));
 
     // Set socket timeout
     final long nTimeoutMilliSecs = aSettings.getTimeoutMilliSecs ();
     if (nTimeoutMilliSecs > 0)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getPropertyName (m_bSMTPS),
-                                     Long.toString (nTimeoutMilliSecs));
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getPropertyName (this.m_bSMTPS),
+                                          Long.toString (nTimeoutMilliSecs));
 
     if (false)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.REPORTSUCCESS.getPropertyName (m_bSMTPS),
-                                     Boolean.TRUE.toString ());
+      this.m_aMailProperties.setProperty (ESMTPTransportProperty.REPORTSUCCESS.getPropertyName (this.m_bSMTPS),
+                                          Boolean.TRUE.toString ());
 
     // Debug flag
-    m_aMailProperties.setProperty ("mail.debug.auth", Boolean.toString (GlobalDebug.isDebugMode ()));
+    this.m_aMailProperties.setProperty ("mail.debug.auth", Boolean.toString (GlobalDebug.isDebugMode ()));
 
     if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Mail properties: " + m_aMailProperties);
+      s_aLogger.debug ("Mail properties: " + this.m_aMailProperties);
 
     // Create session based on properties
-    m_aSession = Session.getInstance (m_aMailProperties);
+    this.m_aSession = Session.getInstance (this.m_aMailProperties);
 
     // Set after eventual properties are set, because in setJavaMailProperties,
     // the session is reset!
-    m_aSession.setDebug (GlobalDebug.isDebugMode ());
+    this.m_aSession.setDebug (GlobalDebug.isDebugMode ());
   }
 
   @Nonnull
   public ISMTPSettings getSMTPSettings ()
   {
-    return m_aSMTPSettings;
+    return this.m_aSMTPSettings;
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public Map <Object, Object> getMailProperties ()
   {
-    return ContainerHelper.newMap (m_aMailProperties);
+    return ContainerHelper.newMap (this.m_aMailProperties);
   }
 
   /**
@@ -163,7 +165,7 @@ final class MailTransport
     {
       try
       {
-        final Transport aTransport = m_aSession.getTransport (m_bSMTPS ? SMTPS_PROTOCOL : SMTP_PROTOCOL);
+        final Transport aTransport = this.m_aSession.getTransport (this.m_bSMTPS ? SMTPS_PROTOCOL : SMTP_PROTOCOL);
 
         // Add global listeners (if present)
         final ConnectionListener aConnectionListener = EmailGlobalSettings.getConnectionListener ();
@@ -179,10 +181,10 @@ final class MailTransport
         }
 
         // Connect
-        aTransport.connect (m_aSMTPSettings.getHostName (),
-                            m_aSMTPSettings.getPort (),
-                            m_aSMTPSettings.getUserName (),
-                            m_aSMTPSettings.getPassword ());
+        aTransport.connect (this.m_aSMTPSettings.getHostName (),
+                            this.m_aSMTPSettings.getPort (),
+                            this.m_aSMTPSettings.getUserName (),
+                            this.m_aSMTPSettings.getPassword ());
 
         try
         {
@@ -197,23 +199,30 @@ final class MailTransport
               {
                 aPerMailListener = new TransportListener ()
                 {
+                  @Override
                   public void messageDelivered (@Nonnull final TransportEvent aEvent)
                   {
-                    aEmailDataTransportListener.messageDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    aEmailDataTransportListener.messageDelivered (MailTransport.this.m_aSMTPSettings, aMessage, aEvent);
                     if (aGlobalTransportListener != null)
                       aGlobalTransportListener.messageDelivered (aEvent);
                   }
 
+                  @Override
                   public void messageNotDelivered (@Nonnull final TransportEvent aEvent)
                   {
-                    aEmailDataTransportListener.messageNotDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    aEmailDataTransportListener.messageNotDelivered (MailTransport.this.m_aSMTPSettings,
+                                                                     aMessage,
+                                                                     aEvent);
                     if (aGlobalTransportListener != null)
                       aGlobalTransportListener.messageNotDelivered (aEvent);
                   }
 
+                  @Override
                   public void messagePartiallyDelivered (@Nonnull final TransportEvent aEvent)
                   {
-                    aEmailDataTransportListener.messagePartiallyDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    aEmailDataTransportListener.messagePartiallyDelivered (MailTransport.this.m_aSMTPSettings,
+                                                                           aMessage,
+                                                                           aEvent);
                     if (aGlobalTransportListener != null)
                       aGlobalTransportListener.messagePartiallyDelivered (aEvent);
                   }
@@ -222,8 +231,8 @@ final class MailTransport
               }
 
               // convert from IEmailData to MimeMessage
-              final MimeMessage aMimeMessage = new MimeMessage (m_aSession);
-              MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSMTPSettings.getCharsetObj ());
+              final MimeMessage aMimeMessage = new MimeMessage (this.m_aSession);
+              MailConverter.fillMimeMesage (aMimeMessage, aMessage, this.m_aSMTPSettings.getCharsetObj ());
 
               // Ensure a sent date is present
               if (aMimeMessage.getSentDate () == null)
@@ -301,22 +310,22 @@ final class MailTransport
     if (!(o instanceof MailTransport))
       return false;
     final MailTransport rhs = (MailTransport) o;
-    return m_aSMTPSettings.equals (rhs.m_aSMTPSettings);
+    return this.m_aSMTPSettings.equals (rhs.m_aSMTPSettings);
   }
 
   @Override
   public int hashCode ()
   {
     // Compare only settings - session and properties are derived
-    return new HashCodeGenerator (this).append (m_aSMTPSettings).getHashCode ();
+    return new HashCodeGenerator (this).append (this.m_aSMTPSettings).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("settings", m_aSMTPSettings)
-                                       .append ("properties", m_aMailProperties)
-                                       .append ("session", m_aSession)
+    return new ToStringGenerator (this).append ("settings", this.m_aSMTPSettings)
+                                       .append ("properties", this.m_aMailProperties)
+                                       .append ("session", this.m_aSession)
                                        .toString ();
   }
 }

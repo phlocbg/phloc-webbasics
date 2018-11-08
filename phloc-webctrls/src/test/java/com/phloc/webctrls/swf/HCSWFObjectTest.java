@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.phloc.commons.microdom.IMicroNode;
-import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.conversion.HCSettings;
 
@@ -44,7 +43,5 @@ public final class HCSWFObjectTest
     x.addFlashVar ("flash1", "Wert");
     final IMicroNode aNode = x.convertToNode (HCSettings.getConversionSettings (false));
     assertNotNull (aNode);
-    if (false)
-      System.out.println (MicroWriter.getXMLString (aNode));
   }
 }

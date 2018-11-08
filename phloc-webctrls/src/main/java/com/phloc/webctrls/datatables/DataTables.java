@@ -806,33 +806,8 @@ public class DataTables implements IHCNodeBuilder
 
     if (hasAnyInvisibleColumn ())
     {
-      if (true)
-      {
-        // Remove all columns as this breaks the rendering
-        this.m_aTable.removeAllColumns ();
-        if (false)
-        {
-          // Just a small test
-          final int nVisibleColumnCount = getVisibleColumnCount ();
-          for (int i = 0; i < nVisibleColumnCount; ++i)
-            this.m_aTable.addColumn (new HCCol ());
-        }
-      }
-      else
-      {
-        // Delete all columns from the colgroup that are invisible, because this
-        // will break the rendered layout
-        // Note: back to front, so that the index does not need to be modified
-        // Note: disabled, as this may lead to HC table consistency warnings
-        final HCColGroup aColGroup = this.m_aTable.getColGroup ();
-        if (aColGroup != null)
-          for (int i = this.m_aColumns.size () - 1; i >= 0; --i)
-          {
-            final DataTablesColumn aColumn = this.m_aColumns.get (i);
-            if (!aColumn.isVisible ())
-              aColGroup.removeColumnAtIndex (i);
-          }
-      }
+      // Remove all columns as this breaks the rendering
+      this.m_aTable.removeAllColumns ();
     }
 
     if (this.m_aAjaxSource != null)
@@ -974,8 +949,8 @@ public class DataTables implements IHCNodeBuilder
     final JSPackage aPackage = new JSPackage ();
     final JSAnonymousFunction aOpenCloseCallback = new JSAnonymousFunction ();
     {
-      final JSVar jsTR = aOpenCloseCallback.body ().var ("r",
-                                                         JQuery.jQueryThis ().parents (EHTMLElement.TR).component0 ());
+      final JSVar jsTR = aOpenCloseCallback.body ()
+                                           .var ("r", JQuery.jQueryThis ().parents (EHTMLElement.TR).component0 ());
       final JSConditional aIf = aOpenCloseCallback.body ()._if (jsTable.invoke ("fnIsOpen").arg (jsTR));
       aIf._then ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aExpandImgURL.getAsString ());
       aIf._then ().invoke (jsTable, "fnClose").arg (jsTR);

@@ -500,11 +500,8 @@ public final class RequestHelper
   {
     ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
-    if (false)
-    {
-      // Missing support > 2GB!!!
-      return aHttpRequest.getContentLength ();
-    }
+    // Missing support > 2GB!!!
+    // return aHttpRequest.getContentLength ();
 
     final String sContentLength = aHttpRequest.getHeader (CHTTPHeader.CONTENT_LENGTH);
     return StringParser.parseLong (sContentLength, -1L);

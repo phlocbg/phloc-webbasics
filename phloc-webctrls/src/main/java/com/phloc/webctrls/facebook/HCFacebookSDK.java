@@ -27,11 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSExpr;
-import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -66,31 +64,16 @@ public class HCFacebookSDK extends HCNodeList
       return;
     }
     addChild (new HCDiv ().setID (FB_ROOT_ID));
-    if (true)
-    {
-      addChild (new HCScriptOnDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery") //$NON-NLS-1$
-                                                   .arg (sAppID)
-                                                   .arg (FacebookLocaleMapping.getInstance ()
-                                                                              .getFBLocale (aDisplayLocale)
-                                                                              .toString ())
-                                                   .arg (FB_ROOT_ID)
-                                                   .arg (bCheckLoginStatus)
-                                                   .arg (bEnableCookies)
-                                                   .arg (bUseXFBML)
-                                                   .arg (sAPIVersion)));
-    }
-    else
-    {
-      addChild (new HCScript (new JSInvocation ("facebookLoadSDKAsync").arg (sAppID) //$NON-NLS-1$
-                                                                       .arg (FacebookLocaleMapping.getInstance ()
-                                                                                                  .getFBLocale (aDisplayLocale)
-                                                                                                  .toString ())
-                                                                       .arg (FB_ROOT_ID)
-                                                                       .arg (bCheckLoginStatus)
-                                                                       .arg (bEnableCookies)
-                                                                       .arg (bUseXFBML)
-                                                                       .arg (sAPIVersion)));
-    }
+    addChild (new HCScriptOnDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery") //$NON-NLS-1$
+                                                 .arg (sAppID)
+                                                 .arg (FacebookLocaleMapping.getInstance ()
+                                                                            .getFBLocale (aDisplayLocale)
+                                                                            .toString ())
+                                                 .arg (FB_ROOT_ID)
+                                                 .arg (bCheckLoginStatus)
+                                                 .arg (bEnableCookies)
+                                                 .arg (bUseXFBML)
+                                                 .arg (sAPIVersion)));
     markIncludedInRequest ();
     registerExternalResources ();
   }
