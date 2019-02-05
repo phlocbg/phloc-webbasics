@@ -67,15 +67,16 @@ public class CharacterEncodingFilter implements Filter
   @Nonempty
   protected String getEncoding ()
   {
-    return m_sEncoding;
+    return this.m_sEncoding;
   }
 
   @OverrideOnDemand
   protected boolean isForceEncoding ()
   {
-    return m_bForceEncoding;
+    return this.m_bForceEncoding;
   }
 
+  @Override
   public void init (@Nonnull final FilterConfig aFilterConfig) throws ServletException
   {
     // encoding
@@ -84,15 +85,16 @@ public class CharacterEncodingFilter implements Filter
     {
       // Throws IllegalArgumentException in case it is unknown
       CharsetManager.getCharsetFromName (sEncoding);
-      m_sEncoding = sEncoding;
+      this.m_sEncoding = sEncoding;
     }
 
     // force encoding?
     final String sForceEncoding = aFilterConfig.getInitParameter (FILTER_INITPARAM_FORCE_ENCODING);
     if (sForceEncoding != null)
-      m_bForceEncoding = StringParser.parseBool (sForceEncoding);
+      this.m_bForceEncoding = StringParser.parseBool (sForceEncoding);
   }
 
+  @Override
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
@@ -106,8 +108,10 @@ public class CharacterEncodingFilter implements Filter
       if (sOldRequestEncoding == null || isForceEncoding ())
       {
         aRequest.setCharacterEncoding (sEncoding);
-        if (sOldRequestEncoding != null && !sEncoding.equals (sOldRequestEncoding))
-          s_aLogger.info ("Changed request encoding from '" + sOldRequestEncoding + "' to '" + sEncoding + "'");
+        if (sOldRequestEncoding != null && !sEncoding.equalsIgnoreCase (sOldRequestEncoding))
+        {
+          s_aLogger.info ("Changed request encoding from '{}' to '{}'", sOldRequestEncoding, sEncoding);
+        }
       }
       aResponse.setCharacterEncoding (sEncoding);
       aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
@@ -117,6 +121,7 @@ public class CharacterEncodingFilter implements Filter
     aChain.doFilter (aRequest, aResponse);
   }
 
+  @Override
   public void destroy ()
   {}
 }
