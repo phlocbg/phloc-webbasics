@@ -58,7 +58,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *   header-part := 1*header CRLF<br>
  *   header := header-name ":" header-value<br>
  *   header-name := &lt;printable ascii characters except ":"&gt;<br>
- *   header-value := &lt;any ascii characters except CR & LF&gt;<br>
+ *   header-value := &lt;any ascii characters except CR &amp; LF&gt;<br>
  *   body-data := &lt;arbitrary data&gt;<br>
  * </code>
  * <p>
@@ -68,7 +68,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * the parent stream (see {@link #setBoundary(byte[])}).
  * <p>
  * Here is an example of usage of this class.<br>
- * 
+ *
  * <pre>
  * try
  * {
@@ -93,7 +93,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *   // a read or write error occurred
  * }
  * </pre>
- * 
+ *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  * @author Sean C. Sullivan
@@ -126,7 +126,7 @@ public final class MultipartStream
 
     /**
      * Creates a new instance with the given listener and content length.
-     * 
+     *
      * @param pListener
      *        The listener to invoke.
      * @param pContentLength
@@ -136,13 +136,13 @@ public final class MultipartStream
     {
       if (pListener != null)
         s_aLogger.info ("setting listener " + pListener.getClass ().getName ());
-      m_aListener = pListener;
-      m_nContentLength = pContentLength;
+      this.m_aListener = pListener;
+      this.m_nContentLength = pContentLength;
     }
 
     /**
      * Called to indicate that bytes have been read.
-     * 
+     *
      * @param pBytes
      *        Number of bytes, which have been read.
      */
@@ -153,7 +153,7 @@ public final class MultipartStream
        * Indicates, that the given number of bytes have been read from the input
        * stream.
        */
-      m_nBytesRead += pBytes;
+      this.m_nBytesRead += pBytes;
       _notifyListener ();
     }
 
@@ -162,7 +162,7 @@ public final class MultipartStream
      */
     void noteItem ()
     {
-      ++m_nItems;
+      ++this.m_nItems;
       _notifyListener ();
     }
 
@@ -171,9 +171,9 @@ public final class MultipartStream
      */
     private void _notifyListener ()
     {
-      if (m_aListener != null)
+      if (this.m_aListener != null)
       {
-        m_aListener.update (m_nBytesRead, m_nContentLength, m_nItems);
+        this.m_aListener.update (this.m_nBytesRead, this.m_nContentLength, this.m_nItems);
       }
     }
   }
@@ -293,7 +293,7 @@ public final class MultipartStream
    * Note that the buffer must be at least big enough to contain the boundary
    * string, plus 4 characters for CR/LF and double dash, plus at least one byte
    * of data. Too small a buffer size setting will degrade performance.
-   * 
+   *
    * @param input
    *        The <code>InputStream</code> to serve as a data source.
    * @param boundary
@@ -309,27 +309,27 @@ public final class MultipartStream
    */
   MultipartStream (final InputStream input, final byte [] boundary, final int bufSize, final ProgressNotifier pNotifier)
   {
-    m_aInput = input;
-    m_nBufSize = bufSize;
-    m_aBuffer = new byte [bufSize];
-    m_aNotifier = pNotifier;
+    this.m_aInput = input;
+    this.m_nBufSize = bufSize;
+    this.m_aBuffer = new byte [bufSize];
+    this.m_aNotifier = pNotifier;
 
     // We prepend CR/LF to the boundary to chop trailng CR/LF from
     // body-data tokens.
-    m_aBoundary = new byte [boundary.length + BOUNDARY_PREFIX.length];
-    m_nBoundaryLength = boundary.length + BOUNDARY_PREFIX.length;
-    m_nKeepRegion = m_aBoundary.length;
-    System.arraycopy (BOUNDARY_PREFIX, 0, m_aBoundary, 0, BOUNDARY_PREFIX.length);
-    System.arraycopy (boundary, 0, m_aBoundary, BOUNDARY_PREFIX.length, boundary.length);
+    this.m_aBoundary = new byte [boundary.length + BOUNDARY_PREFIX.length];
+    this.m_nBoundaryLength = boundary.length + BOUNDARY_PREFIX.length;
+    this.m_nKeepRegion = this.m_aBoundary.length;
+    System.arraycopy (BOUNDARY_PREFIX, 0, this.m_aBoundary, 0, BOUNDARY_PREFIX.length);
+    System.arraycopy (boundary, 0, this.m_aBoundary, BOUNDARY_PREFIX.length, boundary.length);
 
-    m_nHead = 0;
-    m_nTail = 0;
+    this.m_nHead = 0;
+    this.m_nTail = 0;
   }
 
   /**
    * <p>
    * Constructs a <code>MultipartStream</code> with a default size buffer.
-   * 
+   *
    * @param input
    *        The <code>InputStream</code> to serve as a data source.
    * @param boundary
@@ -351,31 +351,31 @@ public final class MultipartStream
    * Retrieves the character encoding used when reading the headers of an
    * individual part. When not specified, or <code>null</code>, the platform
    * default encoding is used.
-   * 
+   *
    * @return The encoding used to read part headers.
    */
   @Nullable
   public String getHeaderEncoding ()
   {
-    return m_sHeaderEncoding;
+    return this.m_sHeaderEncoding;
   }
 
   /**
    * Specifies the character encoding to be used when reading the headers of
    * individual parts. When not specified, or <code>null</code>, the platform
    * default encoding is used.
-   * 
+   *
    * @param encoding
    *        The encoding used to read part headers.
    */
   public void setHeaderEncoding (@Nullable final String encoding)
   {
-    m_sHeaderEncoding = encoding;
+    this.m_sHeaderEncoding = encoding;
   }
 
   /**
    * Reads a byte from the <code>buffer</code>, and refills it as necessary.
-   * 
+   *
    * @return The next byte from the input stream.
    * @throws IOException
    *         if there is no more data available.
@@ -383,28 +383,28 @@ public final class MultipartStream
   public byte readByte () throws IOException
   {
     // Buffer depleted ?
-    if (m_nHead == m_nTail)
+    if (this.m_nHead == this.m_nTail)
     {
-      m_nHead = 0;
+      this.m_nHead = 0;
       // Refill.
-      m_nTail = m_aInput.read (m_aBuffer, m_nHead, m_nBufSize);
-      if (m_nTail == -1)
+      this.m_nTail = this.m_aInput.read (this.m_aBuffer, this.m_nHead, this.m_nBufSize);
+      if (this.m_nTail == -1)
       {
         // No more data available.
         throw new IOException ("No more data is available");
       }
-      if (m_aNotifier != null)
+      if (this.m_aNotifier != null)
       {
-        m_aNotifier.noteBytesRead (m_nTail);
+        this.m_aNotifier.noteBytesRead (this.m_nTail);
       }
     }
-    return m_aBuffer[m_nHead++];
+    return this.m_aBuffer[this.m_nHead++];
   }
 
   /**
    * Skips a <code>boundary</code> token, and checks whether more
    * <code>encapsulations</code> are contained in the stream.
-   * 
+   *
    * @return <code>true</code> if there are more encapsulations in this stream;
    *         <code>false</code> otherwise.
    * @throws MalformedStreamException
@@ -416,7 +416,7 @@ public final class MultipartStream
     final byte [] marker = new byte [2];
     boolean nextChunk = false;
 
-    m_nHead += m_nBoundaryLength;
+    this.m_nHead += this.m_nBoundaryLength;
     try
     {
       marker[0] = readByte ();
@@ -464,7 +464,7 @@ public final class MultipartStream
    * <p>
    * Restoring the parent stream boundary token after processing of a nested
    * stream is left to the application.
-   * 
+   *
    * @param boundary
    *        The boundary to be used for parsing of the nested stream.
    * @throws IllegalBoundaryException
@@ -473,11 +473,11 @@ public final class MultipartStream
    */
   public void setBoundary (final byte [] boundary) throws IllegalBoundaryException
   {
-    if (boundary.length != m_nBoundaryLength - BOUNDARY_PREFIX.length)
+    if (boundary.length != this.m_nBoundaryLength - BOUNDARY_PREFIX.length)
     {
       throw new IllegalBoundaryException ("The length of a boundary token can not be changed");
     }
-    System.arraycopy (boundary, 0, m_aBoundary, BOUNDARY_PREFIX.length, boundary.length);
+    System.arraycopy (boundary, 0, this.m_aBoundary, BOUNDARY_PREFIX.length, boundary.length);
   }
 
   /**
@@ -490,7 +490,7 @@ public final class MultipartStream
    * <p>
    * <strong>TODO</strong> allow limiting maximum header size to protect against
    * abuse.
-   * 
+   *
    * @return The <code>header-part</code> of the current encapsulation.
    * @throws MalformedStreamException
    *         if the stream ends unexpectedly.
@@ -532,9 +532,9 @@ public final class MultipartStream
       }
 
       String headers = null;
-      if (m_sHeaderEncoding != null)
+      if (this.m_sHeaderEncoding != null)
       {
-        headers = baos.getAsString (CharsetManager.getCharsetFromName (m_sHeaderEncoding));
+        headers = baos.getAsString (CharsetManager.getCharsetFromName (this.m_sHeaderEncoding));
       }
       else
       {
@@ -558,7 +558,7 @@ public final class MultipartStream
    * constant size buffer. (see
    * {@link #MultipartStream(InputStream,byte[],int, MultipartStream.ProgressNotifier)
    * constructor}).
-   * 
+   *
    * @param output
    *        The <code>Stream</code> to write data into. May be null, in which
    *        case this method is equivalent to {@link #discardBodyData()}.
@@ -576,7 +576,7 @@ public final class MultipartStream
 
   /**
    * Creates a new {@link ItemInputStream}.
-   * 
+   *
    * @return A new instance of {@link ItemInputStream}.
    */
   @Nonnull
@@ -591,7 +591,7 @@ public final class MultipartStream
    * and discards it.
    * <p>
    * Use this method to skip encapsulations you don't need or don't understand.
-   * 
+   *
    * @return The amount of data discarded.
    * @throws MalformedStreamException
    *         if the stream ends unexpectedly.
@@ -605,7 +605,7 @@ public final class MultipartStream
 
   /**
    * Finds the beginning of the first <code>encapsulation</code>.
-   * 
+   *
    * @return <code>true</code> if an <code>encapsulation</code> was found in the
    *         stream.
    * @throws IOException
@@ -614,8 +614,8 @@ public final class MultipartStream
   public boolean skipPreamble () throws IOException
   {
     // First delimiter may be not preceeded with a CRLF.
-    System.arraycopy (m_aBoundary, 2, m_aBoundary, 0, m_aBoundary.length - 2);
-    m_nBoundaryLength = m_aBoundary.length - 2;
+    System.arraycopy (this.m_aBoundary, 2, this.m_aBoundary, 0, this.m_aBoundary.length - 2);
+    this.m_nBoundaryLength = this.m_aBoundary.length - 2;
     try
     {
       // Discard all data up to the delimiter.
@@ -632,17 +632,17 @@ public final class MultipartStream
     finally
     {
       // Restore delimiter.
-      System.arraycopy (m_aBoundary, 0, m_aBoundary, 2, m_aBoundary.length - 2);
-      m_nBoundaryLength = m_aBoundary.length;
-      m_aBoundary[0] = CR;
-      m_aBoundary[1] = LF;
+      System.arraycopy (this.m_aBoundary, 0, this.m_aBoundary, 2, this.m_aBoundary.length - 2);
+      this.m_nBoundaryLength = this.m_aBoundary.length;
+      this.m_aBoundary[0] = CR;
+      this.m_aBoundary[1] = LF;
     }
   }
 
   /**
    * Compares <code>count</code> first bytes in the arrays <code>a</code> and
    * <code>b</code>.
-   * 
+   *
    * @param a
    *        The first array to compare.
    * @param b
@@ -667,7 +667,7 @@ public final class MultipartStream
   /**
    * Searches for a byte of specified value in the <code>buffer</code>, starting
    * at the specified <code>position</code>.
-   * 
+   *
    * @param value
    *        The value to find.
    * @param pos
@@ -677,9 +677,9 @@ public final class MultipartStream
    */
   protected int findByte (final byte value, final int pos)
   {
-    for (int i = pos; i < m_nTail; i++)
+    for (int i = pos; i < this.m_nTail; i++)
     {
-      if (m_aBuffer[i] == value)
+      if (this.m_aBuffer[i] == value)
       {
         return i;
       }
@@ -691,7 +691,7 @@ public final class MultipartStream
   /**
    * Searches for the <code>boundary</code> in the <code>buffer</code> region
    * delimited by <code>head</code> and <code>tail</code>.
-   * 
+   *
    * @return The position of the boundary found, counting from the beginning of
    *         the <code>buffer</code>, or <code>-1</code> if not found.
    */
@@ -699,23 +699,23 @@ public final class MultipartStream
   {
     int first;
     int match = 0;
-    final int maxpos = m_nTail - m_nBoundaryLength;
-    for (first = m_nHead; (first <= maxpos) && (match != m_nBoundaryLength); first++)
+    final int maxpos = this.m_nTail - this.m_nBoundaryLength;
+    for (first = this.m_nHead; first <= maxpos && match != this.m_nBoundaryLength; first++)
     {
-      first = findByte (m_aBoundary[0], first);
-      if (first == -1 || (first > maxpos))
+      first = findByte (this.m_aBoundary[0], first);
+      if (first == -1 || first > maxpos)
       {
         return -1;
       }
-      for (match = 1; match < m_nBoundaryLength; match++)
+      for (match = 1; match < this.m_nBoundaryLength; match++)
       {
-        if (m_aBuffer[first + match] != m_aBoundary[match])
+        if (this.m_aBuffer[first + match] != this.m_aBoundary[match])
         {
           break;
         }
       }
     }
-    if (match == m_nBoundaryLength)
+    if (match == this.m_nBoundaryLength)
     {
       return first - 1;
     }
@@ -740,7 +740,7 @@ public final class MultipartStream
     /**
      * Constructs an <code>MalformedStreamException</code> with the specified
      * detail message.
-     * 
+     *
      * @param message
      *        The detail message.
      */
@@ -752,7 +752,7 @@ public final class MultipartStream
     /**
      * Constructs an <code>MalformedStreamException</code> with the specified
      * detail message.
-     * 
+     *
      * @param message
      *        The detail message.
      * @param aCause
@@ -781,7 +781,7 @@ public final class MultipartStream
     /**
      * Constructs an <code>IllegalBoundaryException</code> with the specified
      * detail message.
-     * 
+     *
      * @param message
      *        The detail message.
      */
@@ -827,30 +827,30 @@ public final class MultipartStream
      */
     private void _findSeparator ()
     {
-      m_nPos = MultipartStream.this.findSeparator ();
-      if (m_nPos == -1)
+      this.m_nPos = MultipartStream.this.findSeparator ();
+      if (this.m_nPos == -1)
       {
-        if (m_nTail - m_nHead > m_nKeepRegion)
-          m_nPad = m_nKeepRegion;
+        if (MultipartStream.this.m_nTail - MultipartStream.this.m_nHead > MultipartStream.this.m_nKeepRegion)
+          this.m_nPad = MultipartStream.this.m_nKeepRegion;
         else
-          m_nPad = m_nTail - m_nHead;
+          this.m_nPad = MultipartStream.this.m_nTail - MultipartStream.this.m_nHead;
       }
     }
 
     /**
      * Returns the number of bytes, which have been read by the stream.
-     * 
+     *
      * @return Number of bytes, which have been read so far.
      */
     public long getBytesRead ()
     {
-      return m_nTotal;
+      return this.m_nTotal;
     }
 
     /**
      * Returns the number of bytes, which are currently available, without
      * blocking.
-     * 
+     *
      * @throws IOException
      *         An I/O error occurs.
      * @return Number of bytes in the buffer.
@@ -858,9 +858,9 @@ public final class MultipartStream
     @Override
     public int available () throws IOException
     {
-      if (m_nPos == -1)
-        return m_nTail - m_nHead - m_nPad;
-      return m_nPos - m_nHead;
+      if (this.m_nPos == -1)
+        return MultipartStream.this.m_nTail - MultipartStream.this.m_nHead - this.m_nPad;
+      return this.m_nPos - MultipartStream.this.m_nHead;
     }
 
     /**
@@ -870,7 +870,7 @@ public final class MultipartStream
 
     /**
      * Returns the next byte in the stream.
-     * 
+     *
      * @return The next byte in the stream, as a non-negative integer, or -1 for
      *         EOF.
      * @throws IOException
@@ -879,15 +879,15 @@ public final class MultipartStream
     @Override
     public int read () throws IOException
     {
-      if (m_bClosed)
+      if (this.m_bClosed)
         throw new IFileItemStream.ItemSkippedException ();
 
       if (available () == 0)
         if (_makeAvailable () == 0)
           return -1;
 
-      ++m_nTotal;
-      final int b = m_aBuffer[m_nHead++];
+      ++this.m_nTotal;
+      final int b = MultipartStream.this.m_aBuffer[MultipartStream.this.m_nHead++];
       if (b >= 0)
         return b;
 
@@ -896,7 +896,7 @@ public final class MultipartStream
 
     /**
      * Reads bytes into the given buffer.
-     * 
+     *
      * @param b
      *        The destination buffer, where to write to.
      * @param off
@@ -910,7 +910,7 @@ public final class MultipartStream
     @Override
     public int read (final byte [] b, final int off, final int len) throws IOException
     {
-      if (m_bClosed)
+      if (this.m_bClosed)
         throw new IFileItemStream.ItemSkippedException ();
 
       if (len == 0)
@@ -924,15 +924,15 @@ public final class MultipartStream
           return -1;
       }
       res = Math.min (res, len);
-      System.arraycopy (m_aBuffer, m_nHead, b, off, res);
-      m_nHead += res;
-      m_nTotal += res;
+      System.arraycopy (MultipartStream.this.m_aBuffer, MultipartStream.this.m_nHead, b, off, res);
+      MultipartStream.this.m_nHead += res;
+      this.m_nTotal += res;
       return res;
     }
 
     /**
      * Closes the input stream.
-     * 
+     *
      * @throws IOException
      *         An I/O error occurred.
      */
@@ -944,7 +944,7 @@ public final class MultipartStream
 
     /**
      * Closes the input stream.
-     * 
+     *
      * @param pCloseUnderlying
      *        Whether to close the underlying stream (hard close)
      * @throws IOException
@@ -953,13 +953,13 @@ public final class MultipartStream
     @SuppressFBWarnings ("SR_NOT_CHECKED")
     public void close (final boolean pCloseUnderlying) throws IOException
     {
-      if (m_bClosed)
+      if (this.m_bClosed)
         return;
 
       if (pCloseUnderlying)
       {
-        m_bClosed = true;
-        m_aInput.close ();
+        this.m_bClosed = true;
+        MultipartStream.this.m_aInput.close ();
       }
       else
       {
@@ -975,12 +975,12 @@ public final class MultipartStream
           skip (av);
         }
       }
-      m_bClosed = true;
+      this.m_bClosed = true;
     }
 
     /**
      * Skips the given number of bytes.
-     * 
+     *
      * @param bytes
      *        Number of bytes to skip.
      * @return The number of bytes, which have actually been skipped.
@@ -990,7 +990,7 @@ public final class MultipartStream
     @Override
     public long skip (final long bytes) throws IOException
     {
-      if (m_bClosed)
+      if (this.m_bClosed)
         throw new IFileItemStream.ItemSkippedException ();
 
       int av = available ();
@@ -1001,33 +1001,40 @@ public final class MultipartStream
           return 0;
       }
       final long res = Math.min (av, bytes);
-      m_nHead += res;
+      MultipartStream.this.m_nHead += res;
       return res;
     }
 
     /**
      * Attempts to read more data.
-     * 
+     *
      * @return Number of available bytes
      * @throws IOException
      *         An I/O error occurred.
      */
     private int _makeAvailable () throws IOException
     {
-      if (m_nPos != -1)
+      if (this.m_nPos != -1)
         return 0;
 
       // Move the data to the beginning of the buffer.
-      m_nTotal += m_nTail - m_nHead - m_nPad;
-      System.arraycopy (m_aBuffer, m_nTail - m_nPad, m_aBuffer, 0, m_nPad);
+      this.m_nTotal += MultipartStream.this.m_nTail - MultipartStream.this.m_nHead - this.m_nPad;
+      System.arraycopy (MultipartStream.this.m_aBuffer,
+                        MultipartStream.this.m_nTail - this.m_nPad,
+                        MultipartStream.this.m_aBuffer,
+                        0,
+                        this.m_nPad);
 
       // Refill buffer with new data.
-      m_nHead = 0;
-      m_nTail = m_nPad;
+      MultipartStream.this.m_nHead = 0;
+      MultipartStream.this.m_nTail = this.m_nPad;
 
       while (true)
       {
-        final int nBytesRead = m_aInput.read (m_aBuffer, m_nTail, m_nBufSize - m_nTail);
+        final int nBytesRead = MultipartStream.this.m_aInput.read (MultipartStream.this.m_aBuffer,
+                                                                   MultipartStream.this.m_nTail,
+                                                                   MultipartStream.this.m_nBufSize -
+                                                                                                 MultipartStream.this.m_nTail);
         if (nBytesRead == -1)
         {
           // The last pad amount is left in the buffer.
@@ -1035,28 +1042,29 @@ public final class MultipartStream
           // condition.
           throw new MalformedStreamException ("Stream ended unexpectedly");
         }
-        if (m_aNotifier != null)
+        if (MultipartStream.this.m_aNotifier != null)
         {
-          m_aNotifier.noteBytesRead (nBytesRead);
+          MultipartStream.this.m_aNotifier.noteBytesRead (nBytesRead);
         }
-        m_nTail += nBytesRead;
+        MultipartStream.this.m_nTail += nBytesRead;
 
         _findSeparator ();
         final int av = available ();
 
-        if (av > 0 || m_nPos != -1)
+        if (av > 0 || this.m_nPos != -1)
           return av;
       }
     }
 
     /**
      * Returns, whether the stream is closed.
-     * 
+     *
      * @return True, if the stream is closed, otherwise false.
      */
+    @Override
     public boolean isClosed ()
     {
-      return m_bClosed;
+      return this.m_bClosed;
     }
   }
 }

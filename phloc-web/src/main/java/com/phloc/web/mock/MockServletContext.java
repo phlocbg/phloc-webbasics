@@ -57,7 +57,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 //ESCA-JAVA0116:
 /**
  * Mock implementation of the {@link ServletContext} interface.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -91,7 +91,7 @@ public class MockServletContext implements ServletContext
   /**
    * Create a new MockServletContext, using no base path and a
    * DefaultIResourceProvider (i.e. the classpath root as WAR root).
-   * 
+   *
    * @param aInitParams
    *        The init parameter
    */
@@ -102,7 +102,7 @@ public class MockServletContext implements ServletContext
 
   /**
    * Create a new MockServletContext.
-   * 
+   *
    * @param sContextPath
    *        The context path to use. May be <code>null</code>.
    */
@@ -113,7 +113,7 @@ public class MockServletContext implements ServletContext
 
   /**
    * Create a new MockServletContext.
-   * 
+   *
    * @param sContextPath
    *        Context path to use. May be <code>null</code>.
    * @param aInitParams
@@ -126,7 +126,7 @@ public class MockServletContext implements ServletContext
 
   /**
    * Create a new MockServletContext.
-   * 
+   *
    * @param sContextPath
    *        The context path to use
    * @param sResourceBasePath
@@ -139,13 +139,15 @@ public class MockServletContext implements ServletContext
 
   /**
    * Create a new MockServletContext.
-   * 
+   *
    * @param sContextPath
    *        The context path to use
    * @param sResourceBasePath
    *        the WAR root directory (should not end with a slash)
    * @param aResourceLoader
    *        the IReadableResourceProvider to use (or null for the default)
+   * @param aInitParams
+   *        A map containing initialization parameters
    */
   public MockServletContext (@Nullable final String sContextPath,
                              @Nullable final String sResourceBasePath,
@@ -153,8 +155,8 @@ public class MockServletContext implements ServletContext
                              @Nullable final Map <String, String> aInitParams)
   {
     setContextPath (sContextPath);
-    m_aResourceProvider = aResourceLoader != null ? aResourceLoader : new DefaultResourceProvider ();
-    m_sResourceBasePath = sResourceBasePath != null ? sResourceBasePath : "";
+    this.m_aResourceProvider = aResourceLoader != null ? aResourceLoader : new DefaultResourceProvider ();
+    this.m_sResourceBasePath = sResourceBasePath != null ? sResourceBasePath : "";
 
     // Use JVM temp dir as ServletContext temp dir.
     final String sTempDir = SystemProperties.getTmpDir ();
@@ -170,13 +172,13 @@ public class MockServletContext implements ServletContext
     for (final ServletContextListener aListener : MockHttpListener.getAllServletContextListeners ())
       aListener.contextInitialized (aSCE);
 
-    m_aServletPool = new MockServletPool (this);
+    this.m_aServletPool = new MockServletPool (this);
   }
 
   /**
    * Build a full resource location for the given path, prepending the resource
    * base path of this MockServletContext.
-   * 
+   *
    * @param sPath
    *        the path as specified
    * @return the full resource path
@@ -184,60 +186,67 @@ public class MockServletContext implements ServletContext
   @Nonnull
   protected String getResourceLocation (@Nonnull final String sPath)
   {
-    return StringHelper.startsWith (sPath, '/') ? m_sResourceBasePath + sPath : m_sResourceBasePath + "/" + sPath;
+    return StringHelper.startsWith (sPath, '/') ? this.m_sResourceBasePath + sPath
+                                                : this.m_sResourceBasePath + "/" + sPath;
   }
 
   public final void setContextPath (@Nullable final String sContextPath)
   {
     if (sContextPath == null)
-      m_sContextPath = "";
+      this.m_sContextPath = "";
     else
       if (StringHelper.startsWith (sContextPath, '/'))
-        m_sContextPath = sContextPath;
+        this.m_sContextPath = sContextPath;
       else
-        m_sContextPath = "/" + sContextPath;
+        this.m_sContextPath = "/" + sContextPath;
   }
 
   /* This is a Servlet API 2.5 method. */
+  @Override
   @Nonnull
   public String getContextPath ()
   {
-    return m_sContextPath;
+    return this.m_sContextPath;
   }
 
   public void registerContext (@Nonnull final String sContextPath, @Nonnull final ServletContext aContext)
   {
     ValueEnforcer.notNull (sContextPath, "ContextPath");
     ValueEnforcer.notNull (aContext, "Context");
-    m_aContexts.put (sContextPath, aContext);
+    this.m_aContexts.put (sContextPath, aContext);
   }
 
+  @Override
   @Nullable
   public ServletContext getContext (@Nullable final String sContextPath)
   {
-    if (m_sContextPath.equals (sContextPath))
+    if (this.m_sContextPath.equals (sContextPath))
       return this;
-    return m_aContexts.get (sContextPath);
+    return this.m_aContexts.get (sContextPath);
   }
 
+  @Override
   @Nonnegative
   public int getMajorVersion ()
   {
     return SERVLET_SPEC_MAJOR_VERSION;
   }
 
+  @Override
   @Nonnegative
   public int getMinorVersion ()
   {
     return SERVLET_SPEC_MINOR_VERSION;
   }
 
+  @Override
   @Nullable
   public String getMimeType (@Nonnull final String sFilename)
   {
     return MimeTypeDeterminator.getMimeTypeFromFilename (sFilename);
   }
 
+  @Override
   @UnsupportedOperation
   @Deprecated
   public Set <String> getResourcePaths (final String sPath)
@@ -245,24 +254,27 @@ public class MockServletContext implements ServletContext
     throw new UnsupportedOperationException ();
   }
 
+  @Override
   @Nullable
   public URL getResource (@Nonnull final String sPath) throws MalformedURLException
   {
-    final IReadableResource aResource = m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
+    final IReadableResource aResource = this.m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
     if (!aResource.exists ())
       return null;
     return aResource.getAsURL ();
   }
 
+  @Override
   @Nullable
   public InputStream getResourceAsStream (@Nonnull final String sPath)
   {
-    final IReadableResource aResource = m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
+    final IReadableResource aResource = this.m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
     if (!aResource.exists ())
       return null;
     return aResource.getInputStream ();
   }
 
+  @Override
   @Nonnull
   public RequestDispatcher getRequestDispatcher (@Nonnull final String sPath)
   {
@@ -271,6 +283,7 @@ public class MockServletContext implements ServletContext
     return new MockRequestDispatcher (sPath);
   }
 
+  @Override
   @Nullable
   @Deprecated
   public RequestDispatcher getNamedDispatcher (@Nullable final String sPath)
@@ -278,12 +291,14 @@ public class MockServletContext implements ServletContext
     return null;
   }
 
+  @Override
   @Deprecated
   public Servlet getServlet (@Nullable final String sName)
   {
     return null;
   }
 
+  @Override
   @Deprecated
   @Nonnull
   public Enumeration <Object> getServlets ()
@@ -291,6 +306,7 @@ public class MockServletContext implements ServletContext
     return ContainerHelper.<Object> getEmptyEnumeration ();
   }
 
+  @Override
   @Deprecated
   @Nonnull
   public Enumeration <Object> getServletNames ()
@@ -298,27 +314,31 @@ public class MockServletContext implements ServletContext
     return ContainerHelper.<Object> getEmptyEnumeration ();
   }
 
+  @Override
   public void log (@Nullable final String message)
   {
     s_aLogger.info (message);
   }
 
+  @Override
   @Deprecated
   public void log (@Nullable final Exception ex, @Nullable final String sMessage)
   {
     s_aLogger.info (sMessage, ex);
   }
 
+  @Override
   public void log (@Nullable final String sMessage, @Nullable final Throwable ex)
   {
     s_aLogger.info (sMessage, ex);
   }
 
+  @Override
   @Nonnull
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public String getRealPath (@Nonnull final String sPath)
   {
-    final IReadableResource aResource = m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
+    final IReadableResource aResource = this.m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
     if (aResource == null)
       throw new IllegalStateException ("Failed to get real path of '" + sPath + "'");
     final File aFile = aResource.getAsFile ();
@@ -327,6 +347,7 @@ public class MockServletContext implements ServletContext
     return aFile.getAbsolutePath ();
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getServerInfo ()
@@ -334,69 +355,76 @@ public class MockServletContext implements ServletContext
     return "MockServletContext";
   }
 
+  @Override
   @Nullable
   public String getInitParameter (@Nonnull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
-    return m_aInitParameters.getProperty (sName);
+    return this.m_aInitParameters.getProperty (sName);
   }
 
   public final void addInitParameter (@Nonnull final String sName, @Nonnull final String sValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (sValue, "Value");
-    m_aInitParameters.setProperty (sName, sValue);
+    this.m_aInitParameters.setProperty (sName, sValue);
   }
 
+  @Override
   @Nonnull
   public Enumeration <Object> getInitParameterNames ()
   {
-    return m_aInitParameters.keys ();
+    return this.m_aInitParameters.keys ();
   }
 
+  @Override
   @Nullable
   public Object getAttribute (@Nonnull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
-    return m_aAttributes.get (sName);
+    return this.m_aAttributes.get (sName);
   }
 
+  @Override
   @Nonnull
   public Enumeration <String> getAttributeNames ()
   {
-    return ContainerHelper.getEnumeration (m_aAttributes.keySet ());
+    return ContainerHelper.getEnumeration (this.m_aAttributes.keySet ());
   }
 
+  @Override
   public final void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     if (aValue != null)
-      m_aAttributes.put (sName, aValue);
+      this.m_aAttributes.put (sName, aValue);
     else
-      m_aAttributes.remove (sName);
+      this.m_aAttributes.remove (sName);
   }
 
+  @Override
   public void removeAttribute (@Nonnull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
-    m_aAttributes.remove (sName);
+    this.m_aAttributes.remove (sName);
   }
 
   public void setServletContextName (@Nullable final String sServletContextName)
   {
-    m_sServletContextName = sServletContextName;
+    this.m_sServletContextName = sServletContextName;
   }
 
+  @Override
   @Nullable
   public String getServletContextName ()
   {
-    return m_sServletContextName;
+    return this.m_sServletContextName;
   }
 
   /**
    * Create a new {@link MockServletConfig} object without servlet init
    * parameters.
-   * 
+   *
    * @param sServletName
    *        Name of the servlet. May neither be <code>null</code> nor empty.
    * @return A new {@link MockServletConfig} object for this servlet context.
@@ -409,7 +437,7 @@ public class MockServletContext implements ServletContext
 
   /**
    * Create a new {@link MockServletConfig} object.
-   * 
+   *
    * @param sServletName
    *        Name of the servlet. May neither be <code>null</code> nor empty.
    * @param aServletInitParams
@@ -430,7 +458,7 @@ public class MockServletContext implements ServletContext
   @Nonnull
   public MockServletPool getServletPool ()
   {
-    return m_aServletPool;
+    return this.m_aServletPool;
   }
 
   @Nullable
@@ -440,7 +468,7 @@ public class MockServletContext implements ServletContext
 
     // Find matching servlet
     final String sServletPath = aHttpRequest.getServletPath ();
-    final Servlet aServlet = m_aServletPool.getServletOfPath (sServletPath);
+    final Servlet aServlet = this.m_aServletPool.getServletOfPath (sServletPath);
     if (aServlet == null)
     {
       s_aLogger.error ("Found no servlet matching '" + sServletPath + "'");
@@ -462,18 +490,18 @@ public class MockServletContext implements ServletContext
 
   public void invalidate ()
   {
-    if (m_bInvalidated)
+    if (this.m_bInvalidated)
       throw new IllegalStateException ("Servlet context already invalidated!");
-    m_bInvalidated = true;
+    this.m_bInvalidated = true;
 
     // Destroy all servlets
-    m_aServletPool.invalidate ();
+    this.m_aServletPool.invalidate ();
 
     // Call all HTTP listener
     final ServletContextEvent aSCE = new ServletContextEvent (this);
     for (final ServletContextListener aListener : MockHttpListener.getAllServletContextListeners ())
       aListener.contextDestroyed (aSCE);
 
-    m_aAttributes.clear ();
+    this.m_aAttributes.clear ();
   }
 }

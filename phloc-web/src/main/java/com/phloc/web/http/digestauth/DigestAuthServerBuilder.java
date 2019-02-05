@@ -35,12 +35,13 @@ import com.phloc.web.http.HTTPStringHelper;
  * Helper class to build the value of the
  * {@link com.phloc.web.http.CHTTPHeader#WWW_AUTHENTICATE} value send from the
  * server to client.
- * 
- * @author Philip Helger
+ *
+ * @author Boris Gregorcic
  */
 @NotThreadSafe
 public final class DigestAuthServerBuilder implements Serializable
 {
+  private static final long serialVersionUID = 4864474539554255911L;
   private String m_sRealm;
   private final Set <String> m_aDomains = new LinkedHashSet <String> ();
   private String m_sNonce;
@@ -58,7 +59,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * the authentication and might additionally indicate the collection of users
    * who might have access. An example might be
    * "registered_users@gotham.news.com".
-   * 
+   *
    * @param sRealm
    *        The realm to be used. May not be <code>null</code> and should not be
    *        empty.
@@ -70,7 +71,7 @@ public final class DigestAuthServerBuilder implements Serializable
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
 
-    m_sRealm = sRealm;
+    this.m_sRealm = sRealm;
     return this;
   }
 
@@ -87,7 +88,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * This directive is not meaningful in Proxy-Authenticate headers, for which
    * the protection space is always the entire proxy; if present it should be
    * ignored.
-   * 
+   *
    * @param aURL
    *        The absolute or relative path which is protected. May not be
    *        <code>null</code>.
@@ -102,7 +103,7 @@ public final class DigestAuthServerBuilder implements Serializable
     // Check for spaces, as all URLs are concatenated with spaces!
     if (sURL.indexOf (' ') >= 0)
       throw new IllegalArgumentException ("URL may not contain spaces: '" + sURL + "'");
-    m_aDomains.add (sURL);
+    this.m_aDomains.add (sURL);
     return this;
   }
 
@@ -134,7 +135,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * PUT requests and a time-stamp for GET requests. For more details on the
    * issues involved see section 4. of this document.<br>
    * The nonce is opaque to the client.
-   * 
+   *
    * @param sNonce
    *        The nonce value to be set. May not be <code>null</code>.
    * @return this
@@ -145,7 +146,7 @@ public final class DigestAuthServerBuilder implements Serializable
     if (!HTTPStringHelper.isQuotedTextContent (sNonce))
       throw new IllegalArgumentException ("nonce is invalid: " + sNonce);
 
-    m_sNonce = sNonce;
+    this.m_sNonce = sNonce;
     return this;
   }
 
@@ -154,7 +155,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * client unchanged in the Authorization header of subsequent requests with
    * URIs in the same protection space. It is recommended that this string be
    * base64 or hexadecimal data.
-   * 
+   *
    * @param sOpaque
    *        The opaque value. May not be <code>null</code>.
    * @return this
@@ -165,7 +166,7 @@ public final class DigestAuthServerBuilder implements Serializable
     if (!HTTPStringHelper.isQuotedTextContent (sOpaque))
       throw new IllegalArgumentException ("opaque is invalid: " + sOpaque);
 
-    m_sOpaque = sOpaque;
+    this.m_sOpaque = sOpaque;
     return this;
   }
 
@@ -179,7 +180,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * client knows the correct username/password). If stale is FALSE, or anything
    * other than TRUE, or the stale directive is not present, the username and/or
    * password are invalid, and new values must be obtained.
-   * 
+   *
    * @param eStale
    *        Stale value. May not be <code>null</code>.
    * @return this
@@ -187,7 +188,7 @@ public final class DigestAuthServerBuilder implements Serializable
   @Nonnull
   public DigestAuthServerBuilder setStale (@Nonnull final ETriState eStale)
   {
-    m_eStale = ValueEnforcer.notNull (eStale, "Stale");
+    this.m_eStale = ValueEnforcer.notNull (eStale, "Stale");
     return this;
   }
 
@@ -209,8 +210,9 @@ public final class DigestAuthServerBuilder implements Serializable
    * concatenated with the data. The "MD5-sess" algorithm is intended to allow
    * efficient 3rd party authentication servers; for the difference in usage,
    * see the description in section 3.2.2.2.
-   * 
+   *
    * @param sAlgorithm
+   *        The algorithm to use
    * @return this
    */
   @Nonnull
@@ -219,7 +221,7 @@ public final class DigestAuthServerBuilder implements Serializable
     if (!HTTPStringHelper.isToken (sAlgorithm))
       throw new IllegalArgumentException ("The passed algorithm is not a valid token: " + sAlgorithm);
 
-    m_sAlgorithm = sAlgorithm;
+    this.m_sAlgorithm = sAlgorithm;
     return this;
   }
 
@@ -232,7 +234,7 @@ public final class DigestAuthServerBuilder implements Serializable
    * indicates authentication with integrity protection; see the descriptions
    * below for calculating the response directive value for the application of
    * this choice. Unrecognized options MUST be ignored.
-   * 
+   *
    * @param sQOP
    *        The qop-option to add. May not be <code>null</code>.
    * @return this
@@ -243,13 +245,13 @@ public final class DigestAuthServerBuilder implements Serializable
     if (!HTTPStringHelper.isToken (sQOP))
       throw new IllegalArgumentException ("The passed qop-option is not a token: " + sQOP);
 
-    m_aQOPs.add (sQOP);
+    this.m_aQOPs.add (sQOP);
     return this;
   }
 
   public boolean isValid ()
   {
-    return m_sRealm != null && m_sNonce != null;
+    return this.m_sRealm != null && this.m_sNonce != null;
   }
 
   @Nonnull
@@ -261,22 +263,23 @@ public final class DigestAuthServerBuilder implements Serializable
 
     final StringBuilder ret = new StringBuilder (HTTPDigestAuth.HEADER_VALUE_PREFIX_DIGEST);
     // Realm is required
-    ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
-    if (!m_aDomains.isEmpty ())
+    ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (this.m_sRealm));
+    if (!this.m_aDomains.isEmpty ())
     {
       ret.append (", domain=")
-         .append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (' ', m_aDomains)));
+         .append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (' ', this.m_aDomains)));
     }
     // Nonce is required
-    ret.append (", nonce=").append (HTTPStringHelper.getQuotedTextString (m_sNonce));
-    if (m_sOpaque != null)
-      ret.append (", opaque=").append (HTTPStringHelper.getQuotedTextString (m_sOpaque));
-    if (!m_eStale.isUndefined ())
-      ret.append (", stale=").append (m_eStale.isTrue () ? "true" : "false");
-    if (m_sAlgorithm != null)
-      ret.append (", algorithm=").append (m_sAlgorithm);
-    if (!m_aQOPs.isEmpty ())
-      ret.append (", qop=").append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (',', m_aQOPs)));
+    ret.append (", nonce=").append (HTTPStringHelper.getQuotedTextString (this.m_sNonce));
+    if (this.m_sOpaque != null)
+      ret.append (", opaque=").append (HTTPStringHelper.getQuotedTextString (this.m_sOpaque));
+    if (!this.m_eStale.isUndefined ())
+      ret.append (", stale=").append (this.m_eStale.isTrue () ? "true" : "false");
+    if (this.m_sAlgorithm != null)
+      ret.append (", algorithm=").append (this.m_sAlgorithm);
+    if (!this.m_aQOPs.isEmpty ())
+      ret.append (", qop=")
+         .append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (',', this.m_aQOPs)));
 
     return ret.toString ();
   }

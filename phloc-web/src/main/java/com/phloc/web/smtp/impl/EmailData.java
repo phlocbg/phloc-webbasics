@@ -70,75 +70,84 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
     setEmailType (eEmailType);
   }
 
+  @Override
   @Nonnull
   public final EmailData setEmailType (@Nonnull final EEmailType eEmailType)
   {
     ValueEnforcer.notNull (eEmailType, "EmailType");
-    m_eEmailType = eEmailType;
+    this.m_eEmailType = eEmailType;
     return this;
   }
 
+  @Override
   @Nonnull
   public EEmailType getEmailType ()
   {
-    return m_eEmailType;
+    return this.m_eEmailType;
   }
 
+  @Override
   @Nonnull
   public final EmailData setFrom (@Nullable final IEmailAddress sFrom)
   {
-    m_aFrom = sFrom;
+    this.m_aFrom = sFrom;
     return this;
   }
 
+  @Override
   @Nullable
   public IEmailAddress getFrom ()
   {
-    return m_aFrom;
+    return this.m_aFrom;
   }
 
+  @Override
   @Nonnull
   public final EmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
   {
-    m_aReplyTo.clear ();
+    this.m_aReplyTo.clear ();
     if (aReplyTo != null)
-      m_aReplyTo.add (aReplyTo);
+      this.m_aReplyTo.add (aReplyTo);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setReplyTo (@Nullable final IEmailAddress... aReplyTos)
   {
-    m_aReplyTo.clear ();
+    this.m_aReplyTo.clear ();
     if (aReplyTos != null)
       for (final IEmailAddress aReplyTo : aReplyTos)
         if (aReplyTo != null)
-          m_aReplyTo.add (aReplyTo);
+          this.m_aReplyTo.add (aReplyTo);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
   {
-    m_aReplyTo.clear ();
+    this.m_aReplyTo.clear ();
     if (aReplyTos != null)
       for (final IEmailAddress aReplyTo : aReplyTos)
         if (aReplyTo != null)
-          m_aReplyTo.add (aReplyTo);
+          this.m_aReplyTo.add (aReplyTo);
     return this;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <? extends IEmailAddress> getReplyTo ()
   {
-    return ContainerHelper.newList (m_aReplyTo);
+    return ContainerHelper.newList (this.m_aReplyTo);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  private static InternetAddress [] _asArray (@Nonnull final List <IEmailAddress> aList, @Nullable final String sCharset) throws UnsupportedEncodingException,
-                                                                                                                         AddressException
+  private static InternetAddress [] _asArray (@Nonnull final List <IEmailAddress> aList,
+                                              @Nullable final String sCharset) throws UnsupportedEncodingException,
+                                                                               AddressException
   {
     final InternetAddress [] ret = new InternetAddress [aList.size ()];
     int i = 0;
@@ -162,266 +171,299 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
     }
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   @Deprecated
   public InternetAddress [] getReplyToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
-                                                                             AddressException
+                                                                              AddressException
   {
-    return _asArray (m_aReplyTo, sCharset);
+    return _asArray (this.m_aReplyTo, sCharset);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public InternetAddress [] getReplyToArray (@Nullable final Charset aCharset) throws AddressException
   {
-    return _asArray (m_aReplyTo, aCharset);
+    return _asArray (this.m_aReplyTo, aCharset);
   }
 
+  @Override
   @Nonnegative
   public int getReplyToCount ()
   {
-    return m_aReplyTo.size ();
+    return this.m_aReplyTo.size ();
   }
 
+  @Override
   @Nonnull
   public final EmailData setTo (@Nullable final IEmailAddress aTo)
   {
-    m_aTo.clear ();
+    this.m_aTo.clear ();
     if (aTo != null)
-      m_aTo.add (aTo);
+      this.m_aTo.add (aTo);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setTo (@Nullable final IEmailAddress... aTos)
   {
-    m_aTo.clear ();
+    this.m_aTo.clear ();
     if (aTos != null)
       for (final IEmailAddress aTo : aTos)
         if (aTo != null)
-          m_aTo.add (aTo);
+          this.m_aTo.add (aTo);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
   {
-    m_aTo.clear ();
+    this.m_aTo.clear ();
     if (aTos != null)
       for (final IEmailAddress aTo : aTos)
         if (aTo != null)
-          m_aTo.add (aTo);
+          this.m_aTo.add (aTo);
     return this;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <? extends IEmailAddress> getTo ()
   {
-    return ContainerHelper.newList (m_aTo);
+    return ContainerHelper.newList (this.m_aTo);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   @Deprecated
   public InternetAddress [] getToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
-                                                                        AddressException
+                                                                         AddressException
   {
-    return _asArray (m_aTo, sCharset);
+    return _asArray (this.m_aTo, sCharset);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public InternetAddress [] getToArray (@Nullable final Charset aCharset) throws AddressException
   {
-    return _asArray (m_aTo, aCharset);
+    return _asArray (this.m_aTo, aCharset);
   }
 
+  @Override
   @Nonnegative
   public int getToCount ()
   {
-    return m_aTo.size ();
+    return this.m_aTo.size ();
   }
 
+  @Override
   @Nonnull
   public final EmailData setCc (@Nullable final IEmailAddress aCc)
   {
-    m_aCc.clear ();
+    this.m_aCc.clear ();
     if (aCc != null)
-      m_aCc.add (aCc);
+      this.m_aCc.add (aCc);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setCc (@Nullable final IEmailAddress... aCcs)
   {
-    m_aCc.clear ();
+    this.m_aCc.clear ();
     if (aCcs != null)
       for (final IEmailAddress aCc : aCcs)
         if (aCc != null)
-          m_aCc.add (aCc);
+          this.m_aCc.add (aCc);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
   {
-    m_aCc.clear ();
+    this.m_aCc.clear ();
     if (aCcs != null)
       for (final IEmailAddress aCc : aCcs)
         if (aCc != null)
-          m_aCc.add (aCc);
+          this.m_aCc.add (aCc);
     return this;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <? extends IEmailAddress> getCc ()
   {
-    return ContainerHelper.newList (m_aCc);
+    return ContainerHelper.newList (this.m_aCc);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   @Deprecated
   public InternetAddress [] getCcArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
-                                                                        AddressException
+                                                                         AddressException
   {
-    return _asArray (m_aCc, sCharset);
+    return _asArray (this.m_aCc, sCharset);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public InternetAddress [] getCcArray (@Nullable final Charset aCharset) throws AddressException
   {
-    return _asArray (m_aCc, aCharset);
+    return _asArray (this.m_aCc, aCharset);
   }
 
+  @Override
   @Nonnegative
   public int getCcCount ()
   {
-    return m_aCc.size ();
+    return this.m_aCc.size ();
   }
 
+  @Override
   @Nonnull
   public final EmailData setBcc (@Nullable final IEmailAddress aBcc)
   {
-    m_aBcc.clear ();
+    this.m_aBcc.clear ();
     if (aBcc != null)
-      m_aBcc.add (aBcc);
+      this.m_aBcc.add (aBcc);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setBcc (@Nullable final IEmailAddress... aBccs)
   {
-    m_aBcc.clear ();
+    this.m_aBcc.clear ();
     if (aBccs != null)
       for (final IEmailAddress aBcc : aBccs)
         if (aBcc != null)
-          m_aBcc.add (aBcc);
+          this.m_aBcc.add (aBcc);
     return this;
   }
 
+  @Override
   @Nonnull
   public final EmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
   {
-    m_aBcc.clear ();
+    this.m_aBcc.clear ();
     if (aBccs != null)
       for (final IEmailAddress aBcc : aBccs)
         if (aBcc != null)
-          m_aBcc.add (aBcc);
+          this.m_aBcc.add (aBcc);
     return this;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <? extends IEmailAddress> getBcc ()
   {
-    return ContainerHelper.newList (m_aBcc);
+    return ContainerHelper.newList (this.m_aBcc);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   @Deprecated
   public InternetAddress [] getBccArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
-                                                                         AddressException
+                                                                          AddressException
   {
-    return _asArray (m_aBcc, sCharset);
+    return _asArray (this.m_aBcc, sCharset);
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public InternetAddress [] getBccArray (@Nullable final Charset aCharset) throws AddressException
   {
-    return _asArray (m_aBcc, aCharset);
+    return _asArray (this.m_aBcc, aCharset);
   }
 
+  @Override
   @Nonnegative
   public int getBccCount ()
   {
-    return m_aBcc.size ();
+    return this.m_aBcc.size ();
   }
 
+  @Override
   @Nonnull
   public final EmailData setSentDate (@Nullable final DateTime aSentDate)
   {
-    m_aSentDate = aSentDate;
+    this.m_aSentDate = aSentDate;
     return this;
   }
 
+  @Override
   @Nullable
   public DateTime getSentDate ()
   {
-    return m_aSentDate;
+    return this.m_aSentDate;
   }
 
+  @Override
   @Nonnull
   public final EmailData setSubject (@Nullable final String sSubject)
   {
-    m_sSubject = sSubject;
+    this.m_sSubject = sSubject;
     return this;
   }
 
+  @Override
   @Nullable
   public String getSubject ()
   {
-    return m_sSubject;
+    return this.m_sSubject;
   }
 
+  @Override
   @Nonnull
   public final EmailData setBody (@Nullable final String sBody)
   {
-    m_sBody = sBody;
+    this.m_sBody = sBody;
     return this;
   }
 
+  @Override
   @Nullable
   public String getBody ()
   {
-    return m_sBody;
+    return this.m_sBody;
   }
 
+  @Override
   @Nullable
   public IEmailAttachmentList getAttachments ()
   {
-    return m_aAttachments;
+    return this.m_aAttachments;
   }
 
+  @Override
   @Nonnegative
   public int getAttachmentCount ()
   {
-    return m_aAttachments == null ? 0 : m_aAttachments.size ();
+    return this.m_aAttachments == null ? 0 : this.m_aAttachments.size ();
   }
 
+  @Override
   @Nonnull
   public final EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
     if (aAttachments != null && !aAttachments.isEmpty ())
-      m_aAttachments = aAttachments;
+      this.m_aAttachments = aAttachments;
     else
-      m_aAttachments = null;
+      this.m_aAttachments = null;
     return this;
   }
 
@@ -433,30 +475,30 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
     if (!super.equals (o))
       return false;
     final EmailData rhs = (EmailData) o;
-    return EqualsUtils.equals (m_aFrom, rhs.m_aFrom) &&
-           EqualsUtils.equals (m_aReplyTo, rhs.m_aReplyTo) &&
-           m_aTo.equals (rhs.m_aTo) &&
-           m_aCc.equals (rhs.m_aCc) &&
-           m_aBcc.equals (rhs.m_aBcc) &&
-           EqualsUtils.equals (m_aSentDate, rhs.m_aSentDate) &&
-           EqualsUtils.equals (m_sSubject, rhs.m_sSubject) &&
-           EqualsUtils.equals (m_sBody, rhs.m_sBody) &&
-           EqualsUtils.equals (m_aAttachments, rhs.m_aAttachments);
+    return EqualsUtils.equals (this.m_aFrom, rhs.m_aFrom) &&
+           EqualsUtils.equals (this.m_aReplyTo, rhs.m_aReplyTo) &&
+           this.m_aTo.equals (rhs.m_aTo) &&
+           this.m_aCc.equals (rhs.m_aCc) &&
+           this.m_aBcc.equals (rhs.m_aBcc) &&
+           EqualsUtils.equals (this.m_aSentDate, rhs.m_aSentDate) &&
+           EqualsUtils.equals (this.m_sSubject, rhs.m_sSubject) &&
+           EqualsUtils.equals (this.m_sBody, rhs.m_sBody) &&
+           EqualsUtils.equals (this.m_aAttachments, rhs.m_aAttachments);
   }
 
   @Override
   public int hashCode ()
   {
     return HashCodeGenerator.getDerived (super.hashCode ())
-                            .append (m_aFrom)
-                            .append (m_aReplyTo)
-                            .append (m_aTo)
-                            .append (m_aCc)
-                            .append (m_aBcc)
-                            .append (m_aSentDate)
-                            .append (m_sSubject)
-                            .append (m_sBody)
-                            .append (m_aAttachments)
+                            .append (this.m_aFrom)
+                            .append (this.m_aReplyTo)
+                            .append (this.m_aTo)
+                            .append (this.m_aCc)
+                            .append (this.m_aBcc)
+                            .append (this.m_aSentDate)
+                            .append (this.m_sSubject)
+                            .append (this.m_sBody)
+                            .append (this.m_aAttachments)
                             .getHashCode ();
   }
 
@@ -464,15 +506,15 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("from", m_aFrom)
-                            .appendIfNotNull ("replyTo", m_aReplyTo)
-                            .append ("to", m_aTo)
-                            .appendIfNotNull ("cc", m_aCc)
-                            .appendIfNotNull ("bcc", m_aBcc)
-                            .append ("sendDate", m_aSentDate)
-                            .append ("subject", m_sSubject)
-                            .append ("body", m_sBody)
-                            .appendIfNotNull ("attachments", m_aAttachments)
+                            .append ("from", this.m_aFrom)
+                            .appendIfNotNull ("replyTo", this.m_aReplyTo)
+                            .append ("to", this.m_aTo)
+                            .appendIfNotNull ("cc", this.m_aCc)
+                            .appendIfNotNull ("bcc", this.m_aBcc)
+                            .append ("sendDate", this.m_aSentDate)
+                            .append ("subject", this.m_sSubject)
+                            .append ("body", this.m_sBody)
+                            .appendIfNotNull ("attachments", this.m_aAttachments)
                             .toString ();
   }
 
@@ -492,6 +534,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
    *        The mail body text.
    * @param aAttachments
    *        Any attachments to use. May be <code>null</code>.
+   * @return the newly created email data
    */
   @Nonnull
   public static IEmailData createEmailData (@Nonnull final EEmailType eEmailType,

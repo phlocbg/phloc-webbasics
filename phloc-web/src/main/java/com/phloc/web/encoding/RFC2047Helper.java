@@ -31,7 +31,7 @@ import com.phloc.commons.codec.RFC1522QCodec;
 
 /**
  * RFC 2047 Helper
- * 
+ *
  * @author Apache Abdera
  */
 @Immutable
@@ -39,8 +39,8 @@ public final class RFC2047Helper
 {
   public static enum ECodec
   {
-    B,
-    Q
+   B,
+   Q
   }
 
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
@@ -66,11 +66,14 @@ public final class RFC2047Helper
 
   /**
    * Used to encode a string as specified by RFC 2047
-   * 
+   *
    * @param sValue
    *        The string to encode
    * @param aCharset
    *        The character set to use for the encoding
+   * @param eCodec
+   *        The codec to use
+   * @return The encoded value
    */
   @Nullable
   public static String encode (@Nullable final String sValue, @Nonnull final Charset aCharset, final ECodec eCodec)
@@ -97,9 +100,10 @@ public final class RFC2047Helper
 
   /**
    * Used to decode a string as specified by RFC 2047
-   * 
+   *
    * @param sValue
    *        The encoded string
+   * @return The decoded value
    */
   @Nullable
   public static String decode (@Nullable final String sValue)

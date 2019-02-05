@@ -49,7 +49,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
- * 
+ *
  * @author Philip Helger, Boris Gregorcic
  */
 @Immutable
@@ -72,7 +72,7 @@ public final class RequestHelper
   /**
    * Get the passed string without an eventually contained session ID like in
    * "test.html;JSESSIONID=1234".
-   * 
+   *
    * @param sValue
    *        The value to strip the session ID from
    * @return The value without a session ID or the original string.
@@ -107,7 +107,7 @@ public final class RequestHelper
    * <td>/xyz</td>
    * </tr>
    * </table>
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request
    * @return The request URI without the optional session ID
@@ -127,7 +127,7 @@ public final class RequestHelper
   /**
    * Get the request path info without an eventually appended session
    * (";jsessionid=...")
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request
    * @return Returns any extra path information associated with the URL the
@@ -149,7 +149,7 @@ public final class RequestHelper
 
   /**
    * Return the URI of the request within the servlet context.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request. May not be <code>null</code>.
    * @return the path within the web application and never <code>null</code>. By
@@ -182,7 +182,7 @@ public final class RequestHelper
    * path. That is it checks if URLPath starts with ParentPath. In this check,
    * the URL path is decoded to also properly match requests where e.g. spaces
    * are contained.
-   * 
+   *
    * @param sParentURLPath
    *        The URL base path, must not be URLencoded
    * @param sURLPath
@@ -225,12 +225,12 @@ public final class RequestHelper
    * <p>
    * Detects include request URL if called within a RequestDispatcher include.
    * <p>
-   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -> "/a".
+   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -&gt; "/a".
    * <p>
-   * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
+   * E.g.: servlet mapping = "/test"; request URI = "/test" -&gt; "".
    * <p>
-   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
-   * 
+   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -&gt; "".
+   *
    * @param aHttpRequest
    *        current HTTP request
    * @return the path within the servlet mapping, or ""
@@ -253,11 +253,11 @@ public final class RequestHelper
 
   /**
    * Get the full URL (incl. protocol) and parameters of the passed request.<br>
-   * 
+   *
    * <pre>
    * http://hostname.com/mywebapp/servlet/MyServlet/a/b;c=123?d=789
    * </pre>
-   * 
+   *
    * @param aHttpRequest
    *        The request to use. May not be <code>null</code>.
    * @return The full URL.
@@ -278,11 +278,11 @@ public final class RequestHelper
   /**
    * Get the full URI (excl. protocol) and parameters of the passed request.<br>
    * Example:
-   * 
+   *
    * <pre>
    * /mywebapp/servlet/MyServlet/a/b;c=123?d=789
    * </pre>
-   * 
+   *
    * @param aHttpRequest
    *        The request to use. May not be <code>null</code>.
    * @return The full URI.
@@ -365,7 +365,7 @@ public final class RequestHelper
 
   /**
    * Get the HTTP version associated with the given HTTP request
-   * 
+   *
    * @param aHttpRequest
    *        The http request to query. May not be <code>null</code>.
    * @return <code>null</code> if no supported HTTP version is contained
@@ -381,7 +381,7 @@ public final class RequestHelper
 
   /**
    * Get the HTTP method associated with the given HTTP request
-   * 
+   *
    * @param aHttpRequest
    *        The http request to query. May not be <code>null</code>.
    * @return <code>null</code> if no supported HTTP method is contained
@@ -397,7 +397,7 @@ public final class RequestHelper
 
   /**
    * Get a complete request header map as a copy.
-   * 
+   *
    * @param aHttpRequest
    *        The source HTTP request. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -426,7 +426,7 @@ public final class RequestHelper
   /**
    * This is a utility method which avoids that all map values are enclosed in
    * an array. Jetty seems to create String arrays out of simple string values
-   * 
+   *
    * @param aHttpRequest
    *        The source HTTP request. May not be <code>null</code>.
    * @return A Map containing pure strings instead of string arrays with one
@@ -490,7 +490,7 @@ public final class RequestHelper
    * Get the content length of the passed request. This is not done using
    * <code>request.getContentLength()</code> but instead parsing the HTTP header
    * field {@link CHTTPHeader#CONTENT_LENGTH} manually!
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @return -1 if no or an invalid content length is set in the header
@@ -510,7 +510,7 @@ public final class RequestHelper
   /**
    * Get all request headers of the passed request in a correctly typed
    * {@link Enumeration}.
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @param sName
@@ -529,7 +529,7 @@ public final class RequestHelper
   /**
    * Get all all request header names of the passed request in a correctly typed
    * {@link Enumeration}.
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -600,7 +600,7 @@ public final class RequestHelper
 
   /**
    * Get the client certificates provided by a HTTP servlet request.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP servlet request to extract the information from. May not be
    *        <code>null</code>.

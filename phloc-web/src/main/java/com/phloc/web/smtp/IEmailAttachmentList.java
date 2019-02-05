@@ -29,25 +29,27 @@ import com.phloc.commons.state.IClearable;
 /**
  * This interface represents attachments to be added to a mail message. Messages
  * with attachments are always send as MIME messages.
- * 
+ *
  * @author Philip Helger
  */
 public interface IEmailAttachmentList extends IReadonlyEmailAttachmentList, IClearable
 {
   /**
    * Add an attachment.
-   * 
+   *
    * @param sFilename
    *        The ID/filename of the attachment. May not be <code>null</code>.
    * @param aISS
    *        The {@link IInputStreamProvider} representing the data. May not be
    *        <code>null</code>.
+   * @param <ISP>
+   *        The type of the input stream provider
    */
   <ISP extends IInputStreamProvider & Serializable> void addAttachment (@Nonnull String sFilename, @Nonnull ISP aISS);
 
   /**
    * Add an attachment.
-   * 
+   *
    * @param aAttachment
    *        The attachment to be added. May not be <code>null</code>.
    */
@@ -55,7 +57,7 @@ public interface IEmailAttachmentList extends IReadonlyEmailAttachmentList, ICle
 
   /**
    * Remove the passed attachment.
-   * 
+   *
    * @param sFilename
    *        The file name of the attachment to be removed. The file name is case
    *        sensitive.

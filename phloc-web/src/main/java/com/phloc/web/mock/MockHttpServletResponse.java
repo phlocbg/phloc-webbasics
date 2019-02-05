@@ -59,7 +59,7 @@ import com.phloc.web.CWeb;
 // ESCA-JAVA0116:
 /**
  * Mock implementation of {@link HttpServletResponse}.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -117,12 +117,13 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    * Set whether {@link #getOutputStream()} access is allowed.
    * <p>
    * Default is <code>true</code>.
-   * 
+   *
    * @param bOutputStreamAccessAllowed
+   *        Whether or not to allow it
    */
   public void setOutputStreamAccessAllowed (final boolean bOutputStreamAccessAllowed)
   {
-    m_bOutputStreamAccessAllowed = bOutputStreamAccessAllowed;
+    this.m_bOutputStreamAccessAllowed = bOutputStreamAccessAllowed;
   }
 
   /**
@@ -130,17 +131,18 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    */
   public boolean isOutputStreamAccessAllowed ()
   {
-    return m_bOutputStreamAccessAllowed;
+    return this.m_bOutputStreamAccessAllowed;
   }
 
   /**
    * Set whether {@link #getWriter()} access is allowed.
-   * <p>
-   * Default is <code>true</code>.
+   *
+   * @param bWriterAccessAllowed
+   *        Whether or not it is allowed. Default is <code>true</code>.
    */
   public void setWriterAccessAllowed (final boolean bWriterAccessAllowed)
   {
-    m_bWriterAccessAllowed = bWriterAccessAllowed;
+    this.m_bWriterAccessAllowed = bWriterAccessAllowed;
   }
 
   /**
@@ -148,9 +150,10 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    */
   public boolean isWriterAccessAllowed ()
   {
-    return m_bWriterAccessAllowed;
+    return this.m_bWriterAccessAllowed;
   }
 
+  @Override
   public void setCharacterEncoding (@Nullable final String sCharacterEncoding)
   {
     setCharacterEncoding (sCharacterEncoding == null ? null : CharsetManager.getCharsetFromName (sCharacterEncoding));
@@ -158,19 +161,20 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 
   public void setCharacterEncoding (@Nullable final Charset aCharacterEncoding)
   {
-    m_aCharacterEncoding = aCharacterEncoding;
+    this.m_aCharacterEncoding = aCharacterEncoding;
   }
 
+  @Override
   @Nullable
   public String getCharacterEncoding ()
   {
-    return m_aCharacterEncoding == null ? null : m_aCharacterEncoding.name ();
+    return this.m_aCharacterEncoding == null ? null : this.m_aCharacterEncoding.name ();
   }
 
   @Nullable
   public Charset getCharacterEncodingObj ()
   {
-    return m_aCharacterEncoding;
+    return this.m_aCharacterEncoding;
   }
 
   @Nonnull
@@ -193,27 +197,29 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     return ret;
   }
 
+  @Override
   @Nonnull
   public ServletOutputStream getOutputStream ()
   {
-    if (!m_bOutputStreamAccessAllowed)
+    if (!this.m_bOutputStreamAccessAllowed)
       throw new IllegalStateException ("OutputStream access not allowed");
 
-    return m_aOS;
+    return this.m_aOS;
   }
 
+  @Override
   @Nonnull
   public PrintWriter getWriter ()
   {
-    if (!m_bWriterAccessAllowed)
+    if (!this.m_bWriterAccessAllowed)
       throw new IllegalStateException ("Writer access not allowed");
 
-    if (m_aWriter == null)
+    if (this.m_aWriter == null)
     {
-      final Writer aWriter = StreamUtils.createWriter (m_aContent, getCharacterEncodingObjOrDefault ());
-      m_aWriter = new ResponsePrintWriter (aWriter);
+      final Writer aWriter = StreamUtils.createWriter (this.m_aContent, getCharacterEncodingObjOrDefault ());
+      this.m_aWriter = new ResponsePrintWriter (aWriter);
     }
-    return m_aWriter;
+    return this.m_aWriter;
   }
 
   @Nonnull
@@ -221,7 +227,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public byte [] getContentAsByteArray ()
   {
     flushBuffer ();
-    return m_aContent.toByteArray ();
+    return this.m_aContent.toByteArray ();
   }
 
   @Nonnull
@@ -235,29 +241,31 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public String getContentAsString (@Nonnull @Nonempty final String sCharset)
   {
     flushBuffer ();
-    return m_aContent.getAsString (sCharset);
+    return this.m_aContent.getAsString (sCharset);
   }
 
   @Nonnull
   public String getContentAsString (@Nonnull final Charset aCharset)
   {
     flushBuffer ();
-    return m_aContent.getAsString (aCharset);
+    return this.m_aContent.getAsString (aCharset);
   }
 
+  @Override
   public void setContentLength (final int nContentLength)
   {
-    m_nContentLength = nContentLength;
+    this.m_nContentLength = nContentLength;
   }
 
   public int getContentLength ()
   {
-    return m_nContentLength;
+    return this.m_nContentLength;
   }
 
+  @Override
   public void setContentType (@Nullable final String sContentType)
   {
-    m_sContentType = sContentType;
+    this.m_sContentType = sContentType;
     if (sContentType != null)
     {
       try
@@ -274,22 +282,26 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     }
   }
 
+  @Override
   @Nullable
   public String getContentType ()
   {
-    return m_sContentType;
+    return this.m_sContentType;
   }
 
+  @Override
   public void setBufferSize (final int nBufferSize)
   {
-    m_nBufferSize = nBufferSize;
+    this.m_nBufferSize = nBufferSize;
   }
 
+  @Override
   public int getBufferSize ()
   {
-    return m_nBufferSize;
+    return this.m_nBufferSize;
   }
 
+  @Override
   public void flushBuffer ()
   {
     setCommitted (true);
@@ -298,80 +310,86 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   /*
    * Throws exception if committed!
    */
+  @Override
   public void resetBuffer ()
   {
     if (isCommitted ())
       throw new IllegalStateException ("Cannot reset buffer - response is already committed");
-    m_aContent.reset ();
-    m_aWriter = null;
+    this.m_aContent.reset ();
+    this.m_aWriter = null;
   }
 
   private void _setCommittedIfBufferSizeExceeded ()
   {
     final int nBufSize = getBufferSize ();
-    if (nBufSize > 0 && m_aContent.size () > nBufSize)
+    if (nBufSize > 0 && this.m_aContent.size () > nBufSize)
       setCommitted (true);
   }
 
   public void setCommitted (final boolean bCommitted)
   {
-    m_bCommitted = bCommitted;
+    this.m_bCommitted = bCommitted;
   }
 
+  @Override
   public boolean isCommitted ()
   {
-    return m_bCommitted;
+    return this.m_bCommitted;
   }
 
   /*
    * Throws exception if committed!
    */
+  @Override
   public void reset ()
   {
     resetBuffer ();
-    m_aCharacterEncoding = null;
-    m_nContentLength = 0;
-    m_sContentType = null;
-    m_aLocale = null;
-    m_aCookies.clear ();
-    m_aHeaders.clear ();
-    m_nStatus = HttpServletResponse.SC_OK;
-    m_sErrorMessage = null;
+    this.m_aCharacterEncoding = null;
+    this.m_nContentLength = 0;
+    this.m_sContentType = null;
+    this.m_aLocale = null;
+    this.m_aCookies.clear ();
+    this.m_aHeaders.clear ();
+    this.m_nStatus = HttpServletResponse.SC_OK;
+    this.m_sErrorMessage = null;
   }
 
+  @Override
   public void setLocale (@Nullable final Locale aLocale)
   {
-    m_aLocale = aLocale;
+    this.m_aLocale = aLocale;
   }
 
+  @Override
   @Nullable
   public Locale getLocale ()
   {
-    return m_aLocale;
+    return this.m_aLocale;
   }
 
   // ---------------------------------------------------------------------
   // HttpServletResponse interface
   // ---------------------------------------------------------------------
 
+  @Override
   public void addCookie (@Nonnull final Cookie aCookie)
   {
     ValueEnforcer.notNull (aCookie, "Cookie");
-    m_aCookies.add (aCookie);
+    this.m_aCookies.add (aCookie);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public Cookie [] getCookies ()
   {
-    return ArrayHelper.newArray (m_aCookies, Cookie.class);
+    return ArrayHelper.newArray (this.m_aCookies, Cookie.class);
   }
 
   @Nullable
   public Cookie getCookie (@Nonnull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
-    for (final Cookie aCookie : m_aCookies)
+    for (final Cookie aCookie : this.m_aCookies)
       if (sName.equals (aCookie.getName ()))
         return aCookie;
     return null;
@@ -384,14 +402,15 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     return sName == null ? null : sName.toLowerCase (Locale.US);
   }
 
+  @Override
   public boolean containsHeader (@Nullable final String sName)
   {
-    return m_aHeaders.containsKey (_unifyHeaderName (sName));
+    return this.m_aHeaders.containsKey (_unifyHeaderName (sName));
   }
 
   /**
    * Return the names of all specified headers as a Set of Strings.
-   * 
+   *
    * @return the <code>Set</code> of header name <code>Strings</code>, or an
    *         empty <code>Set</code> if none
    */
@@ -399,17 +418,17 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   @ReturnsMutableCopy
   public Set <String> getHeaderNames ()
   {
-    return ContainerHelper.newSet (m_aHeaders.keySet ());
+    return ContainerHelper.newSet (this.m_aHeaders.keySet ());
   }
 
   /**
    * Return the primary value for the given header, if any.
    * <p>
    * Will return the first value in case of multiple values.
-   * 
+   *
    * @param sName
    *        the name of the header
-   * @return the associated header value, or <code>null<code> if none
+   * @return the associated header value, or <code>null</code> if none
    */
   @Nullable
   public Object getHeader (@Nullable final String sName)
@@ -420,7 +439,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 
   /**
    * Return all values for the given header as a List of value objects.
-   * 
+   *
    * @param sName
    *        the name of the header
    * @return the associated header values, or an empty List if none
@@ -428,20 +447,21 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   @Nonnull
   public List <Object> getHeaders (@Nullable final String sName)
   {
-    return ContainerHelper.newList (m_aHeaders.get (_unifyHeaderName (sName)));
+    return ContainerHelper.newList (this.m_aHeaders.get (_unifyHeaderName (sName)));
   }
 
   /**
    * The default implementation returns the given URL String as-is. Use
    * {@link #setEncodeUrlSuffix(String)} to define a suffix to be appended.
-   * 
+   *
    * @return the encoded URL
    */
+  @Override
   @Nullable
   public String encodeURL (@Nullable final String sUrl)
   {
-    if (StringHelper.hasText (m_sEncodeUrlSuffix))
-      return StringHelper.getNotNull (sUrl) + m_sEncodeUrlSuffix;
+    if (StringHelper.hasText (this.m_sEncodeUrlSuffix))
+      return StringHelper.getNotNull (sUrl) + this.m_sEncodeUrlSuffix;
     return sUrl;
   }
 
@@ -449,86 +469,98 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    * The default implementation returns the given URL String as-is. Use
    * {@link #setEncodeRedirectUrlSuffix(String)} to define a suffix to be
    * appended.
-   * 
+   *
    * @return the encoded URL
    */
+  @Override
   @Nullable
   public String encodeRedirectURL (@Nullable final String sUrl)
   {
-    if (StringHelper.hasText (m_sEncodeRedirectUrlSuffix))
-      return StringHelper.getNotNull (sUrl) + m_sEncodeRedirectUrlSuffix;
+    if (StringHelper.hasText (this.m_sEncodeRedirectUrlSuffix))
+      return StringHelper.getNotNull (sUrl) + this.m_sEncodeRedirectUrlSuffix;
     return sUrl;
   }
 
+  @Override
   @Deprecated
   public String encodeUrl (@Nullable final String sUrl)
   {
     return encodeURL (sUrl);
   }
 
+  @Override
   @Deprecated
   public String encodeRedirectUrl (@Nullable final String sUrl)
   {
     return encodeRedirectURL (sUrl);
   }
 
+  @Override
   public void sendError (final int nStatus, @Nullable final String sErrorMessage) throws IOException
   {
     if (isCommitted ())
       throw new IllegalStateException ("Cannot set error status - response is already committed");
-    m_nStatus = nStatus;
-    m_sErrorMessage = sErrorMessage;
+    this.m_nStatus = nStatus;
+    this.m_sErrorMessage = sErrorMessage;
     setCommitted (true);
   }
 
+  @Override
   public void sendError (final int nStatus) throws IOException
   {
     if (isCommitted ())
       throw new IllegalStateException ("Cannot set error status - response is already committed");
-    m_nStatus = nStatus;
+    this.m_nStatus = nStatus;
     setCommitted (true);
   }
 
+  @Override
   public void sendRedirect (@Nonnull final String sUrl) throws IOException
   {
     if (isCommitted ())
       throw new IllegalStateException ("Cannot send redirect - response is already committed");
     ValueEnforcer.notNull (sUrl, "URL");
-    m_sRedirectedUrl = sUrl;
+    this.m_sRedirectedUrl = sUrl;
     setCommitted (true);
   }
 
   @Nullable
   public String getRedirectedUrl ()
   {
-    return m_sRedirectedUrl;
+    return this.m_sRedirectedUrl;
   }
 
+  @Override
   public void setDateHeader (@Nullable final String sName, final long nValue)
   {
     _setHeaderValue (sName, Long.valueOf (nValue));
   }
 
+  @Override
   public void addDateHeader (@Nullable final String sName, final long nValue)
   {
     _addHeaderValue (sName, Long.valueOf (nValue));
   }
 
+  @Override
   public void setHeader (@Nullable final String sName, @Nullable final String sValue)
   {
     _setHeaderValue (sName, sValue);
   }
 
+  @Override
   public void addHeader (@Nullable final String sName, @Nullable final String sValue)
   {
     _addHeaderValue (sName, sValue);
   }
 
+  @Override
   public void setIntHeader (@Nullable final String sName, final int nValue)
   {
     _setHeaderValue (sName, Integer.valueOf (nValue));
   }
 
+  @Override
   public void addIntHeader (@Nullable final String sName, final int nValue)
   {
     _addHeaderValue (sName, Integer.valueOf (nValue));
@@ -546,76 +578,78 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 
   private void _doAddHeaderValue (@Nullable final String sName, @Nullable final Object aValue, final boolean bReplace)
   {
-    if (bReplace || !m_aHeaders.containsSingle (_unifyHeaderName (sName), aValue))
-      m_aHeaders.putSingle (_unifyHeaderName (sName), aValue);
+    if (bReplace || !this.m_aHeaders.containsSingle (_unifyHeaderName (sName), aValue))
+      this.m_aHeaders.putSingle (_unifyHeaderName (sName), aValue);
   }
 
+  @Override
   public void setStatus (final int nStatus)
   {
-    m_nStatus = nStatus;
+    this.m_nStatus = nStatus;
   }
 
+  @Override
   @Deprecated
   public void setStatus (final int nStatus, @Nullable final String sErrorMessage)
   {
-    m_nStatus = nStatus;
-    m_sErrorMessage = sErrorMessage;
+    this.m_nStatus = nStatus;
+    this.m_sErrorMessage = sErrorMessage;
   }
 
   public int getStatus ()
   {
-    return m_nStatus;
+    return this.m_nStatus;
   }
 
   @Nullable
   public String getErrorMessage ()
   {
-    return m_sErrorMessage;
+    return this.m_sErrorMessage;
   }
 
   // Methods for MockRequestDispatcher
   public void setForwardedUrl (@Nullable final String sForwardedUrl)
   {
-    m_sForwardedUrl = sForwardedUrl;
+    this.m_sForwardedUrl = sForwardedUrl;
   }
 
   @Nullable
   public String getForwardedUrl ()
   {
-    return m_sForwardedUrl;
+    return this.m_sForwardedUrl;
   }
 
   public void setIncludedUrl (@Nullable final String sIncludedUrl)
   {
-    m_sIncludedUrl = sIncludedUrl;
+    this.m_sIncludedUrl = sIncludedUrl;
   }
 
   @Nullable
   public String getIncludedUrl ()
   {
-    return m_sIncludedUrl;
+    return this.m_sIncludedUrl;
   }
 
   public void setEncodeUrlSuffix (@Nullable final String sEncodeUrlSuffix)
   {
-    m_sEncodeUrlSuffix = sEncodeUrlSuffix;
+    this.m_sEncodeUrlSuffix = sEncodeUrlSuffix;
   }
 
   @Nullable
   public String getEncodeUrlSuffix ()
   {
-    return m_sEncodeUrlSuffix;
+    return this.m_sEncodeUrlSuffix;
   }
 
   public void setEncodeRedirectUrlSuffix (@Nullable final String sEncodeRedirectUrlSuffix)
   {
-    m_sEncodeRedirectUrlSuffix = sEncodeRedirectUrlSuffix;
+    this.m_sEncodeRedirectUrlSuffix = sEncodeRedirectUrlSuffix;
   }
 
   @Nullable
   public String getEncodeRedirectUrlSuffix ()
   {
-    return m_sEncodeRedirectUrlSuffix;
+    return this.m_sEncodeRedirectUrlSuffix;
   }
 
   /**

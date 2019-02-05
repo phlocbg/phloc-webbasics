@@ -35,7 +35,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Misc. helper methods on HTTP cookies.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -87,13 +87,15 @@ public final class CookieHelper
   /**
    * Create a cookie that is bound on a certain path within the local web
    * server.
-   * 
+   *
    * @param sName
    *        The cookie name.
    * @param sValue
    *        The cookie value.
    * @param sPath
    *        The path the cookie is valid for.
+   * @param bExpireWhenBrowserIsClosed
+   *        Whether or not the cookie should expire on browser close
    * @return The created cookie object.
    */
   @Nonnull
@@ -128,7 +130,7 @@ public final class CookieHelper
 
   /**
    * Remove a cookie by setting the max age to 0.
-   * 
+   *
    * @param aHttpResponse
    *        The HTTP response. May not be <code>null</code>.
    * @param aCookie

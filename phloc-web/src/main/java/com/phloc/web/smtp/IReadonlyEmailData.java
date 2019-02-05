@@ -35,7 +35,7 @@ import com.phloc.commons.email.IEmailAddress;
 /**
  * Contains all possible fields for mail sending in a read-only fashion.<br>
  * Note: the attribute container may only contain String values!
- * 
+ *
  * @author Philip Helger
  */
 public interface IReadonlyEmailData extends IReadonlyAttributeContainer
@@ -48,7 +48,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the sender mail address.
-   * 
+   *
    * @return <code>null</code> if no sender is specified.
    */
   @Nullable
@@ -56,7 +56,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the reply-to mail addresses.
-   * 
+   *
    * @return never <code>null</code>
    */
   @Nonnull
@@ -64,12 +64,14 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the reply-to email addresses.
-   * 
+   *
    * @param sCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws UnsupportedEncodingException
+   *         eventually
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   @Deprecated
@@ -77,11 +79,12 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the reply-to email addresses.
-   * 
+   *
    * @param aCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   InternetAddress [] getReplyToArray (@Nullable Charset aCharset) throws AddressException;
@@ -94,7 +97,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all TO-receivers.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -102,12 +105,14 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all TO-receivers.
-   * 
+   *
    * @param sCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws UnsupportedEncodingException
+   *         eventually
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   @Deprecated
@@ -115,11 +120,12 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all TO-receivers.
-   * 
+   *
    * @param aCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   InternetAddress [] getToArray (@Nullable Charset aCharset) throws AddressException;
@@ -132,7 +138,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all CC-receivers.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -140,12 +146,14 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all CC-receivers.
-   * 
+   *
    * @param sCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws UnsupportedEncodingException
+   *         eventually
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   @Deprecated
@@ -153,11 +161,12 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all CC-receivers.
-   * 
+   *
    * @param aCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   InternetAddress [] getCcArray (@Nullable Charset aCharset) throws AddressException;
@@ -170,7 +179,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all BCC-receivers.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -178,23 +187,26 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get a list of all BCC-receivers.
-   * 
+   *
    * @param sCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws UnsupportedEncodingException
+   *         eventually
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   InternetAddress [] getBccArray (@Nullable String sCharset) throws UnsupportedEncodingException, AddressException;
 
   /**
    * Get a list of all BCC-receivers.
-   * 
+   *
    * @param aCharset
    *        Character set to use. May be <code>null</code>.
    * @return Never <code>null</code>.
    * @throws AddressException
+   *         eventually
    */
   @Nonnull
   InternetAddress [] getBccArray (@Nullable Charset aCharset) throws AddressException;
@@ -207,7 +219,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the date when the mail claims to be sent.
-   * 
+   *
    * @return <code>null</code> if no such date is specified.
    */
   @Nullable
@@ -215,7 +227,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the subject line.
-   * 
+   *
    * @return <code>null</code> if no subject is specified.
    */
   @Nullable
@@ -223,7 +235,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 
   /**
    * Get the mail content.
-   * 
+   *
    * @return <code>null</code> if no content is specified.
    */
   @Nullable
@@ -232,7 +244,7 @@ public interface IReadonlyEmailData extends IReadonlyAttributeContainer
   /**
    * Get an optional list of attachments. If attachments are present, the mail
    * is always created as a MIME message and never a simple text message.
-   * 
+   *
    * @return A map from the filename to an {@link java.io.InputStream}-provider
    *         containing all desired attachments or <code>null</code>/an empty
    *         container if no attachments are required.

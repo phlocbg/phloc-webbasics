@@ -44,12 +44,13 @@ import com.phloc.web.datetime.PDTWebDateUtils;
 
 /**
  * Abstracts HTTP header interface for external usage.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
 public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, List <String>>>, Serializable
 {
+  private static final long serialVersionUID = 1169139040518024734L;
   private final Map <String, List <String>> m_aHeaders = new LinkedHashMap <String, List <String>> ();
 
   public HTTPHeaderMap ()
@@ -57,18 +58,18 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
 
   public void reset ()
   {
-    m_aHeaders.clear ();
+    this.m_aHeaders.clear ();
   }
 
   @Nonnull
   @ReturnsMutableCopy
   private List <String> _getOrCreateHeaderList (final String sName)
   {
-    List <String> aValues = m_aHeaders.get (sName);
+    List <String> aValues = this.m_aHeaders.get (sName);
     if (aValues == null)
     {
       aValues = new ArrayList <String> (2);
-      m_aHeaders.put (sName, aValues);
+      this.m_aHeaders.put (sName, aValues);
     }
     return aValues;
   }
@@ -152,10 +153,13 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
   @ReturnsMutableCopy
   public Map <String, List <String>> getAllHeaders ()
   {
-    return ContainerHelper.newOrderedMap (m_aHeaders);
+    return ContainerHelper.newOrderedMap (this.m_aHeaders);
   }
 
   /**
+   * @param sName
+   *        The name of the header to get
+   * @return The values set for this header, never <code>null</code>
    * @deprecated Use {@link #getHeaderValues(String)} instead
    */
   @Deprecated
@@ -170,10 +174,13 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
   @ReturnsMutableCopy
   public List <String> getHeaderValues (@Nullable final String sName)
   {
-    return ContainerHelper.newList (m_aHeaders.get (sName));
+    return ContainerHelper.newList (this.m_aHeaders.get (sName));
   }
 
   /**
+   * @param sName
+   *        The name of the header to get (case insensitive)
+   * @return The values set for this header, never <code>null</code>
    * @deprecated Use {@link #getHeaderValuesCaseInsensitive(String)} instead
    */
   @Deprecated
@@ -190,7 +197,7 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
   {
     final List <String> ret = new ArrayList <String> ();
     if (StringHelper.hasText (sName))
-      for (final Map.Entry <String, List <String>> aEntry : m_aHeaders.entrySet ())
+      for (final Map.Entry <String, List <String>> aEntry : this.m_aHeaders.entrySet ())
         if (sName.equalsIgnoreCase (aEntry.getKey ()))
         {
           ret.addAll (aEntry.getValue ());
@@ -201,35 +208,38 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
 
   public boolean containsHeaders (@Nullable final String sName)
   {
-    return m_aHeaders.containsKey (sName);
+    return this.m_aHeaders.containsKey (sName);
   }
 
   @Nonnull
   public EChange removeHeaders (@Nullable final String sName)
   {
-    return EChange.valueOf (m_aHeaders.remove (sName) != null);
+    return EChange.valueOf (this.m_aHeaders.remove (sName) != null);
   }
 
+  @Override
   @Nonnull
   public Iterator <Map.Entry <String, List <String>>> iterator ()
   {
-    return m_aHeaders.entrySet ().iterator ();
+    return this.m_aHeaders.entrySet ().iterator ();
   }
 
+  @Override
   public boolean isEmpty ()
   {
-    return m_aHeaders.isEmpty ();
+    return this.m_aHeaders.isEmpty ();
   }
 
+  @Override
   @Nonnegative
   public int size ()
   {
-    return m_aHeaders.size ();
+    return this.m_aHeaders.size ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("headers", m_aHeaders).toString ();
+    return new ToStringGenerator (this).append ("headers", this.m_aHeaders).toString ();
   }
 }

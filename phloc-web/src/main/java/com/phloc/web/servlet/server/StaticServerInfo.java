@@ -35,12 +35,13 @@ import com.phloc.web.servlet.request.RequestHelper;
 /**
  * This singleton instance represents default server information for locations
  * where no request context is available (e.g. in scheduled tasks)
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
 public class StaticServerInfo implements Serializable
 {
+  private static final long serialVersionUID = -1739276721284136828L;
   private static final Logger s_aLogger = LoggerFactory.getLogger (StaticServerInfo.class);
   private static volatile StaticServerInfo s_aDefault;
 
@@ -56,14 +57,14 @@ public class StaticServerInfo implements Serializable
                               @Nonnegative final int nServerPort,
                               @Nonnull final String sContextPath)
   {
-    m_sScheme = ValueEnforcer.notEmpty (sScheme, "Scheme");
-    m_sServerName = ValueEnforcer.notEmpty (sServerName, "ServerName");
-    m_nServerPort = RequestHelper.getServerPortToUse (sScheme, nServerPort);
+    this.m_sScheme = ValueEnforcer.notEmpty (sScheme, "Scheme");
+    this.m_sServerName = ValueEnforcer.notEmpty (sServerName, "ServerName");
+    this.m_nServerPort = RequestHelper.getServerPortToUse (sScheme, nServerPort);
     // may be empty!!
-    m_sContextPath = ValueEnforcer.notNull (sContextPath, "ContextPath");
+    this.m_sContextPath = ValueEnforcer.notNull (sContextPath, "ContextPath");
 
-    m_sFullServerPath = RequestHelper.getFullServerName (sScheme, sServerName, nServerPort).toString ();
-    m_sFullServerAndContextPath = m_sFullServerPath + sContextPath;
+    this.m_sFullServerPath = RequestHelper.getFullServerName (sScheme, sServerName, nServerPort).toString ();
+    this.m_sFullServerAndContextPath = this.m_sFullServerPath + sContextPath;
   }
 
   /**
@@ -72,7 +73,7 @@ public class StaticServerInfo implements Serializable
   @Nonnull
   public String getScheme ()
   {
-    return m_sScheme;
+    return this.m_sScheme;
   }
 
   /**
@@ -81,7 +82,7 @@ public class StaticServerInfo implements Serializable
   @Nonnull
   public String getServerName ()
   {
-    return m_sServerName;
+    return this.m_sServerName;
   }
 
   /**
@@ -91,16 +92,16 @@ public class StaticServerInfo implements Serializable
   @CheckForSigned
   public int getServerPort ()
   {
-    return m_nServerPort;
+    return this.m_nServerPort;
   }
 
   /**
-   * @return <code>/context</code> or <code></code> (empty string)
+   * @return <code>/context</code> or empty string
    */
   @Nonnull
   public String getContextPath ()
   {
-    return m_sContextPath;
+    return this.m_sContextPath;
   }
 
   /**
@@ -110,7 +111,7 @@ public class StaticServerInfo implements Serializable
   @Nonnull
   public String getFullServerPath ()
   {
-    return m_sFullServerPath;
+    return this.m_sFullServerPath;
   }
 
   /**
@@ -120,18 +121,18 @@ public class StaticServerInfo implements Serializable
   @Nonnull
   public String getFullContextPath ()
   {
-    return m_sFullServerAndContextPath;
+    return this.m_sFullServerAndContextPath;
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("scheme", m_sScheme)
-                                       .append ("serverName", m_sServerName)
-                                       .append ("serverPort", m_nServerPort)
-                                       .append ("contextPath", m_sContextPath)
-                                       .append ("fullServerPath", m_sFullServerPath)
-                                       .append ("fullServerAndContextPath", m_sFullServerAndContextPath)
+    return new ToStringGenerator (this).append ("scheme", this.m_sScheme)
+                                       .append ("serverName", this.m_sServerName)
+                                       .append ("serverPort", this.m_nServerPort)
+                                       .append ("contextPath", this.m_sContextPath)
+                                       .append ("fullServerPath", this.m_sFullServerPath)
+                                       .append ("fullServerAndContextPath", this.m_sFullServerAndContextPath)
                                        .toString ();
   }
 

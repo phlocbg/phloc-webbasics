@@ -28,11 +28,12 @@ package com.phloc.web.fileupload;
  */
 public final class InvalidFileNameException extends RuntimeException
 {
+  private static final long serialVersionUID = -8561078424811672022L;
   private final String m_sName;
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param pName
    *        The file name causing the exception.
    * @param pMessage
@@ -41,14 +42,14 @@ public final class InvalidFileNameException extends RuntimeException
   public InvalidFileNameException (final String pName, final String pMessage)
   {
     super (pMessage);
-    m_sName = pName;
+    this.m_sName = pName;
   }
 
   /**
-   * Returns the invalid file name.
+   * @return The invalid file name.
    */
   public String getName ()
   {
-    return m_sName;
+    return this.m_sName;
   }
 }

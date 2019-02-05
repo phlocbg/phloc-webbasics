@@ -47,19 +47,17 @@ import com.phloc.web.fileupload.IFileItemFactory;
  * disk, is configurable, as is the directory in which temporary files will be
  * created.
  * </p>
- * <p>
  * If not otherwise configured, the default configuration values are as follows:
  * <ul>
  * <li>Size threshold is 10KB.</li>
  * <li>Repository is the system default temp directory, as returned by
  * <code>System.getProperty("java.io.tmpdir")</code>.</li>
  * </ul>
- * </p>
  * <p>
  * Temporary files, which are created for file items, should be deleted later
  * on.
  * </p>
- * 
+ *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  * @author Philip Helger
  */
@@ -90,7 +88,7 @@ public class DiskFileItemFactory implements IFileItemFactory
 
   /**
    * Constructs a preconfigured instance of this class.
-   * 
+   *
    * @param sizeThreshold
    *        The threshold, in bytes, below which items will be retained in
    *        memory and above which they will be stored as a file.
@@ -100,32 +98,33 @@ public class DiskFileItemFactory implements IFileItemFactory
    */
   public DiskFileItemFactory (@Nonnegative final int sizeThreshold, @Nullable final File repository)
   {
-    m_nSizeThreshold = sizeThreshold;
-    m_aRepository = repository;
+    this.m_nSizeThreshold = sizeThreshold;
+    this.m_aRepository = repository;
   }
 
+  @Override
   public void setRepository (@Nullable final File aRepository)
   {
-    m_aRepository = aRepository;
+    this.m_aRepository = aRepository;
   }
 
   private void _addTempFile (@Nonnull final File aFile)
   {
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aTempFiles.add (aFile);
+      this.m_aTempFiles.add (aFile);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
   /**
    * Create a new {@link com.phloc.web.fileupload.io.DiskFileItem} instance from
    * the supplied parameters and the local factory configuration.
-   * 
+   *
    * @param sFieldName
    *        The name of the form field.
    * @param sContentType
@@ -138,6 +137,7 @@ public class DiskFileItemFactory implements IFileItemFactory
    *        other client.
    * @return The newly created file item.
    */
+  @Override
   @Nonnull
   public DiskFileItem createItem (final String sFieldName,
                                   final String sContentType,
@@ -148,41 +148,42 @@ public class DiskFileItemFactory implements IFileItemFactory
                                                   sContentType,
                                                   bIsFormField,
                                                   sFileName,
-                                                  m_nSizeThreshold,
-                                                  m_aRepository);
+                                                  this.m_nSizeThreshold,
+                                                  this.m_aRepository);
     // Add the temp file - may be non-existing if the size is below the
     // threshold
     _addTempFile (result.getTempFile ());
     return result;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <File> getAllTemporaryFiles ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aTempFiles);
+      return ContainerHelper.newList (this.m_aTempFiles);
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
   public void deleteAllTemporaryFiles ()
   {
     List <File> aTempFiles;
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      aTempFiles = ContainerHelper.newList (m_aTempFiles);
-      m_aTempFiles.clear ();
+      aTempFiles = ContainerHelper.newList (this.m_aTempFiles);
+      this.m_aTempFiles.clear ();
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
 
     for (final File aFile : aTempFiles)

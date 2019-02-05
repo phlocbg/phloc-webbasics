@@ -43,13 +43,11 @@ import com.phloc.datetime.format.PDTFromString;
 /**
  * A helper class that parses Dates out of Strings with date time in RFC822 and
  * W3CDateTime formats plus the variants Atom (0.3) and RSS (0.9, 0.91, 0.92,
- * 0.93, 0.94, 1.0 and 2.0) specificators added to those formats.
- * <p/>
+ * 0.93, 0.94, 1.0 and 2.0) specificators added to those formats. <br>
  * It uses the JDK java.text.SimpleDateFormat class attempting the parse using a
- * mask for each one of the possible formats.
- * <p/>
+ * mask for each one of the possible formats. <br>
  * Original work Copyright 2004 Sun Microsystems, Inc.
- * 
+ *
  * @author Alejandro Abdelnur (original; mainly the formatting masks)
  * @author Philip Helger (major modification)
  */
@@ -66,9 +64,9 @@ public final class PDTWebDateUtils
    * then it fails with exception
    */
   private static final String [] RFC822_MASKS = { "EEE, dd MMM yy HH:mm:ss",
-                                                 "EEE, dd MMM yy HH:mm",
-                                                 "dd MMM yy HH:mm:ss",
-                                                 "dd MMM yy HH:mm" };
+                                                  "EEE, dd MMM yy HH:mm",
+                                                  "dd MMM yy HH:mm:ss",
+                                                  "dd MMM yy HH:mm" };
 
   /*
    * order is like this because the SimpleDateFormat.parse does not fail with
@@ -77,33 +75,33 @@ public final class PDTWebDateUtils
    * then it fails with exception
    */
   private static final String [] W3CDATETIME_MASKS = { "yyyy-MM-dd'T'HH:mm:ss.SSS",
-                                                      "yyyy-MM-dd't'HH:mm:ss.SSS",
-                                                      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                                                      "yyyy-MM-dd't'HH:mm:ss.SSS'z'",
-                                                      "yyyy-MM-dd'T'HH:mm:ss",
-                                                      "yyyy-MM-dd't'HH:mm:ss",
-                                                      "yyyy-MM-dd'T'HH:mm:ss",
-                                                      "yyyy-MM-dd't'HH:mm:ss",
-                                                      FORMAT_W3C,
-                                                      "yyyy-MM-dd't'HH:mm:ss'z'",
-                                                      "yyyy-MM-dd'T'HH:mm",
-                                                      /*
-                                                       * Applies to the
-                                                       * following 2: together
-                                                       * with logic in the
-                                                       * parseW3CDateTime they
-                                                       * handle W3C dates
-                                                       * without time forcing
-                                                       * them to be GMT
-                                                       */
-                                                      "yyyy-MM'T'HH:mm",
-                                                      "yyyy'T'HH:mm",
-                                                      "yyyy-MM-dd't'HH:mm",
-                                                      "yyyy-MM-dd'T'HH:mm'Z'",
-                                                      "yyyy-MM-dd't'HH:mm'z'",
-                                                      "yyyy-MM-dd",
-                                                      "yyyy-MM",
-                                                      "yyyy" };
+                                                       "yyyy-MM-dd't'HH:mm:ss.SSS",
+                                                       "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                                                       "yyyy-MM-dd't'HH:mm:ss.SSS'z'",
+                                                       "yyyy-MM-dd'T'HH:mm:ss",
+                                                       "yyyy-MM-dd't'HH:mm:ss",
+                                                       "yyyy-MM-dd'T'HH:mm:ss",
+                                                       "yyyy-MM-dd't'HH:mm:ss",
+                                                       FORMAT_W3C,
+                                                       "yyyy-MM-dd't'HH:mm:ss'z'",
+                                                       "yyyy-MM-dd'T'HH:mm",
+                                                       /*
+                                                        * Applies to the
+                                                        * following 2: together
+                                                        * with logic in the
+                                                        * parseW3CDateTime they
+                                                        * handle W3C dates
+                                                        * without time forcing
+                                                        * them to be GMT
+                                                        */
+                                                       "yyyy-MM'T'HH:mm",
+                                                       "yyyy'T'HH:mm",
+                                                       "yyyy-MM-dd't'HH:mm",
+                                                       "yyyy-MM-dd'T'HH:mm'Z'",
+                                                       "yyyy-MM-dd't'HH:mm'z'",
+                                                       "yyyy-MM-dd",
+                                                       "yyyy-MM",
+                                                       "yyyy" };
 
   private static final Locale LOCALE_TO_USE = Locale.US;
 
@@ -115,11 +113,9 @@ public final class PDTWebDateUtils
   {}
 
   /**
-   * Parses a Date out of a string using an array of masks.
-   * <p/>
-   * It uses the masks in order until one of them succeeds or all fail.
-   * <p/>
-   * 
+   * Parses a Date out of a string using an array of masks. <br>
+   * It uses the masks in order until one of them succeeds or all fail. <br>
+   *
    * @param aMasks
    *        array of masks to use for parsing the string
    * @param sDate
@@ -168,7 +164,7 @@ public final class PDTWebDateUtils
 
   /**
    * Extract the time zone from the passed string. UTC and GMT are supported.
-   * 
+   *
    * @param sDate
    *        The date string.
    * @return A non-<code>null</code> pair, where the first element is the
@@ -192,8 +188,7 @@ public final class PDTWebDateUtils
   }
 
   /**
-   * Parses a Date out of a String with a date in RFC822 format.
-   * <p/>
+   * Parses a Date out of a String with a date in RFC822 format. <br>
    * It parsers the following formats:
    * <ul>
    * <li>"EEE, dd MMM yyyy HH:mm:ss z"</li>
@@ -205,11 +200,10 @@ public final class PDTWebDateUtils
    * <li>"dd MMM yy HH:mm:ss z"</li>
    * <li>"dd MMM yy HH:mm z"</li>
    * </ul>
-   * <p/>
+   * <br>
    * Refer to the java.text.SimpleDateFormat javadocs for details on the format
-   * of each element.
-   * <p/>
-   * 
+   * of each element. <br>
+   *
    * @param sDate
    *        string to parse for a date. May be <code>null</code>.
    * @return the Date represented by the given RFC822 string. It returns
@@ -228,8 +222,7 @@ public final class PDTWebDateUtils
   }
 
   /**
-   * Parses a Date out of a String with a date in RFC822 format.
-   * <p/>
+   * Parses a Date out of a String with a date in RFC822 format. <br>
    * It parsers the following formats:
    * <ul>
    * <li>"EEE, dd MMM yyyy HH:mm:ss z"</li>
@@ -241,11 +234,10 @@ public final class PDTWebDateUtils
    * <li>"dd MMM yy HH:mm:ss z"</li>
    * <li>"dd MMM yy HH:mm z"</li>
    * </ul>
-   * <p/>
+   * <br>
    * Refer to the java.text.SimpleDateFormat javadocs for details on the format
-   * of each element.
-   * <p/>
-   * 
+   * of each element. <br>
+   *
    * @param sDate
    *        string to parse for a date. May be <code>null</code>.
    * @return the Date represented by the given RFC822 string. It returns
@@ -264,8 +256,7 @@ public final class PDTWebDateUtils
   }
 
   /**
-   * Parses a Date out of a String with a date in W3C date-time format.
-   * <p/>
+   * Parses a Date out of a String with a date in W3C date-time format. <br>
    * It parsers the following formats:
    * <ul>
    * <li>"yyyy-MM-dd'T'HH:mm:ssz"</li>
@@ -274,11 +265,10 @@ public final class PDTWebDateUtils
    * <li>"yyyy-MM"</li>
    * <li>"yyyy"</li>
    * </ul>
-   * <p/>
+   * <br>
    * Refer to the java.text.SimpleDateFormat javadocs for details on the format
-   * of each element.
-   * <p/>
-   * 
+   * of each element. <br>
+   *
    * @param sDate
    *        string to parse for a date. May be <code>null</code>.
    * @return the Date represented by the given W3C date-time string. It returns
@@ -296,8 +286,7 @@ public final class PDTWebDateUtils
   }
 
   /**
-   * Parses a Date out of a String with a date in W3C date-time format.
-   * <p/>
+   * Parses a Date out of a String with a date in W3C date-time format. <br>
    * It parsers the following formats:
    * <ul>
    * <li>"yyyy-MM-dd'T'HH:mm:ssz"</li>
@@ -306,11 +295,10 @@ public final class PDTWebDateUtils
    * <li>"yyyy-MM"</li>
    * <li>"yyyy"</li>
    * </ul>
-   * <p/>
+   * <br>
    * Refer to the java.text.SimpleDateFormat javadocs for details on the format
-   * of each element.
-   * <p/>
-   * 
+   * of each element. <br>
+   *
    * @param sDate
    *        string to parse for a date. May be <code>null</code>.
    * @return the Date represented by the given W3C date-time string. It returns
@@ -331,7 +319,7 @@ public final class PDTWebDateUtils
    * Parses a Date out of a String with a date in W3C date-time format or in a
    * RFC822 format.
    * <p>
-   * 
+   *
    * @param sDate
    *        string to parse for a date.
    * @return the Date represented by the given W3C date-time string. It returns
@@ -351,7 +339,7 @@ public final class PDTWebDateUtils
    * Parses a Date out of a String with a date in W3C date-time format or in a
    * RFC822 format.
    * <p>
-   * 
+   *
    * @param sDate
    *        string to parse for a date.
    * @return the Date represented by the given W3C date-time string. It returns
@@ -369,7 +357,7 @@ public final class PDTWebDateUtils
 
   /**
    * create a RFC822 representation of a date.
-   * 
+   *
    * @param aDateTime
    *        Date to parse. If <code>null</code> the current date and time is
    *        used.
@@ -385,7 +373,7 @@ public final class PDTWebDateUtils
 
   /**
    * create a RFC822 representation of a date time using UTC date time zone.
-   * 
+   *
    * @param aDateTime
    *        Date to parse. If <code>null</code> the current date and time is
    *        used.
@@ -401,7 +389,7 @@ public final class PDTWebDateUtils
 
   /**
    * create a W3C Date Time representation of a date.
-   * 
+   *
    * @param aDateTime
    *        Date to parse. If <code>null</code> the current date and time is
    *        used.
@@ -419,7 +407,7 @@ public final class PDTWebDateUtils
   /**
    * create a W3C Date Time representation of a date time using UTC date time
    * zone.
-   * 
+   *
    * @param aDateTime
    *        Date to parse. If <code>null</code> the current date and time is
    *        used.
@@ -428,7 +416,8 @@ public final class PDTWebDateUtils
   @Nonnull
   public static String getAsStringW3C (@Nullable final LocalDateTime aDateTime)
   {
-    return getAsStringW3C (aDateTime == null ? (DateTime) null : aDateTime.toDateTime (PDTConfig.getDateTimeZoneUTC ()));
+    return getAsStringW3C (aDateTime == null ? (DateTime) null
+                                             : aDateTime.toDateTime (PDTConfig.getDateTimeZoneUTC ()));
   }
 
   /**
