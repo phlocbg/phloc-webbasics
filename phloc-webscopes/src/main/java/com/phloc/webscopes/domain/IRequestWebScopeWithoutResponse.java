@@ -195,11 +195,11 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <p>
    * Detects include request URL if called within a RequestDispatcher include.
    * <p>
-   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -> "/a".
+   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -&gt; "/a".
    * <p>
-   * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
+   * E.g.: servlet mapping = "/test"; request URI = "/test" -&gt; "".
    * <p>
-   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
+   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -&gt; "".
    * 
    * @return the path within the servlet mapping, or ""
    */
@@ -416,7 +416,8 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   String getFullContextAndServletPath ();
 
   /**
-   * Get the full URL (incl. protocol) and parameters of the current request.<br>
+   * Get the full URL (incl. protocol) and parameters of the current
+   * request.<br>
    * <code>http://hostname.com:81/context/servlet/path/a/b?c=123&amp;d=789</code>
    * 
    * @return The full URL of the current request.

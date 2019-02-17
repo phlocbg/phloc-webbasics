@@ -25,7 +25,9 @@ public final class ScopeHelper
    * access the session)
    * 
    * @param sApplicationID
+   *        The current application ID
    * @param aSession
+   *        The HTTP session
    */
   public static void setupMockRequestOnDemand (final String sApplicationID, final HttpSession aSession)
   {

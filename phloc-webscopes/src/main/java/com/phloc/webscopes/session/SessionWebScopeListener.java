@@ -37,19 +37,6 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public class SessionWebScopeListener implements HttpSessionListener
 {
-  /**
-   * This will deliver the ID of the currently created session (for the current
-   * thread) during the {@link #sessionCreated(HttpSessionEvent)} method. <br>
-   * <b>ATTENTION:</b><br>
-   * If you need to access the session scope or session ID from a place that is
-   * potentially triggered from within the session creation, make sure you first
-   * check this method and use the returned session ID to avoid creating
-   * additional sessions!
-   * 
-   * @return The ID of the session which is currently in creation for the
-   *         current thread or <code>null</code>
-   */
-
   @Override
   public final void sessionCreated (@Nonnull final HttpSessionEvent aEvent)
   {

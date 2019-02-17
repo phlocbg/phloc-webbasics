@@ -503,6 +503,7 @@ public final class WebScopeManager
    * the course of listener implementation without creating additional sessions
    * 
    * @param aHttpSession
+   *        The HTTP session that was detected to have started
    */
   public static void onDetectSessionStart (@Nonnull final HttpSession aHttpSession)
   {
@@ -530,6 +531,7 @@ public final class WebScopeManager
    * in the method {@link #onSessionEnd(HttpSession)}
    * 
    * @param aHttpSession
+   *        The HTTP session that was detected to have ended
    */
   public static void onDetectSessionEnd (@Nonnull final HttpSession aHttpSession)
   {
@@ -651,8 +653,8 @@ public final class WebScopeManager
                                                  @Nonnull final HttpServletRequest aHttpRequest,
                                                  @Nonnull final HttpServletResponse aHttpResponse)
   {
-    final IRequestWebScope aRequestScope = MetaWebScopeFactory.getWebScopeFactory ().createRequestScope (aHttpRequest,
-                                                                                                         aHttpResponse);
+    final IRequestWebScope aRequestScope = MetaWebScopeFactory.getWebScopeFactory ()
+                                                              .createRequestScope (aHttpRequest, aHttpResponse);
     ScopeManager.setAndInitRequestScope (sApplicationID, aRequestScope);
     return aRequestScope;
   }

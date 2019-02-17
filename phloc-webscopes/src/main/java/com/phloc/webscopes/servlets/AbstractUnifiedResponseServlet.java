@@ -255,6 +255,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * @param aRequestScope
    *        The source request scope. Never <code>null</code>.
    * @param t
+   *        Throwable
    */
   @OverrideOnDemand
   protected void onException (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope, @Nonnull final Throwable t)
@@ -264,7 +265,8 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                      " using " +
                      aRequestScope.getMethod () +
                      " on URI " +
-                     aRequestScope.getURL (), t);
+                     aRequestScope.getURL (),
+                     t);
   }
 
   /**
@@ -295,7 +297,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
       return;
     }
-    m_aStatsHttpVersion.increment (eHTTPVersion.getName ());
+    this.m_aStatsHttpVersion.increment (eHTTPVersion.getName ());
 
     // Notify event listeners about the very first event on this servlet
     // May already be set in test cases!
@@ -312,7 +314,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (!aAllowedHTTPMethods.contains (eHTTPMethod))
     {
       // Disallow method
-      m_aStatsHttpMethodDisallowed.increment (eHTTPMethod.getName ());
+      this.m_aStatsHttpMethodDisallowed.increment (eHTTPMethod.getName ());
 
       // Build Allow response header
       final StringBuilder aAllow = new StringBuilder ();
@@ -337,7 +339,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
         aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    m_aStatsHttpMethodAllowed.increment (eHTTPMethod.getName ());
+    this.m_aStatsHttpMethodAllowed.increment (eHTTPMethod.getName ());
 
     // Now all pre-conditions were checked. As the next step check some last
     // modification issues, for performance reasons. If all optimizations fail,
@@ -350,11 +352,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
         s_aLogger.debug ("Cancelled request after initRequestState with response " + aUnifiedResponse);
 
       // May e.g. be an 404 error for some not-found resource
-      m_aStatsInitFailure.increment ();
+      this.m_aStatsInitFailure.increment ();
       aUnifiedResponse.applyToResponse (aHttpResponse);
       return;
     }
-    m_aStatsInitSuccess.increment ();
+    this.m_aStatsInitSuccess.increment ();
 
     // Check for last-modification on GET and HEAD
     if (eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.HEAD)
@@ -362,7 +364,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       final DateTime aLastModification = getLastModificationDateTime (aRequestScope);
       if (aLastModification != null)
       {
-        m_aStatsHasLastModification.increment ();
+        this.m_aStatsHasLastModification.increment ();
 
         // Get the If-Modified-Since date header
         final long nRequestIfModifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_MODIFIED_SINCE);
@@ -375,11 +377,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
               s_aLogger.debug ("Requested resource was not modified: " + aRequestScope.getPathWithinServlet ());
 
             // Was not modified since the passed time
-            m_aStatsNotModifiedIfModifiedSince.increment ();
+            this.m_aStatsNotModifiedIfModifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
             return;
           }
-          m_aStatsModifiedIfModifiedSince.increment ();
+          this.m_aStatsModifiedIfModifiedSince.increment ();
         }
 
         // Get the If-Unmodified-Since date header
@@ -393,11 +395,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
               s_aLogger.debug ("Requested resource was not modified: " + aRequestScope.getPathWithinServlet ());
 
             // Was not modified since the passed time
-            m_aStatsNotModifiedIfUnmodifiedSince.increment ();
+            this.m_aStatsNotModifiedIfUnmodifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
             return;
           }
-          m_aStatsModifiedIfUnmodifiedSince.increment ();
+          this.m_aStatsModifiedIfUnmodifiedSince.increment ();
         }
 
         // No If-Modified-Since request header present, set the Last-Modified
@@ -409,7 +411,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       final String sSupportedETag = getSupportedETag (aRequestScope);
       if (StringHelper.hasText (sSupportedETag))
       {
-        m_aStatsHasETag.increment ();
+        this.m_aStatsHasETag.increment ();
 
         // get the request ETag
         final String sRequestETags = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
@@ -429,12 +431,12 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                   s_aLogger.debug ("Requested resource has the same E-Tag: " + aRequestScope.getPathWithinServlet ());
 
                 // We have a matching ETag
-                m_aStatsNotModifiedIfNonMatch.increment ();
+                this.m_aStatsNotModifiedIfNonMatch.increment ();
                 aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
                 return;
               }
           }
-          m_aStatsModifiedIfNonMatch.increment ();
+          this.m_aStatsModifiedIfNonMatch.increment ();
         }
 
         // Save the ETag for the response
@@ -449,14 +451,14 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     }
     catch (final Throwable t)
     {
-      m_aStatsOnRequestBeginFailure.increment ();
+      this.m_aStatsOnRequestBeginFailure.increment ();
       s_aLogger.error ("onRequestBegin failed", t);
     }
 
     boolean bExceptionOccurred = true;
     try
     {
-      m_aStatsHandledRequestsTotal.increment ();
+      this.m_aStatsHandledRequestsTotal.increment ();
 
       // main servlet handling
       handleRequest (aRequestScope, aUnifiedResponse);
@@ -465,14 +467,14 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       // No error occurred
       bExceptionOccurred = false;
 
-      m_aStatsHandledRequestsSuccess.increment ();
+      this.m_aStatsHandledRequestsSuccess.increment ();
 
       if (s_aLogger.isDebugEnabled ())
         s_aLogger.debug ("Successfully handled request: " + aRequestScope.getPathWithinServlet ());
     }
     catch (final Throwable t)
     {
-      m_aStatsHandledRequestsFailure.increment ();
+      this.m_aStatsHandledRequestsFailure.increment ();
       // Do not show the exceptions that occur, when client cancels a request.
       if (StreamUtils.isKnownEOFException (t))
       {
@@ -504,7 +506,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       }
       catch (final Throwable t)
       {
-        m_aStatsOnRequestEndFailure.increment ();
+        this.m_aStatsOnRequestEndFailure.increment ();
         s_aLogger.error ("onRequestEnd failed", t);
       }
     }

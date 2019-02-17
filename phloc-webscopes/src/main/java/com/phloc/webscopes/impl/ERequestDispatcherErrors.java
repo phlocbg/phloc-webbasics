@@ -4,18 +4,18 @@ import javax.annotation.Nullable;
 
 /**
  * Enumeration for the error codes in {@link javax.servlet.RequestDispatcher} as
- * these are not yet available in servlet-api versions < 3.0
+ * these are not yet available in servlet-api versions &lt; 3.0
  * 
  * @author Boris Gregorcic
  */
 public enum ERequestDispatcherErrors
 {
-  ERROR_EXCEPTION ("javax.servlet.error.exception"), //$NON-NLS-1$
-  ERROR_EXCEPTION_TYPE ("javax.servlet.error.exception_type"), //$NON-NLS-1$
-  ERROR_MESSAGE ("javax.servlet.error.message"), //$NON-NLS-1$
-  ERROR_REQUEST_URI ("javax.servlet.error.request_uri"), //$NON-NLS-1$
-  ERROR_SERVLET_NAME ("javax.servlet.error.servlet_name"), //$NON-NLS-1$
-  ERROR_STATUS_CODE ("javax.servlet.error.status_code"); //$NON-NLS-1$
+ ERROR_EXCEPTION ("javax.servlet.error.exception"), //$NON-NLS-1$
+ ERROR_EXCEPTION_TYPE ("javax.servlet.error.exception_type"), //$NON-NLS-1$
+ ERROR_MESSAGE ("javax.servlet.error.message"), //$NON-NLS-1$
+ ERROR_REQUEST_URI ("javax.servlet.error.request_uri"), //$NON-NLS-1$
+ ERROR_SERVLET_NAME ("javax.servlet.error.servlet_name"), //$NON-NLS-1$
+ ERROR_STATUS_CODE ("javax.servlet.error.status_code"); //$NON-NLS-1$
 
   private String m_sID;
 
@@ -33,6 +33,7 @@ public enum ERequestDispatcherErrors
    * Tries to resolve the enum entry corresponding to the passed ID
    * 
    * @param sID
+   *        The ID of the error
    * @return The resolved enum entry, or <code>null</code>
    */
   @Nullable

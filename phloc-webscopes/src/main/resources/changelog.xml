@@ -21,7 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
-  <release date="2019-02-17" version="6.9.1" />
+  <release date="2019-02-17" version="6.9.2" />
+  <entry date="2019-02-17" category="tech" action="update">
+    <change>
+      <text locale="en">JavaDOC</text>
+    </change>
+  </entry>  
   <entry date="2019-02-17" category="tech" action="fix">
     <change>
       <text locale="en">Extended AbstractObjectDeliveryServlet to properly detect null byte injections also in URL encoded file names</text>
