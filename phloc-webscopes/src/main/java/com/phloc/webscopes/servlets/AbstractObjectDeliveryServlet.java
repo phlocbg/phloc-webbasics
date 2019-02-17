@@ -31,10 +31,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
+import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.web.servlet.request.RequestHelper;
@@ -44,10 +46,11 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base class for stream and download servlet.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedResponseServlet
 {
+  private static final long serialVersionUID = 8457059434526144545L;
   protected static final String REQUEST_ATTR_OBJECT_DELIVERY_FILENAME = "$object-delivery.filename";
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractObjectDeliveryServlet.class);
 
@@ -58,8 +61,10 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
    * Therefore the ETag value is calculated only once and used to stream all
    * classpath resources.
    */
-  protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
-                                                                                                          .nextLong ()) + '"';
+  protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' +
+                                                                     Long.toString (VerySecureRandom.getInstance ()
+                                                                                                    .nextLong ()) +
+                                                                     '"';
 
   private static final Set <String> s_aDeniedFilenames = new LinkedHashSet <String> ();
   private static final Set <String> s_aDeniedExtensions = new LinkedHashSet <String> ();
@@ -210,17 +215,56 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
            sFilename.indexOf ("..\\") >= 0;
   }
 
+  protected static boolean isPossibleNullByteInjection (@Nonnull final String sFilename, final boolean bTryAlsoDecoded)
+  {
+    boolean bNullByteInjection = false;
+    if (sFilename.indexOf ('\0') >= 0)
+    {
+      bNullByteInjection = true;
+    }
+    else
+      if (bTryAlsoDecoded)
+      {
+        try
+        {
+          if (URLUtils.urlDecode (sFilename).indexOf ('\0') >= 0)
+          {
+            bNullByteInjection = true;
+          }
+        }
+        catch (final IllegalArgumentException aEx)
+        {
+          // not possible to decode, so also so risk that decoding will lead to
+          // another path
+        }
+      }
+    if (bNullByteInjection)
+    {
+      s_aLogger.warn ("Detected null byte injection!");
+    }
+    return bNullByteInjection;
+  }
+
+  protected final boolean isValidDeliveryRequest (final String sFilename)
+  {
+    return !StringHelper.hasNoText (sFilename) &&
+           _isValidFilename (sFilename) &&
+           FilenameHelper.isValidFilenameWithPaths (sFilename) &&
+           !_isPossibleDirectoryTraversalRequest (sFilename) &&
+           !isPossibleNullByteInjection (sFilename, true) &&
+           validate (sFilename).isValid ();
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   protected EContinue initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                         @Nonnull final UnifiedResponse aUnifiedResponse)
   {
     // cut the leading "/"
-    final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
-
-    if (StringHelper.hasNoText (sFilename) ||
-        !_isValidFilename (sFilename) ||
-        _isPossibleDirectoryTraversalRequest (sFilename))
+    String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
+    // get rid of traversal, null bytes etc.
+    sFilename = FilenameHelper.getCleanPath (sFilename);
+    if (!isValidDeliveryRequest (sFilename))
     {
       // Send the same error code as if it is simply not found to confuse
       // attackers :)
@@ -232,6 +276,13 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
     // Filename seems to be safe
     aRequestScope.setAttribute (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME, StringHelper.trimStart (sFilename, "/"));
     return EContinue.CONTINUE;
+  }
+
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected EValidity validate (final String sFilename)
+  {
+    return EValidity.VALID;
   }
 
   @Override

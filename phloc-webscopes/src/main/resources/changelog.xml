@@ -21,6 +21,17 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
 
+  <release date="2019-02-17" version="6.9.1" />
+  <entry date="2019-02-17" category="tech" action="fix">
+    <change>
+      <text locale="en">Extended AbstractObjectDeliveryServlet to properly detect null byte injections also in URL encoded file names</text>
+    </change>
+  </entry>  
+  <entry date="2019-02-17" category="feature" action="add">
+    <change>
+      <text locale="en">Extended AbstractObjectDeliveryServlet for a custom validation method which can be used to extend the validation checks for valid delivery requests</text>
+    </change>
+  </entry>  
   <release date="2018-05-14" version="6.9.0" />
   <release date="2018-05-14" version="6.8.7" />
   <entry date="2018-03-20" category="tech" action="update">
