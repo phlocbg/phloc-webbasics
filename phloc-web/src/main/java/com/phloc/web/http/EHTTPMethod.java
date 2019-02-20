@@ -26,38 +26,50 @@ import com.phloc.commons.name.IHasName;
 
 /**
  * HTTP 1.1 methods.<br>
- * http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
- * 
- * @author Philip Helger
+ * http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html plus PACTH (rfc5789)
+ *
+ * @author Boris Gregorcic
  */
 public enum EHTTPMethod implements IHasName
 {
-  OPTIONS ("OPTIONS"),
-  GET ("GET"),
-  HEAD ("HEAD"),
-  POST ("POST"),
-  PUT ("PUT"),
-  DELETE ("DELETE"),
-  TRACE ("TRACE"),
-  CONNECT ("CONNECT");
+ OPTIONS ("OPTIONS", true, true),
+ GET ("GET", true, true),
+ HEAD ("HEAD", true, true),
+ POST ("POST", false, false),
+ PUT ("PUT", true, false),
+ DELETE ("DELETE", true, false),
+ TRACE ("TRACE", true, false),
+ CONNECT ("CONNECT", false, false),
+ PATCH ("PATCH", false, false);
 
   private final String m_sName;
+  // https://tools.ietf.org/html/rfc2616#section-9.1
+  private boolean m_bIdempotent;
+  private boolean m_bSafe;
 
-  private EHTTPMethod (@Nonnull @Nonempty final String sName)
+  private EHTTPMethod (@Nonnull @Nonempty final String sName, final boolean bIdempotent, final boolean bSafe)
   {
-    m_sName = sName;
+    this.m_sName = sName;
+    this.m_bIdempotent = bIdempotent;
+    this.m_bSafe = bSafe;
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public String getName ()
   {
-    return m_sName;
+    return this.m_sName;
   }
 
   public boolean isIdempodent ()
   {
-    return this != POST && this != CONNECT;
+    return this.m_bIdempotent;
+  }
+
+  public boolean isSAfe ()
+  {
+    return this.m_bSafe;
   }
 
   public boolean isContentAllowed ()

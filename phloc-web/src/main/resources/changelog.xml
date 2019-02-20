@@ -22,6 +22,12 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   
 
+  <release date="2019-02-20" version="5.8.6" />
+  <entry date="2019-02-20" category="feature" action="add">
+    <change>
+      <text locale="en">Added PATCH method to EHTTPMethods</text>
+    </change>
+  </entry>
   <release date="2019-02-05" version="5.8.5" />
   <entry date="2019-02-05" category="tech" action="update">
     <change>
