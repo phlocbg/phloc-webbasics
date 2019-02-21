@@ -63,11 +63,13 @@ import com.phloc.webscopes.servlet.RequestScopeInitializer;
 /**
  * Abstract base class for a servlet performing actions via
  * {@link UnifiedResponse}.
- * 
+ *
  * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {
+  private static final long serialVersionUID = 2215286276683619857L;
   /** Default allowed methods: HEAD, GET and POST */
   public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.HEAD,
                                                                                   EHTTPMethod.GET,
@@ -151,7 +153,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * {@link HttpServletResponse#SC_METHOD_NOT_ALLOWED} will be returned. By
    * default only {@link EHTTPMethod#GET} and {@link EHTTPMethod#POST} are
    * allowed.
-   * 
+   *
    * @return A non-<code>null</code> set of all allowed HTTP methods.
    */
   @OverrideOnDemand
@@ -167,7 +169,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * checks are performed. So this method can be used to determine the requested
    * object from the request. This method is not called if HTTP version or HTTP
    * method are not supported.
-   * 
+   *
    * @param aRequestScope
    *        The request scope that will be used for processing the request.
    *        Never <code>null</code>.
@@ -188,7 +190,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * Get the last modification date time for the current request. If it was not
    * modified since the last request time, a 304 (not modified) response code is
    * returned. This method is always called for GET and HEAD requests.
-   * 
+   *
    * @param aRequestScope
    *        The request scope that will be used for processing the request.
    *        Never <code>null</code>.
@@ -206,7 +208,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * Get the ETag supported for this request. If an ETag matches, a 304 (not
    * modified) response code is returned. This method is always called for GET
    * and HEAD requests.
-   * 
+   *
    * @param aRequestScope
    *        The request scope that will be used for processing the request.
    *        Never <code>null</code>.
@@ -223,7 +225,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * Called before a valid request is handled. This method is only called if
    * HTTP version matches, HTTP method is supported and caching is not an
    * option.
-   * 
+   *
    * @param aRequestScope
    *        The request scope that will be used for processing the request.
    *        Never <code>null</code>.
@@ -234,7 +236,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
 
   /**
    * Overwrite this method to fill your response.
-   * 
+   *
    * @param aRequestScope
    *        The request scope to use. There is no direct access to the
    *        {@link HttpServletResponse}. Everything must be handled with the
@@ -251,7 +253,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * Called when an exception occurred in
    * {@link #handleRequest(IRequestWebScopeWithoutResponse, UnifiedResponse)}.
    * This method is only called for non-request-cancel operations.
-   * 
+   *
    * @param aRequestScope
    *        The source request scope. Never <code>null</code>.
    * @param t
@@ -272,7 +274,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   /**
    * Called after a valid request was processed. This method is not called if
    * HTTP version or HTTP method are not supported.
-   * 
+   *
    * @param bExceptionOccurred
    *        if <code>true</code> an exception occurred in request processing.
    */
@@ -566,5 +568,13 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                                 @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
   {
     _run (aHttpRequest, aHttpResponse, aRequestScope, EHTTPMethod.TRACE);
+  }
+
+  @Override
+  protected final void onPatch (@Nonnull final HttpServletRequest aHttpRequest,
+                                @Nonnull final HttpServletResponse aHttpResponse,
+                                @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
+  {
+    _run (aHttpRequest, aHttpResponse, aRequestScope, EHTTPMethod.PATCH);
   }
 }
