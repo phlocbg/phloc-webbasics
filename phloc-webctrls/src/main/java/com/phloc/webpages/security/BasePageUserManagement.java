@@ -89,70 +89,72 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    BUTTON_CREATE_NEW_USER ("Neuen Benutzer anlegen", "Create new user"),
-    TAB_ACTIVE ("Aktive Benutzer ({0})", "Active users ({0})"),
-    TAB_DISABLED ("Deaktivierte Benutzer ({0})", "Disabled users ({0})"),
-    TAB_DELETED ("Gelöschte Benutzer ({0})", "Deleted users ({0})"),
-    HEADER_NAME ("Name", "Name"),
-    HEADER_LOGINNAME ("Benutzername", "User name"),
-    HEADER_EMAIL ("E-Mail", "Email"),
-    HEADER_USERGROUPS ("Benutzergruppen", "User groups"),
-    HEADER_VALUE ("Wert", "Value"),
-    TITLE_CREATE ("Neuen Benutzer anlegen", "Create new user"),
-    TITLE_EDIT ("Benutzer ''{0}'' bearbeiten", "Edit user ''{0}''"),
-    TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
-    NONE_DEFINED ("keine definiert", "none defined"),
-    HEADER_DETAILS ("Details von Benutzer ''{0}''", "Details of user ''{0}''"),
-    LABEL_CREATIONDATE ("Angelegt am", "Created on"),
-    LABEL_LASTMODIFICATIONDATE ("Letzte Änderung am", "Last modification on"),
-    LABEL_DELETIONDATE ("Gelöscht am", "Deleted on"),
-    LABEL_LOGINNAME ("Benutzername", "User name"),
-    LABEL_FIRSTNAME ("Vorname", "First name"),
-    LABEL_LASTNAME ("Nachname", "Last name"),
-    LABEL_EMAIL ("E-Mail-Adresse", "Email address"),
-    LABEL_PASSWORD ("Passwort", "Password"),
-    LABEL_PASSWORD_CONFIRM ("Passwort (Bestätigung)", "Password (confirmation)"),
-    LABEL_ENABLED ("Aktiv?", "Enabled?"),
-    LABEL_DELETED ("Gelöscht?", "Deleted?"),
-    LABEL_LAST_LOGIN ("Letzter Login", "Last login"),
-    LABEL_LAST_LOGIN_NEVER ("noch nie", "never"),
-    LABEL_LOGIN_COUNT ("Login-Anzahl", "Login count"),
-    LABEL_CONSECUTIVE_FAILED_LOGIN_COUNT ("Fehlgeschlagene Logins", "Failed logins"),
-    LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
-    LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
-    LABEL_ROLES_0 ("Rollen", "Roles"),
-    LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
-    LABEL_ATTRIBUTES ("Attribute", "Attributes"),
-    ERROR_LOGINNAME_REQUIRED ("Es muss ein Benutzername angegeben werden!", "A user name must be specified!"),
-    ERROR_LASTNAME_REQUIRED ("Es muss ein Nachname angegeben werden!", "A last name must be specified!"),
-    ERROR_EMAIL_REQUIRED ("Es muss eine E-Mail-Adresse angegeben werden!", "An email address must be specified!"),
-    ERROR_EMAIL_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden!", "A valid email address must be specified!"),
-    ERROR_EMAIL_IN_USE ("Ein anderer Benutzer mit dieser E-Mail-Adresse existiert bereits!", "Another user with this email address already exists!"),
-    ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
-    ERROR_NO_USERGROUP ("Es muss mindestens eine Benutzergruppe ausgewählt werden!", "At least one user group must be selected!"),
-    ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!"),
-    SUCCESS_CREATE ("Der neue Benutzer wurde erfolgreich angelegt!", "Successfully created the new user!"),
-    SUCCESS_EDIT ("Der Benutzer wurde erfolgreich bearbeitet!", "Sucessfully edited the user!"),
-    FAILURE_CREATE ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!"),
-    SUCCESS_RESET_PASSWORD ("Das neue Passwort vom Benutzer ''{0}'' wurde gespeichert!", "Successfully saved the new password of user ''{0}''!");
+   BUTTON_CREATE_NEW_USER ("Neuen Benutzer anlegen", "Create new user"),
+   TAB_ACTIVE ("Aktive Benutzer ({0})", "Active users ({0})"),
+   TAB_DISABLED ("Deaktivierte Benutzer ({0})", "Disabled users ({0})"),
+   TAB_DELETED ("Gelöschte Benutzer ({0})", "Deleted users ({0})"),
+   HEADER_NAME ("Name", "Name"),
+   HEADER_LOGINNAME ("Benutzername", "User name"),
+   HEADER_EMAIL ("E-Mail", "Email"),
+   HEADER_USERGROUPS ("Benutzergruppen", "User groups"),
+   HEADER_VALUE ("Wert", "Value"),
+   TITLE_CREATE ("Neuen Benutzer anlegen", "Create new user"),
+   TITLE_EDIT ("Benutzer ''{0}'' bearbeiten", "Edit user ''{0}''"),
+   TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
+   NONE_DEFINED ("keine definiert", "none defined"),
+   HEADER_DETAILS ("Details von Benutzer ''{0}''", "Details of user ''{0}''"),
+   LABEL_CREATIONDATE ("Angelegt am", "Created on"),
+   LABEL_LASTMODIFICATIONDATE ("Letzte Änderung am", "Last modification on"),
+   LABEL_DELETIONDATE ("Gelöscht am", "Deleted on"),
+   LABEL_LOGINNAME ("Benutzername", "User name"),
+   LABEL_FIRSTNAME ("Vorname", "First name"),
+   LABEL_LASTNAME ("Nachname", "Last name"),
+   LABEL_EMAIL ("E-Mail-Adresse", "Email address"),
+   LABEL_PASSWORD ("Passwort", "Password"),
+   LABEL_PASSWORD_CONFIRM ("Passwort (Bestätigung)", "Password (confirmation)"),
+   LABEL_ENABLED ("Aktiv?", "Enabled?"),
+   LABEL_DELETED ("Gelöscht?", "Deleted?"),
+   LABEL_LAST_LOGIN ("Letzter Login", "Last login"),
+   LABEL_LAST_LOGIN_NEVER ("noch nie", "never"),
+   LABEL_LOGIN_COUNT ("Login-Anzahl", "Login count"),
+   LABEL_CONSECUTIVE_FAILED_LOGIN_COUNT ("Fehlgeschlagene Logins", "Failed logins"),
+   LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
+   LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
+   LABEL_ROLES_0 ("Rollen", "Roles"),
+   LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
+   LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+   ERROR_LOGINNAME_REQUIRED ("Es muss ein Benutzername angegeben werden!", "A user name must be specified!"),
+   ERROR_LASTNAME_REQUIRED ("Es muss ein Nachname angegeben werden!", "A last name must be specified!"),
+   ERROR_EMAIL_REQUIRED ("Es muss eine E-Mail-Adresse angegeben werden!", "An email address must be specified!"),
+   ERROR_EMAIL_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden!", "A valid email address must be specified!"),
+   ERROR_EMAIL_IN_USE ("Ein anderer Benutzer mit dieser E-Mail-Adresse existiert bereits!", "Another user with this email address already exists!"),
+   ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
+   ERROR_NO_USERGROUP ("Es muss mindestens eine Benutzergruppe ausgewählt werden!", "At least one user group must be selected!"),
+   ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!"),
+   SUCCESS_CREATE ("Der neue Benutzer wurde erfolgreich angelegt!", "Successfully created the new user!"),
+   SUCCESS_EDIT ("Der Benutzer wurde erfolgreich bearbeitet!", "Sucessfully edited the user!"),
+   FAILURE_CREATE ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!"),
+   SUCCESS_RESET_PASSWORD ("Das neue Passwort vom Benutzer ''{0}'' wurde gespeichert!", "Successfully saved the new password of user ''{0}''!");
 
     private final ITextProvider m_aTP;
 
     private EText (final String sDE, final String sEN)
     {
-      m_aTP = TextProvider.create_DE_EN (sDE, sEN);
+      this.m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
 
+    @Override
     @Nullable
     public String getDisplayText (@Nonnull final Locale aContentLocale)
     {
-      return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
+      return DefaultTextResolver.getText (this, this.m_aTP, aContentLocale);
     }
 
+    @Override
     @Nullable
     public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
     {
-      return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
+      return DefaultTextResolver.getTextWithArgs (this, this.m_aTP, aContentLocale, aArgs);
     }
   }
 
@@ -197,7 +199,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
   @Nonnull
   public BasePageUserManagement <WPECTYPE> setDefaultUserLocale (@Nullable final Locale aDefaultUserLocale)
   {
-    m_aDefaultUserLocale = aDefaultUserLocale;
+    this.m_aDefaultUserLocale = aDefaultUserLocale;
     return this;
   }
 
@@ -264,6 +266,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
    * independently if custom attributes are present or not.
    * 
    * @param aWPEC
+   *        Web page execution context
    * @param aCurrentUser
    *        The user currently shown
    * @param aCustomAttrs
@@ -285,6 +288,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
 
   /**
    * @param aWPEC
+   *        Web page execution context
    * @param aTable
    *        Table to be filled.
    * @param aSelectedObject
@@ -361,7 +365,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
           .setLabel (EText.LABEL_LAST_LOGIN.getDisplayText (aDisplayLocale))
           .setCtrl (aSelectedObject.getLastLoginDateTime () != null ? new HCTextNode (PDTToString.getAsString (aSelectedObject.getLastLoginDateTime (),
                                                                                                                aDisplayLocale))
-                                                                   : HCEM.create (EText.LABEL_LAST_LOGIN_NEVER.getDisplayText (aDisplayLocale)));
+                                                                    : HCEM.create (EText.LABEL_LAST_LOGIN_NEVER.getDisplayText (aDisplayLocale)));
     aTable.createItemRow ()
           .setLabel (EText.LABEL_LOGIN_COUNT.getDisplayText (aDisplayLocale))
           .setCtrl (Integer.toString (aSelectedObject.getLoginCount ()));
@@ -417,8 +421,9 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     if (!aCustomAttrs.isEmpty ())
     {
       final IHCTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
-      aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
-                                           EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
+      aAttrTable.addHeaderRow ()
+                .addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                           EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
       {
         final String sName = aEntry.getKey ();
@@ -482,7 +487,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     final String sPasswordConf = aWPEC.getAttributeAsString (FIELD_PASSWORD_CONFIRM);
     final boolean bEnabled = bIsAdministrator ? true : aWPEC.getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
     final Collection <String> aUserGroupIDs = bIsAdministrator ? aAccessMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ())
-                                                              : aWPEC.getAttributeValues (FIELD_USERGROUPS);
+                                                               : aWPEC.getAttributeValues (FIELD_USERGROUPS);
 
     if (useEmailAddressAsLoginName ())
     {
@@ -554,7 +559,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
                                 sEmailAddress,
                                 sFirstName,
                                 sLastName,
-                                m_aDefaultUserLocale,
+                                this.m_aDefaultUserLocale,
                                 aAttrMap,
                                 !bEnabled);
         aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
@@ -580,19 +585,21 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
                                                          sPassword,
                                                          sFirstName,
                                                          sLastName,
-                                                         m_aDefaultUserLocale,
+                                                         this.m_aDefaultUserLocale,
                                                          aCustomAttrMap,
                                                          !bEnabled);
         if (aNewUser != null)
         {
-          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createSuccessBox (aWPEC,
+                                                             EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
           // assign to the matching internal user groups
           for (final String sUserGroupID : aUserGroupIDs)
             aAccessMgr.assignUserToUserGroup (sUserGroupID, aNewUser.getID ());
         }
         else
-          aNodeList.addChild (getStyler ().createErrorBox (aWPEC, EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (getStyler ().createErrorBox (aWPEC,
+                                                           EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
       }
     }
   }
@@ -659,7 +666,7 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                       SecurityUtils.getUserDisplayName (aSelectedObject,
                                                                                                                         aDisplayLocale))
-                                          : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
+                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     if (!useEmailAddressAsLoginName ())
     {
@@ -667,7 +674,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       aTable.createItemRow ()
             .setLabelMandatory (sLoginName)
             .setCtrl (new HCEdit (new RequestField (FIELD_LOGINNAME,
-                                                    aSelectedObject == null ? null : aSelectedObject.getLoginName ())).setPlaceholder (sLoginName))
+                                                    aSelectedObject == null ? null : aSelectedObject.getLoginName ()))
+                                                                                                                      .setPlaceholder (sLoginName))
             .setErrorList (aFormErrors.getListOfField (FIELD_LOGINNAME));
     }
 
@@ -676,7 +684,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       aTable.createItemRow ()
             .setLabel (sFirstName)
             .setCtrl (new HCEdit (new RequestField (FIELD_FIRSTNAME,
-                                                    aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName))
+                                                    aSelectedObject == null ? null : aSelectedObject.getFirstName ()))
+                                                                                                                      .setPlaceholder (sFirstName))
             .setErrorList (aFormErrors.getListOfField (FIELD_FIRSTNAME));
     }
 
@@ -685,7 +694,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       aTable.createItemRow ()
             .setLabel (sLastName, isLastNameMandatory () ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
             .setCtrl (new HCEdit (new RequestField (FIELD_LASTNAME,
-                                                    aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName))
+                                                    aSelectedObject == null ? null : aSelectedObject.getLastName ()))
+                                                                                                                     .setPlaceholder (sLastName))
             .setErrorList (aFormErrors.getListOfField (FIELD_LASTNAME));
     }
 
@@ -694,7 +704,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       aTable.createItemRow ()
             .setLabel (sEmail, isEmailMandatory () ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
             .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
-                                                    aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
+                                                    aSelectedObject == null ? null
+                                                                            : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
             .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
     }
 
@@ -731,13 +742,13 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
             .setLabelMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale))
             .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
                                                                aSelectedObject == null ? DEFAULT_ENABLED
-                                                                                      : aSelectedObject.isEnabled ())))
+                                                                                       : aSelectedObject.isEnabled ())))
             .setErrorList (aFormErrors.getListOfField (FIELD_ENABLED));
     }
 
     {
       final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttributeValues (FIELD_USERGROUPS)
-                                                                       : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
+                                                                        : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
       final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
                                                                          aDisplayLocale,
                                                                          aUserGroupIDs);
@@ -786,7 +797,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
         {
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
           aWPEC.getNodeList ()
-               .addChild (getStyler ().createSuccessBox (aWPEC, EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+               .addChild (getStyler ().createSuccessBox (aWPEC,
+                                                         EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                               SecurityUtils.getUserDisplayName (aSelectedObject,
                                                                                                                                                 aDisplayLocale))));
           return true;
@@ -901,7 +913,8 @@ public class BasePageUserManagement <WPECTYPE extends IWebPageExecutionContext> 
       {
         aActionCell.addChild (new HCA (aWPEC.getSelfHref ()
                                             .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
-                                            .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                            .add (CHCParam.PARAM_OBJECT, aCurUser.getID ()))
+                                                                                            .setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                                                                           SecurityUtils.getUserDisplayName (aCurUser,
                                                                                                                                                                                             aDisplayLocale)))
                                                                                             .addChild (getResetPasswordIcon ()));

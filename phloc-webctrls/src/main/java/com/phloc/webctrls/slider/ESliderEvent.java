@@ -5,12 +5,13 @@ import javax.annotation.Nullable;
 public enum ESliderEvent
 {
  /**
-  * <code>function(slideIndex[, event])</code>
-  * 
-  * @param slideIndex
-  *        the index of slide which is clicked
-  * @param event
-  *        native event fired by browser
+  * <code>function(slideIndex[, event])</code><br>
+  * <br>
+  * <b>Parameters:</b>
+  * <ul>
+  * <li><b>slideIndex</b>: the index of slide which is clicked</li>
+  * <li><b>event</b>: native event fired by browser</li>
+  * </ul>
   */
  CLICK ("$EVT_CLICK"), //$NON-NLS-1$
  /**
@@ -18,9 +19,10 @@ public enum ESliderEvent
   * <br>
   * <b>Parameters:</b>
   * <ul>
-  * <li><b>position</b>: real position of the carousel
-  * <li><b>virtualPosition</b>: virtual position of the carousel
-  * <li><b>event</b>: native event fired by browser
+  * <li><b>position</b>: real position of the carousel</li>
+  * <li><b>virtualPosition</b>: virtual position of the carousel</li>
+  * <li><b>event</b>: native event fired by browser</li>
+  * </ul>
   */
  DRAG_START ("$EVT_DRAG_START"), //$NON-NLS-1$
  /**
@@ -34,6 +36,7 @@ public enum ESliderEvent
   * <li><b>virtualPosition</b>: virtual position of the carousel</li>
   * <li><b>virtualStartPosition</b>: virtual position that drag starts at</li>
   * <li><b>event</b>: native event fired by browser</li>
+  * </ul>
   */
  DRAG_END ("$EVT_DRAG_END"), //$NON-NLS-1$
  /**
@@ -43,6 +46,7 @@ public enum ESliderEvent
   * <ul>
   * <li><b>position</b>: real position of the carousel</li>
   * <li><b>virtualPosition</b>: virtual position of the carousel</li>
+  * </ul>
   */
  SWIPE_START ("$EVT_SWIPE_START"), //$NON-NLS-1$
  /**
@@ -52,6 +56,7 @@ public enum ESliderEvent
   * <ul>
   * <li><b>position</b>: real position of the carousel</li>
   * <li><b>virtualPosition</b>: virtual position of the carousel</li>
+  * </ul>
   */
  SWIPE_END ("$EVT_SWIPE_END"), //$NON-NLS-1$
  /**
@@ -60,6 +65,7 @@ public enum ESliderEvent
   * <b>Parameters:</b>
   * <ul>
   * <li><b>slideIndex</b>: the index of slide</li>
+  * </ul>
   */
  LOAD_START ("$EVT_LOAD_START"), //$NON-NLS-1$
  /**
@@ -68,6 +74,7 @@ public enum ESliderEvent
   * <b>Parameters:</b>
   * <ul>
   * <li><b>slideIndex</b>: the index of slide</li>
+  * </ul>
   */
  LOAD_END ("$EVT_LOAD_END"), //$NON-NLS-1$
  /**

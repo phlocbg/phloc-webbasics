@@ -10,6 +10,10 @@ public class CaptionSliderOptions extends AbstractSliderOptions
 {
   /**
    * Class to create instance to animate caption (default: $JssorCaptionSlider$)
+   * 
+   * @param sClass
+   *        CSS class
+   * @return this for chaining
    */
   public CaptionSliderOptions setClass (final String sClass)
   {

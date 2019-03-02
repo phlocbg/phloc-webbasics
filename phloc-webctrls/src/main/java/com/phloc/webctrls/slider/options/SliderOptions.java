@@ -22,10 +22,10 @@ public class SliderOptions extends AbstractSliderOptions
   }
 
   /**
-   * For image with lazy loading format (<IMG src2="url" .../>), by default it
-   * will be loaded only when the slide comes.But an integer value (maybe 1, 2
-   * or 3) indicates that how far of nearby slides should be loaded immediately
-   * as well, default value is 1.
+   * For image with lazy loading format (&lt;IMG src2="url" .../&gt;), by
+   * default it will be loaded only when the slide comes.But an integer value
+   * (maybe 1, 2 or 3) indicates that how far of nearby slides should be loaded
+   * immediately as well, default value is 1.
    * 
    * @param bLazy
    *        lazy
@@ -250,8 +250,8 @@ public class SliderOptions extends AbstractSliderOptions
    * The offset position to park slide (this options applies only when slide
    * show disabled) (default:0)
    * 
-   * @param nParkingPositionparking
-   *        position
+   * @param nParkingPosition
+   *        parking position
    * @return this for chaining
    */
   public SliderOptions setParkingPosition (final int nParkingPosition)

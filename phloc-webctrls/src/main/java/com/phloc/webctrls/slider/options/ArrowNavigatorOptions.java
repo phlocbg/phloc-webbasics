@@ -17,7 +17,6 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
    *        $JssorArrowNavigator$)
    * @param nChangeToShow
    *        0 Never, 1 Mouse Over, 2 Always (default:2)
-   * @return this for chaining
    */
   public ArrowNavigatorOptions (final String sClass, final int nChangeToShow)
   {
