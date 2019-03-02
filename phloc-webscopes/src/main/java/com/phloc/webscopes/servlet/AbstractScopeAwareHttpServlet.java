@@ -38,6 +38,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.web.http.EHTTPMethod;
 import com.phloc.webscopes.domain.IRequestWebScope;
 
 /**
@@ -48,11 +49,13 @@ import com.phloc.webscopes.domain.IRequestWebScope;
  * methods are final to avoid overriding the without the usage of scopes. The
  * default operations of the "on*" methods is to call the original "do*"
  * functionality from the parent class.
- * 
+ *
  * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 {
+  private static final long serialVersionUID = -4675249846788869424L;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractScopeAwareHttpServlet.class);
   private static final IStatisticsHandlerCounter s_aCounterRequests = StatisticsManager.getCounterHandler (AbstractScopeAwareHttpServlet.class.getName () +
                                                                                                            "$requests");
@@ -70,6 +73,8 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
                                                                                                    "$PUT");
   private static final IStatisticsHandlerTimer s_aTimerHdlTrace = StatisticsManager.getTimerHandler (AbstractScopeAwareHttpServlet.class.getName () +
                                                                                                      "$TRACE");
+  private static final IStatisticsHandlerTimer s_aTimerHdlPatch = StatisticsManager.getTimerHandler (AbstractScopeAwareHttpServlet.class.getName () +
+                                                                                                     "$PATCH");
 
   private String m_sApplicationID;
 
@@ -95,7 +100,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Add custom init code in overridden implementations of this method.
-   * 
+   *
    * @throws ServletException
    *         to conform to the outer specifications
    */
@@ -146,9 +151,24 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     }
   }
 
+  @Override
+  protected void service (final HttpServletRequest aRequest,
+                          final HttpServletResponse aResponse) throws ServletException, IOException
+  {
+    final String aMethod = aRequest.getMethod ();
+    if (aMethod.equals (EHTTPMethod.PATCH.getName ()))
+    {
+      doPatch (aRequest, aResponse);
+    }
+    else
+    {
+      super.service (aRequest, aResponse);
+    }
+  }
+
   /**
    * Called before every request, independent of the method
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP servlet request
    * @param aHttpResponse
@@ -170,7 +190,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP DELETE
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -209,7 +229,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP GET
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -248,7 +268,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP HEAD
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -287,7 +307,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP OPTIONS
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -326,7 +346,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP POST
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -365,7 +385,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP PUT
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -404,7 +424,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 
   /**
    * Implement HTTP TRACE
-   * 
+   *
    * @param aHttpRequest
    *        The original HTTP request. Never <code>null</code>.
    * @param aHttpResponse
@@ -437,6 +457,48 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlTrace.addTime (aSW.stopAndGetMillis ());
+      aRequestScopeInitializer.destroyScope ();
+    }
+  }
+
+  /**
+   * Implement HTTP PATCH
+   *
+   * @param aHttpRequest
+   *        The original HTTP request. Never <code>null</code>.
+   * @param aHttpResponse
+   *        The original HTTP response. Never <code>null</code>.
+   * @param aRequestScope
+   *        The request scope to be used. Never <code>null</code>.
+   * @throws ServletException
+   *         In case of an error.
+   * @throws IOException
+   *         In case of an error.
+   */
+  @OverrideOnDemand
+  protected void onPatch (@Nonnull final HttpServletRequest aHttpRequest,
+                          @Nonnull final HttpServletResponse aHttpResponse,
+                          @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
+  {
+    aHttpResponse.sendError (HttpServletResponse.SC_NOT_IMPLEMENTED,
+                             "Your Servlet implementation " +
+                                                                     this.getClass ().getName () +
+                                                                     " does not support the HTTP method PATCH!");
+
+  }
+
+  protected final void doPatch (@Nonnull final HttpServletRequest aHttpRequest,
+                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
+    final RequestScopeInitializer aRequestScopeInitializer = beforeRequest (aHttpRequest, aHttpResponse);
+    final StopWatch aSW = new StopWatch (true);
+    try
+    {
+      onPatch (aHttpRequest, aHttpResponse, aRequestScopeInitializer.getRequestScope ());
+    }
+    finally
+    {
+      s_aTimerHdlPatch.addTime (aSW.stopAndGetMillis ());
       aRequestScopeInitializer.destroyScope ();
     }
   }
