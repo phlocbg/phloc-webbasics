@@ -113,9 +113,9 @@ public enum ESliderEvent
  /**
   * <code>function(slideIndex, progress[, progressBegin, idleBegin, idleEnd,
   * progressEnd])</code> given a slide parked, the life cycle of current slide
-  * is as below, progressBegin --> idleBegin --> idleEnd --> progressEnd. This
-  * event fires at any state of 'progressBegin', 'idleBegin', 'idleEnd' and
-  * 'progressEnd' <br>
+  * is as below, progressBegin --&gt; idleBegin --&gt; idleEnd --&gt;
+  * progressEnd. This event fires at any state of 'progressBegin', 'idleBegin',
+  * 'idleEnd' and 'progressEnd' <br>
   * <br>
   * <b>Parameters:</b>
   * <ul>
