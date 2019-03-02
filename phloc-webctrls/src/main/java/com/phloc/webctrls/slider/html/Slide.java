@@ -45,7 +45,7 @@ public class Slide extends AbstractSliderHTMLElement
       if (this.m_aImgLink != null)
       {
         aLink = aNode.addAndReturnChild (new HCA (this.m_aImgLink));
-        aLink.setCustomAttr (this.ATTRIBUTE_USAGE, USAGE_IMAGE);
+        aLink.setCustomAttr (ATTRIBUTE_USAGE, USAGE_IMAGE);
       }
 
       final HCImg aImage = new HCImg ();
@@ -60,7 +60,7 @@ public class Slide extends AbstractSliderHTMLElement
       if (aLink == null)
       {
         aNode.addChild (aImage);
-        aImage.setCustomAttr (this.ATTRIBUTE_USAGE, USAGE_IMAGE);
+        aImage.setCustomAttr (ATTRIBUTE_USAGE, USAGE_IMAGE);
       }
       else
       {

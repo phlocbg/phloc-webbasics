@@ -11,6 +11,10 @@ public class SlideshowOptions extends AbstractSliderOptions
   /**
    * Class to create thumbnail navigator instance (default:
    * $JssorThumbnailNavigator$)
+   * 
+   * @param sClass
+   *        CSS class
+   * @return this for chaining
    */
   public SlideshowOptions setClass (final String sClass)
   {
@@ -23,6 +27,10 @@ public class SlideshowOptions extends AbstractSliderOptions
 
   /**
    * An array of slide show transitions to play slide show
+   * 
+   * @param aTransitions
+   *        transitions
+   * @return this for chaining
    */
   public SlideshowOptions setTransitions (final List <IJSONObject> aTransitions)
   {
@@ -36,6 +44,10 @@ public class SlideshowOptions extends AbstractSliderOptions
   /**
    * The way to choose transition to play slide, 1 Sequence, 0 Random
    * (default:1)
+   * 
+   * @param nOrder
+   *        order
+   * @return this for chaining
    */
   public SlideshowOptions setTransitionsOrder (final int nOrder)
   {
@@ -46,6 +58,10 @@ public class SlideshowOptions extends AbstractSliderOptions
   /**
    * Whether to bring slide link on top of the slider when slide show is
    * running, default value is false (default:false)
+   * 
+   * @param bShowLink
+   *        show link
+   * @return this for chaining
    */
   public SlideshowOptions setShowLink (final boolean bShowLink)
   {

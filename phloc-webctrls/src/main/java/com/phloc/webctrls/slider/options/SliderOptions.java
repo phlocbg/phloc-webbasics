@@ -7,6 +7,10 @@ public class SliderOptions extends AbstractSliderOptions
    * put all inside slide), 2 cover (keep aspect ratio and cover whole slide), 4
    * actual size, 5 contain for large image, actual size for small image,
    * default value is 0
+   * 
+   * @param eFillMode
+   *        fill mode
+   * @return this for chaining
    */
   public SliderOptions setFillMode (final EFillMode eFillMode)
   {
@@ -22,6 +26,10 @@ public class SliderOptions extends AbstractSliderOptions
    * will be loaded only when the slide comes.But an integer value (maybe 1, 2
    * or 3) indicates that how far of nearby slides should be loaded immediately
    * as well, default value is 1.
+   * 
+   * @param bLazy
+   *        lazy
+   * @return this for chaining
    */
   public SliderOptions setLazyLoading (final boolean bLazy)
   {
@@ -31,6 +39,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Index of slide to display when initialize, default value is 0
+   * 
+   * @param nIndex
+   *        index
+   * @return this for chaining
    */
   public SliderOptions setStartIndex (final int nIndex)
   {
@@ -41,6 +53,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Whether to auto play, to enable slide show, this option must be set to
    * true.
+   * 
+   * @param bAutoPlay
+   *        auto play
+   * @return this for chaining
    */
   public SliderOptions setAutoPlay (final boolean bAutoPlay)
   {
@@ -51,6 +67,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Enable loop(circular) of carousel or not, 0: stop, 1: loop, 2 rewind,
    * default value is 1
+   * 
+   * @param nLoopType
+   *        loop type
+   * @return this for chaining
    */
   public SliderOptions setLoop (final int nLoopType)
   {
@@ -60,6 +80,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Enable hardware acceleration or not, default value is true
+   * 
+   * @param bEnabled
+   *        enabled
+   * @return this for chaining
    */
   public SliderOptions setHardwareAcceleration (final boolean bEnabled)
   {
@@ -70,6 +94,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Steps to go for each navigation request (this options applies only when
    * slide show disabled).
+   * 
+   * @param nSteps
+   *        steps
+   * @return this for chaining
    */
   public SliderOptions setAutoPlaySteps (final int nSteps)
   {
@@ -80,6 +108,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Interval (in milliseconds) to go for next slide since the previous stopped
    * if the slider is auto playing
+   * 
+   * @param nInterval
+   *        interval
+   * @return this for chaining
    */
   public SliderOptions setAutoPlayInterval (final int nInterval)
   {
@@ -92,6 +124,10 @@ public class SliderOptions extends AbstractSliderOptions
    * pause for desktop, 2 pause for touch device, 3 pause for desktop and touch
    * device, 4 freeze for desktop, 8 freeze for touch device, 12 freeze for
    * desktop and touch device, default value is 1
+   * 
+   * @param nPauseType
+   *        pause type
+   * @return this for chaining
    */
   public SliderOptions setPauseOnHover (final int nPauseType)
   {
@@ -101,6 +137,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Allows keyboard (arrow key) navigation or not (default: false)
+   * 
+   * @param bEnabled
+   *        enabled
+   * @return this for chaining
    */
   public SliderOptions setArrowKeyNavigation (final boolean bEnabled)
   {
@@ -110,6 +150,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Specifies default duration for right to left animation in milliseconds
+   * 
+   * @param nDuration
+   *        duration
+   * @return this for chaining
    */
   public SliderOptions setSlideDuration (final int nDuration)
   {
@@ -120,6 +164,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Specifies easing for right to left animation
    * (default:$JssorEasing$.$EaseOutQuad)
+   * 
+   * @param eSlideEasing
+   *        slide easing
+   * @return this for chaining
    */
   public SliderOptions setSlideEasing (final EEasing eSlideEasing)
   {
@@ -132,6 +180,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Minimum drag offset to trigger slide (default:20)
+   * 
+   * @param nOffset
+   *        offset
+   * @return this for chaining
    */
   public SliderOptions setMinDragOffsetToSlide (final int nOffset)
   {
@@ -142,6 +194,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Width of every slide in pixels, default value is width of 'slides'
    * container
+   * 
+   * @param nWidth
+   *        width
+   * @return this for chaining
    */
   public SliderOptions setSlideWidth (final int nWidth)
   {
@@ -152,6 +208,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Height of every slide in pixels, default value is height of 'slides'
    * container
+   * 
+   * @param nHeight
+   *        height
+   * @return this for chaining
    */
   public SliderOptions setSlideHeight (final int nHeight)
   {
@@ -161,6 +221,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Space between each slide in pixels (default:0)
+   * 
+   * @param nSpacing
+   *        spacing
+   * @return this for chaining
    */
   public SliderOptions setSlideSpacing (final int nSpacing)
   {
@@ -171,6 +235,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Number of pieces to display (the slide show would be disabled if the value
    * is set to greater than 1) (default:1)
+   * 
+   * @param nPieces
+   *        pieces
+   * @return this for chaining
    */
   public SliderOptions setDisplayPieces (final int nPieces)
   {
@@ -181,6 +249,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * The offset position to park slide (this options applies only when slide
    * show disabled) (default:0)
+   * 
+   * @param nParkingPositionparking
+   *        position
+   * @return this for chaining
    */
   public SliderOptions setParkingPosition (final int nParkingPosition)
   {
@@ -192,6 +264,10 @@ public class SliderOptions extends AbstractSliderOptions
    * The way (0 parallel, 1 recursive, default value is 1) to search UI
    * components (slides container, loading screen, navigator container, arrow
    * navigator container, thumbnail navigator container etc). (default:1)
+   * 
+   * @param nUISearchMode
+   *        UI search mode
+   * @return this for chaining
    */
   public SliderOptions setUISearchMode (final int nUISearchMode)
   {
@@ -202,6 +278,10 @@ public class SliderOptions extends AbstractSliderOptions
   /**
    * Orientation to play slide (for auto play, navigation), 1 horizontal, 2
    * vertical, 5 horizontal reverse, 6 vertical reverse
+   * 
+   * @param nPlayOrientation
+   *        play orientation
+   * @return this for chaining
    */
   public SliderOptions setPlayOrientation (final int nPlayOrientation)
   {
@@ -213,6 +293,10 @@ public class SliderOptions extends AbstractSliderOptions
    * Orientation to drag slide, 0 no drag, 1 horizontal, 2 vertical, 3 either
    * (Note that the $DragOrientation should be the same as $PlayOrientation when
    * $DisplayPieces is greater than 1, or parking position is not 0) (default:1)
+   * 
+   * @param nDragOrientation
+   *        drag orientation
+   * @return this for chaining
    */
   public SliderOptions setDragOrientation (final int nDragOrientation)
   {
@@ -222,6 +306,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Options to specify and enable navigator or not
+   * 
+   * @param aOptions
+   *        options
+   * @return this for chaining
    */
   public SliderOptions setBulletNavigatorOptions (final BulletNavigatorOptions aOptions)
   {
@@ -234,6 +322,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Options to specify and enable arrow navigator or not
+   * 
+   * @param aOptions
+   *        options
+   * @return this for chaining
    */
   public SliderOptions setArrowNavigatorOptions (final ArrowNavigatorOptions aOptions)
   {
@@ -246,6 +338,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Options to specify and enable thumbnail navigator or not
+   * 
+   * @param aOptions
+   *        options
+   * @return this for chaining
    */
   public SliderOptions setThumbnailNavigatorOptions (final ThumbnailNavigatorOptions aOptions)
   {
@@ -258,6 +354,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Options to specify and enable slide show or not
+   * 
+   * @param aOptions
+   *        options
+   * @return this for chaining
    */
   public SliderOptions setSlideshowOptions (final SlideshowOptions aOptions)
   {
@@ -270,6 +370,10 @@ public class SliderOptions extends AbstractSliderOptions
 
   /**
    * Options which specifies how to animate caption
+   * 
+   * @param aOptions
+   *        options
+   * @return this for chaining
    */
   public SliderOptions setCaptionSliderOptions (final CaptionSliderOptions aOptions)
   {

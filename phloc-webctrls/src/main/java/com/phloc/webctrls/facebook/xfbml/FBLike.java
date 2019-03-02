@@ -157,6 +157,8 @@ public class FBLike extends AbstractFBNodeFBXML
    * than 50 characters and can contain alphanumeric characters and some
    * punctuation (currently +/=-.:_).
    * 
+   * @param sText
+   *        Base test for which to create a referral
    * @return a valid referrer text
    */
   @Nonnull

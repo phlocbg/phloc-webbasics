@@ -17,6 +17,7 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
    *        $JssorArrowNavigator$)
    * @param nChangeToShow
    *        0 Never, 1 Mouse Over, 2 Always (default:2)
+   * @return this for chaining
    */
   public ArrowNavigatorOptions (final String sClass, final int nChangeToShow)
   {
@@ -26,6 +27,10 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Class to create navigator instance (default: $JssorBulletNavigator$)
+   * 
+   * @param sClass
+   *        The CSS class
+   * @return this for chaining
    */
   public ArrowNavigatorOptions setClass (final String sClass)
   {
@@ -38,6 +43,10 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
 
   /**
    * 0 Never, 1 Mouse Over, 2 Always (default:2)
+   * 
+   * @param nShowType
+   *        show type
+   * @return this for chaining
    */
   public ArrowNavigatorOptions setChanceToShow (final int nShowType)
   {
@@ -48,6 +57,10 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
   /**
    * Auto center navigator in parent container, 0 None, 1 Horizontal, 2
    * Vertical, 3 Both (default:0)
+   * 
+   * @param nAutoCenter
+   *        auto center
+   * @return this for chaining
    */
   public ArrowNavigatorOptions setAutoCenter (final int nAutoCenter)
   {
@@ -57,6 +70,10 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Steps to go for each navigation request (default:1)
+   * 
+   * @param nSteps
+   *        steps
+   * @return this for chaining
    */
   public ArrowNavigatorOptions setSteps (final int nSteps)
   {
@@ -66,6 +83,10 @@ public class ArrowNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Scales bullet navigator or not while slider scale (default:true)
+   * 
+   * @param bScale
+   *        whether or not to scale
+   * @return this for chaining
    */
   public ArrowNavigatorOptions setScale (final boolean bScale)
   {

@@ -14,6 +14,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Class to create navigator instance (default: $JssorThumbnailNavigator$)
+   * 
+   * @param sClass
+   *        CSS class
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setClass (final String sClass)
   {
@@ -26,6 +30,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * 0 Never, 1 Mouse Over, 2 Always (default:2)
+   * 
+   * @param nShowType
+   *        show type
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setChanceToShow (final int nShowType)
   {
@@ -36,6 +44,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
   /**
    * Enable loop(circular) of carousel or not, 0: stop, 1: loop, 2 rewind,
    * default value is 1
+   * 
+   * @param nLoopType
+   *        loop type
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setLoop (final int nLoopType)
   {
@@ -46,6 +58,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
   /**
    * 0 None, 1 act by click, 2 act by mouse hover, 3 both, default value is 1
    * (default:1)
+   * 
+   * @param nActionMode
+   *        action mode
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setActionMode (final int nActionMode)
   {
@@ -56,6 +72,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
   /**
    * Auto center navigator in parent container, 0 None, 1 Horizontal, 2
    * Vertical, 3 Both (default:0)
+   * 
+   * @param nAutoCenter
+   *        auto center
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setAutoCenter (final int nAutoCenter)
   {
@@ -65,6 +85,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Specify lanes to arrange items (default:1)
+   * 
+   * @param nLanes
+   *        lanes
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setLanes (final int nLanes)
   {
@@ -74,6 +98,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Horizontal space between each item in pixel (default:0)
+   * 
+   * @param nSpacingX
+   *        X spacing
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setSpacingX (final int nSpacingX)
   {
@@ -83,6 +111,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Vertical space between each item in pixel (default:0)
+   * 
+   * @param nSpacingY
+   *        Y spacing
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setSpacingY (final int nSpacingY)
   {
@@ -93,6 +125,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
   /**
    * Number of pieces to display (the slide show would be disabled if the value
    * is set to greater than 1) (default:1)
+   * 
+   * @param nPieces
+   *        pieces
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setDisplayPieces (final int nPieces)
   {
@@ -103,6 +139,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
   /**
    * The offset position to park slide (this options applies only when slide
    * show disabled) (default:0)
+   * 
+   * @param nParkingPosition
+   *        parking position
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setParkingPosition (final int nParkingPosition)
   {
@@ -112,6 +152,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Disable drag or not (default:false)
+   * 
+   * @param bDisable
+   *        disable
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setDisableDrag (final boolean bDisable)
   {
@@ -121,6 +165,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * The orientation of the navigator, 1 horizontal, 2 vertical (default:1)
+   * 
+   * @param nOrientation
+   *        orientation
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setOrientation (final int nOrientation)
   {
@@ -130,6 +178,10 @@ public class ThumbnailNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Scales bullet navigator or not while slider scale (default:true)
+   * 
+   * @param bScale
+   *        scale
+   * @return this for chaining
    */
   public ThumbnailNavigatorOptions setScale (final boolean bScale)
   {

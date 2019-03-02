@@ -26,7 +26,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 
 /**
- * This is an integration of the Facebook PAge Plugin
+ * This is an integration of the Facebook Page Plugin
  * (https://developers.facebook.com/docs/plugins/page-plugin) which lets you
  * embed a stream of a Facebook page inside website
  * 
@@ -60,12 +60,6 @@ public class FBPage extends AbstractFBNodeFBXML
   /**
    * @param aURL
    *        The URL of the Facebook Page
-   * @param nWidth
-   *        The pixel width of the plugin. (min 280 - max 500), default:340
-   * @param nHeight
-   *        The maximum pixel height of the plugin. (min 130), default:500
-   * @param bHideCover
-   *        Hide cover photo in the header
    */
   public FBPage (@Nonnull final ISimpleURL aURL)
   {
@@ -82,7 +76,9 @@ public class FBPage extends AbstractFBNodeFBXML
    * @param bHideCover
    *        Hide cover photo in the header
    * @param bShowFacePile
+   *        Whether or not to show face pile
    * @param bShowPosts
+   *        Whether or not to show posts
    */
   public FBPage (@Nonnull final ISimpleURL aURL,
                  final int nWidth,

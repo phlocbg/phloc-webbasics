@@ -60,12 +60,6 @@ public class FBPage extends AbstractFBNodeHTML5
   /**
    * @param aURL
    *        The URL of the Facebook Page
-   * @param nWidth
-   *        The pixel width of the plugin. (min 280 - max 500), default:340
-   * @param nHeight
-   *        The maximum pixel height of the plugin. (min 130), default:500
-   * @param bHideCover
-   *        Hide cover photo in the header
    */
   public FBPage (@Nonnull final ISimpleURL aURL)
   {
@@ -82,7 +76,9 @@ public class FBPage extends AbstractFBNodeHTML5
    * @param bHideCover
    *        Hide cover photo in the header
    * @param bShowFacePile
+   *        Whether or not to show face pile
    * @param bShowPosts
+   *        Whether or not to show posts
    */
   public FBPage (@Nonnull final ISimpleURL aURL,
                  final int nWidth,

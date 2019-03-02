@@ -69,7 +69,7 @@ public class SliderBulletNavigator extends AbstractSliderHTMLElement
       aNode.addStyle (CCSSProperties.LEFT.newValue (ECSSUnit.px (this.m_nLeft.intValue ())));
     }
     final HCDiv aPrototype = aNode.addAndReturnChild (new HCDiv ());
-    aPrototype.setCustomAttr (this.ATTRIBUTE_USAGE, "prototype"); //$NON-NLS-1$
+    aPrototype.setCustomAttr (ATTRIBUTE_USAGE, "prototype"); //$NON-NLS-1$
     this.m_eSkin.applyStyles (aPrototype);
   }
 }

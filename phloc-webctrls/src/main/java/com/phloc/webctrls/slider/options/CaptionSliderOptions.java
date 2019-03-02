@@ -22,6 +22,10 @@ public class CaptionSliderOptions extends AbstractSliderOptions
 
   /**
    * An array of caption transitions to play caption
+   * 
+   * @param aTransitions
+   *        transitions
+   * @return this for chaining
    */
   public CaptionSliderOptions setTransitions (final List <IJSONObject> aTransitions)
   {
@@ -36,6 +40,10 @@ public class CaptionSliderOptions extends AbstractSliderOptions
    * How captions play in, 0 None (no play), 1 Chain (goes after main slide), 3
    * Chain Flatten (goes after main slide and flatten all caption animations)
    * (default:1)
+   * 
+   * @param nMode
+   *        mode
+   * @return this for chaining
    */
   public CaptionSliderOptions setPlayInMode (final int nMode)
   {
@@ -47,6 +55,10 @@ public class CaptionSliderOptions extends AbstractSliderOptions
    * How captions play out, 0 None (no play), 1 Chain (goes before main slide),
    * 3 Chain Flatten (goes before main slide and flatten all caption animations)
    * (default:1)
+   * 
+   * @param nMode
+   *        mode
+   * @return this for chaining
    */
   public CaptionSliderOptions setPlayOutMode (final int nMode)
   {

@@ -14,6 +14,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Class to create navigator instance (default: $JssorBulletNavigator$)
+   * 
+   * @param sClass
+   *        CSS class
+   * @return this for chaining
    */
   public BulletNavigatorOptions setClass (final String sClass)
   {
@@ -26,6 +30,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * 0 Never, 1 Mouse Over, 2 Always (default:2)
+   * 
+   * @param nShowType
+   *        show type
+   * @return this for chaining
    */
   public BulletNavigatorOptions setChanceToShow (final int nShowType)
   {
@@ -36,6 +44,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
   /**
    * 0 None, 1 act by click, 2 act by mouse hover, 3 both, default value is 1
    * (default:1)
+   * 
+   * @param nActionMode
+   *        action mode
+   * @return this for chaining
    */
   public BulletNavigatorOptions setActionMode (final int nActionMode)
   {
@@ -46,6 +58,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
   /**
    * Auto center navigator in parent container, 0 None, 1 Horizontal, 2
    * Vertical, 3 Both (default:0)
+   * 
+   * @param nAutoCenter
+   *        auto center
+   * @return this for chaining
    */
   public BulletNavigatorOptions setAutoCenter (final int nAutoCenter)
   {
@@ -55,6 +71,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Steps to go for each navigation request (default:1)
+   * 
+   * @param nSteps
+   *        steps
+   * @return this for chaining
    */
   public BulletNavigatorOptions setSteps (final int nSteps)
   {
@@ -64,6 +84,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Specify lanes to arrange items (default:1)
+   * 
+   * @param nLanes
+   *        lanes
+   * @return this for chaining
    */
   public BulletNavigatorOptions setLanes (final int nLanes)
   {
@@ -73,6 +97,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Horizontal space between each item in pixel (default:0)
+   * 
+   * @param nSpacingX
+   *        X spacing
+   * @return this for chaining
    */
   public BulletNavigatorOptions setSpacingX (final int nSpacingX)
   {
@@ -82,6 +110,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Vertical space between each item in pixel (default:0)
+   * 
+   * @param nSpacingY
+   *        Y spacing
+   * @return this for chaining
    */
   public BulletNavigatorOptions setSpacingY (final int nSpacingY)
   {
@@ -91,6 +123,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * The orientation of the navigator, 1 horizontal, 2 vertical (default:1)
+   * 
+   * @param nOrientation
+   *        orientation
+   * @return this for chaining
    */
   public BulletNavigatorOptions setOrientation (final int nOrientation)
   {
@@ -100,6 +136,10 @@ public class BulletNavigatorOptions extends AbstractSliderOptions
 
   /**
    * Scales bullet navigator or not while slider scale (default:true)
+   * 
+   * @param bScale
+   *        scale
+   * @return this for chaining
    */
   public BulletNavigatorOptions setScale (final boolean bScale)
   {

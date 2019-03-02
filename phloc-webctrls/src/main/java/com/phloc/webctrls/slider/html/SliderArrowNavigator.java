@@ -71,7 +71,7 @@ public class SliderArrowNavigator implements IHCNodeBuilder
     aNode.addClass (CLASS);
     if (StringHelper.hasText (this.m_sUsage))
     {
-      aNode.setCustomAttr (this.ATTRIBUTE_USAGE, this.m_sUsage);
+      aNode.setCustomAttr (ATTRIBUTE_USAGE, this.m_sUsage);
     }
     aNode.addClass (DefaultCSSClassProvider.create ("jssora" + this.m_eSkin.getID () + (this.m_bLeft ? "l" : "r"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     aNode.addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.px (this.m_eSkin.getWidth ())));
