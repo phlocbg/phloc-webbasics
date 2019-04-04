@@ -114,13 +114,7 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
  /**
   * Used to supply an additional link that shows related content to the object.
   */
- SEE_ALSO ("see_also"),
-
- /**
-  * the application ID used to link the page to an application (in order to
-  * allow using insights)
-  */
- APP_ID ("app_id");
+ SEE_ALSO ("see_also");
 
   private final String m_sID;
 
