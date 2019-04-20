@@ -18,6 +18,7 @@
 package com.phloc.web.smtp;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -25,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 
@@ -87,8 +89,13 @@ public interface IEmailData extends IReadonlyEmailData, IAttributeContainer
   @Nonnull
   IEmailData setBody (@Nullable String sBody);
 
+  @Override
   @Nullable
   IEmailAttachmentList getAttachments ();
+
+  IEmailData setHeader (@Nonnull @Nonempty final String sHeader, @Nonnull @Nonempty final String sValue);
+
+  Map <String, String> getHeaders ();
 
   /**
    * @return The number of contained attachments. Always &ge; 0.
@@ -107,4 +114,8 @@ public interface IEmailData extends IReadonlyEmailData, IAttributeContainer
    */
   @Nonnull
   IEmailData setAttachments (@Nullable IEmailAttachmentList aAttachments);
+
+  boolean isUseFailedMailQueue ();
+
+  IEmailData setUseFailedMailQueue (final boolean bUseFailedMailQueue);
 }

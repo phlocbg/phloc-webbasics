@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -32,6 +33,7 @@ import javax.mail.internet.InternetAddress;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
@@ -64,6 +66,8 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   private String m_sSubject;
   private String m_sBody;
   private IEmailAttachmentList m_aAttachments;
+  private final Map <String, String> m_aHeaders = ContainerHelper.newMap ();
+  private boolean m_bUseFailedMailQueue = true;
 
   public EmailData (@Nonnull final EEmailType eEmailType)
   {
@@ -71,8 +75,21 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
   }
 
   @Override
+  public IEmailData setHeader (@Nonnull @Nonempty final String sHeader, @Nonnull @Nonempty final String sValue)
+  {
+    this.m_aHeaders.put (sHeader, sValue);
+    return this;
+  }
+
+  @Override
+  public Map <String, String> getHeaders ()
+  {
+    return ContainerHelper.newMap (this.m_aHeaders);
+  }
+
+  @Override
   @Nonnull
-  public final EmailData setEmailType (@Nonnull final EEmailType eEmailType)
+  public final IEmailData setEmailType (@Nonnull final EEmailType eEmailType)
   {
     ValueEnforcer.notNull (eEmailType, "EmailType");
     this.m_eEmailType = eEmailType;
@@ -88,7 +105,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setFrom (@Nullable final IEmailAddress sFrom)
+  public final IEmailData setFrom (@Nullable final IEmailAddress sFrom)
   {
     this.m_aFrom = sFrom;
     return this;
@@ -103,7 +120,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
+  public final IEmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
   {
     this.m_aReplyTo.clear ();
     if (aReplyTo != null)
@@ -113,7 +130,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setReplyTo (@Nullable final IEmailAddress... aReplyTos)
+  public final IEmailData setReplyTo (@Nullable final IEmailAddress... aReplyTos)
   {
     this.m_aReplyTo.clear ();
     if (aReplyTos != null)
@@ -125,7 +142,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
+  public final IEmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
   {
     this.m_aReplyTo.clear ();
     if (aReplyTos != null)
@@ -198,7 +215,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setTo (@Nullable final IEmailAddress aTo)
+  public final IEmailData setTo (@Nullable final IEmailAddress aTo)
   {
     this.m_aTo.clear ();
     if (aTo != null)
@@ -208,7 +225,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setTo (@Nullable final IEmailAddress... aTos)
+  public final IEmailData setTo (@Nullable final IEmailAddress... aTos)
   {
     this.m_aTo.clear ();
     if (aTos != null)
@@ -220,7 +237,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
+  public final IEmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
   {
     this.m_aTo.clear ();
     if (aTos != null)
@@ -265,7 +282,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setCc (@Nullable final IEmailAddress aCc)
+  public final IEmailData setCc (@Nullable final IEmailAddress aCc)
   {
     this.m_aCc.clear ();
     if (aCc != null)
@@ -275,7 +292,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setCc (@Nullable final IEmailAddress... aCcs)
+  public final IEmailData setCc (@Nullable final IEmailAddress... aCcs)
   {
     this.m_aCc.clear ();
     if (aCcs != null)
@@ -287,7 +304,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
+  public final IEmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
   {
     this.m_aCc.clear ();
     if (aCcs != null)
@@ -332,7 +349,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setBcc (@Nullable final IEmailAddress aBcc)
+  public final IEmailData setBcc (@Nullable final IEmailAddress aBcc)
   {
     this.m_aBcc.clear ();
     if (aBcc != null)
@@ -342,7 +359,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setBcc (@Nullable final IEmailAddress... aBccs)
+  public final IEmailData setBcc (@Nullable final IEmailAddress... aBccs)
   {
     this.m_aBcc.clear ();
     if (aBccs != null)
@@ -354,7 +371,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
+  public final IEmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
   {
     this.m_aBcc.clear ();
     if (aBccs != null)
@@ -399,7 +416,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setSentDate (@Nullable final DateTime aSentDate)
+  public final IEmailData setSentDate (@Nullable final DateTime aSentDate)
   {
     this.m_aSentDate = aSentDate;
     return this;
@@ -414,7 +431,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setSubject (@Nullable final String sSubject)
+  public final IEmailData setSubject (@Nullable final String sSubject)
   {
     this.m_sSubject = sSubject;
     return this;
@@ -429,7 +446,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setBody (@Nullable final String sBody)
+  public final IEmailData setBody (@Nullable final String sBody)
   {
     this.m_sBody = sBody;
     return this;
@@ -458,7 +475,7 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
 
   @Override
   @Nonnull
-  public final EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
+  public final IEmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
     if (aAttachments != null && !aAttachments.isEmpty ())
       this.m_aAttachments = aAttachments;
@@ -518,6 +535,19 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
                             .toString ();
   }
 
+  @Override
+  public IEmailData setUseFailedMailQueue (final boolean bUseFailedMailQueue)
+  {
+    this.m_bUseFailedMailQueue = bUseFailedMailQueue;
+    return this;
+  }
+
+  @Override
+  public boolean isUseFailedMailQueue ()
+  {
+    return this.m_bUseFailedMailQueue;
+  }
+
   /**
    * Utility method for converting different fields to a single
    * {@link IEmailData}.
@@ -544,12 +574,24 @@ public class EmailData extends MapBasedAttributeContainer implements IEmailData
                                             @Nullable final String sBody,
                                             @Nullable final IEmailAttachmentList aAttachments)
   {
+    return createEmailData (eEmailType, aSender, aReceiver, sSubject, sBody, aAttachments, true);
+  }
+
+  public static IEmailData createEmailData (@Nonnull final EEmailType eEmailType,
+                                            @Nullable final IEmailAddress aSender,
+                                            @Nullable final IEmailAddress aReceiver,
+                                            @Nullable final String sSubject,
+                                            @Nullable final String sBody,
+                                            @Nullable final IEmailAttachmentList aAttachments,
+                                            final boolean bUseFailedMailQueue)
+  {
     final IEmailData aEmailData = new EmailData (eEmailType);
     aEmailData.setFrom (aSender);
     aEmailData.setTo (aReceiver);
     aEmailData.setSubject (sSubject);
     aEmailData.setBody (sBody);
     aEmailData.setAttachments (aAttachments);
+    aEmailData.setUseFailedMailQueue (bUseFailedMailQueue);
     return aEmailData;
   }
 }

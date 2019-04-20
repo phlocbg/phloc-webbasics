@@ -19,15 +19,11 @@ package com.phloc.web.smtp;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xbill.DNS.Lookup;
-import org.xbill.DNS.Record;
-import org.xbill.DNS.Type;
 
 import com.phloc.commons.email.EmailAddressUtils;
 
@@ -66,35 +62,6 @@ public final class EmailAddressValidator
   }
 
   /**
-   * Check if the passed host name has an MX record.
-   * 
-   * @param sHostName
-   *        The host name to check.
-   * @return <code>true</code> if an MX record was found, <code>false</code> if
-   *         not (or if an exception occurred)
-   */
-  private static boolean _hasMXRecord (@Nonnull final String sHostName)
-  {
-    try
-    {
-      final Record [] aRecords = new Lookup (sHostName, Type.MX).run ();
-      return aRecords != null && aRecords.length > 0;
-    }
-    catch (final Exception ex)
-    {
-      // Do not log this message, as this method is potentially called very
-      // often!
-      s_aLogger.warn ("Failed to check for MX record on host '" +
-                      sHostName +
-                      "': " +
-                      ex.getClass ().getName () +
-                      " - " +
-                      ex.getMessage ());
-      return false;
-    }
-  }
-
-  /**
    * Checks if a value is a valid e-mail address. Depending on the global value
    * for the MX record check the check is performed incl. the MX record check or
    * without.
@@ -125,15 +92,6 @@ public final class EmailAddressValidator
    */
   public static boolean isValidWithMXCheck (@Nullable final String sEmail)
   {
-    // First check without MX
-    if (!EmailAddressUtils.isValid (sEmail))
-      return false;
-
-    final String sUnifiedEmail = EmailAddressUtils.getUnifiedEmailAddress (sEmail);
-
-    // MX record checking
-    final int i = sUnifiedEmail.indexOf ('@');
-    final String sHostName = sUnifiedEmail.substring (i + 1);
-    return _hasMXRecord (sHostName);
+    return EmailAddressUtils.isValid (sEmail) && MXChecker.getInstance ().isValidMXEntry (sEmail);
   }
 }

@@ -44,6 +44,8 @@ import com.phloc.web.smtp.ISMTPSettings;
 @Immutable
 public final class FailedMailData implements ITypedObject <String>, Serializable
 {
+  private static final long serialVersionUID = 1897012959398052936L;
+
   public static final ObjectType TYPE_FAILEDMAIL = new ObjectType ("failedmail");
 
   private final String m_sID;
@@ -52,6 +54,7 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   private final DateTime m_aOriginalSentDateTime;
   private final IEmailData m_aEmailData;
   private final Throwable m_aError;
+  private int m_nError;
 
   /**
    * Constructor for message unspecific error.
@@ -106,6 +109,16 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
           aError);
   }
 
+  public FailedMailData (@Nonnull final String sID,
+                         @Nonnull final LocalDateTime aErrorDT,
+                         @Nonnull final ISMTPSettings aSettings,
+                         @Nullable final DateTime aOriginalSentDT,
+                         @Nullable final IEmailData aEmailData,
+                         @Nullable final Throwable aError)
+  {
+    this (sID, aErrorDT, aSettings, aOriginalSentDT, aEmailData, aError, 0);
+  }
+
   /**
    * Constructor for serialization only!
    * 
@@ -124,33 +137,39 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
    *        mail-independent error.
    * @param aError
    *        The exception that occurred. May be <code>null</code>.
+   * @param nErrorCode
+   *        the error code returned by the SMTP
    */
   public FailedMailData (@Nonnull final String sID,
                          @Nonnull final LocalDateTime aErrorDT,
                          @Nonnull final ISMTPSettings aSettings,
                          @Nullable final DateTime aOriginalSentDT,
                          @Nullable final IEmailData aEmailData,
-                         @Nullable final Throwable aError)
+                         @Nullable final Throwable aError,
+                         final int nErrorCode)
   {
-    m_sID = ValueEnforcer.notNull (sID, "ID");
-    m_aErrorDT = ValueEnforcer.notNull (aErrorDT, "ErrorDT");
-    m_aSettings = ValueEnforcer.notNull (aSettings, "Settings");
-    m_aOriginalSentDateTime = aOriginalSentDT != null ? aOriginalSentDT
-                                                     : (aEmailData != null ? aEmailData.getSentDate () : null);
-    m_aEmailData = aEmailData;
-    m_aError = aError;
+    this.m_sID = ValueEnforcer.notNull (sID, "ID");
+    this.m_aErrorDT = ValueEnforcer.notNull (aErrorDT, "ErrorDT");
+    this.m_aSettings = ValueEnforcer.notNull (aSettings, "Settings");
+    this.m_aOriginalSentDateTime = aOriginalSentDT != null ? aOriginalSentDT
+                                                           : (aEmailData != null ? aEmailData.getSentDate () : null);
+    this.m_aEmailData = aEmailData;
+    this.m_aError = aError;
+    this.m_nError = nErrorCode;
   }
 
+  @Override
   @Nonnull
   public ObjectType getTypeID ()
   {
     return TYPE_FAILEDMAIL;
   }
 
+  @Override
   @Nonnull
   public String getID ()
   {
-    return m_sID;
+    return this.m_sID;
   }
 
   /**
@@ -159,7 +178,7 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nonnull
   public LocalDateTime getErrorDateTime ()
   {
-    return m_aErrorDT;
+    return this.m_aErrorDT;
   }
 
   /**
@@ -168,7 +187,7 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nonnull
   public ISMTPSettings getSMTPSettings ()
   {
-    return m_aSettings;
+    return this.m_aSettings;
   }
 
   /**
@@ -177,7 +196,7 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nonnull
   public DateTime getOriginalSentDateTime ()
   {
-    return m_aOriginalSentDateTime;
+    return this.m_aOriginalSentDateTime;
   }
 
   /**
@@ -188,29 +207,39 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nullable
   public IEmailData getEmailData ()
   {
-    return m_aEmailData;
+    return this.m_aEmailData;
   }
 
   @Nullable
   public Throwable getError ()
   {
-    return m_aError;
+    return this.m_aError;
+  }
+
+  public int getErrorCode ()
+  {
+    return this.m_nError;
+  }
+
+  public void setErrorCode (final int nErrorCode)
+  {
+    this.m_nError = nErrorCode;
   }
 
   @Nonnull
   public String getErrorTimeDisplayText (@Nonnull final Locale aDisplayLocale)
   {
-    return PDTToString.getAsString (m_aErrorDT, aDisplayLocale);
+    return PDTToString.getAsString (this.m_aErrorDT, aDisplayLocale);
   }
 
   @Nonnull
   public String getSMTPServerDisplayText ()
   {
-    String ret = m_aSettings.getHostName () + ":" + m_aSettings.getPort ();
-    if (StringHelper.hasText (m_aSettings.getUserName ()))
+    String ret = this.m_aSettings.getHostName () + ":" + this.m_aSettings.getPort ();
+    if (StringHelper.hasText (this.m_aSettings.getUserName ()))
     {
-      ret += "[" + m_aSettings.getUserName ();
-      if (StringHelper.hasText (m_aSettings.getPassword ()))
+      ret += "[" + this.m_aSettings.getUserName ();
+      if (StringHelper.hasText (this.m_aSettings.getPassword ()))
         ret += "/****";
       ret += ']';
     }
@@ -220,15 +249,15 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nonnull
   public String getSenderDisplayText ()
   {
-    return m_aEmailData == null ? "" : m_aEmailData.getFrom ().getDisplayName ();
+    return this.m_aEmailData == null ? "" : this.m_aEmailData.getFrom ().getDisplayName ();
   }
 
   @Nonnull
   public String getRecipientDisplayText ()
   {
     final StringBuilder ret = new StringBuilder ();
-    if (m_aEmailData != null)
-      for (final IEmailAddress aEmailAddress : m_aEmailData.getTo ())
+    if (this.m_aEmailData != null)
+      for (final IEmailAddress aEmailAddress : this.m_aEmailData.getTo ())
       {
         if (ret.length () > 0)
           ret.append ("; ");
@@ -240,7 +269,7 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Nullable
   public String getMessageDisplayText ()
   {
-    return m_aError == null ? null : m_aError.getMessage ();
+    return this.m_aError == null ? null : this.m_aError.getMessage ();
   }
 
   @Override
@@ -251,22 +280,22 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
     if (!(o instanceof FailedMailData))
       return false;
     final FailedMailData rhs = (FailedMailData) o;
-    return m_sID.equals (rhs.m_sID) &&
-           m_aErrorDT.equals (rhs.m_aErrorDT) &&
-           m_aSettings.equals (rhs.m_aSettings) &&
-           EqualsUtils.equals (m_aOriginalSentDateTime, rhs.m_aOriginalSentDateTime) &&
-           EqualsUtils.equals (m_aEmailData, rhs.m_aEmailData) &&
+    return this.m_sID.equals (rhs.m_sID) &&
+           this.m_aErrorDT.equals (rhs.m_aErrorDT) &&
+           this.m_aSettings.equals (rhs.m_aSettings) &&
+           EqualsUtils.equals (this.m_aOriginalSentDateTime, rhs.m_aOriginalSentDateTime) &&
+           EqualsUtils.equals (this.m_aEmailData, rhs.m_aEmailData) &&
            EqualsUtils.equals (getMessageDisplayText (), rhs.getMessageDisplayText ());
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sID)
-                                       .append (m_aErrorDT)
-                                       .append (m_aSettings)
-                                       .append (m_aOriginalSentDateTime)
-                                       .append (m_aEmailData)
+    return new HashCodeGenerator (this).append (this.m_sID)
+                                       .append (this.m_aErrorDT)
+                                       .append (this.m_aSettings)
+                                       .append (this.m_aOriginalSentDateTime)
+                                       .append (this.m_aEmailData)
                                        .append (getMessageDisplayText ())
                                        .getHashCode ();
   }
@@ -274,12 +303,12 @@ public final class FailedMailData implements ITypedObject <String>, Serializable
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("id", m_sID)
-                                       .append ("errorDateTime", m_aErrorDT)
-                                       .append ("settings", m_aSettings)
-                                       .appendIfNotNull ("originalSentDateTime", m_aOriginalSentDateTime)
-                                       .appendIfNotNull ("emailData", m_aEmailData)
-                                       .appendIfNotNull ("error", m_aError)
+    return new ToStringGenerator (this).append ("id", this.m_sID)
+                                       .append ("errorDateTime", this.m_aErrorDT)
+                                       .append ("settings", this.m_aSettings)
+                                       .appendIfNotNull ("originalSentDateTime", this.m_aOriginalSentDateTime)
+                                       .appendIfNotNull ("emailData", this.m_aEmailData)
+                                       .appendIfNotNull ("error", this.m_aError)
                                        .toString ();
   }
 }

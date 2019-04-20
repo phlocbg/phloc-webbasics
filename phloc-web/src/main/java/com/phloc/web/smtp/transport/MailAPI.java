@@ -272,13 +272,26 @@ public final class MailAPI
             hasNonVendorEmailAddress (aEmailData.getCc ()) ||
             hasNonVendorEmailAddress (aEmailData.getBcc ()))
         {
-          s_aLogger.error ("Debug mode: ignoring mail TO '" +
-                           aEmailData.getTo () +
-                           "'" +
-                           (aEmailData.getCcCount () > 0 ? " and CC '" + aEmailData.getCc () + "'" : "") +
-                           (aEmailData.getBccCount () > 0 ? " and BCC '" + aEmailData.getBcc () + "'" : "") +
-                           " because at least one address is not targeted to the vendor domain");
-          bCanQueue = false;
+          if (EmailGlobalSettings.isAllowNonVendorMailsInDebugOnLocalhost () &&
+              aSMTPSettings.getHostName ().equals ("localhost"))
+          {
+            s_aLogger.warn ("Debug mode: sending non-vendor mail TO '" +
+                            aEmailData.getTo () +
+                            "'" +
+                            (aEmailData.getCcCount () > 0 ? " and CC '" + aEmailData.getCc () + "'" : "") +
+                            (aEmailData.getBccCount () > 0 ? " and BCC '" + aEmailData.getBcc () + "'" : "") +
+                            " as it was allowed for localhost SMTP");
+          }
+          else
+          {
+            s_aLogger.error ("Debug mode: ignoring mail TO '" +
+                             aEmailData.getTo () +
+                             "'" +
+                             (aEmailData.getCcCount () > 0 ? " and CC '" + aEmailData.getCc () + "'" : "") +
+                             (aEmailData.getBccCount () > 0 ? " and BCC '" + aEmailData.getBcc () + "'" : "") +
+                             " because at least one address is not targeted to the vendor domain");
+            bCanQueue = false;
+          }
         }
       }
 

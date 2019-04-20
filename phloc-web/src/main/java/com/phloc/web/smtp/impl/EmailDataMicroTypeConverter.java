@@ -38,6 +38,7 @@ import com.phloc.commons.microdom.utils.MicroUtils;
 import com.phloc.datetime.config.PDTConfig;
 import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.smtp.EEmailType;
+import com.phloc.web.smtp.IEmailData;
 
 public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
 {
@@ -64,12 +65,13 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
       eParent.setAttribute (ATTR_PERSONAL, aEmailAddress.getPersonal ());
   }
 
+  @Override
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
                                               @Nullable final String sNamespaceURI,
                                               @Nonnull final String sTagName)
   {
-    final EmailData aEmailData = (EmailData) aSource;
+    final IEmailData aEmailData = (IEmailData) aSource;
     final IMicroElement eEmailData = new MicroElement (sNamespaceURI, sTagName);
     eEmailData.setAttribute (ATTR_TYPE, aEmailData.getEmailType ().getID ());
 
@@ -118,13 +120,14 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     return new EmailAddress (sAddress, sPersonal);
   }
 
+  @Override
   @Nonnull
   @ContainsSoftMigration
-  public EmailData convertToNative (@Nonnull final IMicroElement eEmailData)
+  public IEmailData convertToNative (@Nonnull final IMicroElement eEmailData)
   {
     final String sEmailType = eEmailData.getAttribute (ATTR_TYPE);
     final EEmailType eEmailType = EEmailType.getFromIDOrNull (sEmailType);
-    final EmailData aEmailData = new EmailData (eEmailType);
+    final IEmailData aEmailData = new EmailData (eEmailType);
 
     final IMicroElement eFrom = eEmailData.getFirstChildElement (ELEMENT_FROM);
     aEmailData.setFrom (_readEmailAddress (eFrom));

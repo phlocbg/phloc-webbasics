@@ -51,9 +51,12 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.EmailGlobalSettings;
+import com.phloc.web.smtp.IEMailSendListener;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.IEmailDataTransportListener;
 import com.phloc.web.smtp.ISMTPSettings;
+import com.sun.mail.smtp.SMTPAddressSucceededException;
+import com.sun.mail.smtp.SMTPTransport;
 
 /**
  * The wrapper around the main javax.mail transport
@@ -68,7 +71,7 @@ final class MailTransport
   private static final IStatisticsHandlerCounter s_aStatsCountSuccess = StatisticsManager.getCounterHandler (MailTransport.class);
   private static final IStatisticsHandlerCounter s_aStatsCountFailed = StatisticsManager.getCounterHandler (MailTransport.class.getName () +
                                                                                                             "$failed");
-  private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
+  private static final Logger LOG = LoggerFactory.getLogger (MailTransport.class);
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
   private final ISMTPSettings m_aSMTPSettings;
@@ -126,8 +129,8 @@ final class MailTransport
     // Debug flag
     this.m_aMailProperties.setProperty ("mail.debug.auth", Boolean.toString (GlobalDebug.isDebugMode ()));
 
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Mail properties: " + this.m_aMailProperties);
+    if (LOG.isDebugEnabled ())
+      LOG.debug ("Mail properties: " + this.m_aMailProperties);
 
     // Create session based on properties
     this.m_aSession = Session.getInstance (this.m_aMailProperties);
@@ -163,6 +166,7 @@ final class MailTransport
     final Map <IEmailData, MessagingException> aFailedMessages = new LinkedHashMap <IEmailData, MessagingException> ();
     if (aMessages != null)
     {
+      final IEMailSendListener aEmailSendListener = EmailGlobalSettings.getEmailSendListener ();
       try
       {
         final Transport aTransport = this.m_aSession.getTransport (this.m_bSMTPS ? SMTPS_PROTOCOL : SMTP_PROTOCOL);
@@ -173,11 +177,16 @@ final class MailTransport
           aTransport.addConnectionListener (aConnectionListener);
 
         final TransportListener aGlobalTransportListener = EmailGlobalSettings.getTransportListener ();
+
         final IEmailDataTransportListener aEmailDataTransportListener = EmailGlobalSettings.getEmailDataTransportListener ();
         if (aGlobalTransportListener != null && aEmailDataTransportListener == null)
         {
           // Set only the global transport listener
           aTransport.addTransportListener (aGlobalTransportListener);
+        }
+        if (aTransport instanceof SMTPTransport)
+        {
+          ((SMTPTransport) aTransport).setReportSuccess (EmailGlobalSettings.isReportSuccess ());
         }
 
         // Connect
@@ -191,10 +200,10 @@ final class MailTransport
           // For all messages
           for (final IEmailData aMessage : aMessages)
           {
+            TransportListener aPerMailListener = null;
             try
             {
               // Set email data specific listeners
-              TransportListener aPerMailListener = null;
               if (aEmailDataTransportListener != null)
               {
                 aPerMailListener = new TransportListener ()
@@ -250,28 +259,33 @@ final class MailTransport
                 aMimeMessage.setHeader (HEADER_MESSAGE_ID, sMessageID);
               }
 
-              s_aLogger.info ("Delivering mail to " +
-                              Arrays.toString (aMimeMessage.getRecipients (RecipientType.TO)) +
-                              " with subject '" +
-                              aMimeMessage.getSubject () +
-                              "' and message ID '" +
-                              aMimeMessage.getMessageID () +
-                              "'");
+              LOG.info ("Delivering mail to {} with subject '{}' and message ID '{}'",
+                        Arrays.toString (aMimeMessage.getRecipients (RecipientType.TO)),
+                        aMimeMessage.getSubject (),
+                        aMimeMessage.getMessageID ());
 
               // Start transmitting
               aTransport.sendMessage (aMimeMessage, aMimeMessage.getAllRecipients ());
-
+              s_aStatsCountSuccess.increment ();
+              aEmailSendListener.onSuccess (aMessage);
+            }
+            catch (final SMTPAddressSucceededException aEx)
+            {
+              s_aStatsCountSuccess.increment ();
+              aEmailSendListener.onSuccess (aMessage);
+            }
+            catch (final MessagingException aEx)
+            {
+              s_aStatsCountFailed.increment ();
+              aEmailSendListener.onError (aMessage, aEx);
+              // Sending exactly THIS messages failed
+              aFailedMessages.put (aMessage, aEx);
+            }
+            finally
+            {
               // Remove per-mail listener again
               if (aPerMailListener != null)
                 aTransport.removeTransportListener (aPerMailListener);
-
-              s_aStatsCountSuccess.increment ();
-            }
-            catch (final MessagingException ex)
-            {
-              s_aStatsCountFailed.increment ();
-              // Sending exactly THIS messages failed
-              aFailedMessages.put (aMessage, ex);
             }
           }
         }
@@ -281,22 +295,38 @@ final class MailTransport
           {
             aTransport.close ();
           }
-          catch (final MessagingException ex)
+          catch (final MessagingException aEx)
           {
-            throw new MailSendException ("Failed to close mail transport", ex);
+            throw new MailSendException ("Failed to close mail transport", aEx);
           }
         }
       }
-      catch (final AuthenticationFailedException ex)
+      catch (final AuthenticationFailedException aEx)
       {
         // problem with the credentials
-        throw new MailSendException ("Mail server authentication failed", ex);
+        if (aEmailSendListener != null)
+        {
+          for (final IEmailData aMessage : aMessages)
+          {
+            aEmailSendListener.onError (aMessage, aEx);
+          }
+        }
+        throw new MailSendException ("Mail server authentication failed", aEx);
       }
-      catch (final MessagingException ex)
+      catch (final MessagingException aEx)
       {
-        if (WebExceptionHelper.isServerNotReachableConnection (ex.getCause ()))
-          throw new MailSendException ("Failed to connect to mail server: " + ex.getCause ().getMessage ());
-        throw new MailSendException ("Mail server connection failed", ex);
+        if (aEmailSendListener != null)
+        {
+          for (final IEmailData aMessage : aMessages)
+          {
+            aEmailSendListener.onError (aMessage, aEx);
+          }
+        }
+        if (WebExceptionHelper.isServerNotReachableConnection (aEx.getCause ()))
+        {
+          throw new MailSendException ("Failed to connect to mail server: " + aEx.getCause ().getMessage ());
+        }
+        throw new MailSendException ("Mail server connection failed", aEx);
       }
     }
     return aFailedMessages;

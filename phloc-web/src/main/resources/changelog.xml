@@ -22,6 +22,27 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   
 
+  <release date="2019-04-20" version="5.8.7" />
+  <entry date="2019-04-20" category="feature" action="add">
+    <change>
+      <text locale="en">Extracted Email address MX validation</text>
+    </change>
+  </entry>
+  <entry date="2019-04-20" category="feature" action="add">
+    <change>
+      <text locale="en">New mail settings options (report success, allow non-vendor mail for localhost)</text>
+    </change>
+  </entry>
+  <entry date="2019-04-20" category="feature" action="add">
+    <change>
+      <text locale="en">Support for mail send listeners</text>
+    </change>
+  </entry>
+  <entry date="2019-04-20" category="feature" action="add">
+    <change>
+      <text locale="en">Support for headers via EmailData</text>
+    </change>
+  </entry>
   <release date="2019-02-20" version="5.8.6" />
   <entry date="2019-02-20" category="feature" action="add">
     <change>

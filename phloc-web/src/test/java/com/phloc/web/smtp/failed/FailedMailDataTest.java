@@ -33,6 +33,7 @@ import com.phloc.commons.mock.MockException;
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.smtp.EEmailType;
+import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailAttachment;
 import com.phloc.web.smtp.impl.EmailAttachmentList;
@@ -58,9 +59,9 @@ public final class FailedMailDataTest
   }
 
   @Nonnull
-  private static EmailData _createEmailData ()
+  private static IEmailData _createEmailData ()
   {
-    final EmailData aData = new EmailData (EEmailType.TEXT);
+    final IEmailData aData = new EmailData (EEmailType.TEXT);
     aData.setFrom (new EmailAddress ("from@example.org"));
     aData.setReplyTo (new EmailAddress ("replyto1@example.org"),
                       new EmailAddress ("replyto2@example.org"),
@@ -110,7 +111,7 @@ public final class FailedMailDataTest
   public void testWithData ()
   {
     final ISMTPSettings aSettings = _createSMTPSettings ();
-    final EmailData aData = _createEmailData ();
+    final IEmailData aData = _createEmailData ();
 
     final FailedMailData aFMD = new FailedMailData (aSettings, aData);
     assertNotNull (aFMD.getID ());
@@ -128,7 +129,7 @@ public final class FailedMailDataTest
   public void testWithExceptionAndData ()
   {
     final ISMTPSettings aSettings = _createSMTPSettings ();
-    final EmailData aData = _createEmailData ();
+    final IEmailData aData = _createEmailData ();
     final Throwable aError = new MockException ("Test error");
 
     final FailedMailData aFMD = new FailedMailData (aSettings, aData, aError);

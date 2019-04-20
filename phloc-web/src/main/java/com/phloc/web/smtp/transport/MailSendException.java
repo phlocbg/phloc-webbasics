@@ -22,10 +22,12 @@ import javax.annotation.Nonnull;
 /**
  * Central exception in case something's wrong with mail sending.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public final class MailSendException extends Exception
 {
+  private static final long serialVersionUID = -6690712197319670690L;
+
   public MailSendException (final String sMsg)
   {
     super (sMsg);
