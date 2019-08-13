@@ -44,6 +44,7 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
+import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ContainerHelper;
@@ -55,6 +56,7 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.URLUtils;
@@ -124,6 +126,7 @@ public class UnifiedResponse
   private IMimeType m_aMimeType;
   private byte [] m_aContent;
   private IInputStreamProvider m_aContentISP;
+  private INonThrowingRunnableWithParameter <ESuccess> m_aOnContentStreamConsumed;
   private EContentDispositionType m_eContentDispositionType = DEFAULT_CONTENT_DISPOSITION_TYPE;
   private String m_sContentDispositionFilename;
   private CacheControlBuilder m_aCacheControl;
@@ -403,6 +406,7 @@ public class UnifiedResponse
       _info ("Overwriting content with byte array!");
     this.m_aContent = aContent;
     this.m_aContentISP = null;
+    this.m_aOnContentStreamConsumed = null;
     return this;
   }
 
@@ -416,11 +420,30 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setContent (@Nonnull final IInputStreamProvider aISP)
   {
+    return setContent (aISP, null);
+  }
+
+  /**
+   * Set the response content provider.
+   *
+   * @param aISP
+   *        The content provider to be used. May not be <code>null</code>.
+   * @param aOnContentStreamConsumed
+   *        An optional callback which will be executed after the input stream
+   *        has been delivered (written to the response output stream), may be
+   *        <code>null</code>
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setContent (@Nonnull final IInputStreamProvider aISP,
+                                     @Nullable final INonThrowingRunnableWithParameter <ESuccess> aOnContentStreamConsumed)
+  {
     ValueEnforcer.notNull (aISP, "InputStreamProvider");
     if (hasContent ())
       _info ("Overwriting content with content provider!");
     this.m_aContent = null;
     this.m_aContentISP = aISP;
+    this.m_aOnContentStreamConsumed = aOnContentStreamConsumed;
     return this;
   }
 
@@ -429,6 +452,7 @@ public class UnifiedResponse
   {
     this.m_aContent = null;
     this.m_aContentISP = null;
+    this.m_aOnContentStreamConsumed = null;
     return this;
   }
 
@@ -1251,6 +1275,10 @@ public class UnifiedResponse
 
           // Handle it gracefully with a 404 and not with a 500
           aHttpResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+          if (this.m_aOnContentStreamConsumed != null)
+          {
+            this.m_aOnContentStreamConsumed.run (ESuccess.FAILURE);
+          }
         }
         else
         {
@@ -1270,6 +1298,10 @@ public class UnifiedResponse
               // Don't apply additional Content-Length header after the resource
               // was streamed!
               _applyLengthChecks (nBytesCopied);
+              if (this.m_aOnContentStreamConsumed != null)
+              {
+                this.m_aOnContentStreamConsumed.run (ESuccess.SUCCESS);
+              }
             }
             else
             {
@@ -1283,7 +1315,13 @@ public class UnifiedResponse
                       bResponseCommitted);
 
               if (!bResponseCommitted)
+              {
                 aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+              }
+              if (this.m_aOnContentStreamConsumed != null)
+              {
+                this.m_aOnContentStreamConsumed.run (ESuccess.FAILURE);
+              }
             }
           }
         }
