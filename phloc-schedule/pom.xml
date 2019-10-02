@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-schedule</artifactId>
-  <version>1.6.7-SNAPSHOT</version>
+  <version>1.6.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-schedule</name>
   <description>Library for easy scheduling of jobs using Quartz</description>
