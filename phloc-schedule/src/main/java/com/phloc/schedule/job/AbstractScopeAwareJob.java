@@ -24,6 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpSession;
 
+import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
@@ -143,7 +145,8 @@ public abstract class AbstractScopeAwareJob extends AbstractJob
       {
         WebScopeManager.onRequestBegin (sApplicationScopeID,
                                         new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
-                                                                                      .getServletContext (), false),
+                                                                                      .getServletContext (),
+                                                                       false),
                                         new MockHttpServletResponse ());
       }
       catch (final Exception aEx)
