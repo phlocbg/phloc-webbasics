@@ -26,6 +26,7 @@ import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -41,6 +42,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.exceptions.LoggedRuntimeException;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.schedule.quartz.listener.StatisticsJobListener;
 import com.phloc.scopes.singleton.GlobalSingleton;
@@ -216,6 +218,31 @@ public class GlobalQuartzScheduler extends GlobalSingleton
                                .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
                  aJobClass,
                  aJobData);
+  }
+
+  @Nonnull
+  public ESuccess deleteJob (final String sJobName)
+  {
+    final JobKey aJobKey = new JobKey (sJobName, this.m_sGroupName);
+    try
+    {
+      if (this.m_aScheduler.deleteJob (aJobKey))
+      {
+        s_aLogger.info ("Successfully deleted job " + sJobName);
+        return ESuccess.SUCCESS;
+      }
+      else
+      {
+        s_aLogger.error ("Error deleting job " + sJobName);
+        return ESuccess.FAILURE;
+      }
+
+    }
+    catch (final SchedulerException aEx)
+    {
+      s_aLogger.error ("Error deleting job " + sJobName, aEx);
+      return ESuccess.FAILURE;
+    }
   }
 
   /**
