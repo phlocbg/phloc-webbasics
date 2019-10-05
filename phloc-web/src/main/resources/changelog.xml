@@ -28,16 +28,6 @@
       <text locale="en">ServletRedirectParameterStrategy</text>
     </change>
   </entry>
-  <entry date="2019-10-05" category="feature" action="update">
-    <change>
-      <text locale="en">Extended DateEdit to be able to add a handler fired on update</text>
-    </change>
-  </entry>
-  <entry date="2019-10-05" category="tech" action="update">
-    <change>
-      <text locale="en">Added jQuery 3.4.1</text>
-    </change>
-  </entry>
   <release date="2019-08-13" version="5.8.8" />
   <entry date="2019-08-13" category="feature" action="add">
     <change>
