@@ -46,6 +46,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   public AbstractAjaxHandler ()
   {}
 
+  @Override
   @OverrideOnDemand
   public void registerExternalResources ()
   {
@@ -66,11 +67,13 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    *        The current request scope. Never <code>null</code>.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
+   *         if something goes wrong
    */
   @OverrideOnDemand
   @Nonnull
   protected abstract IAjaxResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
 
+  @Override
   @Nonnull
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public final IAjaxResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception

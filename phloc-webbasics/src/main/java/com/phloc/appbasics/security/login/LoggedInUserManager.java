@@ -114,52 +114,53 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       aOIS.defaultReadObject ();
 
       // Resolve user ID
-      if (m_sUserID != null)
+      if (this.m_sUserID != null)
       {
-        m_aUser = AccessManager.getInstance ().getUserOfID (m_sUserID);
-        if (m_aUser == null)
-          throw new IllegalStateException ("Failed to resolve user with ID '" + m_sUserID + "'");
+        this.m_aUser = AccessManager.getInstance ().getUserOfID (this.m_sUserID);
+        if (this.m_aUser == null)
+          throw new IllegalStateException ("Failed to resolve user with ID '" + this.m_sUserID + "'");
       }
 
       // Resolve manager
-      m_aOwningMgr = LoggedInUserManager.getInstance ();
+      this.m_aOwningMgr = LoggedInUserManager.getInstance ();
     }
 
+    @Override
     public void onSessionDidActivate (@Nonnull final ISessionWebScope aSessionScope)
     {
       // Finally remember that the user is logged in
-      m_aOwningMgr.internalActivateUser (m_aUser, aSessionScope);
+      this.m_aOwningMgr.internalActivateUser (this.m_aUser, aSessionScope);
     }
 
     boolean hasUser ()
     {
-      return m_aUser != null;
+      return this.m_aUser != null;
     }
 
     @Nullable
     String getUserID ()
     {
-      return m_sUserID;
+      return this.m_sUserID;
     }
 
     void setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
     {
       ValueEnforcer.notNull (aOwningMgr, "OwningMgr");
       ValueEnforcer.notNull (aUser, "User");
-      if (m_aUser != null)
+      if (this.m_aUser != null)
         throw new IllegalStateException ("Session already has a user!");
 
-      m_aOwningMgr = aOwningMgr;
-      m_aUser = aUser;
-      m_sUserID = aUser.getID ();
+      this.m_aOwningMgr = aOwningMgr;
+      this.m_aUser = aUser;
+      this.m_sUserID = aUser.getID ();
     }
 
     void _reset ()
     {
       // Reset to avoid access while or after logout
-      m_aUser = null;
-      m_sUserID = null;
-      m_aOwningMgr = null;
+      this.m_aUser = null;
+      this.m_sUserID = null;
+      this.m_aOwningMgr = null;
     }
 
     @Override
@@ -169,8 +170,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       // -> Ensure the user is logged out!
 
       // Remember stuff
-      final LoggedInUserManager aOwningMgr = m_aOwningMgr;
-      final String sUserID = m_sUserID;
+      final LoggedInUserManager aOwningMgr = this.m_aOwningMgr;
+      final String sUserID = this.m_sUserID;
 
       _reset ();
 
@@ -182,7 +183,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     @Override
     public String toString ()
     {
-      return ToStringGenerator.getDerived (super.toString ()).append ("userID", m_sUserID).toString ();
+      return ToStringGenerator.getDerived (super.toString ()).append ("userID", this.m_sUserID).toString ();
     }
   }
 
@@ -218,14 +219,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @ReturnsMutableCopy
   public List <IUserLoginCallback> getAllUserLoginCallbacks ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aUserLoginCallbacks);
+      return ContainerHelper.newList (this.m_aUserLoginCallbacks);
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -239,14 +240,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     ValueEnforcer.notNull (aUserLoginCallback, "UserLoginCallback");
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aUserLoginCallbacks.add (aUserLoginCallback);
+      this.m_aUserLoginCallbacks.add (aUserLoginCallback);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -263,14 +264,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     if (aUserLoginCallback == null)
       return EChange.UNCHANGED;
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      return EChange.valueOf (m_aUserLoginCallbacks.remove (aUserLoginCallback));
+      return EChange.valueOf (this.m_aUserLoginCallbacks.remove (aUserLoginCallback));
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -281,14 +282,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @ReturnsMutableCopy
   public List <IUserLogoutCallback> getAllUserLogoutCallbacks ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aUserLogoutCallbacks);
+      return ContainerHelper.newList (this.m_aUserLogoutCallbacks);
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -302,14 +303,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     ValueEnforcer.notNull (aUserLogoutCallback, "UserLogoutCallback");
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aUserLogoutCallbacks.add (aUserLogoutCallback);
+      this.m_aUserLogoutCallbacks.add (aUserLogoutCallback);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -318,6 +319,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * 
    * @param aUserLogoutCallback
    *        The new logout callback to be removed. May be <code>null</code>.
+   * @return Whether or not the call effectively triggered a change
    */
   @Nonnull
   public EChange removeUserLogoutCallback (@Nullable final IUserLogoutCallback aUserLogoutCallback)
@@ -325,14 +327,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     if (aUserLogoutCallback == null)
       return EChange.UNCHANGED;
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      return EChange.valueOf (m_aUserLogoutCallbacks.remove (aUserLogoutCallback));
+      return EChange.valueOf (this.m_aUserLogoutCallbacks.remove (aUserLogoutCallback));
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -395,7 +397,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
                          sUserID +
                          "," +
                          eLoginResult.toString () +
-                         ")", t);
+                         ")",
+                         t);
       }
     return eLoginResult;
   }
@@ -405,15 +408,15 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     ValueEnforcer.notNull (aUser, "User");
     ValueEnforcer.notNull (aSessionScope, "SessionScope");
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
       final LoginInfo aInfo = new LoginInfo (aUser, aSessionScope);
-      m_aLoggedInUsers.put (aUser.getID (), aInfo);
+      this.m_aLoggedInUsers.put (aUser.getID (), aInfo);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -474,10 +477,10 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     }
 
     LoginInfo aInfo;
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      if (m_aLoggedInUsers.containsKey (sUserID))
+      if (this.m_aLoggedInUsers.containsKey (sUserID))
       {
         // The user is already logged in
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
@@ -498,12 +501,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       }
 
       aInfo = new LoginInfo (aUser, ScopeManager.getSessionScope ());
-      m_aLoggedInUsers.put (sUserID, aInfo);
+      this.m_aLoggedInUsers.put (sUserID, aInfo);
       aSUH.setUser (this, aUser);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
 
     s_aLogger.info ("Logged in user '" + sUserID + "'");
@@ -518,10 +521,10 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       catch (final Throwable t)
       {
         s_aLogger.error ("Failed to invoke onUserLogin callback on " +
-                             aUserLoginCallback.toString () +
-                             "(" +
-                             aInfo.toString () +
-                             ")",
+                         aUserLoginCallback.toString () +
+                         "(" +
+                         aInfo.toString () +
+                         ")",
                          t);
       }
 
@@ -538,11 +541,11 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public EChange logoutUser (@Nullable final String sUserID)
   {
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     LoginInfo aInfo;
     try
     {
-      aInfo = m_aLoggedInUsers.remove (sUserID);
+      aInfo = this.m_aLoggedInUsers.remove (sUserID);
       if (aInfo == null)
       {
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
@@ -561,7 +564,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
 
     s_aLogger.info ("Logged out user '" +
@@ -579,10 +582,10 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       catch (final Throwable t)
       {
         s_aLogger.error ("Failed to invoke onUserLogout callback on " +
-                             aUserLogoutCallback.toString () +
-                             "(" +
-                             aInfo.toString () +
-                             ")",
+                         aUserLogoutCallback.toString () +
+                         "(" +
+                         aInfo.toString () +
+                         ")",
                          t);
       }
 
@@ -610,14 +613,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    */
   public boolean isUserLoggedIn (@Nullable final String sUserID)
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aLoggedInUsers.containsKey (sUserID);
+      return this.m_aLoggedInUsers.containsKey (sUserID);
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -629,14 +632,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @ReturnsMutableCopy
   public Set <String> getAllLoggedInUserIDs ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newSet (m_aLoggedInUsers.keySet ());
+      return ContainerHelper.newSet (this.m_aLoggedInUsers.keySet ());
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -650,14 +653,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nullable
   public LoginInfo getLoginInfo (@Nullable final String sUserID)
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aLoggedInUsers.get (sUserID);
+      return this.m_aLoggedInUsers.get (sUserID);
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -669,14 +672,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @ReturnsMutableCopy
   public Collection <LoginInfo> getAllLoginInfos ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aLoggedInUsers.values ());
+      return ContainerHelper.newList (this.m_aLoggedInUsers.values ());
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -686,14 +689,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnegative
   public int getLoggedInUserCount ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aLoggedInUsers.size ();
+      return this.m_aLoggedInUsers.size ();
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -701,6 +704,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * @return The ID of the user logged in this session or <code>null</code> if
    *         no user is logged in.
    */
+  @Override
   @Nullable
   public String getCurrentUserID ()
   {
@@ -741,9 +745,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("loggedInUsers", m_aLoggedInUsers)
-                            .appendIfNotEmpty ("userLoginCallbacks", m_aUserLoginCallbacks)
-                            .appendIfNotEmpty ("userLogoutCallbacks", m_aUserLogoutCallbacks)
+                            .append ("loggedInUsers", this.m_aLoggedInUsers)
+                            .appendIfNotEmpty ("userLoginCallbacks", this.m_aUserLoginCallbacks)
+                            .appendIfNotEmpty ("userLogoutCallbacks", this.m_aUserLogoutCallbacks)
                             .toString ();
   }
 }

@@ -46,31 +46,37 @@ import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
  * some responses. Checked things are status code, character encoding, content
  * type and some headers. This is mainly for debugging purposes.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public class CheckResponseFilter implements Filter
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CheckResponseFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger (CheckResponseFilter.class);
 
+  @Override
   public void init (@Nonnull final FilterConfig filterConfig) throws ServletException
   {}
 
   /**
    * @param sRequestURL
+   *        request URL
    * @param nStatusCode
+   *        status code
    */
   protected void checkStatusCode (@Nonnull final String sRequestURL, final int nStatusCode)
   {
     if (nStatusCode != HttpServletResponse.SC_OK &&
         nStatusCode < HttpServletResponse.SC_MULTIPLE_CHOICES &&
         nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
-      s_aLogger.warn ("Status code " + nStatusCode + " in response to '" + sRequestURL + "'");
+      LOG.warn ("Status code {} in response to '{}'", nStatusCode, sRequestURL);
   }
 
   /**
    * @param sRequestURL
+   *        request URL
    * @param sCharacterEncoding
+   *        character encoding
    * @param nStatusCode
+   *        status code
    */
   @OverrideOnDemand
   protected void checkCharacterEncoding (@Nonnull final String sRequestURL,
@@ -78,13 +84,16 @@ public class CheckResponseFilter implements Filter
                                          final int nStatusCode)
   {
     if (StringHelper.hasNoText (sCharacterEncoding) && !ResponseHelper.isEmptyStatusCode (nStatusCode))
-      s_aLogger.warn ("No character encoding on " + nStatusCode + " response to '" + sRequestURL + "'");
+      LOG.warn ("No character encoding on {} response to '{}'", nStatusCode, sRequestURL);
   }
 
   /**
    * @param sRequestURL
+   *        request URL
    * @param sContentType
+   *        content type
    * @param nStatusCode
+   *        status code
    */
   @OverrideOnDemand
   protected void checkContentType (@Nonnull final String sRequestURL,
@@ -92,7 +101,7 @@ public class CheckResponseFilter implements Filter
                                    final int nStatusCode)
   {
     if (StringHelper.hasNoText (sContentType) && !ResponseHelper.isEmptyStatusCode (nStatusCode))
-      s_aLogger.warn ("No content type on " + nStatusCode + " response to '" + sRequestURL + "'");
+      LOG.warn ("No content type on {} response to '{}'", nStatusCode, sRequestURL);
   }
 
   @OverrideOnDemand
@@ -101,7 +110,7 @@ public class CheckResponseFilter implements Filter
                                final int nStatusCode)
   {
     if (nStatusCode != HttpServletResponse.SC_OK && !aHeaders.isEmpty ())
-      s_aLogger.warn ("Headers on " + nStatusCode + " response to '" + sRequestURL + "': " + aHeaders);
+      LOG.warn ("Headers on {} response to '{}': {}", nStatusCode, sRequestURL, aHeaders);
   }
 
   private void _checkResults (@Nonnull final HttpServletRequest aHttpRequest,
@@ -119,6 +128,7 @@ public class CheckResponseFilter implements Filter
     checkHeaders (sRequestURL, aHeaders, nStatusCode);
   }
 
+  @Override
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,
                         final FilterChain aChain) throws IOException, ServletException
@@ -139,6 +149,7 @@ public class CheckResponseFilter implements Filter
     }
   }
 
+  @Override
   public void destroy ()
   {}
 }

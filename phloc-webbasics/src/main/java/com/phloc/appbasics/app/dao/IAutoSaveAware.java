@@ -65,6 +65,8 @@ public interface IAutoSaveAware
    * finally restores the initial state of the "automatic save" flag and tries
    * to write any pending changes.
    * 
+   * @param <RETURNTYPE>
+   *        Return type
    * @param aCallable
    *        The runnable to be executed. May not be <code>null</code>.
    * @return the result of the callable.

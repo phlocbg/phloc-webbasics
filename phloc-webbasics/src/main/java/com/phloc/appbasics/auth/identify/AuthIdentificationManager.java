@@ -50,7 +50,9 @@ public final class AuthIdentificationManager
   /**
    * Validate the login credentials, try to resolve the subject and create a
    * token upon success.
-   *
+   * 
+   * @param aDisplayLocale
+   *        The display locale
    * @param aCredentials
    *        The credentials to validate. If <code>null</code> it is treated as
    *        error.

@@ -41,7 +41,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   public ScopedFileMonitorManager ()
   {
     // Start monitoring files - spawn thread
-    m_aFMM.start ();
+    this.m_aFMM.start ();
   }
 
   @Nonnull
@@ -54,7 +54,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   protected void onDestroy ()
   {
     // Stop monitor thread
-    m_aFMM.stop ();
+    this.m_aFMM.stop ();
   }
 
   /**
@@ -64,25 +64,28 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    *         if the monitoring is already running
    * @see #isRunning()
    * @see #stop()
+   * @return Whether or not a state change was performed
    */
   @Nonnull
   public EChange start ()
   {
     if (isRunning ())
       return EChange.UNCHANGED;
-    m_aFMM.start ();
+    this.m_aFMM.start ();
     return EChange.CHANGED;
   }
 
   /**
    * Stops monitoring the files.
+   * 
+   * @return Whether or not a state change was performed
    */
   @Nonnull
   public EChange stop ()
   {
     if (!isRunning ())
       return EChange.UNCHANGED;
-    m_aFMM.stop ();
+    this.m_aFMM.stop ();
     return EChange.CHANGED;
   }
 
@@ -92,7 +95,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public boolean isRunning ()
   {
-    return m_aFMM.isRunning ();
+    return this.m_aFMM.isRunning ();
   }
 
   /**
@@ -102,7 +105,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public long getDelay ()
   {
-    return m_aFMM.getDelay ();
+    return this.m_aFMM.getDelay ();
   }
 
   /**
@@ -113,7 +116,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public void setDelay (final long nDelay)
   {
-    m_aFMM.setDelay (nDelay);
+    this.m_aFMM.setDelay (nDelay);
   }
 
   /**
@@ -123,7 +126,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public int getChecksPerRun ()
   {
-    return m_aFMM.getChecksPerRun ();
+    return this.m_aFMM.getChecksPerRun ();
   }
 
   /**
@@ -135,7 +138,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public void setChecksPerRun (final int nChecksPerRun)
   {
-    m_aFMM.setChecksPerRun (nChecksPerRun);
+    this.m_aFMM.setChecksPerRun (nChecksPerRun);
   }
 
   /**
@@ -149,7 +152,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   @Nonnull
   public FileMonitor createFileMonitor (@Nonnull final IFileListener aListener)
   {
-    return m_aFMM.createFileMonitor (aListener);
+    return this.m_aFMM.createFileMonitor (aListener);
   }
 
   /**
@@ -160,7 +163,7 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    */
   public void addFileMonitor (@Nonnull final FileMonitor aMonitor)
   {
-    m_aFMM.addFileMonitor (aMonitor);
+    this.m_aFMM.addFileMonitor (aMonitor);
   }
 
   /**
@@ -173,6 +176,6 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   @Nonnull
   public EChange removeFileMonitor (@Nullable final FileMonitor aMonitor)
   {
-    return m_aFMM.removeFileMonitor (aMonitor);
+    return this.m_aFMM.removeFileMonitor (aMonitor);
   }
 }

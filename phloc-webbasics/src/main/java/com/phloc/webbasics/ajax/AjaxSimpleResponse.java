@@ -27,9 +27,9 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.IJSON;
 
 /**
- * A simple AJAX response, based on an {@link IJson} value.
+ * A simple AJAX response, based on an {@link IJSON} value.
  *
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public class AjaxSimpleResponse implements IAjaxResponse

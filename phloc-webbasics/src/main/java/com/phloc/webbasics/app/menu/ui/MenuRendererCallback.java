@@ -70,14 +70,14 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
     ValueEnforcer.notNull (aRenderer, "Renderer");
     ValueEnforcer.notNull (aDisplayMenuItemIDs, "DisplayMenuItemIDs");
 
-    m_aSWEC = aSWEC;
-    m_aFactory = aFactory;
-    m_aMenuListStack = aMenuListStack;
-    m_aRenderer = aRenderer;
-    m_aDisplayMenuItemIDs = aDisplayMenuItemIDs;
+    this.m_aSWEC = aSWEC;
+    this.m_aFactory = aFactory;
+    this.m_aMenuListStack = aMenuListStack;
+    this.m_aRenderer = aRenderer;
+    this.m_aDisplayMenuItemIDs = aDisplayMenuItemIDs;
 
-    m_aChildCountStack.push (new AtomicInteger (0));
-    m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    this.m_aChildCountStack.push (new AtomicInteger (0));
+    this.m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
     // The selected item may be null if an invalid menu item ID was passed
   }
 
@@ -87,28 +87,28 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
     super.onLevelDown ();
 
     // Check if any child is visible
-    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aTreeItemStack.peek ();
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = this.m_aTreeItemStack.peek ();
     for (final DefaultTreeItemWithID <String, IMenuObject> aChildItem : aParentItem.getChildren ())
-      if (m_aDisplayMenuItemIDs.containsKey (aChildItem.getID ()))
+      if (this.m_aDisplayMenuItemIDs.containsKey (aChildItem.getID ()))
       {
         // add sub menu structure at the right place
-        final T aNewLevel = m_aFactory.create ();
-        m_aRenderer.onLevelDown (aNewLevel);
-        m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (aNewLevel));
+        final T aNewLevel = this.m_aFactory.create ();
+        this.m_aRenderer.onLevelDown (aNewLevel);
+        this.m_aMenuListStack.push (this.m_aMenuItemStack.peek ().addAndReturnChild (aNewLevel));
         break;
       }
 
-    m_aChildCountStack.push (new AtomicInteger (0));
+    this.m_aChildCountStack.push (new AtomicInteger (0));
   }
 
   @Override
   public final void onLevelUp ()
   {
-    final AtomicInteger aChildCount = m_aChildCountStack.pop ();
+    final AtomicInteger aChildCount = this.m_aChildCountStack.pop ();
     if (aChildCount.intValue () > 0)
     {
-      final T aLastLevel = m_aMenuListStack.pop ();
-      m_aRenderer.onLevelUp (aLastLevel);
+      final T aLastLevel = this.m_aMenuListStack.pop ();
+      this.m_aRenderer.onLevelUp (aLastLevel);
     }
     super.onLevelUp ();
   }
@@ -116,12 +116,12 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   @Override
   public final EHierarchyCallbackReturn onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
   {
-    m_aTreeItemStack.push (aItem);
+    this.m_aTreeItemStack.push (aItem);
 
-    final Boolean aExpandedState = m_aDisplayMenuItemIDs.get (aItem.getID ());
+    final Boolean aExpandedState = this.m_aDisplayMenuItemIDs.get (aItem.getID ());
     if (aExpandedState != null)
     {
-      final T aParent = m_aMenuListStack.peek ();
+      final T aParent = this.m_aMenuListStack.peek ();
       final IMenuObject aMenuObj = aItem.getData ();
       boolean bHasChildren = aItem.hasChildren ();
       if (bHasChildren)
@@ -129,7 +129,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
         // Check if the item has children to be displayed!
         boolean bHasDisplayChildren = false;
         for (final IMenuObject aChildMenuObj : aItem.getAllChildDatas ())
-          if (m_aDisplayMenuItemIDs.containsKey (aChildMenuObj.getID ()))
+          if (this.m_aDisplayMenuItemIDs.containsKey (aChildMenuObj.getID ()))
           {
             bHasDisplayChildren = true;
             break;
@@ -139,62 +139,62 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
-        final IHCNode aHCNode = m_aRenderer.renderSeparator (m_aSWEC, (IMenuSeparator) aMenuObj);
+        final IHCNode aHCNode = this.m_aRenderer.renderSeparator (this.m_aSWEC, (IMenuSeparator) aMenuObj);
         HCLI aLI;
         if (aHCNode instanceof HCLI)
           aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
         else
           aLI = aParent.addAndReturnItem (aHCNode);
-        m_aRenderer.onMenuSeparatorItem (m_aSWEC, aLI);
-        m_aMenuItemStack.push (aLI);
+        this.m_aRenderer.onMenuSeparatorItem (this.m_aSWEC, aLI);
+        this.m_aMenuItemStack.push (aLI);
       }
       else
       {
         final boolean bExpanded = aExpandedState.booleanValue ();
-        final boolean bSelected = aMenuObj.getID ().equals (m_sSelectedItem);
+        final boolean bSelected = aMenuObj.getID ().equals (this.m_sSelectedItem);
         if (aMenuObj instanceof IMenuItemPage)
         {
           // page item
-          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage (m_aSWEC,
-                                                                  (IMenuItemPage) aMenuObj,
-                                                                  bHasChildren,
-                                                                  bSelected,
-                                                                  bExpanded);
+          final IHCNode aHCNode = this.m_aRenderer.renderMenuItemPage (this.m_aSWEC,
+                                                                       (IMenuItemPage) aMenuObj,
+                                                                       bHasChildren,
+                                                                       bSelected,
+                                                                       bExpanded);
           HCLI aLI;
           if (aHCNode instanceof HCLI)
             aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
           else
             aLI = aParent.addAndReturnItem (aHCNode);
-          m_aRenderer.onMenuItemPageItem (m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
-          m_aMenuItemStack.push (aLI);
+          this.m_aRenderer.onMenuItemPageItem (this.m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
+          this.m_aMenuItemStack.push (aLI);
         }
         else
           if (aMenuObj instanceof IMenuItemExternal)
           {
             // external item
-            final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal (m_aSWEC,
-                                                                        (IMenuItemExternal) aMenuObj,
-                                                                        bHasChildren,
-                                                                        bSelected,
-                                                                        bExpanded);
+            final IHCNode aHCNode = this.m_aRenderer.renderMenuItemExternal (this.m_aSWEC,
+                                                                             (IMenuItemExternal) aMenuObj,
+                                                                             bHasChildren,
+                                                                             bSelected,
+                                                                             bExpanded);
             HCLI aLI;
             if (aHCNode instanceof HCLI)
               aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
             else
               aLI = aParent.addAndReturnItem (aHCNode);
-            m_aRenderer.onMenuItemExternalItem (m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
-            m_aMenuItemStack.push (aLI);
+            this.m_aRenderer.onMenuItemExternalItem (this.m_aSWEC, aLI, bHasChildren, bSelected, bExpanded);
+            this.m_aMenuItemStack.push (aLI);
           }
           else
             throw new IllegalStateException ("Unsupported menu object type: " + aMenuObj);
       }
-      m_aChildCountStack.peek ().incrementAndGet ();
+      this.m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;
     }
 
     // Item should not be displayed
     // push fake item so the pop does not remove anything important!
-    m_aMenuItemStack.push (new HCLI ());
+    this.m_aMenuItemStack.push (new HCLI ());
     return EHierarchyCallbackReturn.USE_NEXT_SIBLING;
   }
 
@@ -202,17 +202,22 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   @Nonnull
   public final EHierarchyCallbackReturn onItemAfterChildren (final DefaultTreeItemWithID <String, IMenuObject> aItem)
   {
-    m_aTreeItemStack.pop ();
-    m_aMenuItemStack.pop ();
+    this.m_aTreeItemStack.pop ();
+    this.m_aMenuItemStack.pop ();
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
   /**
    * Render the whole menu
    * 
+   * @param <T>
+   *        object type handled by the factory and renderer
    * @param aLEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
+   * @param aFactory
+   *        The factory to be used to create nodes of type T. May not be
+   *        <code>null</code>.
    * @param aRenderer
    *        The renderer to use
    * @return Never <code>null</code>.
@@ -234,9 +239,14 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render a part of the menu
    * 
+   * @param <T>
+   *        object type handled by the factory and renderer
    * @param aLEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
+   * @param aFactory
+   *        The factory to be used to create nodes of type T. May not be
+   *        <code>null</code>.
    * @param aStartTreeItem
    *        The start tree to iterate
    * @param aRenderer
@@ -261,9 +271,14 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render the whole menu
    * 
+   * @param <T>
+   *        object type handled by the factory and renderer
    * @param aLEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
+   * @param aFactory
+   *        The factory to be used to create nodes of type T. May not be
+   *        <code>null</code>.
    * @param aRenderer
    *        The renderer to use
    * @param aDisplayMenuItemIDs
@@ -283,6 +298,8 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render a part of the menu
    * 
+   * @param <T>
+   *        object type handled by the factory and renderer
    * @param aSWEC
    *        The current layout execution context. Required for cookie-less
    *        handling. May not be <code>null</code>.
@@ -309,11 +326,12 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
 
     final NonBlockingStack <T> aNodeStack = new NonBlockingStack <T> ();
     aNodeStack.push (aFactory.create ());
-    TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aSWEC,
-                                                                                 aFactory,
-                                                                                 aNodeStack,
-                                                                                 aRenderer,
-                                                                                 aDisplayMenuItemIDs));
+    TreeWalkerDynamic.walkSubTree (aStartTreeItem,
+                                   new MenuRendererCallback <T> (aSWEC,
+                                                                 aFactory,
+                                                                 aNodeStack,
+                                                                 aRenderer,
+                                                                 aDisplayMenuItemIDs));
     if (aNodeStack.size () != 1)
       throw new IllegalStateException ("Stack is inconsistent: " + aNodeStack);
 

@@ -76,7 +76,9 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   /**
    * Get the state with the passed ID for the current session. In case the state
    * is a {@link UIStateWrapper} instance, it is returned as is.
-   *
+   * 
+   * @param aOT
+   *        The ObjectType to be resolved. May be <code>null</code>.
    * @param sStateID
    *        The state ID to be searched
    * @return the {@link IHasUIState} for the specified control ID, if already
@@ -90,13 +92,13 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     if (StringHelper.hasNoText (sStateID))
       return null;
 
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
       IHasUIState ret = null;
 
       // Get mapping for requested ObjectType
-      final Map <String, IHasUIState> aMap = m_aMap.get (aOT);
+      final Map <String, IHasUIState> aMap = this.m_aMap.get (aOT);
       if (aMap != null)
       {
         // Lookup control ID for this object type
@@ -116,7 +118,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -124,6 +126,8 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
    * Get the state object in the specified type. If the saved state is a
    * {@link UIStateWrapper} instance, the contained value is returned!
    *
+   * @param <T>
+   *        The expected state type
    * @param aOT
    *        The ObjectType to be resolved. May be <code>null</code>.
    * @param sStateID
@@ -168,14 +172,14 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     if (aOT == null)
       throw new IllegalStateException ("Object has no typeID: " + aNewState);
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      Map <String, IHasUIState> aMap = m_aMap.get (aOT);
+      Map <String, IHasUIState> aMap = this.m_aMap.get (aOT);
       if (aMap == null)
       {
         aMap = new HashMap <String, IHasUIState> ();
-        m_aMap.put (aOT, aMap);
+        this.m_aMap.put (aOT, aMap);
       }
 
       if (s_aLogger.isDebugEnabled () && aMap.containsKey (sStateID))
@@ -186,7 +190,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -220,17 +224,17 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   {
     ValueEnforcer.notEmpty (sStateID, "StateID");
 
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      final Map <String, IHasUIState> aMap = m_aMap.get (aObjectType);
+      final Map <String, IHasUIState> aMap = this.m_aMap.get (aObjectType);
       if (aMap == null)
         return EChange.UNCHANGED;
       return EChange.valueOf (aMap.remove (sStateID) != null);
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -242,18 +246,18 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     if (!(o instanceof UIStateRegistry))
       return false;
     final UIStateRegistry rhs = (UIStateRegistry) o;
-    return m_aMap.equals (rhs.m_aMap);
+    return this.m_aMap.equals (rhs.m_aMap);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aMap).getHashCode ();
+    return new HashCodeGenerator (this).append (this.m_aMap).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("map", m_aMap).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("map", this.m_aMap).toString ();
   }
 }

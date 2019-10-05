@@ -130,19 +130,21 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
     super (sID, aName, aDescription);
   }
 
+  @Override
   @Nullable
   public IWebPageIcon getIcon ()
   {
-    return m_aIcon;
+    return this.m_aIcon;
   }
 
   @Nonnull
   public AbstractWebPage <WPECTYPE> setIcon (@Nullable final IWebPageIcon aIcon)
   {
-    m_aIcon = aIcon;
+    this.m_aIcon = aIcon;
     return this;
   }
 
+  @Override
   @Nullable
   @OverrideOnDemand
   public String getHeaderText (@Nonnull final WPECTYPE aWPEC)
@@ -150,6 +152,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
     return getDisplayText (aWPEC.getDisplayLocale ());
   }
 
+  @Override
   @Nullable
   @OverrideOnDemand
   public IHCNode getHeaderNode (@Nonnull final WPECTYPE aWPEC)
@@ -177,6 +180,8 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
   }
 
   /**
+   * @param aLEC
+   *        layout execution context
    * @return A form that links to the current page.
    */
   @Nonnull
@@ -198,6 +203,8 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
   }
 
   /**
+   * @param aLEC
+   *        layout execution context
    * @return A file upload form that links to the current page.
    */
   @Nonnull
@@ -329,6 +336,7 @@ public abstract class AbstractWebPage <WPECTYPE extends IWebPageExecutionContext
    * {@link #fillContent(IWebPageExecutionContext)} method and creating the help
    * node if desired.
    */
+  @Override
   public final void getContent (@Nonnull final WPECTYPE aWPEC)
   {
     if (isValidToDisplayPage (aWPEC).isValid ())

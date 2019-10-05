@@ -373,6 +373,8 @@ public final class LinkUtils
    *
    * @param sHRef
    *        The href to be extended.
+   * @param aParams
+   *        Optional parameters
    * @return Either the original href if already absolute or
    *         <code>http://servername:8123/webapp-context/<i>href</i></code>
    *         otherwise.
@@ -394,6 +396,8 @@ public final class LinkUtils
    *        May not be <code>null</code>.
    * @param sHRef
    *        The href to be extended.
+   * @param aParams
+   *        Optional parameters
    * @return Either the original href if already absolute or
    *         <code>http://servername:8123/webapp-context/<i>href</i></code>
    *         otherwise.
@@ -606,6 +610,8 @@ public final class LinkUtils
   }
 
   /**
+   * @param aLEC
+   *        layout execution context
    * @return A map with the default parameters handled by the application
    *         framework. This currently consists of the selected menu item ID and
    *         the current display locale. Never <code>null</code> nor empty.

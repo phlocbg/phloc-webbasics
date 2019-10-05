@@ -75,8 +75,8 @@ public final class PerRequestCSSIncludes
   /**
    * Register all passed JS items only for this request
    * 
-   * @param aJSPathProvider
-   *        The JS path provider to use. May not be <code>null</code>.
+   * @param aCSSPathProviders
+   *        The CSS path provider to use. May not be <code>null</code>.
    */
   public static void registerCSSIncludesForThisRequest (@Nonnull final Set <ICSSPathProvider> aCSSPathProviders)
   {

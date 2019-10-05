@@ -42,6 +42,7 @@ public abstract class AbstractAjaxHandlerWithContext <LECTYPE extends ILayoutExe
    *        The layout execution context. Never <code>null</code>.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
+   *         if something goes wrong
    */
   @OverrideOnDemand
   @Nonnull

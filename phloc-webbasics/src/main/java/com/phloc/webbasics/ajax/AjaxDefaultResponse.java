@@ -50,6 +50,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 @Immutable
 public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements IAjaxResponse
 {
+  private static final long serialVersionUID = 6050693354636525867L;
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success"; //$NON-NLS-1$
   /**
@@ -63,7 +64,9 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   public static final String PROPERTY_EXTERNAL_CSS = "externalcss"; //$NON-NLS-1$
   /** Additional inline CSS - only in case of success - contains a string */
   public static final String PROPERTY_INLINE_CSS = "inlinecss"; //$NON-NLS-1$
-  /** Additional JS files - only in case of success - contains a list of strings */
+  /**
+   * Additional JS files - only in case of success - contains a list of strings
+   */
   public static final String PROPERTY_EXTERNAL_JS = "externaljs"; //$NON-NLS-1$
   /** Additional inline JS - only in case of success - contains a string */
   public static final String PROPERTY_INLINE_JS = "inlinejs"; //$NON-NLS-1$
@@ -106,9 +109,13 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   /**
    * Success constructor for HC nodes
-   *
+   * 
+   * @param aRequestScope
+   *        Request scope
    * @param aNode
    *        The response HTML node. May be <code>null</code>.
+   * @param aConverter
+   *        the converter to use
    */
   protected AjaxDefaultResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                  @Nullable final IHCNode aNode,
@@ -270,7 +277,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("success", this.m_bSuccess) //$NON-NLS-1$
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("success", this.m_bSuccess) //$NON-NLS-1$
                             .appendIfNotNull ("errorMsg", this.m_sErrorMessage) //$NON-NLS-1$
                             .appendIfNotNull ("successValue", this.m_aSuccessValue) //$NON-NLS-1$
                             .toString ();

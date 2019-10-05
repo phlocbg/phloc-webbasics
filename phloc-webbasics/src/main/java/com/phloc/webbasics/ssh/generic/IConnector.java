@@ -41,6 +41,8 @@ public interface IConnector <HANDLETYPE>
    * A shortcut for
    * {@link IConnectionDestination#openConnection(IAuthCredentials)}.
    * 
+   * @param aCredentials
+   *        credentials to use, may not be <code>null</code>
    * @return {@link EChange}
    */
   @Nonnull

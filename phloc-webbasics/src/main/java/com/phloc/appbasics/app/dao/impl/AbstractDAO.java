@@ -303,6 +303,8 @@ public abstract class AbstractDAO implements IDAO
    * Execute a callback with autosave being disabled. Must be called outside a
    * writeLock, as this method locks itself!
    * 
+   * @param <RETURNTYPE>
+   *        Return type
    * @param aCallable
    *        The callback to be executed
    * @return The result of the callback. May be <code>null</code>.
