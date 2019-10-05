@@ -60,7 +60,7 @@ public class HCFacebookSDK extends HCNodeList
   {
     if (isIncludedInRequest ())
     {
-      LOG.info ("FB SDK already included!"); //$NON-NLS-1$
+      LOG.debug ("FB SDK already included!"); //$NON-NLS-1$
       return;
     }
     addChild (new HCDiv ().setID (FB_ROOT_ID));

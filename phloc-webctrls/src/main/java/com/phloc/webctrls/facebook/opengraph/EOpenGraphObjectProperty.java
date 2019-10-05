@@ -58,6 +58,12 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
   * resolution available.
   */
  IMAGE ("image"),
+
+ IMAGE_WIDTH ("image:width"),
+
+ IMAGE_HEIGHT ("image:height"),
+
+ IMAGE_TYPE ("image:type"),
  /**
   * The object type for this object - to see what the type is for your og:type,
   * go to the Open Graph section of the App Dashboard, click on Types, choose

@@ -27,6 +27,7 @@ import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.request.IHCRequestField;
@@ -52,6 +53,7 @@ public class HCDateEdit implements IHCNodeBuilder
   private final HCEdit m_aEdit;
   private boolean m_bShowTime = false;
   private final Locale m_aLocale;
+  private IJSExpression m_aOnUpdate;
 
   public HCDateEdit (@Nonnull final RequestFieldDate aRFD)
   {
@@ -70,50 +72,63 @@ public class HCDateEdit implements IHCNodeBuilder
 
   public HCDateEdit (final String sName, final String sValue, final String sID, final Locale aDisplayLocale)
   {
-    m_aEdit = new HCEdit (sName, sValue);
-    m_aEdit.setID (sID);
-    m_aLocale = aDisplayLocale;
+    this.m_aEdit = new HCEdit (sName, sValue);
+    this.m_aEdit.setID (sID);
+    this.m_aEdit.setDisableAutoComplete (true);
+    this.m_aLocale = aDisplayLocale;
   }
 
   @Nonnull
   public HCDateEdit setMaxLength (final int nMaxLength)
   {
-    m_aEdit.setMaxLength (nMaxLength);
+    this.m_aEdit.setMaxLength (nMaxLength);
     return this;
   }
 
   @Nonnull
   public HCEdit getEdit ()
   {
-    return m_aEdit;
+    return this.m_aEdit;
+  }
+
+  public HCDateEdit setOnUpdate (final IJSExpression aOnUpdate)
+  {
+    this.m_aOnUpdate = aOnUpdate;
+    return this;
   }
 
   @Nonnull
   public HCDateEdit setShowTime (final boolean bShowTime)
   {
-    m_bShowTime = bShowTime;
+    this.m_bShowTime = bShowTime;
     return this;
   }
 
+  @Override
   @Nonnull
   public HCNodeList build ()
   {
-    registerExternalResources (m_aLocale);
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
-                                                                               : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
+    registerExternalResources (this.m_aLocale);
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (this.m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (this.m_aLocale)
+                                                                                     : PDTFormatPatterns.getDefaultPatternDate (this.m_aLocale))
                                                   .getJSCalendarFormatString ();
 
     final HCNodeList ret = new HCNodeList ();
-    ret.addChild (m_aEdit);
-    ret.addChild (new HCScript (JSExpr.ref ("Calendar")
-                                      .invoke ("setup")
-                                      .arg (new JSAssocArray ().add ("inputField", m_aEdit.getID ())
-                                                               .add ("ifFormat", sFormatString)
-                                                               .add ("daFormat", sFormatString)
-                                                               .add ("eventName", "focus")
-                                                               .add ("cache", true)
-                                                               .add ("step", 1)
-                                                               .add ("showsTime", m_bShowTime))));
+    ret.addChild (this.m_aEdit);
+
+    final JSAssocArray aSetupParams = new JSAssocArray ().add ("inputField", this.m_aEdit.getID ())
+                                                         .add ("ifFormat", sFormatString)
+                                                         .add ("daFormat", sFormatString)
+                                                         .add ("eventName", "focus")
+                                                         .add ("cache", true)
+                                                         .add ("step", 1)
+                                                         .add ("showsTime", this.m_bShowTime);
+    if (this.m_aOnUpdate != null)
+    {
+      aSetupParams.add ("onUpdate", this.m_aOnUpdate);
+    }
+
+    ret.addChild (new HCScript (JSExpr.ref ("Calendar").invoke ("setup").arg (aSetupParams)));
     return ret;
   }
 

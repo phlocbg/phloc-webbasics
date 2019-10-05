@@ -26,10 +26,14 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
+import com.phloc.webscopes.domain.IRequestWebScope;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 public class ServletRedirectIndicatorException extends RuntimeException
 {
-  private final ISimpleURL m_aURL;
+  private static final long serialVersionUID = -5799532978827403454L;
+  private final SimpleURL m_aURL;
   private final Map <String, Object> m_aRequestParams;
 
   public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL)
@@ -40,20 +44,37 @@ public class ServletRedirectIndicatorException extends RuntimeException
   public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL,
                                             @Nullable final Map <String, Object> aRequestParams)
   {
-    m_aURL = ValueEnforcer.notNull (aURL, "URL");
-    m_aRequestParams = aRequestParams;
+    this.m_aURL = new SimpleURL (ValueEnforcer.notNull (aURL, "URL"));
+    final IRequestWebScope aRequest = WebScopeManager.getRequestScopeOrNull ();
+    this.m_aRequestParams = ContainerHelper.newMap ();
+    if (aRequest != null)
+    {
+      final ServletRedirectParameterStrategy aStrat = ServletRedirectParameterStrategy.getInstance ();
+      for (final Map.Entry <String, Object> aExisting : aRequest.getAllAttributes ().entrySet ())
+      {
+        if (aStrat.isCopyOnRedirect (aExisting.getKey ()))
+        {
+          this.m_aRequestParams.put (aExisting.getKey (), aExisting.getValue ());
+          this.m_aURL.add (aExisting.getKey (), String.valueOf (aExisting.getValue ()));
+        }
+      }
+    }
+    if (aRequestParams != null)
+    {
+      this.m_aRequestParams.putAll (aRequestParams);
+    }
   }
 
   @Nonnull
   public ISimpleURL getURL ()
   {
-    return m_aURL;
+    return this.m_aURL;
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, Object> getRequestParams ()
   {
-    return ContainerHelper.newMap (m_aRequestParams);
+    return ContainerHelper.newMap (this.m_aRequestParams);
   }
 }

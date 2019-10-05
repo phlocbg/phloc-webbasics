@@ -70,7 +70,7 @@ public abstract class AbstractDAO implements IDAO
 
   protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
   {
-    m_aIO = ValueEnforcer.notNull (aDAOIO, "DAOIO");
+    this.m_aIO = ValueEnforcer.notNull (aDAOIO, "DAOIO");
   }
 
   /**
@@ -144,7 +144,7 @@ public abstract class AbstractDAO implements IDAO
   @Nonnull
   protected final IDAOIO getIO ()
   {
-    return m_aIO;
+    return this.m_aIO;
   }
 
   /**
@@ -154,30 +154,31 @@ public abstract class AbstractDAO implements IDAO
   @MustBeLocked (ELockType.READ)
   protected final boolean internalIsAutoSaveEnabled ()
   {
-    return m_bAutoSaveEnabled;
+    return this.m_bAutoSaveEnabled;
   }
 
   /**
    * @return <code>true</code> if auto save is enabled, <code>false</code>
    *         otherwise.
    */
+  @Override
   public final boolean isAutoSaveEnabled ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return m_bAutoSaveEnabled;
+      return this.m_bAutoSaveEnabled;
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
   @MustBeLocked (ELockType.WRITE)
   public final void internalSetPendingChanges (final boolean bPendingChanges)
   {
-    m_bPendingChanges = bPendingChanges;
+    this.m_bPendingChanges = bPendingChanges;
   }
 
   /**
@@ -186,53 +187,56 @@ public abstract class AbstractDAO implements IDAO
   @MustBeLocked (ELockType.READ)
   public final boolean internalHasPendingChanges ()
   {
-    return m_bPendingChanges;
+    return this.m_bPendingChanges;
   }
 
   /**
    * @return <code>true</code> if unsaved changes are present
    */
+  @Override
   public final boolean hasPendingChanges ()
   {
-    m_aRWLock.readLock ().lock ();
+    this.m_aRWLock.readLock ().lock ();
     try
     {
-      return m_bPendingChanges;
+      return this.m_bPendingChanges;
     }
     finally
     {
-      m_aRWLock.readLock ().unlock ();
+      this.m_aRWLock.readLock ().unlock ();
     }
   }
 
+  @Override
   public final void beginWithoutAutoSave ()
   {
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
       // Save old auto save state
-      m_aAutoSaveStack.push (Boolean.valueOf (m_bAutoSaveEnabled));
-      m_bAutoSaveEnabled = false;
+      this.m_aAutoSaveStack.push (Boolean.valueOf (this.m_bAutoSaveEnabled));
+      this.m_bAutoSaveEnabled = false;
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
   }
 
+  @Override
   public final void endWithoutAutoSave ()
   {
     // Restore previous auto save state
     boolean bPreviouslyAutoSaveEnabled;
-    m_aRWLock.writeLock ().lock ();
+    this.m_aRWLock.writeLock ().lock ();
     try
     {
-      bPreviouslyAutoSaveEnabled = m_aAutoSaveStack.pop ().booleanValue ();
-      m_bAutoSaveEnabled = bPreviouslyAutoSaveEnabled;
+      bPreviouslyAutoSaveEnabled = this.m_aAutoSaveStack.pop ().booleanValue ();
+      this.m_bAutoSaveEnabled = bPreviouslyAutoSaveEnabled;
     }
     finally
     {
-      m_aRWLock.writeLock ().unlock ();
+      this.m_aRWLock.writeLock ().unlock ();
     }
 
     if (bPreviouslyAutoSaveEnabled)
@@ -249,6 +253,7 @@ public abstract class AbstractDAO implements IDAO
    * @param aRunnable
    *        The callback to be executed
    */
+  @Override
   public final void performWithoutAutoSave (@Nonnull final INonThrowingRunnable aRunnable)
   {
     performWithoutAutoSave (AdapterRunnableToCallable.createAdapter (aRunnable));
@@ -262,6 +267,7 @@ public abstract class AbstractDAO implements IDAO
    *        The callback to be executed
    * @return The result of the callback. May be <code>null</code>.
    */
+  @Override
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
@@ -323,10 +329,10 @@ public abstract class AbstractDAO implements IDAO
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("IO", m_aIO)
-                                       .append ("autoSaveStack", m_aAutoSaveStack)
-                                       .append ("pendingChanges", m_bPendingChanges)
-                                       .append ("autoSaveEnabled", m_bAutoSaveEnabled)
+    return new ToStringGenerator (this).append ("IO", this.m_aIO)
+                                       .append ("autoSaveStack", this.m_aAutoSaveStack)
+                                       .append ("pendingChanges", this.m_bPendingChanges)
+                                       .append ("autoSaveEnabled", this.m_bAutoSaveEnabled)
                                        .toString ();
   }
 }
