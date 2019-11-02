@@ -55,26 +55,40 @@ public class HCFormLabel extends HCLabel implements IFormLabel
   {
     _assignClasses (eType);
     addChild (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)));
-    m_eType = eType;
+    this.m_eType = eType;
+  }
+
+  public HCFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType, final boolean bAppendCColon)
+  {
+    _assignClasses (eType);
+    addChild (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType, bAppendCColon)));
+    this.m_eType = eType;
   }
 
   public HCFormLabel (@Nonnull final IHCNodeWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
     _assignClasses (eType);
     addChild (HCFormLabelUtils.getNodeWithState (aNode, eType));
-    m_eType = eType;
+    this.m_eType = eType;
   }
 
+  @Override
   @Nonnull
   public ELabelType getType ()
   {
-    return m_eType;
+    return this.m_eType;
   }
 
   @Nonnull
   public static HCFormLabel create (@Nonnull final String sText)
   {
     return new HCFormLabel (sText, ELabelType.DEFAULT);
+  }
+
+  @Nonnull
+  public static HCFormLabel create (@Nonnull final String sText, final boolean bAppendColon)
+  {
+    return new HCFormLabel (sText, ELabelType.DEFAULT, bAppendColon);
   }
 
   @Nonnull

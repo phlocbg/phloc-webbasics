@@ -63,6 +63,20 @@ public final class HCFormLabelUtils
   @Nonnull
   public static String getTextWithState (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
+
+    ValueEnforcer.notNull (sText, "Text");
+    ValueEnforcer.notNull (eType, "Type");
+
+    // Trim optional trailing colon
+    final String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
+    return getTextWithState (sText, eType, !StringHelper.endsWith (sPlainText, '?'));
+  }
+
+  @Nonnull
+  public static String getTextWithState (@Nonnull final String sText,
+                                         @Nonnull final ELabelType eType,
+                                         final boolean bAppendColon)
+  {
     ValueEnforcer.notNull (sText, "Text");
     ValueEnforcer.notNull (eType, "Type");
 
@@ -70,7 +84,7 @@ public final class HCFormLabelUtils
     String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
     // Append suffix only, if at least some text is present
     if (StringHelper.hasText (sPlainText))
-      sPlainText += getSuffix (eType, !StringHelper.endsWith (sPlainText, '?'));
+      sPlainText += getSuffix (eType, bAppendColon);
     return sPlainText;
   }
 
