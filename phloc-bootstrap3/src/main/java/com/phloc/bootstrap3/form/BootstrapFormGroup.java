@@ -53,6 +53,12 @@ public class BootstrapFormGroup
   }
 
   @Nonnull
+  public final BootstrapFormGroup setLabel (@Nullable final String sLabel, final boolean bAppendColon)
+  {
+    return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel, bAppendColon));
+  }
+
+  @Nonnull
   public final BootstrapFormGroup setLabel (@Nullable final String sLabel, @Nonnull final ELabelType eLabelType)
   {
     return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel, eLabelType));
