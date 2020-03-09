@@ -21,7 +21,7 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   
-  <release date="2020-03-09" version="5.8.10" />
+  <release date="2020-03-09" version="5.9.0" />
   <entry date="2020-03-09" category="feature" action="add">
     <change>
       <text locale="en">WEB-1: Basic Auth: configurable character set</text>
