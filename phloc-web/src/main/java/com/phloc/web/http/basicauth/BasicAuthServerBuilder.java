@@ -29,10 +29,13 @@ import com.phloc.web.http.HTTPStringHelper;
 @NotThreadSafe
 public class BasicAuthServerBuilder implements Serializable
 {
+  private static final long serialVersionUID = 1503965302673721563L;
   private String m_sRealm;
 
   public BasicAuthServerBuilder ()
-  {}
+  {
+    // private
+  }
 
   /**
    * Set the realm to be used.
@@ -46,15 +49,15 @@ public class BasicAuthServerBuilder implements Serializable
   public BasicAuthServerBuilder setRealm (@Nonnull final String sRealm)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
-      throw new IllegalArgumentException ("realm is invalid: " + sRealm);
+      throw new IllegalArgumentException ("realm is invalid: " + sRealm); //$NON-NLS-1$
 
-    m_sRealm = sRealm;
+    this.m_sRealm = sRealm;
     return this;
   }
 
   public boolean isValid ()
   {
-    return m_sRealm != null;
+    return this.m_sRealm != null;
   }
 
   @Nonnull
@@ -62,16 +65,20 @@ public class BasicAuthServerBuilder implements Serializable
   public String build ()
   {
     if (!isValid ())
-      throw new IllegalStateException ("Built Basic auth is not valid!");
+    {
+      throw new IllegalStateException ("Built Basic auth is not valid!"); //$NON-NLS-1$
+    }
     final StringBuilder ret = new StringBuilder (HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC);
-    if (m_sRealm != null)
-      ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
+    if (this.m_sRealm != null)
+    {
+      ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (this.m_sRealm)); //$NON-NLS-1$
+    }
     return ret.toString ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("realm", m_sRealm).toString ();
+    return new ToStringGenerator (this).append ("realm", this.m_sRealm).toString (); //$NON-NLS-1$
   }
 }

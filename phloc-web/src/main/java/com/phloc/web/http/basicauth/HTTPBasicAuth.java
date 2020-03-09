@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.regex.RegExHelper;
@@ -39,22 +38,42 @@ import com.phloc.web.http.digestauth.HTTPDigestAuth;
 /**
  * Handling for HTTP Basic Authentication
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public final class HTTPBasicAuth
 {
-  public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
+  public static final String HEADER_VALUE_PREFIX_BASIC = "Basic"; //$NON-NLS-1$
   static final char USERNAME_PASSWORD_SEPARATOR = ':';
-  static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (HTTPDigestAuth.class);
+  private static final Charset DEFAULT_CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
+  private static Charset s_aCustomCharset = null;
 
-  @SuppressWarnings ("unused")
-  @PresentForCodeCoverage
-  private static final HTTPBasicAuth s_aInstance = new HTTPBasicAuth ();
+  private static final Logger LOG = LoggerFactory.getLogger (HTTPDigestAuth.class);
 
   private HTTPBasicAuth ()
-  {}
+  {
+    // private
+  }
+
+  @Nonnull
+  protected static Charset getCharset ()
+  {
+    return s_aCustomCharset == null ? DEFAULT_CHARSET : s_aCustomCharset;
+  }
+
+  /**
+   * Sets the passed character set as the one to be used for encoding basic
+   * authentication credentials (default: ISO-8859-1)
+   * 
+   * @param aCustomCharset
+   *        The character set to use, pass <code>null</code> to restore the
+   *        default
+   */
+  public static void setCustomCharset (@Nullable final Charset aCustomCharset)
+  {
+    LOG.info ("Setting BASIC AUTH charset to {}", aCustomCharset == null ? DEFAULT_CHARSET : aCustomCharset); //$NON-NLS-1$
+    s_aCustomCharset = aCustomCharset;
+  }
 
   /**
    * Get the Basic authentication credentials from the passed HTTP servlet
@@ -68,7 +87,7 @@ public final class HTTPBasicAuth
   @Nullable
   public static BasicAuthClientCredentials getBasicAuthClientCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
 
     final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
     return getBasicAuthClientCredentials (sHeaderValue);
@@ -89,33 +108,35 @@ public final class HTTPBasicAuth
     if (StringHelper.hasNoText (sRealHeader))
       return null;
 
-    final String [] aElements = RegExHelper.getSplitToArray (sRealHeader, "\\s+", 2);
+    final String [] aElements = RegExHelper.getSplitToArray (sRealHeader, "\\s+", 2); //$NON-NLS-1$
     if (aElements.length != 2)
     {
-      s_aLogger.error ("String is not Basic Auth");
+      LOG.error ("String is not Basic Auth"); //$NON-NLS-1$
       return null;
     }
 
     if (!aElements[0].equals (HEADER_VALUE_PREFIX_BASIC))
     {
-      s_aLogger.error ("String does not start with 'Basic'");
+      LOG.error ("String does not start with 'Basic'"); //$NON-NLS-1$
       return null;
     }
 
     // Apply Base64 decoding
     final String sEncodedCredentials = aElements[1];
-    final String sUsernamePassword = Base64Helper.safeDecodeAsString (sEncodedCredentials, CHARSET);
+    final String sUsernamePassword = Base64Helper.safeDecodeAsString (sEncodedCredentials, getCharset ());
     if (sUsernamePassword == null)
     {
-      s_aLogger.error ("Illegal Base64 encoded value '" + sEncodedCredentials + "'");
+      LOG.error ("Illegal Base64 encoded value '{}'", sEncodedCredentials); //$NON-NLS-1$
       return null;
     }
 
     // Do we have a username/password separator?
     final int nIndex = sUsernamePassword.indexOf (USERNAME_PASSWORD_SEPARATOR);
     if (nIndex >= 0)
+    {
       return new BasicAuthClientCredentials (sUsernamePassword.substring (0, nIndex),
                                              sUsernamePassword.substring (nIndex + 1));
+    }
     return new BasicAuthClientCredentials (sUsernamePassword);
   }
 }

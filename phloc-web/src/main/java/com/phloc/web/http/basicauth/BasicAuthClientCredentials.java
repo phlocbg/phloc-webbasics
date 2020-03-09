@@ -18,6 +18,7 @@
 package com.phloc.web.http.basicauth;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,11 +35,12 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Credentials for HTTP basic authentication
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public class BasicAuthClientCredentials implements Serializable
 {
+  private static final long serialVersionUID = -5973068742749421254L;
   private final String m_sUserName;
   private final String m_sPassword;
 
@@ -64,9 +66,9 @@ public class BasicAuthClientCredentials implements Serializable
    */
   public BasicAuthClientCredentials (@Nonnull @Nonempty final String sUserName, @Nullable final String sPassword)
   {
-    m_sUserName = ValueEnforcer.notEmpty (sUserName, "UserName");
+    this.m_sUserName = ValueEnforcer.notEmpty (sUserName, "UserName"); //$NON-NLS-1$
     // No difference between null and empty string
-    m_sPassword = StringHelper.hasNoText (sPassword) ? null : sPassword;
+    this.m_sPassword = StringHelper.hasNoText (sPassword) ? null : sPassword;
   }
 
   /**
@@ -76,7 +78,7 @@ public class BasicAuthClientCredentials implements Serializable
   @Nonempty
   public String getUserName ()
   {
-    return m_sUserName;
+    return this.m_sUserName;
   }
 
   /**
@@ -85,7 +87,7 @@ public class BasicAuthClientCredentials implements Serializable
   @Nullable
   public String getPassword ()
   {
-    return m_sPassword;
+    return this.m_sPassword;
   }
 
   /**
@@ -94,7 +96,7 @@ public class BasicAuthClientCredentials implements Serializable
    */
   public boolean hasPassword ()
   {
-    return m_sPassword != null;
+    return this.m_sPassword != null;
   }
 
   /**
@@ -107,10 +109,28 @@ public class BasicAuthClientCredentials implements Serializable
   @Nonempty
   public String getRequestValue ()
   {
-    final String sCombined = StringHelper.getConcatenatedOnDemand (m_sUserName,
+    return getRequestValue (null);
+  }
+
+  /**
+   * Create the request HTTP header value for use with the
+   * {@link com.phloc.web.http.CHTTPHeader#AUTHORIZATION} header name.
+   * 
+   * @param aCharset
+   *        Character set to use (defaults to
+   *        {@link HTTPBasicAuth#getCharset()})
+   * @return The HTTP header value to use. Neither <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  public String getRequestValue (@Nullable final Charset aCharset)
+  {
+    final String sCombined = StringHelper.getConcatenatedOnDemand (this.m_sUserName,
                                                                    HTTPBasicAuth.USERNAME_PASSWORD_SEPARATOR,
-                                                                   m_sPassword);
-    return HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, HTTPBasicAuth.CHARSET);
+                                                                   this.m_sPassword);
+    return HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC +
+           " " + //$NON-NLS-1$
+           Base64Helper.safeEncode (sCombined, aCharset == null ? HTTPBasicAuth.getCharset () : aCharset);
   }
 
   @Override
@@ -121,18 +141,18 @@ public class BasicAuthClientCredentials implements Serializable
     if (!(o instanceof BasicAuthClientCredentials))
       return false;
     final BasicAuthClientCredentials rhs = (BasicAuthClientCredentials) o;
-    return m_sUserName.equals (rhs.m_sUserName) && EqualsUtils.equals (m_sPassword, rhs.m_sPassword);
+    return this.m_sUserName.equals (rhs.m_sUserName) && EqualsUtils.equals (this.m_sPassword, rhs.m_sPassword);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sUserName).append (m_sPassword).getHashCode ();
+    return new HashCodeGenerator (this).append (this.m_sUserName).append (this.m_sPassword).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("userName", m_sUserName).appendPassword ("password").toString ();
+    return new ToStringGenerator (this).append ("userName", this.m_sUserName).appendPassword ("password").toString (); //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

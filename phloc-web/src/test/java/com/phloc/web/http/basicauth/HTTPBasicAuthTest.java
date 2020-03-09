@@ -18,22 +18,25 @@
 package com.phloc.web.http.basicauth;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import com.phloc.commons.charset.CCharset;
+
 /**
  * Test class for class {@link HTTPBasicAuth}.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public final class HTTPBasicAuthTest
 {
   @Test
   public void testBasic ()
   {
-    final BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin", "open sesame");
+    final BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin", "open sesame"); //$NON-NLS-1$ //$NON-NLS-2$
     final String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     final BasicAuthClientCredentials aDecoded = HTTPBasicAuth.getBasicAuthClientCredentials (sValue);
@@ -44,14 +47,14 @@ public final class HTTPBasicAuthTest
   @Test
   public void testUserNameOnly ()
   {
-    BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin");
+    BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin"); //$NON-NLS-1$
     String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     BasicAuthClientCredentials aDecoded = HTTPBasicAuth.getBasicAuthClientCredentials (sValue);
     assertNotNull (aDecoded);
     assertEquals (aCredentials, aDecoded);
 
-    aCredentials = new BasicAuthClientCredentials ("Alladin", "");
+    aCredentials = new BasicAuthClientCredentials ("Alladin", ""); //$NON-NLS-1$ //$NON-NLS-2$
     sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     aDecoded = HTTPBasicAuth.getBasicAuthClientCredentials (sValue);
@@ -63,20 +66,44 @@ public final class HTTPBasicAuthTest
   public void testGetBasicAuthValues ()
   {
     assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ((String) null));
-    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials (""));
-    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("bla"));
-    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("bla foor"));
-    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("Basic"));
-    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  "));
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("")); //$NON-NLS-1$
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("bla")); //$NON-NLS-1$
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("bla foor")); //$NON-NLS-1$
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("Basic")); //$NON-NLS-1$
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  ")); //$NON-NLS-1$
     // Base64 with blanks is OK!
-    BasicAuthClientCredentials aUP = HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  QWxsYW  Rp   bjpvcG  VuIH Nlc2F tZQ   =  =   ");
+    BasicAuthClientCredentials aUP = HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  QWxsYW  Rp   bjpvcG  VuIH Nlc2F tZQ   =  =   "); //$NON-NLS-1$
     assertNotNull (aUP);
-    assertEquals ("Alladin", aUP.getUserName ());
-    assertEquals ("open sesame", aUP.getPassword ());
+    assertEquals ("Alladin", aUP.getUserName ()); //$NON-NLS-1$
+    assertEquals ("open sesame", aUP.getPassword ()); //$NON-NLS-1$
 
-    aUP = HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  QWxsYWRpbjpvcGVuIHNlc2FtZQ==   ");
+    aUP = HTTPBasicAuth.getBasicAuthClientCredentials ("  Basic  QWxsYWRpbjpvcGVuIHNlc2FtZQ==   "); //$NON-NLS-1$
     assertNotNull (aUP);
-    assertEquals ("Alladin", aUP.getUserName ());
-    assertEquals ("open sesame", aUP.getPassword ());
+    assertEquals ("Alladin", aUP.getUserName ()); //$NON-NLS-1$
+    assertEquals ("open sesame", aUP.getPassword ()); //$NON-NLS-1$
+  }
+
+  @Test
+  public void testGetBasicAuthEncoding ()
+  {
+    try
+    {
+      final String sUserName = "Üser§"; //$NON-NLS-1$
+      final String sPassword = "Pässwörd"; //$NON-NLS-1$
+      final BasicAuthClientCredentials aBA = new BasicAuthClientCredentials (sUserName, sPassword);
+      final String sISO = aBA.getRequestValue ();
+      final String sUTF8 = aBA.getRequestValue (CCharset.CHARSET_UTF_8_OBJ);
+
+      assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials (sISO));
+      assertNotEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials (sUTF8));
+
+      HTTPBasicAuth.setCustomCharset (CCharset.CHARSET_UTF_8_OBJ);
+      assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials (sUTF8));
+      assertNotEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials (sISO));
+    }
+    finally
+    {
+      HTTPBasicAuth.setCustomCharset (null);
+    }
   }
 }
