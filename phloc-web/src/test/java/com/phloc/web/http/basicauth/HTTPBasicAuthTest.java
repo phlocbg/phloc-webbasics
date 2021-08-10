@@ -24,7 +24,9 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link HTTPBasicAuth}.
@@ -105,5 +107,23 @@ public final class HTTPBasicAuthTest
     {
       HTTPBasicAuth.setCustomCharset (null);
     }
+  }
+
+  @Test
+  public void testBasicAuthSchemaCaseInsensitive ()
+  {
+    final String sUserName = "Üser§"; //$NON-NLS-1$
+    final String sPassword = "Pässwörd"; //$NON-NLS-1$
+    final BasicAuthClientCredentials aBA = new BasicAuthClientCredentials (sUserName, sPassword);
+    final String sCombined = StringHelper.getConcatenatedOnDemand (sUserName,
+                                                                   HTTPBasicAuth.USERNAME_PASSWORD_SEPARATOR,
+                                                                   sPassword);
+    final String sBase64 = " " + Base64Helper.safeEncode (sCombined, HTTPBasicAuth.getCharset ()); //$NON-NLS-1$
+
+    assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials (HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC + sBase64));
+    assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials ("BASIC" + sBase64)); //$NON-NLS-1$
+    assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials ("basic" + sBase64)); //$NON-NLS-1$
+    assertEquals (aBA, HTTPBasicAuth.getBasicAuthClientCredentials ("bAsIc" + sBase64)); //$NON-NLS-1$
+    assertNull (HTTPBasicAuth.getBasicAuthClientCredentials ("bAsIk" + sBase64)); //$NON-NLS-1$
   }
 }

@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
@@ -115,7 +116,7 @@ public final class HTTPBasicAuth
       return null;
     }
 
-    if (!aElements[0].equals (HEADER_VALUE_PREFIX_BASIC))
+    if (!EqualsUtils.nullSafeEqualsIgnoreCase (aElements[0], HEADER_VALUE_PREFIX_BASIC))
     {
       LOG.error ("String does not start with 'Basic'"); //$NON-NLS-1$
       return null;
@@ -132,11 +133,19 @@ public final class HTTPBasicAuth
 
     // Do we have a username/password separator?
     final int nIndex = sUsernamePassword.indexOf (USERNAME_PASSWORD_SEPARATOR);
-    if (nIndex >= 0)
+    try
     {
-      return new BasicAuthClientCredentials (sUsernamePassword.substring (0, nIndex),
-                                             sUsernamePassword.substring (nIndex + 1));
+      if (nIndex >= 0)
+      {
+        return new BasicAuthClientCredentials (sUsernamePassword.substring (0, nIndex),
+                                               sUsernamePassword.substring (nIndex + 1));
+      }
+      return new BasicAuthClientCredentials (sUsernamePassword);
     }
-    return new BasicAuthClientCredentials (sUsernamePassword);
+    catch (NullPointerException | IllegalArgumentException aEx)
+    {
+      LOG.error ("Error reading basic authentication header", aEx); //$NON-NLS-1$
+      return null;
+    }
   }
 }
