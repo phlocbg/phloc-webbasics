@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -91,17 +92,29 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
       super.flush ();
       setCommitted (true);
     }
+
+    @Override
+    public boolean isReady ()
+    {
+      return false;
+    }
+
+    @Override
+    public void setWriteListener (final WriteListener writeListener)
+    {
+      // not supported
+    }
   };
   private PrintWriter m_aWriter;
-  private int m_nContentLength = 0;
+  private long m_nContentLength = 0;
   private String m_sContentType;
   private int m_nBufferSize = DEFAULT_BUFFER_SIZE;
   private boolean m_bCommitted;
   private Locale m_aLocale = Locale.getDefault ();
 
   // HttpServletResponse properties
-  private final List <Cookie> m_aCookies = new ArrayList <Cookie> ();
-  private final IMultiMapSetBased <String, Object> m_aHeaders = new MultiHashMapLinkedHashSetBased <String, Object> ();
+  private final List <Cookie> m_aCookies = new ArrayList <> ();
+  private final IMultiMapSetBased <String, Object> m_aHeaders = new MultiHashMapLinkedHashSetBased <> ();
   private int m_nStatus = HttpServletResponse.SC_OK;
   private String m_sErrorMessage;
   private String m_sRedirectedUrl;
@@ -202,7 +215,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public ServletOutputStream getOutputStream ()
   {
     if (!this.m_bOutputStreamAccessAllowed)
-      throw new IllegalStateException ("OutputStream access not allowed");
+      throw new IllegalStateException ("OutputStream access not allowed"); //$NON-NLS-1$
 
     return this.m_aOS;
   }
@@ -212,7 +225,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public PrintWriter getWriter ()
   {
     if (!this.m_bWriterAccessAllowed)
-      throw new IllegalStateException ("Writer access not allowed");
+      throw new IllegalStateException ("Writer access not allowed"); //$NON-NLS-1$
 
     if (this.m_aWriter == null)
     {
@@ -259,7 +272,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 
   public int getContentLength ()
   {
-    return this.m_nContentLength;
+    return (int) this.m_nContentLength;
   }
 
   @Override
@@ -277,7 +290,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
       }
       catch (final MimeTypeParserException ex)
       {
-        s_aLogger.warn ("Passed content type '" + sContentType + "' cannot be parsed as a MIME type");
+        s_aLogger.warn ("Passed content type '" + sContentType + "' cannot be parsed as a MIME type"); //$NON-NLS-1$ //$NON-NLS-2$
       }
     }
   }
@@ -314,12 +327,12 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public void resetBuffer ()
   {
     if (isCommitted ())
-      throw new IllegalStateException ("Cannot reset buffer - response is already committed");
+      throw new IllegalStateException ("Cannot reset buffer - response is already committed"); //$NON-NLS-1$
     this.m_aContent.reset ();
     this.m_aWriter = null;
   }
 
-  private void _setCommittedIfBufferSizeExceeded ()
+  void _setCommittedIfBufferSizeExceeded ()
   {
     final int nBufSize = getBufferSize ();
     if (nBufSize > 0 && this.m_aContent.size () > nBufSize)
@@ -374,7 +387,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   @Override
   public void addCookie (@Nonnull final Cookie aCookie)
   {
-    ValueEnforcer.notNull (aCookie, "Cookie");
+    ValueEnforcer.notNull (aCookie, "Cookie"); //$NON-NLS-1$
     this.m_aCookies.add (aCookie);
   }
 
@@ -388,7 +401,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   @Nullable
   public Cookie getCookie (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     for (final Cookie aCookie : this.m_aCookies)
       if (sName.equals (aCookie.getName ()))
         return aCookie;
@@ -414,6 +427,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    * @return the <code>Set</code> of header name <code>Strings</code>, or an
    *         empty <code>Set</code> if none
    */
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public Set <String> getHeaderNames ()
@@ -430,10 +444,11 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    *        the name of the header
    * @return the associated header value, or <code>null</code> if none
    */
+  @Override
   @Nullable
-  public Object getHeader (@Nullable final String sName)
+  public String getHeader (@Nullable final String sName)
   {
-    final List <Object> aList = getHeaders (sName);
+    final List <String> aList = getHeaders (sName);
     return ContainerHelper.getFirstElement (aList);
   }
 
@@ -444,10 +459,16 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
    *        the name of the header
    * @return the associated header values, or an empty List if none
    */
+  @Override
   @Nonnull
-  public List <Object> getHeaders (@Nullable final String sName)
+  public List <String> getHeaders (@Nullable final String sName)
   {
-    return ContainerHelper.newList (this.m_aHeaders.get (_unifyHeaderName (sName)));
+    final List <String> aHeaders = ContainerHelper.newList ();
+    for (final Object aHeader : this.m_aHeaders.get (_unifyHeaderName (sName)))
+    {
+      aHeaders.add (String.valueOf (aHeader));
+    }
+    return aHeaders;
   }
 
   /**
@@ -499,7 +520,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public void sendError (final int nStatus, @Nullable final String sErrorMessage) throws IOException
   {
     if (isCommitted ())
-      throw new IllegalStateException ("Cannot set error status - response is already committed");
+      throw new IllegalStateException ("Cannot set error status - response is already committed"); //$NON-NLS-1$
     this.m_nStatus = nStatus;
     this.m_sErrorMessage = sErrorMessage;
     setCommitted (true);
@@ -509,7 +530,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public void sendError (final int nStatus) throws IOException
   {
     if (isCommitted ())
-      throw new IllegalStateException ("Cannot set error status - response is already committed");
+      throw new IllegalStateException ("Cannot set error status - response is already committed"); //$NON-NLS-1$
     this.m_nStatus = nStatus;
     setCommitted (true);
   }
@@ -518,8 +539,8 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public void sendRedirect (@Nonnull final String sUrl) throws IOException
   {
     if (isCommitted ())
-      throw new IllegalStateException ("Cannot send redirect - response is already committed");
-    ValueEnforcer.notNull (sUrl, "URL");
+      throw new IllegalStateException ("Cannot send redirect - response is already committed"); //$NON-NLS-1$
+    ValueEnforcer.notNull (sUrl, "URL"); //$NON-NLS-1$
     this.m_sRedirectedUrl = sUrl;
     setCommitted (true);
   }
@@ -596,6 +617,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     this.m_sErrorMessage = sErrorMessage;
   }
 
+  @Override
   public int getStatus ()
   {
     return this.m_nStatus;
@@ -693,5 +715,11 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
       super.flush ();
       setCommitted (true);
     }
+  }
+
+  @Override
+  public void setContentLengthLong (final long len)
+  {
+    this.m_nContentLength = len;
   }
 }

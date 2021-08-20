@@ -18,6 +18,7 @@
 package com.phloc.web.mock;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
@@ -38,13 +39,21 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
+import javax.servlet.http.Part;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +87,7 @@ import com.phloc.web.servlet.session.SessionHelper;
 /**
  * Mock implementation of {@link HttpServletRequest}.
  *
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @NotThreadSafe
 public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
@@ -86,11 +95,11 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public static final boolean DEFAULT_INVOKE_HTTP_LISTENER = true;
   public static final String DEFAULT_PROTOCOL = EHTTPVersion.HTTP_11.getName ();
   public static final String DEFAULT_SCHEME = CWeb.SCHEME_HTTP;
-  public static final String DEFAULT_SERVER_ADDR = "127.0.0.1";
-  public static final String DEFAULT_SERVER_NAME = "localhost";
+  public static final String DEFAULT_SERVER_ADDR = "127.0.0.1"; //$NON-NLS-1$
+  public static final String DEFAULT_SERVER_NAME = "localhost"; //$NON-NLS-1$
   public static final int DEFAULT_SERVER_PORT = CWeb.DEFAULT_PORT_HTTP;
-  public static final String DEFAULT_REMOTE_ADDR = "127.0.0.1";
-  public static final String DEFAULT_REMOTE_HOST = "localhost";
+  public static final String DEFAULT_REMOTE_ADDR = "127.0.0.1"; //$NON-NLS-1$
+  public static final String DEFAULT_REMOTE_HOST = "localhost"; //$NON-NLS-1$
   /** The default HTTP method: GET */
   public static final EHTTPMethod DEFAULT_METHOD = EHTTPMethod.GET;
   private static final Logger s_aLogger = LoggerFactory.getLogger (MockHttpServletRequest.class);
@@ -117,16 +126,16 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   private int m_nLocalPort = DEFAULT_SERVER_PORT;
   private String m_sAuthType;
   private Cookie [] m_aCookies;
-  private final IMultiMapSetBased <String, Object> m_aHeaders = new MultiHashMapLinkedHashSetBased <String, Object> ();
+  private final IMultiMapSetBased <String, String> m_aHeaders = new MultiHashMapLinkedHashSetBased <> ();
   private EHTTPMethod m_eMethod;
   private String m_sPathInfo;
-  private String m_sContextPath = "";
+  private String m_sContextPath = ""; //$NON-NLS-1$
   private String m_sQueryString;
   private String m_sRemoteUser;
   private final Set <String> m_aUserRoles = new HashSet <String> ();
   private Principal m_aUserPrincipal;
   private String m_sRequestURI;
-  private String m_sServletPath = "";
+  private String m_sServletPath = ""; //$NON-NLS-1$
   private HttpSession m_aSession;
   private String m_sSessionID;
   private boolean m_bRequestedSessionIDValid = true;
@@ -198,7 +207,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
     // Add default HTTP header
     addHeader (CHTTPHeader.USER_AGENT, getClass ().getName ());
     // Disable GZip and Deflate!
-    addHeader (CHTTPHeader.ACCEPT_ENCODING, "*, gzip;q=0, x-gzip;q=0, deflate;q=0, compress;q=0, x-compress;q=0");
+    addHeader (CHTTPHeader.ACCEPT_ENCODING, "*, gzip;q=0, x-gzip;q=0, deflate;q=0, compress;q=0, x-compress;q=0"); //$NON-NLS-1$
     addHeader (CHTTPHeader.ACCEPT_CHARSET, AcceptCharsetHandler.ANY_CHARSET);
 
     if (aServletContext != null && bInvokeHttpListeners)
@@ -215,11 +224,12 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
    *         available in the standard HttpServletRequest interface for some
    *         reason.). Never <code>null</code>.
    */
+  @Override
   @Nonnull
   public final ServletContext getServletContext ()
   {
     if (this.m_aServletContext == null)
-      throw new IllegalStateException ("No servlet context present!");
+      throw new IllegalStateException ("No servlet context present!"); //$NON-NLS-1$
     return this.m_aServletContext;
   }
 
@@ -249,7 +259,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public void invalidate ()
   {
     if (this.m_bInvalidated)
-      throw new IllegalStateException ("Request scope already invalidated!");
+      throw new IllegalStateException ("Request scope already invalidated!"); //$NON-NLS-1$
     this.m_bInvalidated = true;
 
     if (this.m_aServletContext != null)
@@ -270,7 +280,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   protected void checkActive ()
   {
     if (!this.m_bActive)
-      throw new IllegalStateException ("Request is not active anymore");
+      throw new IllegalStateException ("Request is not active anymore"); //$NON-NLS-1$
   }
 
   @Override
@@ -412,7 +422,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest setParameter (@Nonnull final String sName, @Nullable final String [] aValues)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     this.m_aParameters.put (sName, aValues);
     return this;
   }
@@ -439,7 +449,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
           if (aValue instanceof String [])
             setParameter (aEntry.getKey (), (String []) aValue);
           else
-            throw new IllegalArgumentException ("Unexpected parameter type: " +
+            throw new IllegalArgumentException ("Unexpected parameter type: " + //$NON-NLS-1$
                                                 CGStringHelper.getSafeClassName (aValue));
       }
     return this;
@@ -478,7 +488,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public final MockHttpServletRequest addParameter (@Nonnull final String sName, @Nullable final String [] aValues)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
 
     final String [] aOldParams = this.m_aParameters.get (sName);
     this.m_aParameters.put (sName, ArrayHelper.getConcatenated (aOldParams, aValues));
@@ -506,7 +516,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
           if (aValue instanceof String [])
             addParameter (aEntry.getKey (), (String []) aValue);
           else
-            throw new IllegalArgumentException ("Unexpected parameter type: " +
+            throw new IllegalArgumentException ("Unexpected parameter type: " + //$NON-NLS-1$
                                                 CGStringHelper.getSafeClassName (aValue));
       }
     return this;
@@ -522,7 +532,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest removeParameter (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     this.m_aParameters.remove (sName);
     return this;
   }
@@ -543,7 +553,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nullable
   public String getParameter (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
 
     final String [] aParamValues = this.m_aParameters.get (sName);
     return ArrayHelper.getFirst (aParamValues);
@@ -561,7 +571,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @ReturnsMutableCopy
   public String [] getParameterValues (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     return ArrayHelper.getCopy (this.m_aParameters.get (sName));
   }
 
@@ -672,7 +682,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     checkActive ();
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
 
     if (aValue != null)
       this.m_aAttributes.put (sName, aValue);
@@ -683,7 +693,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Override
   public void removeAttribute (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
 
     checkActive ();
     this.m_aAttributes.remove (sName);
@@ -711,7 +721,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest addPreferredLocale (@Nonnull final Locale aLocale)
   {
-    ValueEnforcer.notNull (aLocale, "Locale");
+    ValueEnforcer.notNull (aLocale, "Locale"); //$NON-NLS-1$
     this.m_aLocales.add (0, aLocale);
     return this;
   }
@@ -862,7 +872,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
    *
    * @param sName
    *        header name
-   * @param aValue
+   * @param sValue
    *        header value
    * @return this
    * @see #getHeaderNames
@@ -872,9 +882,13 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
    * @see #getIntHeader
    */
   @Nonnull
-  public final MockHttpServletRequest addHeader (@Nullable final String sName, @Nullable final Object aValue)
+  // TODO BG allow settings multiple values (arrays etc.)
+  public final MockHttpServletRequest addHeader (@Nullable final String sName, @Nullable final String sValue)
   {
-    this.m_aHeaders.putSingle (_getUnifiedHeaderName (sName), aValue);
+    if (sName != null)
+    {
+      this.m_aHeaders.putSingle (_getUnifiedHeaderName (sName), sValue);
+    }
     return this;
   }
 
@@ -905,15 +919,14 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nullable
   public String getHeader (@Nullable final String sName)
   {
-    final Collection <Object> aValue = this.m_aHeaders.get (_getUnifiedHeaderName (sName));
-    return aValue == null || aValue.isEmpty () ? null : String.valueOf (aValue.iterator ().next ());
+    return ContainerHelper.getFirstElement (this.m_aHeaders.get (_getUnifiedHeaderName (sName)));
   }
 
   @Override
   @Nonnull
-  public Enumeration <Object> getHeaders (@Nullable final String sName)
+  public Enumeration <String> getHeaders (@Nullable final String sName)
   {
-    final Collection <Object> vals = this.m_aHeaders.get (_getUnifiedHeaderName (sName));
+    final Collection <String> vals = this.m_aHeaders.get (_getUnifiedHeaderName (sName));
     return ContainerHelper.getEnumeration (vals != null ? vals : ContainerHelper.newUnmodifiableList ());
   }
 
@@ -969,8 +982,8 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public MockHttpServletRequest setContextPath (@Nullable final String sContextPath)
   {
     if (sContextPath != null)
-      if (!sContextPath.isEmpty () && !sContextPath.startsWith ("/"))
-        s_aLogger.error ("Illegal context path specified: '" + sContextPath + "'");
+      if (!sContextPath.isEmpty () && !sContextPath.startsWith ("/")) //$NON-NLS-1$
+        s_aLogger.error ("Illegal context path specified: '" + sContextPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
     this.m_sContextPath = sContextPath;
     return this;
   }
@@ -1071,8 +1084,8 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public MockHttpServletRequest setServletPath (@Nullable final String sServletPath)
   {
-    if (sServletPath != null && !sServletPath.isEmpty () && !sServletPath.startsWith ("/"))
-      s_aLogger.error ("ServletPath must be empty or start with a slash: '" + sServletPath + "'");
+    if (sServletPath != null && !sServletPath.isEmpty () && !sServletPath.startsWith ("/")) //$NON-NLS-1$
+      s_aLogger.error ("ServletPath must be empty or start with a slash: '" + sServletPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
     this.m_sServletPath = sServletPath;
     return this;
   }
@@ -1229,7 +1242,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
         String sPath = aURI.getPath ();
 
         // Context path
-        final String sServletContextPath = this.m_aServletContext == null ? ""
+        final String sServletContextPath = this.m_aServletContext == null ? "" //$NON-NLS-1$
                                                                           : this.m_aServletContext.getContextPath ();
         if (sServletContextPath.isEmpty () || StringHelper.startsWith (sPath, sServletContextPath))
         {
@@ -1238,7 +1251,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
         }
         else
         {
-          setContextPath ("");
+          setContextPath (""); //$NON-NLS-1$
         }
 
         // Servlet path
@@ -1251,7 +1264,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
         else
         {
           setServletPath (sPath);
-          sPath = "";
+          sPath = ""; //$NON-NLS-1$
         }
 
         // Remaining is the path info:
@@ -1297,5 +1310,90 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
     req.setContent (aContent);
     req.setContentType (sContentType);
     return req;
+  }
+
+  @Override
+  public long getContentLengthLong ()
+  {
+    return getContentLength ();
+  }
+
+  @Override
+  public AsyncContext startAsync () throws IllegalStateException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public AsyncContext startAsync (final ServletRequest servletRequest,
+                                  final ServletResponse servletResponse) throws IllegalStateException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public boolean isAsyncStarted ()
+  {
+    return false;
+  }
+
+  @Override
+  public boolean isAsyncSupported ()
+  {
+    return false;
+  }
+
+  @Override
+  public AsyncContext getAsyncContext ()
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public DispatcherType getDispatcherType ()
+  {
+    return DispatcherType.REQUEST;
+  }
+
+  @Override
+  public String changeSessionId ()
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public boolean authenticate (final HttpServletResponse response) throws IOException, ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public void login (final String username, final String password) throws ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public void logout () throws ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public Collection <Part> getParts () throws IOException, ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public Part getPart (final String name) throws IOException, ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public <T extends HttpUpgradeHandler> T upgrade (final Class <T> handlerClass) throws IOException, ServletException
+  {
+    throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
   }
 }

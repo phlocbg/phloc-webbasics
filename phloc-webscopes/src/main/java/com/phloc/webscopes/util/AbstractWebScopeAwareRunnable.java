@@ -46,21 +46,21 @@ public abstract class AbstractWebScopeAwareRunnable implements INonThrowingRunna
   public AbstractWebScopeAwareRunnable (@Nonnull final ServletContext aSC,
                                         @Nonnull @Nonempty final String sApplicationID)
   {
-    m_aSC = ValueEnforcer.notNull (aSC, "ServletContext");
-    m_sApplicationID = ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
+    this.m_aSC = ValueEnforcer.notNull (aSC, "ServletContext");
+    this.m_sApplicationID = ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
   }
 
   @Nonnull
   public ServletContext getServletContext ()
   {
-    return m_aSC;
+    return this.m_aSC;
   }
 
   @Nonnull
   @Nonempty
   public String getApplicationID ()
   {
-    return m_sApplicationID;
+    return this.m_sApplicationID;
   }
 
   /**
@@ -68,10 +68,11 @@ public abstract class AbstractWebScopeAwareRunnable implements INonThrowingRunna
    */
   protected abstract void scopedRun ();
 
+  @Override
   public final void run ()
   {
-    WebScopeManager.onRequestBegin (m_sApplicationID,
-                                    new OfflineHttpServletRequest (m_aSC, false),
+    WebScopeManager.onRequestBegin (this.m_sApplicationID,
+                                    new OfflineHttpServletRequest (this.m_aSC, false),
                                     new MockHttpServletResponse ());
     try
     {
@@ -86,8 +87,8 @@ public abstract class AbstractWebScopeAwareRunnable implements INonThrowingRunna
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("servletContext", m_aSC)
-                                       .append ("applicationID", m_sApplicationID)
+    return new ToStringGenerator (this).append ("servletContext", this.m_aSC)
+                                       .append ("applicationID", this.m_sApplicationID)
                                        .toString ();
   }
 }

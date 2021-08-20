@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,7 +69,7 @@ public final class FuncTestStreaming
         add = 16;
       }
       final IFileItem item = fileIter.next ();
-      assertEquals ("field" + (num++), item.getFieldName ());
+      assertEquals ("field" + num++, item.getFieldName ());
       final byte [] bytes = item.get ();
       assertEquals (i, bytes.length);
       for (int j = 0; j < i; j++)
@@ -113,7 +114,7 @@ public final class FuncTestStreaming
       @Override
       public int read () throws IOException
       {
-        if (++num > 123)
+        if (++this.num > 123)
         {
           throw new MockIOException ("123");
         }
@@ -164,7 +165,7 @@ public final class FuncTestStreaming
       }
 
       @Override
-      public int read (final byte b [], final int off, final int len) throws IOException
+      public int read (final byte b[], final int off, final int len) throws IOException
       {
         return bais.read (b, off, Math.min (len, 3));
       }
@@ -222,6 +223,24 @@ public final class FuncTestStreaming
           {
             return pStream.read ();
           }
+
+          @Override
+          public boolean isFinished ()
+          {
+            return false;
+          }
+
+          @Override
+          public boolean isReady ()
+          {
+            return false;
+          }
+
+          @Override
+          public void setReadListener (final ReadListener readListener)
+          {
+            // empty
+          }
         };
       }
     };
@@ -264,7 +283,7 @@ public final class FuncTestStreaming
       {
         add = 16;
       }
-      osw.write (_getHeader ("field" + (num++)));
+      osw.write (_getHeader ("field" + num++));
       osw.flush ();
       for (int j = 0; j < i; j++)
       {

@@ -21,6 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   
+  <release date="2021-08-20" version="5.9.2" />
+  <entry date="2021-08-20" category="feature" action="add">
+    <change>
+      <text locale="en">Forcing SameSite None for cookies (WEB-3)</text>
+    </change>
+  </entry>
   <release date="2021-08-10" version="5.9.1" />
   <entry date="2021-08-10" category="feature" action="add">
     <change>

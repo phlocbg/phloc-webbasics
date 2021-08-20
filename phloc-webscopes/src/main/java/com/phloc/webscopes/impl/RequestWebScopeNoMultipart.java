@@ -48,6 +48,7 @@ import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
@@ -76,7 +77,6 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   // Because of transient field
   private static final long serialVersionUID = 78563987233146L;
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (RequestWebScopeNoMultipart.class);
   private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited"; //$NON-NLS-1$
   private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap"; //$NON-NLS-1$
   public static final String REQUEST_ATTR_PARSE_JSON_BODY = "$request.scope.jsonbody"; //$NON-NLS-1$
@@ -103,13 +103,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     this.m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse"); //$NON-NLS-1$
 
     // done initialization
-    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (LOG))
     {
-      s_aLogger.info ("Created request web scope '" + //$NON-NLS-1$
-                      getID () +
-                      "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      LOG.info ("Created request web scope '" + //$NON-NLS-1$
+                getID () +
+                "' of class " + //$NON-NLS-1$
+                CGStringHelper.getClassLocalName (this),
+                ScopeUtils.getDebugStackTrace ());
     }
   }
 
@@ -135,7 +135,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     // loosing any data here!
     if (getAndSetAttributeFlag (REQUEST_ATTR_SCOPE_INITED))
     {
-      s_aLogger.warn ("Scope was already inited: " + toString ()); //$NON-NLS-1$
+      LOG.warn ("Scope was already inited: " + toString ()); //$NON-NLS-1$
       return;
     }
 
@@ -150,20 +150,24 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     {
       final String sParamName = (String) aEnum.nextElement ();
 
+      // Check if it is a single value or not
+      final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
+
+      LOG.info (sParamName + ":" + StringHelper.getImploded (',', aParamValues));
+
       // Avoid double setting a parameter!
       if (bAddedSpecialRequestAttrs && containsAttribute (sParamName))
       {
         continue;
       }
-      // Check if it is a single value or not
-      final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
+
       if (aParamValues.length == 1)
       {
-        setAttribute (sParamName, aParamValues[0]);
+        LOG.info (setAttribute (sParamName, aParamValues[0]).name ());
       }
       else
       {
-        setAttribute (sParamName, aParamValues);
+        LOG.info (setAttribute (sParamName, aParamValues).name ());
       }
     }
     try
@@ -184,14 +188,24 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     postAttributeInit ();
 
     // done initialization
-    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (LOG))
     {
-      s_aLogger.info ("Initialized request web scope '" + //$NON-NLS-1$
-                      getID () +
-                      "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      LOG.info ("Initialized request web scope '" + //$NON-NLS-1$
+                getID () +
+                "' of class " + //$NON-NLS-1$
+                CGStringHelper.getClassLocalName (this),
+                ScopeUtils.getDebugStackTrace ());
     }
+    LOG.info ("SCOPE: " + this);
+
+  }
+
+  @Override
+  @Nonnull
+  public EChange setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
+  {
+    LOG.warn ("SET: " + sName + ":" + aValue, new IllegalStateException ("OIDA"));
+    return super.setAttribute (sName, aValue);
   }
 
   /**
@@ -267,13 +281,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Override
   protected void postDestroy ()
   {
-    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (LOG))
     {
-      s_aLogger.info ("Destroyed request web scope '" + //$NON-NLS-1$
-                      getID () +
-                      "' of class " + //$NON-NLS-1$
-                      CGStringHelper.getClassLocalName (this),
-                      ScopeUtils.getDebugStackTrace ());
+      LOG.info ("Destroyed request web scope '" + //$NON-NLS-1$
+                getID () +
+                "' of class " + //$NON-NLS-1$
+                CGStringHelper.getClassLocalName (this),
+                ScopeUtils.getDebugStackTrace ());
     }
   }
 

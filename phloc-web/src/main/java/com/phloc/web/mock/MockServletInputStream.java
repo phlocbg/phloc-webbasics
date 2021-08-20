@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 
 import com.phloc.commons.ValueEnforcer;
@@ -30,7 +31,7 @@ import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
  * A {@link ServletInputStream} for testing based on a predefined byte array or
  * an existing {@link InputStream}.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 public class MockServletInputStream extends ServletInputStream
 {
@@ -43,19 +44,40 @@ public class MockServletInputStream extends ServletInputStream
 
   public MockServletInputStream (@Nonnull final InputStream aBaseIS)
   {
-    m_aIS = ValueEnforcer.notNull (aBaseIS, "BaseInputStream");
+    this.m_aIS = ValueEnforcer.notNull (aBaseIS, "BaseInputStream");
   }
 
   @Override
   public int read () throws IOException
   {
-    return m_aIS.read ();
+    return this.m_aIS.read ();
   }
 
   @Override
   public void close () throws IOException
   {
-    m_aIS.close ();
+    this.m_aIS.close ();
     super.close ();
+  }
+
+  @Override
+  public boolean isFinished ()
+  {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean isReady ()
+  {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public void setReadListener (final ReadListener readListener)
+  {
+    // TODO Auto-generated method stub
+
   }
 }

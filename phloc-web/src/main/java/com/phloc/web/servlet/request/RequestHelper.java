@@ -139,7 +139,6 @@ public final class RequestHelper
   public static String getPathInfo (@Nonnull final HttpServletRequest aHttpRequest)
   {
     ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
-
     final String sPathInfo = aHttpRequest.getPathInfo ();
     if (StringHelper.hasNoText (sPathInfo))
       return sPathInfo;
@@ -436,37 +435,27 @@ public final class RequestHelper
   @ReturnsMutableCopy
   public static Map <String, Object> getParameterMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
 
-    final Map <String, Object> aResult = new HashMap <String, Object> ();
+    final Map <String, Object> aResult = new HashMap <> ();
     @SuppressWarnings ("unchecked")
-    final Map <String, Object> aOriginalMap = aHttpRequest.getParameterMap ();
+    final Map <String, String []> aOriginalMap = aHttpRequest.getParameterMap ();
 
     // For all parameters
-    for (final Map.Entry <String, Object> aEntry : aOriginalMap.entrySet ())
+    for (final Map.Entry <String, String []> aEntry : aOriginalMap.entrySet ())
     {
       final String sKey = aEntry.getKey ();
-      final Object aValue = aEntry.getValue ();
-      if (aValue instanceof String [])
-      {
-        // It's an array value
-        final String [] aArrayValue = (String []) aValue;
-        if (aArrayValue.length > 1)
-          aResult.put (sKey, aArrayValue);
-        else
-          if (aArrayValue.length == 1)
-          {
-            // Flatten array to String
-            aResult.put (sKey, aArrayValue[0]);
-          }
-          else
-            aResult.put (sKey, "");
-      }
-      else
-      {
-        // It's a single value
+      final String [] aValue = aEntry.getValue ();
+      if (aValue.length > 1)
         aResult.put (sKey, aValue);
-      }
+      else
+        if (aValue.length == 1)
+        {
+          // Flatten array to String
+          aResult.put (sKey, aValue[0]);
+        }
+        else
+          aResult.put (sKey, ""); //$NON-NLS-1$
     }
     return aResult;
   }
@@ -474,7 +463,7 @@ public final class RequestHelper
   @Nonnull
   public static IRequestParamMap getRequestParamMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
 
     // Check if a value is cached in the HTTP request
     IRequestParamMap aValue = (IRequestParamMap) aHttpRequest.getAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);

@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.EventListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -31,11 +33,19 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.Dynamic;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -58,15 +68,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Mock implementation of the {@link ServletContext} interface.
  *
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @NotThreadSafe
 public class MockServletContext implements ServletContext
 {
-  public static final int SERVLET_SPEC_MAJOR_VERSION = 2;
-  public static final int SERVLET_SPEC_MINOR_VERSION = 5;
-  public static final String DEFAULT_SERVLET_CONTEXT_NAME = "MockServletContext";
-  public static final String DEFAULT_SERVLET_CONTEXT_PATH = "";
+  public static final int SERVLET_SPEC_MAJOR_VERSION = 3;
+  public static final int SERVLET_SPEC_MINOR_VERSION = 0;
+  public static final String DEFAULT_SERVLET_CONTEXT_NAME = "MockServletContext"; //$NON-NLS-1$
+  public static final String DEFAULT_SERVLET_CONTEXT_PATH = ""; //$NON-NLS-1$
   private static final Logger s_aLogger = LoggerFactory.getLogger (MockServletContext.class);
 
   private final IReadableResourceProvider m_aResourceProvider;
@@ -85,7 +95,7 @@ public class MockServletContext implements ServletContext
    */
   public MockServletContext ()
   {
-    this (null, "", null, null);
+    this (null, "", null, null); //$NON-NLS-1$
   }
 
   /**
@@ -97,7 +107,7 @@ public class MockServletContext implements ServletContext
    */
   public MockServletContext (@Nullable final Map <String, String> aInitParams)
   {
-    this (null, "", null, aInitParams);
+    this (null, "", null, aInitParams); //$NON-NLS-1$
   }
 
   /**
@@ -108,7 +118,7 @@ public class MockServletContext implements ServletContext
    */
   public MockServletContext (@Nullable final String sContextPath)
   {
-    this (sContextPath, "", null, null);
+    this (sContextPath, "", null, null); //$NON-NLS-1$
   }
 
   /**
@@ -121,7 +131,7 @@ public class MockServletContext implements ServletContext
    */
   public MockServletContext (@Nullable final String sContextPath, @Nullable final Map <String, String> aInitParams)
   {
-    this (sContextPath, "", null, aInitParams);
+    this (sContextPath, "", null, aInitParams); //$NON-NLS-1$
   }
 
   /**
@@ -156,12 +166,12 @@ public class MockServletContext implements ServletContext
   {
     setContextPath (sContextPath);
     this.m_aResourceProvider = aResourceLoader != null ? aResourceLoader : new DefaultResourceProvider ();
-    this.m_sResourceBasePath = sResourceBasePath != null ? sResourceBasePath : "";
+    this.m_sResourceBasePath = sResourceBasePath != null ? sResourceBasePath : ""; //$NON-NLS-1$
 
     // Use JVM temp dir as ServletContext temp dir.
     final String sTempDir = SystemProperties.getTmpDir ();
     if (sTempDir != null)
-      setAttribute ("tempdir", new File (sTempDir));
+      setAttribute ("tempdir", new File (sTempDir)); //$NON-NLS-1$
 
     if (aInitParams != null)
       for (final Map.Entry <String, String> aEntry : aInitParams.entrySet ())
@@ -187,18 +197,18 @@ public class MockServletContext implements ServletContext
   protected String getResourceLocation (@Nonnull final String sPath)
   {
     return StringHelper.startsWith (sPath, '/') ? this.m_sResourceBasePath + sPath
-                                                : this.m_sResourceBasePath + "/" + sPath;
+                                                : this.m_sResourceBasePath + "/" + sPath; //$NON-NLS-1$
   }
 
   public final void setContextPath (@Nullable final String sContextPath)
   {
     if (sContextPath == null)
-      this.m_sContextPath = "";
+      this.m_sContextPath = ""; //$NON-NLS-1$
     else
       if (StringHelper.startsWith (sContextPath, '/'))
         this.m_sContextPath = sContextPath;
       else
-        this.m_sContextPath = "/" + sContextPath;
+        this.m_sContextPath = "/" + sContextPath; //$NON-NLS-1$
   }
 
   /* This is a Servlet API 2.5 method. */
@@ -211,8 +221,8 @@ public class MockServletContext implements ServletContext
 
   public void registerContext (@Nonnull final String sContextPath, @Nonnull final ServletContext aContext)
   {
-    ValueEnforcer.notNull (sContextPath, "ContextPath");
-    ValueEnforcer.notNull (aContext, "Context");
+    ValueEnforcer.notNull (sContextPath, "ContextPath"); //$NON-NLS-1$
+    ValueEnforcer.notNull (aContext, "Context"); //$NON-NLS-1$
     this.m_aContexts.put (sContextPath, aContext);
   }
 
@@ -279,7 +289,7 @@ public class MockServletContext implements ServletContext
   public RequestDispatcher getRequestDispatcher (@Nonnull final String sPath)
   {
     if (!StringHelper.startsWith (sPath, '/'))
-      throw new IllegalArgumentException ("RequestDispatcher path at ServletContext level must start with '/'");
+      throw new IllegalArgumentException ("RequestDispatcher path at ServletContext level must start with '/'"); //$NON-NLS-1$
     return new MockRequestDispatcher (sPath);
   }
 
@@ -301,17 +311,17 @@ public class MockServletContext implements ServletContext
   @Override
   @Deprecated
   @Nonnull
-  public Enumeration <Object> getServlets ()
+  public Enumeration <Servlet> getServlets ()
   {
-    return ContainerHelper.<Object> getEmptyEnumeration ();
+    return ContainerHelper.<Servlet> getEmptyEnumeration ();
   }
 
   @Override
   @Deprecated
   @Nonnull
-  public Enumeration <Object> getServletNames ()
+  public Enumeration <String> getServletNames ()
   {
-    return ContainerHelper.<Object> getEmptyEnumeration ();
+    return ContainerHelper.<String> getEmptyEnumeration ();
   }
 
   @Override
@@ -340,10 +350,10 @@ public class MockServletContext implements ServletContext
   {
     final IReadableResource aResource = this.m_aResourceProvider.getReadableResource (getResourceLocation (sPath));
     if (aResource == null)
-      throw new IllegalStateException ("Failed to get real path of '" + sPath + "'");
+      throw new IllegalStateException ("Failed to get real path of '" + sPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
     final File aFile = aResource.getAsFile ();
     if (aFile == null)
-      throw new IllegalStateException ("Failed to convert resource " + aResource + " to a file");
+      throw new IllegalStateException ("Failed to convert resource " + aResource + " to a file"); //$NON-NLS-1$ //$NON-NLS-2$
     return aFile.getAbsolutePath ();
   }
 
@@ -352,36 +362,43 @@ public class MockServletContext implements ServletContext
   @Nonempty
   public String getServerInfo ()
   {
-    return "MockServletContext";
+    return "MockServletContext"; //$NON-NLS-1$
   }
 
   @Override
   @Nullable
   public String getInitParameter (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     return this.m_aInitParameters.getProperty (sName);
   }
 
   public final void addInitParameter (@Nonnull final String sName, @Nonnull final String sValue)
   {
-    ValueEnforcer.notNull (sName, "Name");
-    ValueEnforcer.notNull (sValue, "Value");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
+    ValueEnforcer.notNull (sValue, "Value"); //$NON-NLS-1$
     this.m_aInitParameters.setProperty (sName, sValue);
   }
 
   @Override
   @Nonnull
-  public Enumeration <Object> getInitParameterNames ()
+  public Enumeration <String> getInitParameterNames ()
   {
-    return this.m_aInitParameters.keys ();
+    final List <String> aParams = ContainerHelper.newList ();
+    final Enumeration <Object> aKeyEnum = this.m_aInitParameters.keys ();
+    while (aKeyEnum.hasMoreElements ())
+    {
+      final Object aKey = aKeyEnum.nextElement ();
+      aParams.add (aKey == null ? null : String.valueOf (aKey));
+    }
+    return ContainerHelper.getEnumeration (aParams);
   }
 
   @Override
   @Nullable
   public Object getAttribute (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     return this.m_aAttributes.get (sName);
   }
 
@@ -395,7 +412,7 @@ public class MockServletContext implements ServletContext
   @Override
   public final void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     if (aValue != null)
       this.m_aAttributes.put (sName, aValue);
     else
@@ -405,7 +422,7 @@ public class MockServletContext implements ServletContext
   @Override
   public void removeAttribute (@Nonnull final String sName)
   {
-    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name"); //$NON-NLS-1$
     this.m_aAttributes.remove (sName);
   }
 
@@ -464,14 +481,14 @@ public class MockServletContext implements ServletContext
   @Nullable
   public MockHttpServletResponse invoke (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
 
     // Find matching servlet
     final String sServletPath = aHttpRequest.getServletPath ();
     final Servlet aServlet = this.m_aServletPool.getServletOfPath (sServletPath);
     if (aServlet == null)
     {
-      s_aLogger.error ("Found no servlet matching '" + sServletPath + "'");
+      s_aLogger.error ("Found no servlet matching '" + sServletPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
       return null;
     }
 
@@ -483,7 +500,7 @@ public class MockServletContext implements ServletContext
     }
     catch (final Throwable t)
     {
-      throw new IllegalStateException ("Failed to invoke servlet " + aServlet + " for request " + aHttpRequest, t);
+      throw new IllegalStateException ("Failed to invoke servlet " + aServlet + " for request " + aHttpRequest, t); //$NON-NLS-1$ //$NON-NLS-2$
     }
     return ret;
   }
@@ -491,7 +508,7 @@ public class MockServletContext implements ServletContext
   public void invalidate ()
   {
     if (this.m_bInvalidated)
-      throw new IllegalStateException ("Servlet context already invalidated!");
+      throw new IllegalStateException ("Servlet context already invalidated!"); //$NON-NLS-1$
     this.m_bInvalidated = true;
 
     // Destroy all servlets
@@ -503,5 +520,193 @@ public class MockServletContext implements ServletContext
       aListener.contextDestroyed (aSCE);
 
     this.m_aAttributes.clear ();
+  }
+
+  @Override
+  public int getEffectiveMajorVersion ()
+  {
+    return getMajorVersion ();
+  }
+
+  @Override
+  public int getEffectiveMinorVersion ()
+  {
+    return getMinorVersion ();
+  }
+
+  @Override
+  public boolean setInitParameter (final String name, final String value)
+  {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Dynamic addServlet (final String servletName, final String className)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Dynamic addServlet (final String servletName, final Servlet servlet)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Dynamic addServlet (final String servletName, final Class <? extends Servlet> servletClass)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public <T extends Servlet> T createServlet (final Class <T> clazz) throws ServletException
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public ServletRegistration getServletRegistration (final String servletName)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Map <String, ? extends ServletRegistration> getServletRegistrations ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final String className)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final Filter filter)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName,
+                                                             final Class <? extends Filter> filterClass)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public <T extends Filter> T createFilter (final Class <T> clazz) throws ServletException
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public FilterRegistration getFilterRegistration (final String filterName)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Map <String, ? extends FilterRegistration> getFilterRegistrations ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public SessionCookieConfig getSessionCookieConfig ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void setSessionTrackingModes (final Set <SessionTrackingMode> sessionTrackingModes)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public Set <SessionTrackingMode> getDefaultSessionTrackingModes ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set <SessionTrackingMode> getEffectiveSessionTrackingModes ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void addListener (final String className)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public <T extends EventListener> void addListener (final T t)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void addListener (final Class <? extends EventListener> listenerClass)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public <T extends EventListener> T createListener (final Class <T> clazz) throws ServletException
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public JspConfigDescriptor getJspConfigDescriptor ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public ClassLoader getClassLoader ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void declareRoles (final String... roleNames)
+  {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public String getVirtualServerName ()
+  {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

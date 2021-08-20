@@ -72,6 +72,7 @@ import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
+import com.phloc.web.servlet.cookie.CookieHelper;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.web.useragent.browser.BrowserInfo;
@@ -1202,6 +1203,8 @@ public class UnifiedResponse
     if (this.m_aCookies != null)
       for (final Cookie aCookie : this.m_aCookies.values ())
         aHttpResponse.addCookie (aCookie);
+
+    CookieHelper.correctCookieHeaders (aHttpResponse);
 
     // Write the body to the response
     _applyContent (aHttpResponse);

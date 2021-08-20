@@ -25,6 +25,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,44 +63,44 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
                                                 final long nContentLength,
                                                 @Nonnegative final int nMinCompressSize) throws IOException
   {
-    m_aHttpRequest = ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
-    m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
-    m_sContentEncoding = ValueEnforcer.notEmpty (sContentEncoding, "ContentEncoding");
-    m_nContentLength = nContentLength;
-    m_nMinCompressSize = nMinCompressSize;
+    this.m_aHttpRequest = ValueEnforcer.notNull (aHttpRequest, "HttpRequest"); //$NON-NLS-1$
+    this.m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse"); //$NON-NLS-1$
+    this.m_sContentEncoding = ValueEnforcer.notEmpty (sContentEncoding, "ContentEncoding"); //$NON-NLS-1$
+    this.m_nContentLength = nContentLength;
+    this.m_nMinCompressSize = nMinCompressSize;
     if (nMinCompressSize == 0)
-      doCompress ("ctor: no min compress size");
+      doCompress ("ctor: no min compress size"); //$NON-NLS-1$
   }
 
   private static void _debugLog (final boolean bCompress, final String sMsg)
   {
     if (CompressFilterSettings.isDebugModeEnabled ())
-      s_aLogger.info ((bCompress ? "Compressing: " : "Not compressing: ") + sMsg);
+      s_aLogger.info ((bCompress ? "Compressing: " : "Not compressing: ") + sMsg); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public final void resetBuffer ()
   {
-    if (m_aHttpResponse.isCommitted ())
-      throw new IllegalStateException ("Committed");
-    m_aOS = null;
-    m_aBAOS = null;
-    if (m_aCompressedOS != null)
+    if (this.m_aHttpResponse.isCommitted ())
+      throw new IllegalStateException ("Committed"); //$NON-NLS-1$
+    this.m_aOS = null;
+    this.m_aBAOS = null;
+    if (this.m_aCompressedOS != null)
     {
       // Remove header again
-      m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, null);
-      m_aCompressedOS = null;
+      this.m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, null);
+      this.m_aCompressedOS = null;
     }
-    m_bClosed = false;
-    m_bDoNotCompress = false;
+    this.m_bClosed = false;
+    this.m_bDoNotCompress = false;
   }
 
   public final void setContentLength (final long nLength)
   {
     if (CompressFilterSettings.isDebugModeEnabled ())
-      s_aLogger.info ("Setting content length to " + nLength + "; doNotCompress=" + m_bDoNotCompress);
-    m_nContentLength = nLength;
-    if (m_bDoNotCompress && nLength >= 0)
-      ResponseHelper.setContentLength (m_aHttpResponse, m_nContentLength);
+      s_aLogger.info ("Setting content length to " + nLength + "; doNotCompress=" + this.m_bDoNotCompress); //$NON-NLS-1$ //$NON-NLS-2$
+    this.m_nContentLength = nLength;
+    if (this.m_bDoNotCompress && nLength >= 0)
+      ResponseHelper.setContentLength (this.m_aHttpResponse, this.m_nContentLength);
   }
 
   @Nonnull
@@ -107,55 +108,55 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
 
   public final void doCompress (@Nullable final String sDebugInfo) throws IOException
   {
-    if (m_aCompressedOS == null)
+    if (this.m_aCompressedOS == null)
     {
-      if (m_aHttpResponse.isCommitted ())
-        throw new IllegalStateException ("Response already committed");
+      if (this.m_aHttpResponse.isCommitted ())
+        throw new IllegalStateException ("Response already committed"); //$NON-NLS-1$
 
-      m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+      this.m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, this.m_sContentEncoding);
 
       // Check if header was really set (may e.g. not be the case when something
       // is included like a JSP)
-      if (m_aHttpResponse.containsHeader (CHTTPHeader.CONTENT_ENCODING))
+      if (this.m_aHttpResponse.containsHeader (CHTTPHeader.CONTENT_ENCODING))
       {
         _debugLog (true, sDebugInfo);
 
-        m_aCompressedOS = createDeflaterOutputStream (m_aHttpResponse.getOutputStream ());
-        m_aOS = m_aCompressedOS;
-        if (m_aBAOS != null)
+        this.m_aCompressedOS = createDeflaterOutputStream (this.m_aHttpResponse.getOutputStream ());
+        this.m_aOS = this.m_aCompressedOS;
+        if (this.m_aBAOS != null)
         {
           // Copy cached content to new OS
-          m_aBAOS.writeTo (m_aOS);
-          m_aBAOS = null;
+          this.m_aBAOS.writeTo (this.m_aOS);
+          this.m_aBAOS = null;
         }
       }
       else
-        doNotCompress ("from compress: included request");
+        doNotCompress ("from compress: included request"); //$NON-NLS-1$
     }
     else
     {
       if (CompressFilterSettings.isDebugModeEnabled ())
-        s_aLogger.info ("doCompress on already compressed stream");
+        s_aLogger.info ("doCompress on already compressed stream"); //$NON-NLS-1$
     }
   }
 
   public final void doNotCompress (final String sDebugInfo) throws IOException
   {
-    if (m_aCompressedOS != null)
-      throw new IllegalStateException ("Compressed output stream is already assigned.");
+    if (this.m_aCompressedOS != null)
+      throw new IllegalStateException ("Compressed output stream is already assigned."); //$NON-NLS-1$
 
-    if (m_aOS == null || m_aBAOS != null)
+    if (this.m_aOS == null || this.m_aBAOS != null)
     {
-      m_bDoNotCompress = true;
+      this.m_bDoNotCompress = true;
       _debugLog (false, sDebugInfo);
 
-      m_aOS = m_aHttpResponse.getOutputStream ();
-      setContentLength (m_nContentLength);
-      if (m_aBAOS != null)
+      this.m_aOS = this.m_aHttpResponse.getOutputStream ();
+      setContentLength (this.m_nContentLength);
+      if (this.m_aBAOS != null)
       {
         // Copy all cached content
-        m_aBAOS.writeTo (m_aOS);
-        m_aBAOS = null;
+        this.m_aBAOS.writeTo (this.m_aOS);
+        this.m_aBAOS = null;
       }
     }
   }
@@ -163,125 +164,125 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   @Override
   public final void flush () throws IOException
   {
-    if (m_aOS == null || m_aBAOS != null)
+    if (this.m_aOS == null || this.m_aBAOS != null)
     {
-      if (m_nContentLength > 0 && m_nContentLength < m_nMinCompressSize)
-        doNotCompress ("flush");
+      if (this.m_nContentLength > 0 && this.m_nContentLength < this.m_nMinCompressSize)
+        doNotCompress ("flush"); //$NON-NLS-1$
       else
-        doCompress ("flush");
+        doCompress ("flush"); //$NON-NLS-1$
     }
 
-    m_aOS.flush ();
+    this.m_aOS.flush ();
   }
 
   @Override
   public final void close () throws IOException
   {
-    if (!m_bClosed)
+    if (!this.m_bClosed)
     {
-      final Object aIncluded = m_aHttpRequest.getAttribute ("javax.servlet.include.request_uri");
+      final Object aIncluded = this.m_aHttpRequest.getAttribute ("javax.servlet.include.request_uri"); //$NON-NLS-1$
       if (aIncluded != null)
       {
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("No close because we're including " + aIncluded);
+          s_aLogger.info ("No close because we're including " + aIncluded); //$NON-NLS-1$
         flush ();
       }
       else
       {
-        if (m_aBAOS != null)
+        if (this.m_aBAOS != null)
         {
-          if (m_nContentLength < 0)
-            m_nContentLength = m_aBAOS.size ();
-          if (m_nContentLength < m_nMinCompressSize)
-            doNotCompress ("close with buffer");
+          if (this.m_nContentLength < 0)
+            this.m_nContentLength = this.m_aBAOS.size ();
+          if (this.m_nContentLength < this.m_nMinCompressSize)
+            doNotCompress ("close with buffer"); //$NON-NLS-1$
           else
-            doCompress ("close with buffer");
+            doCompress ("close with buffer"); //$NON-NLS-1$
         }
         else
-          if (m_aOS == null)
-            doNotCompress ("close without buffer");
+          if (this.m_aOS == null)
+            doNotCompress ("close without buffer"); //$NON-NLS-1$
 
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("Closing stream. compressed=" + (m_aCompressedOS != null));
-        if (m_aCompressedOS != null)
-          m_aCompressedOS.close ();
+          s_aLogger.info ("Closing stream. compressed=" + (this.m_aCompressedOS != null)); //$NON-NLS-1$
+        if (this.m_aCompressedOS != null)
+          this.m_aCompressedOS.close ();
         else
-          m_aOS.close ();
-        m_bClosed = true;
+          this.m_aOS.close ();
+        this.m_bClosed = true;
       }
     }
   }
 
   public final boolean isClosed ()
   {
-    return m_bClosed;
+    return this.m_bClosed;
   }
 
   public final void finishAndClose () throws IOException
   {
-    if (!m_bClosed)
+    if (!this.m_bClosed)
     {
-      if (m_aOS == null || m_aBAOS != null)
+      if (this.m_aOS == null || this.m_aBAOS != null)
       {
-        if (m_nContentLength > 0 && m_nContentLength < m_nMinCompressSize)
-          doNotCompress ("finish");
+        if (this.m_nContentLength > 0 && this.m_nContentLength < this.m_nMinCompressSize)
+          doNotCompress ("finish"); //$NON-NLS-1$
         else
-          doCompress ("finish");
+          doCompress ("finish"); //$NON-NLS-1$
       }
 
-      if (m_aCompressedOS != null && !m_bClosed)
+      if (this.m_aCompressedOS != null && !this.m_bClosed)
       {
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("Closing compressed stream in finish!");
-        m_bClosed = true;
-        m_aCompressedOS.close ();
+          s_aLogger.info ("Closing compressed stream in finish!"); //$NON-NLS-1$
+        this.m_bClosed = true;
+        this.m_aCompressedOS.close ();
       }
       else
       {
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("Not closing anything in finish!");
+          s_aLogger.info ("Not closing anything in finish!"); //$NON-NLS-1$
       }
     }
   }
 
   private void _prepareToWrite (@Nonnegative final int nLength) throws IOException
   {
-    if (m_bClosed)
-      throw new IOException ("Already closed");
+    if (this.m_bClosed)
+      throw new IOException ("Already closed"); //$NON-NLS-1$
 
-    if (m_aOS == null)
+    if (this.m_aOS == null)
     {
-      if (m_aHttpResponse.isCommitted ())
-        doNotCompress ("_prepareToWrite new - response already committed");
+      if (this.m_aHttpResponse.isCommitted ())
+        doNotCompress ("_prepareToWrite new - response already committed"); //$NON-NLS-1$
       else
-        if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
-          doNotCompress ("_prepareToWrite new " + m_nContentLength);
+        if (this.m_nContentLength >= 0 && this.m_nContentLength < this.m_nMinCompressSize)
+          doNotCompress ("_prepareToWrite new " + this.m_nContentLength); //$NON-NLS-1$
         else
-          if (nLength > m_nMinCompressSize)
-            doCompress ("_prepareToWrite new " + nLength);
+          if (nLength > this.m_nMinCompressSize)
+            doCompress ("_prepareToWrite new " + nLength); //$NON-NLS-1$
           else
           {
             if (CompressFilterSettings.isDebugModeEnabled ())
-              s_aLogger.info ("Starting new output buffering!");
-            m_aBAOS = new NonBlockingByteArrayOutputStream (DEFAULT_BUFSIZE);
-            m_aOS = m_aBAOS;
+              s_aLogger.info ("Starting new output buffering!"); //$NON-NLS-1$
+            this.m_aBAOS = new NonBlockingByteArrayOutputStream (DEFAULT_BUFSIZE);
+            this.m_aOS = this.m_aBAOS;
           }
     }
     else
-      if (m_aBAOS != null)
+      if (this.m_aBAOS != null)
       {
-        if (m_aHttpResponse.isCommitted ())
-          doNotCompress ("_prepareToWrite buffered - response already committed");
+        if (this.m_aHttpResponse.isCommitted ())
+          doNotCompress ("_prepareToWrite buffered - response already committed"); //$NON-NLS-1$
         else
-          if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
-            doNotCompress ("_prepareToWrite buffered " + m_nContentLength);
+          if (this.m_nContentLength >= 0 && this.m_nContentLength < this.m_nMinCompressSize)
+            doNotCompress ("_prepareToWrite buffered " + this.m_nContentLength); //$NON-NLS-1$
           else
-            if (nLength >= (m_aBAOS.getBufferSize () - m_aBAOS.size ()))
-              doCompress ("_prepareToWrite buffered " + nLength);
+            if (nLength >= this.m_aBAOS.getBufferSize () - this.m_aBAOS.size ())
+              doCompress ("_prepareToWrite buffered " + nLength); //$NON-NLS-1$
             else
             {
               if (CompressFilterSettings.isDebugModeEnabled ())
-                s_aLogger.info ("Continue buffering!");
+                s_aLogger.info ("Continue buffering!"); //$NON-NLS-1$
             }
       }
     // Else a regular non-buffered OS is present (m_aOS != null)
@@ -291,7 +292,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   public final void write (final int nByte) throws IOException
   {
     _prepareToWrite (1);
-    m_aOS.write ((byte) nByte);
+    this.m_aOS.write ((byte) nByte);
   }
 
   @Override
@@ -301,15 +302,29 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   }
 
   @Override
-  public final void write (@Nonnull final byte [] aBytes, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public final void write (@Nonnull final byte [] aBytes,
+                           @Nonnegative final int nOfs,
+                           @Nonnegative final int nLen) throws IOException
   {
     _prepareToWrite (nLen);
-    m_aOS.write (aBytes, nOfs, nLen);
+    this.m_aOS.write (aBytes, nOfs, nLen);
   }
 
   @Nullable
   public final OutputStream getOutputStream ()
   {
-    return m_aOS;
+    return this.m_aOS;
+  }
+
+  @Override
+  public boolean isReady ()
+  {
+    return !this.m_bClosed;
+  }
+
+  @Override
+  public void setWriteListener (final WriteListener writeListener)
+  {
+    // not implemented
   }
 }

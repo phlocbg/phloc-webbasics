@@ -34,12 +34,12 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Internal class from scope aware filter and servlets.
  * 
- * @author Philip Helger
+ * @author Boris Gregorcic
  */
 @Immutable
 public final class RequestScopeInitializer
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (RequestScopeInitializer.class);
+  private static final Logger LOG = LoggerFactory.getLogger (RequestScopeInitializer.class);
 
   private final IRequestWebScope m_aRequestScope;
   private final boolean m_bCreatedIt;
@@ -55,8 +55,8 @@ public final class RequestScopeInitializer
    */
   private RequestScopeInitializer (@Nonnull final IRequestWebScope aRequestScope, final boolean bCreatedIt)
   {
-    m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope");
-    m_bCreatedIt = bCreatedIt;
+    this.m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope"); //$NON-NLS-1$
+    this.m_bCreatedIt = bCreatedIt;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class RequestScopeInitializer
   @Nonnull
   public IRequestWebScope getRequestScope ()
   {
-    return m_aRequestScope;
+    return this.m_aRequestScope;
   }
 
   /**
@@ -73,7 +73,7 @@ public final class RequestScopeInitializer
    */
   public void destroyScope ()
   {
-    if (m_bCreatedIt)
+    if (this.m_bCreatedIt)
     {
       // End the scope after the complete filtering process (if it was
       // created)
@@ -86,7 +86,7 @@ public final class RequestScopeInitializer
                                                 @Nonnull final HttpServletRequest aHttpRequest,
                                                 @Nonnull final HttpServletResponse aHttpResponse)
   {
-    ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
+    ValueEnforcer.notEmpty (sApplicationID, "ApplicationID"); //$NON-NLS-1$
 
     // Check if a request scope is already present
     final IRequestWebScope aExistingRequestScope = WebScopeManager.getRequestScopeOrNull ();
@@ -102,20 +102,18 @@ public final class RequestScopeInitializer
         if (!sApplicationID.equals (sExistingApplicationID))
         {
           // Application ID mismatch!
-          s_aLogger.warn ("The existing request scope has the application ID '" +
-                          sExistingApplicationID +
-                          "' but now the application ID '" +
-                          sApplicationID +
-                          "' should be used. The old application ID '" +
-                          sExistingApplicationID +
-                          "' is continued to be used!!!");
+          LOG.warn ("The existing request scope has the application ID '{}' but now the application ID '{}' should be used. The old application ID '{}' is continued to be used!!!", //$NON-NLS-1$
+                    sExistingApplicationID,
+                    sApplicationID,
+                    sExistingApplicationID);
         }
         return new RequestScopeInitializer (aExistingRequestScope, false);
       }
-
-      // Wow...
-      s_aLogger.error ("The existing request scope is no longer valid - creating a new one: " +
-                       aExistingRequestScope.toString ());
+      if (LOG.isErrorEnabled ())
+      {
+        LOG.error ("The existing request scope is no longer valid - creating a new one: {}", //$NON-NLS-1$
+                   aExistingRequestScope);
+      }
     }
 
     // No valid scope present
