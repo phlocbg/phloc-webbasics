@@ -165,14 +165,18 @@ public final class CookieHelper
     aHttpResponse.addCookie (aCookie);
   }
 
-  public static void correctCookieHeaders (final HttpServletResponse aHttpResponse)
+  public static void correctCookieHeaders (final HttpServletResponse aHttpResponse,
+                                           final HttpServletRequest aHttpRequest)
   {
     if (!FORCE_COOKIES_SECURE.get () && !FORCE_COOKIES_SAMESITE_NONE.get ())
     {
       return;
     }
+    if (!aHttpRequest.isSecure () && aHttpRequest.getRequestURL ().indexOf ("https://") != 0) //$NON-NLS-1$
+    {
+      return;
+    }
     final List <String> aCookieHeaders = ContainerHelper.newList ();
-
     for (final String sHeaderName : aHttpResponse.getHeaderNames ())
     {
       if (EqualsUtils.nullSafeEqualsIgnoreCase (sHeaderName, CHTTPHeader.SET_COOKIE))

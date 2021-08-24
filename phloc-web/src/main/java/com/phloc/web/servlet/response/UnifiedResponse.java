@@ -1204,7 +1204,7 @@ public class UnifiedResponse
       for (final Cookie aCookie : this.m_aCookies.values ())
         aHttpResponse.addCookie (aCookie);
 
-    CookieHelper.correctCookieHeaders (aHttpResponse);
+    CookieHelper.correctCookieHeaders (aHttpResponse, this.m_aHttpRequest);
 
     // Write the body to the response
     _applyContent (aHttpResponse);
