@@ -15,7 +15,9 @@ public enum ERequestDispatcherErrors
  ERROR_MESSAGE ("javax.servlet.error.message"), //$NON-NLS-1$
  ERROR_REQUEST_URI ("javax.servlet.error.request_uri"), //$NON-NLS-1$
  ERROR_SERVLET_NAME ("javax.servlet.error.servlet_name"), //$NON-NLS-1$
- ERROR_STATUS_CODE ("javax.servlet.error.status_code"); //$NON-NLS-1$
+ ERROR_STATUS_CODE ("javax.servlet.error.status_code"), //$NON-NLS-1$
+ FORWARD_SERVLET_PATH ("javax.servlet.forward.servlet_path"), //$NON-NLS-1$
+ FORWARD_REQUEST_URI ("javax.servlet.forward.request_uri"); //$NON-NLS-1$
 
   private String m_sID;
 
