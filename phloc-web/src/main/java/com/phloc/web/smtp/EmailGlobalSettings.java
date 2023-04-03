@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp;
 
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 
@@ -34,7 +35,10 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.LockedContainerHelper;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.web.smtp.transport.DoNothingEMailSendListener;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -80,6 +84,8 @@ public final class EmailGlobalSettings
 
   private static boolean s_bAllowNonVendorMailsInDebugOnLocalhost;
 
+  private static List <String> s_aAllowedNonVendorDomains = ContainerHelper.newList ();
+
   private EmailGlobalSettings ()
   {}
 
@@ -91,6 +97,48 @@ public final class EmailGlobalSettings
   public static boolean isAllowNonVendorMailsInDebugOnLocalhost ()
   {
     return s_bAllowNonVendorMailsInDebugOnLocalhost;
+  }
+
+  public static void setAllowedNonVendorDomains (final List <String> aAllowedNonVendorDomains)
+  {
+    LOCK.writeLock ().lock ();
+    try
+    {
+      s_aAllowedNonVendorDomains.clear ();
+      if (aAllowedNonVendorDomains != null)
+      {
+        s_aAllowedNonVendorDomains.addAll (aAllowedNonVendorDomains);
+      }
+    }
+    finally
+    {
+      LOCK.writeLock ().unlock ();
+    }
+  }
+
+  public static boolean isAllowedNonVendorDomain (final String sEmail)
+  {
+    LOCK.readLock ().lock ();
+    try
+    {
+      for (final String sAllowedDomain : s_aAllowedNonVendorDomains)
+      {
+        if (StringHelper.endsWith (sEmail, '@' + sAllowedDomain))
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+    finally
+    {
+      LOCK.readLock ().unlock ();
+    }
+  }
+
+  public static List <String> getAllowedNonVendorDomains ()
+  {
+    return LockedContainerHelper.getList (s_aAllowedNonVendorDomains, LOCK);
   }
 
   /**

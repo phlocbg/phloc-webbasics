@@ -170,8 +170,16 @@ public final class MailAPI
     {
       final String sVendorEmailSuffix = VendorInfo.getVendorEmailSuffix ();
       for (final IEmailAddress aAddress : aAddresses)
+      {
         if (!aAddress.getAddress ().endsWith (sVendorEmailSuffix))
-          return true;
+        {
+          // check if the domain is explicitly allowed
+          if (!EmailGlobalSettings.isAllowedNonVendorDomain (aAddress.getAddress ()))
+          {
+            return true;
+          }
+        }
+      }
     }
     return false;
   }
