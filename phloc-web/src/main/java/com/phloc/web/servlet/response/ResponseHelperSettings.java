@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2006-2015 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
@@ -62,6 +62,7 @@ public final class ResponseHelperSettings
   public static final boolean DEFAULT_RESPONSE_COMPRESSION_ENABLED = true;
   public static final boolean DEFAULT_RESPONSE_GZIP_ENABLED = true;
   public static final boolean DEFAULT_RESPONSE_DERFLATE_ENABLED = true;
+  public static final boolean DEFAULT_FORCE_FILENAME_RFC5987 = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (ResponseHelperSettings.class);
 
@@ -70,6 +71,7 @@ public final class ResponseHelperSettings
   private static boolean s_bResponseCompressionEnabled = DEFAULT_RESPONSE_COMPRESSION_ENABLED;
   private static boolean s_bResponseGzipEnabled = DEFAULT_RESPONSE_GZIP_ENABLED;
   private static boolean s_bResponseDeflateEnabled = DEFAULT_RESPONSE_DERFLATE_ENABLED;
+  private static boolean s_bForceFilenameRFC5987 = DEFAULT_FORCE_FILENAME_RFC5987;
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -287,6 +289,45 @@ public final class ResponseHelperSettings
     try
     {
       return s_nExpirationSeconds;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public static EChange setForceFilenameRFC5987 (final boolean bForceFilenameRFC5987)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bForceFilenameRFC5987 == bForceFilenameRFC5987)
+        return EChange.UNCHANGED;
+      s_bForceFilenameRFC5987 = bForceFilenameRFC5987;
+      s_aLogger.info ("ResponseHelper ForceFilenameRFC5987=" + bForceFilenameRFC5987); //$NON-NLS-1$
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * Option for workaround of content disposition problem with tomcat
+   * (https://bz.apache.org/bugzilla/show_bug.cgi?id=66512)
+   * 
+   * @return <code>true</code> if the filename will be using the same value as
+   *         the corresponding RFC5987 filename* on content disposition
+   *         <code>false</code> if not
+   */
+  public static boolean isForceFilenameRFC5987 ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bForceFilenameRFC5987;
     }
     finally
     {

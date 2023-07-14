@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2006-2015 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,12 +155,6 @@ public class UnifiedResponse
 
   /** This maps keeps all the response headers for later emitting. */
   private final HTTPHeaderMap m_aRequestHeaderMap;
-
-  /**
-   * An optional encode to be used to determine if a content-disposition
-   * filename can be ISO-8859-1 encoded.
-   */
-  private CharsetEncoder m_aContentDispositionEncoder;
 
   /**
    * Constructor
@@ -1088,18 +1081,21 @@ public class UnifiedResponse
       }
       else
       {
-        // Filename needs to be surrounded with double quotes (single quotes
-        // don't work).
-        aSB.append (this.m_eContentDispositionType.getID ())
-           .append ("; filename=\"")
-           .append (this.m_sContentDispositionFilename)
-           .append ("\"");
-
         // Check if we need an UTF-8 filename
         // http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http/6745788#6745788
         final String sRFC5987Filename = RFC5987Encoder.getRFC5987EncodedUTF8 (this.m_sContentDispositionFilename);
-        if (!sRFC5987Filename.equals (this.m_sContentDispositionFilename))
+        final boolean bSetRFC5987 = !sRFC5987Filename.equals (this.m_sContentDispositionFilename);
+
+        final String sFilename = bSetRFC5987 &&
+                                 ResponseHelperSettings.isForceFilenameRFC5987 () ? sRFC5987Filename
+                                                                                  : this.m_sContentDispositionFilename;
+        // Filename needs to be surrounded with double quotes (single quotes
+        // don't work).
+        aSB.append (this.m_eContentDispositionType.getID ()).append ("; filename=\"").append (sFilename).append ("\"");
+        if (bSetRFC5987)
+        {
           aSB.append ("; filename*=UTF-8''").append (sRFC5987Filename);
+        }
       }
 
       aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, aSB.toString ());

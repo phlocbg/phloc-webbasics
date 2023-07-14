@@ -21,6 +21,18 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   
+  <release date="2023-07-14" version="5.9.5" />
+  <entry date="2023-07-14" category="feature" action="add">
+    <change>
+      <text locale="en">Added optIn handling for UnifiedResponse content disposition filename encoding to counter Tomcat bug (https://bz.apache.org/bugzilla/show_bug.cgi?id=66512). Supports https://jira.boc-group.com/browse/AXX-104828</text>
+    </change>
+  </entry>
+  <release date="2023-04-03" version="5.9.4" />
+  <entry date="2023-04-03" category="feature" action="add">
+    <change>
+      <text locale="en">Possibility to specify additional non-vendor domains for being allowed in debug mode</text>
+    </change>
+  </entry>
   <release date="2021-08-24" version="5.9.3" />
   <entry date="2021-08-24" category="feature" action="add">
     <change>
