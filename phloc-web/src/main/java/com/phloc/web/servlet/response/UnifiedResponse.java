@@ -1,4 +1,4 @@
-﻿/**
+/**
 * Copyright (C) 2006-2015 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
