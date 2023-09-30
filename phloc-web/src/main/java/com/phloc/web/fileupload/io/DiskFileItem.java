@@ -585,10 +585,13 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
   @Override
   public String toString ()
   {
+    // avoid information disclosure about the server file system in case toString ends up in a response (e.g. on redirect when requesting a file item with expired session)
+    File aStoreLocation = getStoreLocation ();
+    String sStoreLocation = aStoreLocation == null ? null : aStoreLocation.getName ();
     return "name=" +
            getName () +
            ", StoreLocation=" +
-           getStoreLocation () +
+           sStoreLocation +
            ", size=" +
            getSize () +
            "bytes, " +

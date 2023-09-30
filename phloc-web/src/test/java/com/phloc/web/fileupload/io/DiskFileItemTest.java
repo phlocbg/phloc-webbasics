@@ -159,6 +159,20 @@ public final class DiskFileItemTest
   }
 
   /**
+   * Verify that only the file name, not the path is contained in the toString
+   * representation
+   */
+  @Test
+  public void testToString ()
+  {
+    // Create the FileItem
+    final byte [] testFieldValueBytes = _createContentBytes (threshold + 1);
+    final IFileItem item = _createFileItem (testFieldValueBytes);
+    final String sPath = ((DiskFileItem) item).getStoreLocation ().getAbsolutePath ();
+    assertFalse (item.toString ().contains (sPath));
+  }
+
+  /**
    * Compare FileItem's (except the byte[] content)
    */
   private void _compareFileItems (final IFileItem origItem, final IFileItem newItem)
