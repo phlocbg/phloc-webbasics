@@ -24,10 +24,10 @@ import java.util.zip.DeflaterOutputStream;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +180,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   {
     if (!this.m_bClosed)
     {
-      final Object aIncluded = this.m_aHttpRequest.getAttribute ("javax.servlet.include.request_uri"); //$NON-NLS-1$
+      final Object aIncluded = this.m_aHttpRequest.getAttribute ("jakarta.servlet.include.request_uri"); //$NON-NLS-1$
       if (aIncluded != null)
       {
         if (CompressFilterSettings.isDebugModeEnabled ())

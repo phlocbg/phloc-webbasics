@@ -22,9 +22,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletRequestListener;
-import javax.servlet.http.HttpSessionListener;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletRequestListener;
+import jakarta.servlet.http.HttpSessionListener;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 

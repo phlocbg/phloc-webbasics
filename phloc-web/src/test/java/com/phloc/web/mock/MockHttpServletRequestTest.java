@@ -20,7 +20,7 @@ package com.phloc.web.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.junit.Test;
 

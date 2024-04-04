@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>24.3</version>
+    <version>24.4-SNAPSHOT</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -80,13 +80,19 @@
       <version>6.9.3</version>
     </dependency>
 
-    <dependency>
+    <!-- <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency> -->
 
+<dependency>
+    <groupId>jakarta.servlet..</groupId>
+    <artifactId>jakarta.servlet.-api</artifactId>
+    <version>6.0.0</version>
+    <scope>provided</scope>
+</dependency>
 
     <dependency>
       <groupId>junit</groupId>

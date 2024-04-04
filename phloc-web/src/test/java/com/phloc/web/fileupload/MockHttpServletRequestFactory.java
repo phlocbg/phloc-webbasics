@@ -18,7 +18,7 @@
 package com.phloc.web.fileupload;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.phloc.web.mock.MockHttpServletRequest;
 
