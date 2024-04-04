@@ -18,7 +18,7 @@
 package com.phloc.webscopes.util;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;

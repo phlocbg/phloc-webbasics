@@ -23,7 +23,7 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

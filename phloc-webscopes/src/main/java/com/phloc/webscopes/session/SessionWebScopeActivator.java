@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionActivationListener;
-import javax.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionActivationListener;
+import jakarta.servlet.http.HttpSessionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

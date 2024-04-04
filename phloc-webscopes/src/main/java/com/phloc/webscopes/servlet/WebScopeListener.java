@@ -18,10 +18,10 @@
 package com.phloc.webscopes.servlet;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 
 import com.phloc.webscopes.mgr.WebScopeManager;
 

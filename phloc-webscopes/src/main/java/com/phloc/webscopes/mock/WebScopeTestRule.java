@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.junit.rules.ExternalResource;
 
