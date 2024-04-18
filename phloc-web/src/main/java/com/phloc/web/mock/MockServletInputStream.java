@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.ServletInputStream;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;

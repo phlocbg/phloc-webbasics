@@ -22,8 +22,8 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 
 import com.phloc.web.http.HTTPHeaderMap;
 
@@ -49,15 +49,6 @@ public class StatusAwareHttpResponseWrapper extends HttpServletResponseWrapper
   public void setStatus (final int sc)
   {
     super.setStatus (sc);
-    m_nStatusCode = sc;
-  }
-
-  @Override
-  @Deprecated
-  @OverridingMethodsMustInvokeSuper
-  public void setStatus (final int sc, final String sm)
-  {
-    super.setStatus (sc, sm);
     m_nStatusCode = sc;
   }
 

@@ -25,17 +25,15 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionBindingListener;
-import javax.servlet.http.HttpSessionContext;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionBindingEvent;
+import jakarta.servlet.http.HttpSessionBindingListener;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -48,7 +46,6 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-@SuppressWarnings ("deprecation")
 @NotThreadSafe
 public class MockHttpSession implements HttpSession
 {
@@ -141,13 +138,6 @@ public class MockHttpSession implements HttpSession
   public int getMaxInactiveInterval ()
   {
     return m_nMaxInactiveInterval;
-  }
-
-  @Deprecated
-  @UnsupportedOperation
-  public HttpSessionContext getSessionContext ()
-  {
-    throw new UnsupportedOperationException ("getSessionContext");
   }
 
   @Nullable

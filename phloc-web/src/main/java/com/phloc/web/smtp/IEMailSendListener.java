@@ -1,6 +1,6 @@
 package com.phloc.web.smtp;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 public interface IEMailSendListener
 {

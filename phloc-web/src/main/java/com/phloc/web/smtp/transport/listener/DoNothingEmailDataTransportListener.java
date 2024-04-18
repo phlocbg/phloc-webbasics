@@ -18,7 +18,7 @@
 package com.phloc.web.smtp.transport.listener;
 
 import javax.annotation.Nonnull;
-import javax.mail.event.TransportEvent;
+import jakarta.mail.event.TransportEvent;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.IEmailData;

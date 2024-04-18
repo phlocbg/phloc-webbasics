@@ -20,7 +20,7 @@ package com.phloc.web.datasource;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.activation.DataSource;
+import jakarta.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

@@ -29,10 +29,10 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -503,20 +503,6 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   }
 
   @Override
-  @Deprecated
-  public String encodeUrl (@Nullable final String sUrl)
-  {
-    return encodeURL (sUrl);
-  }
-
-  @Override
-  @Deprecated
-  public String encodeRedirectUrl (@Nullable final String sUrl)
-  {
-    return encodeRedirectURL (sUrl);
-  }
-
-  @Override
   public void sendError (final int nStatus, @Nullable final String sErrorMessage) throws IOException
   {
     if (isCommitted ())
@@ -607,14 +593,6 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
   public void setStatus (final int nStatus)
   {
     this.m_nStatus = nStatus;
-  }
-
-  @Override
-  @Deprecated
-  public void setStatus (final int nStatus, @Nullable final String sErrorMessage)
-  {
-    this.m_nStatus = nStatus;
-    this.m_sErrorMessage = sErrorMessage;
   }
 
   @Override

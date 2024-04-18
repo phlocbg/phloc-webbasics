@@ -19,7 +19,7 @@ package com.phloc.web.smtp;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.mail.Part;
+import jakarta.mail.Part;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;

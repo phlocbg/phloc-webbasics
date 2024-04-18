@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

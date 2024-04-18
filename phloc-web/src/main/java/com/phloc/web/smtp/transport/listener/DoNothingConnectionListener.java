@@ -18,8 +18,8 @@
 package com.phloc.web.smtp.transport.listener;
 
 import javax.annotation.Nonnull;
-import javax.mail.event.ConnectionEvent;
-import javax.mail.event.ConnectionListener;
+import jakarta.mail.event.ConnectionEvent;
+import jakarta.mail.event.ConnectionListener;
 
 import com.phloc.commons.string.ToStringGenerator;
 

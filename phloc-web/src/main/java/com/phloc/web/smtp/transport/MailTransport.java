@@ -25,15 +25,15 @@ import java.util.Properties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.mail.AuthenticationFailedException;
-import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.event.ConnectionListener;
-import javax.mail.event.TransportEvent;
-import javax.mail.event.TransportListener;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.Message.RecipientType;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.event.ConnectionListener;
+import jakarta.mail.event.TransportEvent;
+import jakarta.mail.event.TransportListener;
+import jakarta.mail.internet.MimeMessage;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ import com.sun.mail.smtp.SMTPAddressSucceededException;
 import com.sun.mail.smtp.SMTPTransport;
 
 /**
- * The wrapper around the main javax.mail transport
+ * The wrapper around the main jakarta.mail transport
  * 
  * @author Philip Helger
  */

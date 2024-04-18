@@ -19,7 +19,7 @@ package com.phloc.webscopes.mock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.junit.Rule;
 

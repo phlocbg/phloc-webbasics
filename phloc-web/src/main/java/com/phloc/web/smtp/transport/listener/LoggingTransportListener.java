@@ -19,12 +19,12 @@ package com.phloc.web.smtp.transport.listener;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.event.TransportEvent;
-import javax.mail.event.TransportListener;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.event.TransportEvent;
+import jakarta.mail.event.TransportListener;
+import jakarta.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

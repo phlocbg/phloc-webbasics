@@ -26,8 +26,8 @@ import java.util.zip.ZipOutputStream;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;

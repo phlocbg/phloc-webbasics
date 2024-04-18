@@ -18,10 +18,10 @@
 package com.phloc.web.smtp;
 
 import javax.annotation.Nonnull;
-import javax.mail.event.TransportEvent;
+import jakarta.mail.event.TransportEvent;
 
 /**
- * An interface similar to javax.mail.event.TransportListener but specific
+ * An interface similar to jakarta.mail.event.TransportListener but specific
  * relations to out internal object types {@link ISMTPSettings} and
  * {@link IEmailData}.
  * 

@@ -19,15 +19,15 @@ package com.phloc.web.smtp.transport;
 
 import java.nio.charset.Charset;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 
 import com.phloc.commons.exceptions.LoggedRuntimeException;
 import com.phloc.commons.mime.CMimeType;
@@ -144,7 +144,7 @@ public final class MailConverter
    * Fill the {@link MimeMessage} object with the {@link IEmailData} elements.
    * 
    * @param aMimeMessage
-   *        The javax.mail object to be filled.
+   *        The jakarta.mail object to be filled.
    * @param aMailData
    *        The mail data object that contains all the source information to be
    *        send.

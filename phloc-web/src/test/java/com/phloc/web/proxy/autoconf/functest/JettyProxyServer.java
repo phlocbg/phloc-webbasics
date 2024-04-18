@@ -19,20 +19,18 @@ package com.phloc.web.proxy.autoconf.functest;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.ProxyServlet;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Slf4jLog;
+import org.eclipse.jetty.proxy.ProxyServlet;
 
 import com.phloc.commons.url.URLProtocolRegistry;
 
@@ -40,15 +38,13 @@ public class JettyProxyServer
 {
   public static void main (final String... args) throws Exception
   {
-    Log.setLog (new Slf4jLog ("jetty.proxy"));
 
     // Create main server
     final Server aServer = new Server ();
     // Create connector on Port 8080
-    final Connector aConnector = new SelectChannelConnector ();
+    final ServerConnector aConnector = new ServerConnector(aServer);
     aConnector.setPort (8080);
-    aConnector.setMaxIdleTime (30000);
-    aConnector.setStatsOn (true);
+    aConnector.setIdleTimeout (30000);
     aServer.setConnectors (new Connector [] { aConnector });
 
     // Create main context at path "/"

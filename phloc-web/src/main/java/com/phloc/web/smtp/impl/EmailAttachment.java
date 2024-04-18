@@ -24,7 +24,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 
-import javax.activation.FileTypeMap;
+import jakarta.activation.FileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

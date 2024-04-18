@@ -39,21 +39,22 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUpgradeHandler;
-import javax.servlet.http.Part;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.ServletConnection;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletRequestEvent;
+import jakarta.servlet.ServletRequestListener;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpUpgradeHandler;
+import jakarta.servlet.http.Part;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -762,13 +763,6 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
     return new MockRequestDispatcher (sPath);
   }
 
-  @Override
-  @Deprecated
-  public String getRealPath (@Nonnull final String sPath)
-  {
-    return getServletContext ().getRealPath (sPath);
-  }
-
   @Nonnull
   public MockHttpServletRequest setRemotePort (final int nRemotePort)
   {
@@ -975,7 +969,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nullable
   public String getPathTranslated ()
   {
-    return this.m_sPathInfo != null ? getRealPath (this.m_sPathInfo) : null;
+    return this.m_sPathInfo != null ? getServletContext ().getRealPath(this.m_sPathInfo) : null;
   }
 
   @Nonnull
@@ -1199,13 +1193,6 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
     return this.m_bRequestedSessionIDFromURL;
   }
 
-  @Override
-  @Deprecated
-  public boolean isRequestedSessionIdFromUrl ()
-  {
-    return isRequestedSessionIdFromURL ();
-  }
-
   /**
    * Set all path related members to the value to be deduced from the request
    * URI.
@@ -1395,5 +1382,26 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public <T extends HttpUpgradeHandler> T upgrade (final Class <T> handlerClass) throws IOException, ServletException
   {
     throw new IllegalStateException ("not implemented"); //$NON-NLS-1$
+  }
+
+  @Override
+  public String getProtocolRequestId ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRequestId ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public ServletConnection getServletConnection ()
+  {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

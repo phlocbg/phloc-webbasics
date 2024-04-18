@@ -20,7 +20,7 @@ package com.phloc.webbasics.servlet;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.mime.CMimeType;

@@ -26,10 +26,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +147,7 @@ public final class WebScopeManager
   /**
    * To be called, when the global web scope is initialized. Most commonly this
    * is called from within
-   * {@link javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)}
+   * {@link jakarta.servlet.ServletContextListener#contextInitialized(jakarta.servlet.ServletContextEvent)}
    * 
    * @param aServletContext
    *        The source servlet context to be used to retrieve the scope ID. May
@@ -209,7 +209,7 @@ public final class WebScopeManager
   /**
    * To be called, when the global web scope is destroyed. Most commonly this is
    * called from within
-   * {@link javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)}
+   * {@link jakarta.servlet.ServletContextListener#contextDestroyed(jakarta.servlet.ServletContextEvent)}
    */
   public static void onGlobalEnd ()
   {
@@ -314,7 +314,7 @@ public final class WebScopeManager
   /**
    * To be called, when a session web scope is initialized. Most commonly this
    * is called from within
-   * {@link javax.servlet.http.HttpSessionListener#sessionCreated(javax.servlet.http.HttpSessionEvent)}
+   * {@link jakarta.servlet.http.HttpSessionListener#sessionCreated(jakarta.servlet.http.HttpSessionEvent)}
    * 
    * @param aHttpSession
    *        The source session to base the scope on. May not be
@@ -546,7 +546,7 @@ public final class WebScopeManager
   /**
    * To be called, when a session web scope is destroyed. Most commonly this is
    * called from within
-   * {@link javax.servlet.http.HttpSessionListener#sessionDestroyed(javax.servlet.http.HttpSessionEvent)}
+   * {@link jakarta.servlet.http.HttpSessionListener#sessionDestroyed(jakarta.servlet.http.HttpSessionEvent)}
    * 
    * @param aHttpSession
    *        The source session to destroy the matching scope. May not be

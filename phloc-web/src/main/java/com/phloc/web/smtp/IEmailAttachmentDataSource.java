@@ -17,7 +17,7 @@
  */
 package com.phloc.web.smtp;
 
-import javax.activation.DataSource;
+import jakarta.activation.DataSource;
 import javax.annotation.Nonnull;
 
 /**

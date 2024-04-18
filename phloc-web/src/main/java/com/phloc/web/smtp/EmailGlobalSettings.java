@@ -26,8 +26,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import javax.mail.event.ConnectionListener;
-import javax.mail.event.TransportListener;
+import jakarta.mail.event.ConnectionListener;
+import jakarta.mail.event.TransportListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -441,7 +441,7 @@ public final class EmailGlobalSettings
   }
 
   /**
-   * Enable or disable javax.mail debugging. By default debugging is disabled.
+   * Enable or disable jakarta.mail debugging. By default debugging is disabled.
    * 
    * @param bDebug
    *        <code>true</code> to enabled debugging, <code>false</code> to
@@ -458,7 +458,7 @@ public final class EmailGlobalSettings
   }
 
   /**
-   * @return <code>true</code> if javax.mail debugging is enabled,
+   * @return <code>true</code> if jakarta.mail debugging is enabled,
    *         <code>false</code> if not.
    */
   public static boolean isJavaxMailDebuggingEnabled ()

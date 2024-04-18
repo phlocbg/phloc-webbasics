@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Interface for a single web request scope object that also offers access to

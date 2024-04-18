@@ -33,20 +33,20 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.ServletRegistration.Dynamic;
-import javax.servlet.SessionCookieConfig;
-import javax.servlet.SessionTrackingMode;
-import javax.servlet.descriptor.JspConfigDescriptor;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterRegistration;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.ServletRegistration.Dynamic;
+import jakarta.servlet.SessionCookieConfig;
+import jakarta.servlet.SessionTrackingMode;
+import jakarta.servlet.descriptor.JspConfigDescriptor;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -302,39 +302,9 @@ public class MockServletContext implements ServletContext
   }
 
   @Override
-  @Deprecated
-  public Servlet getServlet (@Nullable final String sName)
-  {
-    return null;
-  }
-
-  @Override
-  @Deprecated
-  @Nonnull
-  public Enumeration <Servlet> getServlets ()
-  {
-    return ContainerHelper.<Servlet> getEmptyEnumeration ();
-  }
-
-  @Override
-  @Deprecated
-  @Nonnull
-  public Enumeration <String> getServletNames ()
-  {
-    return ContainerHelper.<String> getEmptyEnumeration ();
-  }
-
-  @Override
   public void log (@Nullable final String message)
   {
     s_aLogger.info (message);
-  }
-
-  @Override
-  @Deprecated
-  public void log (@Nullable final Exception ex, @Nullable final String sMessage)
-  {
-    s_aLogger.info (sMessage, ex);
   }
 
   @Override
@@ -584,21 +554,21 @@ public class MockServletContext implements ServletContext
   }
 
   @Override
-  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final String className)
+  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final String className)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final Filter filter)
+  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final Filter filter)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName,
+  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName,
                                                              final Class <? extends Filter> filterClass)
   {
     // TODO Auto-generated method stub
@@ -708,5 +678,54 @@ public class MockServletContext implements ServletContext
   {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  @Override
+  public Dynamic addJspFile (String arg0, String arg1)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRequestCharacterEncoding ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getResponseCharacterEncoding ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public int getSessionTimeout ()
+  {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public void setRequestCharacterEncoding (String arg0)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void setResponseCharacterEncoding (String arg0)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void setSessionTimeout (int arg0)
+  {
+    // TODO Auto-generated method stub
+    
   }
 }
