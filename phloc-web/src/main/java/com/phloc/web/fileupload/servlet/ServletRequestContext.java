@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.web.fileupload.IRequestContext;
 import com.phloc.web.servlet.request.RequestHelper;

@@ -26,9 +26,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.ServletRequestListener;
-import jakarta.servlet.http.HttpSessionListener;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpSessionListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -33,20 +33,20 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterRegistration;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.Servlet;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRegistration;
-import jakarta.servlet.ServletRegistration.Dynamic;
-import jakarta.servlet.SessionCookieConfig;
-import jakarta.servlet.SessionTrackingMode;
-import jakarta.servlet.descriptor.JspConfigDescriptor;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.Dynamic;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -584,21 +584,21 @@ public class MockServletContext implements ServletContext
   }
 
   @Override
-  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final String className)
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final String className)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final Filter filter)
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName, final Filter filter)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public jakarta.servlet.FilterRegistration.Dynamic addFilter (final String filterName,
+  public javax.servlet.FilterRegistration.Dynamic addFilter (final String filterName,
                                                              final Class <? extends Filter> filterClass)
   {
     // TODO Auto-generated method stub

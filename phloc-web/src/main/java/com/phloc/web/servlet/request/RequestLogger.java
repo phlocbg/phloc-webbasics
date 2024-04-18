@@ -25,9 +25,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

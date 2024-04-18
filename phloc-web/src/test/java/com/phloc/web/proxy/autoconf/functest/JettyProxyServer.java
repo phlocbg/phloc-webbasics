@@ -19,11 +19,11 @@ package com.phloc.web.proxy.autoconf.functest;
 
 import java.io.IOException;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;

@@ -24,8 +24,8 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;

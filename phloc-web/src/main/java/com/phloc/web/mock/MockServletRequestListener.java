@@ -20,8 +20,8 @@ package com.phloc.web.mock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import jakarta.servlet.ServletRequestEvent;
-import jakarta.servlet.ServletRequestListener;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
 
 /**
  * This mock listeners is responsible for creating

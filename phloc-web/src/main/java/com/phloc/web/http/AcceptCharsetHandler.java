@@ -20,7 +20,7 @@ package com.phloc.web.http;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;

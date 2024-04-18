@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.web.fileupload.FileUpload;

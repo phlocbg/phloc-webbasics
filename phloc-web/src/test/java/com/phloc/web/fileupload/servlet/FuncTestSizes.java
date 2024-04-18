@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 

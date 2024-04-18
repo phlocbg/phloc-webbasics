@@ -533,7 +533,7 @@ problem: JAVA0018:JAVA0018 Method name '_hasValidExtension' does not have requir
 problem: JAVA0130:JAVA0130 Non-static method '_hasValidExtension' does not use instance fields
 problem: JAVA0034:JAVA0034 Missing braces in if statement
 problem: JAVA0018:JAVA0018 Method name '_isPossibleDirectoryTraversalRequest' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
-problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'jakarta.servlet.ServletException'
+problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'javax.servlet.ServletException'
 path: /phloc-webbasics/src/main/java/com/phloc/webbasics/servlet/AbstractStreamServlet.java
 problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
 problem: JAVA0034:JAVA0034 Missing braces in if statement
@@ -620,12 +620,12 @@ problem: JAVA0034:JAVA0034 Missing braces in if statement
 path: /phloc-webbasics/src/main/java/com/phloc/webbasics/servlet/LogoutServlet.java
 problem: JAVA0234:JAVA0234 Class 'LogoutServlet' is Serializable but does not define serialVersionUID
 problem: JAVA0057:JAVA0057 Unnecessary default constructor 'LogoutServlet'
-problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'jakarta.servlet.ServletException'
+problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'javax.servlet.ServletException'
 problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'java.io.IOException'
 problem: JAVA0034:JAVA0034 Missing braces in if statement
 path: /phloc-webbasics/src/main/java/com/phloc/webbasics/servlet/PingPongServlet.java
 problem: JAVA0234:JAVA0234 Class 'PingPongServlet' is Serializable but does not define serialVersionUID
-problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'jakarta.servlet.ServletException'
+problem: JAVA0160:JAVA0160 Method 'handleRequest' does not throw specified exception 'javax.servlet.ServletException'
 path: /phloc-webbasics/src/main/java/com/phloc/webbasics/servlet/WebAppListener.java
 problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_INIT_PARAMETER_TRACE'
 problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_INIT_PARAMETER_DEBUG'

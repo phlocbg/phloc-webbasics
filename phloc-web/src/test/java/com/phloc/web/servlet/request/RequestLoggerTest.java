@@ -19,7 +19,7 @@ package com.phloc.web.servlet.request;
 
 import static org.junit.Assert.assertNotNull;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 

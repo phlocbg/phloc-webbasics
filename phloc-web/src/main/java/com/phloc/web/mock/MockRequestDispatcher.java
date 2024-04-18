@@ -19,10 +19,10 @@ package com.phloc.web.mock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

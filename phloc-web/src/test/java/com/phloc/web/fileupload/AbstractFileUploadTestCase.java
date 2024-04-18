@@ -19,7 +19,7 @@ package com.phloc.web.fileupload;
 
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.web.fileupload.io.DiskFileItemFactory;

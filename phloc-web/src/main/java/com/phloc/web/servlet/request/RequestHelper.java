@@ -26,7 +26,7 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +55,9 @@ import com.phloc.web.port.DefaultNetworkPorts;
 @Immutable
 public final class RequestHelper
 {
-  public static final String SERVLET_ATTR_SSL_CIPHER_SUITE = "jakarta.servlet.request.cipher_suite";
-  public static final String SERVLET_ATTR_SSL_KEY_SIZE = "jakarta.servlet.request.key_size";
-  public static final String SERVLET_ATTR_CLIENT_CERTIFICATE = "jakarta.servlet.request.X509Certificate";
+  public static final String SERVLET_ATTR_SSL_CIPHER_SUITE = "javax.servlet.request.cipher_suite";
+  public static final String SERVLET_ATTR_SSL_KEY_SIZE = "javax.servlet.request.key_size";
+  public static final String SERVLET_ATTR_CLIENT_CERTIFICATE = "javax.servlet.request.X509Certificate";
 
   private static final String SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP = "$requesthelp.requestparammap";
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestHelper.class);

@@ -19,7 +19,7 @@ package com.phloc.web.mock;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 import com.phloc.web.annotations.IsOffline;
 
