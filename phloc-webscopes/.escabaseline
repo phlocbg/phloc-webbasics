@@ -618,7 +618,7 @@ problem: JAVA0116:JAVA0116 Missing javadoc: field 'MOCK_CONTEXT_PATH'
 path: /phloc-scopes/src/main/java/com/phloc/scopes/web/servlet/AbstractScopeAwareFilter.java
 problem: JAVA0173:JAVA0173 Unused method parameter 'aFilterConfig'
 problem: JAVA0173:JAVA0173 Unused method parameter 'aFilterConfig'
-problem: JAVA0160:JAVA0160 Method 'onInit' does not throw specified exception 'jakarta.servlet.ServletException'
+problem: JAVA0160:JAVA0160 Method 'onInit' does not throw specified exception 'javax.servlet.ServletException'
 problem: JAVA0034:JAVA0034 Missing braces in if statement
 problem: JAVA0115:JAVA0115 Incorrect javadoc: no @throws or @exception tag for 'IOException'
 problem: JAVA0115:JAVA0115 Incorrect javadoc: no @throws or @exception tag for 'ServletException'
@@ -635,7 +635,7 @@ problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
 problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
 problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
 problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
-problem: JAVA0160:JAVA0160 Method 'onInit' does not throw specified exception 'jakarta.servlet.ServletException'
+problem: JAVA0160:JAVA0160 Method 'onInit' does not throw specified exception 'javax.servlet.ServletException'
 problem: JAVA0034:JAVA0034 Missing braces in if statement
 problem: JAVA0018:JAVA0018 Method name '_ensureResponseCharset' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
 problem: JAVA0173:JAVA0173 Unused method parameter 'aRequestScope'

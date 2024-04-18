@@ -20,9 +20,9 @@ package com.phloc.webscopes.servlets.filter;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.state.EContinue;
 import com.phloc.web.http.EHTTPMethod;

@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.Nullable;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 import org.junit.Test;
 

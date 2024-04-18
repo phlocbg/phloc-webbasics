@@ -1,6 +1,6 @@
 package com.phloc.webscopes.util;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockHttpServletResponse;

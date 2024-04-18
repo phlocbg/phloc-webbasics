@@ -19,7 +19,7 @@ package com.phloc.webscopes.domain;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 import com.phloc.scopes.domain.IGlobalScope;
 import com.phloc.webscopes.IWebScope;

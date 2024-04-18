@@ -18,9 +18,9 @@
 package com.phloc.webscopes.session;
 
 import javax.annotation.Nonnull;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionEvent;
-import jakarta.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.webscopes.domain.ISessionWebScope;

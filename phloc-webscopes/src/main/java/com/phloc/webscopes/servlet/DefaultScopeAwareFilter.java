@@ -18,8 +18,8 @@
 package com.phloc.webscopes.servlet;
 
 import javax.annotation.Nonnull;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.state.EContinue;
 import com.phloc.webscopes.domain.IRequestWebScope;

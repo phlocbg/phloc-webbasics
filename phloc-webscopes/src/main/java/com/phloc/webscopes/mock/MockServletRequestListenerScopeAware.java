@@ -19,8 +19,8 @@ package com.phloc.webscopes.mock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
-import jakarta.servlet.ServletRequestEvent;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
