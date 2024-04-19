@@ -26,7 +26,6 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +45,8 @@ import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.port.CNetworkPort;
 import com.phloc.web.port.DefaultNetworkPorts;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
@@ -90,8 +91,9 @@ public final class RequestHelper
   /**
    * Get the request URI without an eventually appended session
    * (";jsessionid=...")
-   * <table summary="Examples of Returned Values">
-   * <tr align=left>
+   * <table>
+   * <caption>Examples of Returned Values</caption>
+   * <tr>
    * <th>First line of HTTP request</th>
    * <th>Returned Value</th>
    * <tr>

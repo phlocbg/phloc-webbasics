@@ -80,12 +80,12 @@ public final class ParameterParser
   /**
    * Are there any characters left to parse?
    * 
-   * @return <tt>true</tt> if there are unparsed characters, <tt>false</tt>
-   *         otherwise.
+   * @return <code>true</code> if there are unparsed characters,
+   *         <code>false</code> otherwise.
    */
   private boolean _hasChar ()
   {
-    return m_nPos < m_nLen;
+    return this.m_nPos < this.m_nLen;
   }
 
   /**
@@ -93,36 +93,38 @@ public final class ParameterParser
    * and trailing blanks as well as enclosing quotation marks, when necessary.
    * 
    * @param quoted
-   *        <tt>true</tt> if quotation marks are expected, <tt>false</tt>
-   *        otherwise.
+   *        <code>true</code> if quotation marks are expected,
+   *        <code>false</code> otherwise.
    * @return the token
    */
   @Nullable
   private String _getToken (final boolean quoted)
   {
     // Trim leading white spaces
-    while (m_nIndex1 < m_nIndex2 && Character.isWhitespace (m_aChars[m_nIndex1]))
+    while (this.m_nIndex1 < this.m_nIndex2 && Character.isWhitespace (this.m_aChars[this.m_nIndex1]))
     {
-      m_nIndex1++;
+      this.m_nIndex1++;
     }
     // Trim trailing white spaces
-    while (m_nIndex2 > m_nIndex1 && Character.isWhitespace (m_aChars[m_nIndex2 - 1]))
+    while (this.m_nIndex2 > this.m_nIndex1 && Character.isWhitespace (this.m_aChars[this.m_nIndex2 - 1]))
     {
-      m_nIndex2--;
+      this.m_nIndex2--;
     }
     // Strip away quotation marks if necessary
     if (quoted)
     {
-      if ((m_nIndex2 - m_nIndex1) >= 2 && m_aChars[m_nIndex1] == '"' && m_aChars[m_nIndex2 - 1] == '"')
+      if ((this.m_nIndex2 - this.m_nIndex1) >= 2 &&
+          this.m_aChars[this.m_nIndex1] == '"' &&
+          this.m_aChars[this.m_nIndex2 - 1] == '"')
       {
-        m_nIndex1++;
-        m_nIndex2--;
+        this.m_nIndex1++;
+        this.m_nIndex2--;
       }
     }
     String result = null;
-    if (m_nIndex2 > m_nIndex1)
+    if (this.m_nIndex2 > this.m_nIndex1)
     {
-      result = new String (m_aChars, m_nIndex1, m_nIndex2 - m_nIndex1);
+      result = new String (this.m_aChars, this.m_nIndex1, this.m_nIndex2 - this.m_nIndex1);
     }
     return result;
   }
@@ -142,15 +144,15 @@ public final class ParameterParser
   private String _parseToken (final char cTerminator1, final char cTerminator2)
   {
     char ch;
-    m_nIndex1 = m_nPos;
-    m_nIndex2 = m_nPos;
+    this.m_nIndex1 = this.m_nPos;
+    this.m_nIndex2 = this.m_nPos;
     while (_hasChar ())
     {
-      ch = m_aChars[m_nPos];
+      ch = this.m_aChars[this.m_nPos];
       if (ch == cTerminator1 || ch == cTerminator2)
         break;
-      m_nIndex2++;
-      m_nPos++;
+      this.m_nIndex2++;
+      this.m_nPos++;
     }
     return _getToken (false);
   }
@@ -168,35 +170,36 @@ public final class ParameterParser
   private String _parseQuotedToken (final char cTerminator)
   {
     char ch;
-    m_nIndex1 = m_nPos;
-    m_nIndex2 = m_nPos;
+    this.m_nIndex1 = this.m_nPos;
+    this.m_nIndex2 = this.m_nPos;
     boolean bQuoted = false;
     boolean bCharEscaped = false;
     while (_hasChar ())
     {
-      ch = m_aChars[m_nPos];
+      ch = this.m_aChars[this.m_nPos];
       if (!bQuoted && cTerminator == ch)
         break;
 
       if (!bCharEscaped && ch == '"')
         bQuoted = !bQuoted;
       bCharEscaped = (!bCharEscaped && ch == '\\');
-      m_nIndex2++;
-      m_nPos++;
+      this.m_nIndex2++;
+      this.m_nPos++;
     }
     return _getToken (true);
   }
 
   /**
-   * Returns <tt>true</tt> if parameter names are to be converted to lower case
-   * when name/value pairs are parsed.
+   * Returns <code>true</code> if parameter names are to be converted to lower
+   * case when name/value pairs are parsed.
    * 
-   * @return <tt>true</tt> if parameter names are to be converted to lower case
-   *         when name/value pairs are parsed. Otherwise returns <tt>false</tt>
+   * @return <code>true</code> if parameter names are to be converted to lower
+   *         case when name/value pairs are parsed. Otherwise returns
+   *         <code>false</code>
    */
   public boolean isLowerCaseNames ()
   {
-    return m_bLowerCaseNames;
+    return this.m_bLowerCaseNames;
   }
 
   /**
@@ -204,12 +207,12 @@ public final class ParameterParser
    * name/value pairs are parsed.
    * 
    * @param b
-   *        <tt>true</tt> if parameter names are to be converted to lower case
-   *        when name/value pairs are parsed. <tt>false</tt> otherwise.
+   *        <code>true</code> if parameter names are to be converted to lower
+   *        case when name/value pairs are parsed. <code>false</code> otherwise.
    */
   public void setLowerCaseNames (final boolean b)
   {
-    m_bLowerCaseNames = b;
+    this.m_bLowerCaseNames = b;
   }
 
   /**
@@ -266,9 +269,9 @@ public final class ParameterParser
     if (str != null)
     {
       final char [] chars = str.toCharArray ();
-      m_aChars = chars;
-      m_nPos = 0;
-      m_nLen = str.length ();
+      this.m_aChars = chars;
+      this.m_nPos = 0;
+      this.m_nLen = str.length ();
 
       String sParamName = null;
       String sParamValue = null;
@@ -276,18 +279,18 @@ public final class ParameterParser
       {
         sParamName = _parseToken ('=', separator);
         sParamValue = null;
-        if (_hasChar () && chars[m_nPos] == '=')
+        if (_hasChar () && chars[this.m_nPos] == '=')
         {
-          m_nPos++; // skip '='
+          this.m_nPos++; // skip '='
           sParamValue = _parseQuotedToken (separator);
         }
-        if (_hasChar () && chars[m_nPos] == separator)
+        if (_hasChar () && chars[this.m_nPos] == separator)
         {
-          m_nPos++; // skip separator
+          this.m_nPos++; // skip separator
         }
         if (StringHelper.hasText (sParamName))
         {
-          if (m_bLowerCaseNames)
+          if (this.m_bLowerCaseNames)
             sParamName = sParamName.toLowerCase (Locale.US);
           params.put (sParamName, sParamValue);
         }
