@@ -23,8 +23,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.domain.IRequestScope;
@@ -33,6 +31,9 @@ import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.IRequestParamMap;
 import com.phloc.webscopes.IWebScope;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Interface for a single web request scope object that does not offer access to
@@ -306,8 +307,9 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the part of this request's URL from the protocol name up to the
    * query string in the first line of the HTTP request. The web container does
    * not decode this String. For example:
-   * <table summary="Examples of Returned Values">
-   * <tr align=left>
+   * <table>
+   * <caption>Examples of Returned Values</caption>
+   * <tr>
    * <th>First line of HTTP request</th>
    * <th>Returned Value</th>
    * </tr>
