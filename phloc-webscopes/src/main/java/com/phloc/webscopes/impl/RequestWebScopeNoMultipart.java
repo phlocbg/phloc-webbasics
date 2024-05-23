@@ -27,9 +27,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +45,6 @@ import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
-import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
@@ -65,6 +61,10 @@ import com.phloc.web.servlet.request.IRequestParamMap;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestParamMap;
 import com.phloc.webscopes.domain.IRequestWebScope;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * A request web scopes that does not parse multi-part requests.
@@ -150,24 +150,22 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     {
       final String sParamName = (String) aEnum.nextElement ();
 
-      // Check if it is a single value or not
-      final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
-
-      LOG.info (sParamName + ":" + StringHelper.getImploded (',', aParamValues));
-
       // Avoid double setting a parameter!
       if (bAddedSpecialRequestAttrs && containsAttribute (sParamName))
       {
         continue;
       }
 
+      // Check if it is a single value or not
+      final String [] aParamValues = this.m_aHttpRequest.getParameterValues (sParamName);
+
       if (aParamValues.length == 1)
       {
-        LOG.info (setAttribute (sParamName, aParamValues[0]).name ());
+        setAttribute (sParamName, aParamValues[0]);
       }
       else
       {
-        LOG.info (setAttribute (sParamName, aParamValues).name ());
+        setAttribute (sParamName, aParamValues);
       }
     }
     try
@@ -196,16 +194,6 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
                 CGStringHelper.getClassLocalName (this),
                 ScopeUtils.getDebugStackTrace ());
     }
-    LOG.info ("SCOPE: " + this);
-
-  }
-
-  @Override
-  @Nonnull
-  public EChange setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
-  {
-    LOG.warn ("SET: " + sName + ":" + aValue, new IllegalStateException ("OIDA"));
-    return super.setAttribute (sName, aValue);
   }
 
   /**
@@ -368,7 +356,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @ReturnsMutableCopy
   public Map <String, IFileItem> getAllUploadedFileItems ()
   {
-    final Map <String, IFileItem> ret = new HashMap <String, IFileItem> ();
+    final Map <String, IFileItem> ret = new HashMap <> ();
     final Enumeration <String> aEnum = getAttributeNames ();
     while (aEnum.hasMoreElements ())
     {
@@ -387,7 +375,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @ReturnsMutableCopy
   public Map <String, IFileItem []> getAllUploadedFileItemsComplete ()
   {
-    final Map <String, IFileItem []> ret = new HashMap <String, IFileItem []> ();
+    final Map <String, IFileItem []> ret = new HashMap <> ();
     final Enumeration <String> aEnum = getAttributeNames ();
     while (aEnum.hasMoreElements ())
     {
@@ -411,7 +399,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @ReturnsMutableCopy
   public List <IFileItem> getAllUploadedFileItemValues ()
   {
-    final List <IFileItem> ret = new ArrayList <IFileItem> ();
+    final List <IFileItem> ret = new ArrayList <> ();
     final Enumeration <String> aEnum = getAttributeNames ();
     while (aEnum.hasMoreElements ())
     {
