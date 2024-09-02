@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-webbasics</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-webbasics</name>
   <description>Library with basic business objects required by Java web application</description>
