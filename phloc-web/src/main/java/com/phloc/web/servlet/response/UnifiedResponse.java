@@ -207,13 +207,29 @@ public class UnifiedResponse
   {
     if (!this.m_bEmittedRequestHeaders)
     {
-      s_aLogger.warn ("  Request Headers: " +
-                      ContainerHelper.getSortedByKey (RequestLogger.getHTTPHeaderMap (this.m_aRequestHeaderMap)));
-      if (!this.m_aResponseHeaderMap.isEmpty ())
-        s_aLogger.warn ("  Response Headers: " +
-                        ContainerHelper.getSortedByKey (RequestLogger.getHTTPHeaderMap (this.m_aResponseHeaderMap)));
+      if (HeaderSecurity.isLogRequestHeadersOnError () && !this.m_aRequestHeaderMap.isEmpty ())
+      {
+        s_aLogger.warn ("  Request Headers: {}", getHeaders (this.m_aRequestHeaderMap)); //$NON-NLS-1$
+      }
+      if (HeaderSecurity.isLogResponseHeadersOnError () && !this.m_aResponseHeaderMap.isEmpty ())
+      {
+        s_aLogger.warn ("  Response Headers: {}", getHeaders (this.m_aResponseHeaderMap)); //$NON-NLS-1$
+      }
       this.m_bEmittedRequestHeaders = true;
     }
+  }
+
+  private static Map <String, String> getHeaders (final HTTPHeaderMap aHeaderMap)
+  {
+    final Map <String, String> aHeaders = ContainerHelper.getSortedByKey (RequestLogger.getHTTPHeaderMap (aHeaderMap));
+
+    // obfuscate all sensitive headers
+    for (final Map.Entry <String, String> aEntry : aHeaders.entrySet ())
+    {
+      aHeaders.put (aEntry.getKey (),
+                    HeaderSecurity.getObfuscatedHeaderValueOnDemand (aEntry.getKey (), aEntry.getValue ()));
+    }
+    return aHeaders;
   }
 
   private void _warn (@Nonnull final String sMsg)
