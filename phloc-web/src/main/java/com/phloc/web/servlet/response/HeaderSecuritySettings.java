@@ -51,4 +51,19 @@ public class HeaderSecuritySettings
   {
     return LockedContainerHelper.getList (this.m_aSensitiveHeaders, this.m_aLock);
   }
+
+  public void clear ()
+  {
+    this.m_aLock.writeLock ().lock ();
+    try
+    {
+      this.m_aSensitiveHeaders.clear ();
+      this.m_bLogRequestHeadersOnError.set (true);
+      this.m_bLogResponseHeadersOnError.set (true);
+    }
+    finally
+    {
+      this.m_aLock.writeLock ().unlock ();
+    }
+  }
 }

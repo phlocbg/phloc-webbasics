@@ -30,9 +30,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -78,6 +75,9 @@ import com.phloc.web.useragent.browser.BrowserInfo;
 import com.phloc.web.useragent.browser.EBrowserType;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This class encapsulates all things required to build a HTTP response. It
@@ -203,20 +203,26 @@ public class UnifiedResponse
     s_aLogger.info (_getPrefix () + sMsg);
   }
 
-  private void _showRequestInfo ()
+  protected String showRequestInfo ()
   {
+    final StringBuilder aInfo = new StringBuilder ();
     if (!this.m_bEmittedRequestHeaders)
     {
       if (HeaderSecurity.isLogRequestHeadersOnError () && !this.m_aRequestHeaderMap.isEmpty ())
       {
-        s_aLogger.warn ("  Request Headers: {}", getHeaders (this.m_aRequestHeaderMap)); //$NON-NLS-1$
+        final String sRequestInfo = "  Request Headers: " + getHeaders (this.m_aRequestHeaderMap); //$NON-NLS-1$
+        s_aLogger.warn (sRequestInfo);
+        aInfo.append (sRequestInfo);
       }
       if (HeaderSecurity.isLogResponseHeadersOnError () && !this.m_aResponseHeaderMap.isEmpty ())
       {
-        s_aLogger.warn ("  Response Headers: {}", getHeaders (this.m_aResponseHeaderMap)); //$NON-NLS-1$
+        final String sResponseInfo = "  Response Headers: " + getHeaders (this.m_aResponseHeaderMap); //$NON-NLS-1$
+        s_aLogger.warn (sResponseInfo);
+        aInfo.append (sResponseInfo);
       }
       this.m_bEmittedRequestHeaders = true;
     }
+    return aInfo.toString ();
   }
 
   private static Map <String, String> getHeaders (final HTTPHeaderMap aHeaderMap)
@@ -235,13 +241,13 @@ public class UnifiedResponse
   private void _warn (@Nonnull final String sMsg)
   {
     s_aLogger.warn (_getPrefix () + sMsg);
-    _showRequestInfo ();
+    showRequestInfo ();
   }
 
   private void _error (@Nonnull final String sMsg)
   {
     s_aLogger.error (_getPrefix () + sMsg);
-    _showRequestInfo ();
+    showRequestInfo ();
   }
 
   @Nonnull
@@ -801,7 +807,7 @@ public class UnifiedResponse
 
     final String sKey = aCookie.getName ();
     if (this.m_aCookies == null)
-      this.m_aCookies = new HashMap <String, Cookie> ();
+      this.m_aCookies = new HashMap <> ();
     else
       if (this.m_aCookies.containsKey (sKey))
         _warn ("Overwriting cookie '" + sKey + "' with the new value '" + aCookie.getValue () + "'");

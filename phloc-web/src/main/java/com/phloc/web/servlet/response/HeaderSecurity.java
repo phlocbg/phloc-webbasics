@@ -124,4 +124,9 @@ public final class HeaderSecurity
   {
     return HeaderSecurity.isSensitiveHeader (sHeaderName) ? HEADER_VALUE_PLACEHOLDER : sHeaderValue;
   }
+
+  public static void clear ()
+  {
+    GLOBAL_HEADER_SECURITY_SETTINGS.clear ();
+  }
 }
