@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-web</artifactId>
-  <version>6.2.2</version>
+  <version>6.2.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-web</name>
   <description>Library with basic web functionality</description>
@@ -45,7 +45,7 @@
     <connection>scm:git:https://github.com/phlocbg/phloc-webbasics</connection>
     <developerConnection>scm:git:https://github.com/phlocbg/phloc-webbasics</developerConnection>
     <url>http://github.com/phlocbg/phloc-webbasics</url>
-    <tag>phloc-web-6.2.2</tag>
+    <tag>HEAD</tag>
   </scm>
   <organization>
     <name>phloc systems</name>
