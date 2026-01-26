@@ -1,5 +1,7 @@
 package com.phloc.web.servlet.response;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 /**
  * This class can be used to steer the handling of headers when it comes to
  * logging in case of warnings or errors. For security reasons, some sensitive
@@ -16,6 +18,7 @@ package com.phloc.web.servlet.response;
  * 
  * @author Boris Gregorcic
  */
+@ThreadSafe
 public final class HeaderSecurity
 {
   private static final String HEADER_VALUE_PLACEHOLDER = "***"; //$NON-NLS-1$
@@ -32,6 +35,22 @@ public final class HeaderSecurity
     return bGlobal ? GLOBAL_HEADER_SECURITY_SETTINGS : REQUEST_HEADER_SECURITY_SETTINGS.get ();
   }
 
+  private static HeaderSecuritySettings getOrCreateSettings (final boolean bGlobal)
+  {
+    if (bGlobal)
+    {
+      return GLOBAL_HEADER_SECURITY_SETTINGS;
+    }
+
+    HeaderSecuritySettings aSettings = REQUEST_HEADER_SECURITY_SETTINGS.get ();
+    if (aSettings == null)
+    {
+      aSettings = new HeaderSecuritySettings ();
+      REQUEST_HEADER_SECURITY_SETTINGS.set (aSettings);
+    }
+    return aSettings;
+  }
+
   /**
    * Mark a header as sensitive. if logged, the value will be replaced with an
    * obfuscating placeholder.
@@ -44,7 +63,7 @@ public final class HeaderSecurity
    */
   public static void addSensitiveHeader (final String sHeaderName, final boolean bGlobal)
   {
-    getSettings (bGlobal).addSensitiveHeader (sHeaderName);
+    getOrCreateSettings (bGlobal).addSensitiveHeader (sHeaderName);
   }
 
   /**
@@ -56,7 +75,7 @@ public final class HeaderSecurity
    */
   public static void disableLogRequestHeadersOnError (final boolean bGlobal)
   {
-    getSettings (bGlobal).setLogRequestHeadersOnError (false);
+    getOrCreateSettings (bGlobal).setLogRequestHeadersOnError (false);
   }
 
   /**
@@ -68,7 +87,7 @@ public final class HeaderSecurity
    */
   public static void disableLogResponseHeadersOnError (final boolean bGlobal)
   {
-    getSettings (bGlobal).setLogResponseHeadersOnError (false);
+    getOrCreateSettings (bGlobal).setLogResponseHeadersOnError (false);
   }
 
   /**
@@ -79,7 +98,13 @@ public final class HeaderSecurity
    */
   public static boolean isLogRequestHeadersOnError ()
   {
-    return getSettings (false).isLogRequestHeadersOnError () && getSettings (true).isLogRequestHeadersOnError ();
+    if (!getSettings (true).isLogRequestHeadersOnError ())
+    {
+      // globally disabled
+      return false;
+    }
+    final HeaderSecuritySettings aRequestSettings = getSettings (false);
+    return aRequestSettings == null || aRequestSettings.isLogRequestHeadersOnError ();
   }
 
   /**
@@ -90,7 +115,13 @@ public final class HeaderSecurity
    */
   public static boolean isLogResponseHeadersOnError ()
   {
-    return getSettings (false).isLogResponseHeadersOnError () && getSettings (true).isLogResponseHeadersOnError ();
+    if (!getSettings (true).isLogResponseHeadersOnError ())
+    {
+      // globally disabled
+      return false;
+    }
+    final HeaderSecuritySettings aRequestSettings = getSettings (false);
+    return aRequestSettings == null || aRequestSettings.isLogResponseHeadersOnError ();
   }
 
   /**
@@ -105,7 +136,13 @@ public final class HeaderSecurity
    */
   public static boolean isSensitiveHeader (final String sHeaderName)
   {
-    return getSettings (false).isSensitiveHeader (sHeaderName) || getSettings (true).isSensitiveHeader (sHeaderName);
+    if (getSettings (true).isSensitiveHeader (sHeaderName))
+    {
+      // globally sensitive
+      return true;
+    }
+    final HeaderSecuritySettings aRequestSettings = getSettings (false);
+    return aRequestSettings != null && aRequestSettings.isSensitiveHeader (sHeaderName);
   }
 
   /**
@@ -128,5 +165,6 @@ public final class HeaderSecurity
   public static void clear ()
   {
     GLOBAL_HEADER_SECURITY_SETTINGS.clear ();
+    REQUEST_HEADER_SECURITY_SETTINGS.remove ();
   }
 }

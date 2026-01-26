@@ -63,7 +63,7 @@ public class HeaderSecurityTest
   }
 
   @Test
-  public void testHeadersLogRequest ()
+  public void testHeadersLogRequestGlobal ()
   {
     new Thread ( () -> {
       try
@@ -98,7 +98,42 @@ public class HeaderSecurityTest
   }
 
   @Test
-  public void testHeadersLogResponse ()
+  public void testHeadersLogRequestRequest ()
+  {
+    new Thread ( () -> {
+      try
+      {
+        final MockHttpServletRequest aRequest = new MockHttpServletRequest ();
+        final UnifiedResponse aResponse = new UnifiedResponse (aRequest);
+
+        HeaderSecurity.disableLogRequestHeadersOnError (false);
+
+        aRequest.addHeader ("secretIN", "narf");
+        aRequest.addHeader ("publicIN", "puit");
+        aResponse.addCustomResponseHeader ("secretOUT", "zoot");
+        aResponse.addCustomResponseHeader ("publicOUT", "fjord");
+        final String sRequestInfo = aResponse.showRequestInfo ();
+        Assert.assertFalse (sRequestInfo.contains ("Request Headers:"));
+        Assert.assertFalse (sRequestInfo.contains ("secretIN"));
+        Assert.assertFalse (sRequestInfo.contains ("narf"));
+        Assert.assertFalse (sRequestInfo.contains ("publicIN"));
+        Assert.assertFalse (sRequestInfo.contains ("puit"));
+
+        Assert.assertTrue (sRequestInfo.contains ("Response Headers:"));
+        Assert.assertTrue (sRequestInfo.contains ("secretOUT"));
+        Assert.assertTrue (sRequestInfo.contains ("zoot"));
+        Assert.assertTrue (sRequestInfo.contains ("publicOUT"));
+        Assert.assertTrue (sRequestInfo.contains ("puit"));
+      }
+      finally
+      {
+        HeaderSecurity.clear ();
+      }
+    }).start ();
+  }
+
+  @Test
+  public void testHeadersLogResponseGlobal ()
   {
     new Thread ( () -> {
       try
@@ -107,6 +142,41 @@ public class HeaderSecurityTest
         final UnifiedResponse aResponse = new UnifiedResponse (aRequest);
 
         HeaderSecurity.disableLogResponseHeadersOnError (true);
+
+        aRequest.addHeader ("secretIN", "narf");
+        aRequest.addHeader ("publicIN", "puit");
+        aResponse.addCustomResponseHeader ("secretOUT", "zoot");
+        aResponse.addCustomResponseHeader ("publicOUT", "fjord");
+        final String sRequestInfo = aResponse.showRequestInfo ();
+        Assert.assertTrue (sRequestInfo.contains ("Request Headers:"));
+        Assert.assertTrue (sRequestInfo.contains ("secretIN"));
+        Assert.assertTrue (sRequestInfo.contains ("narf"));
+        Assert.assertTrue (sRequestInfo.contains ("publicIN"));
+        Assert.assertTrue (sRequestInfo.contains ("puit"));
+
+        Assert.assertFalse (sRequestInfo.contains ("Response Headers:"));
+        Assert.assertFalse (sRequestInfo.contains ("secretOUT"));
+        Assert.assertFalse (sRequestInfo.contains ("zoot"));
+        Assert.assertFalse (sRequestInfo.contains ("publicOUT"));
+        Assert.assertFalse (sRequestInfo.contains ("puit"));
+      }
+      finally
+      {
+        HeaderSecurity.clear ();
+      }
+    }).start ();
+  }
+
+  @Test
+  public void testHeadersLogResponseRequest ()
+  {
+    new Thread ( () -> {
+      try
+      {
+        final MockHttpServletRequest aRequest = new MockHttpServletRequest ();
+        final UnifiedResponse aResponse = new UnifiedResponse (aRequest);
+
+        HeaderSecurity.disableLogResponseHeadersOnError (false);
 
         aRequest.addHeader ("secretIN", "narf");
         aRequest.addHeader ("publicIN", "puit");
@@ -200,6 +270,8 @@ public class HeaderSecurityTest
       }
       catch (final Exception aEx)
       {
+        HeaderSecurity.clear ();
+        Assert.fail ();
         // swallow to make sure next thread runs
       }
     }).start ();
@@ -226,6 +298,23 @@ public class HeaderSecurityTest
         Assert.assertTrue (sRequestInfo.contains ("zoot"));
         Assert.assertTrue (sRequestInfo.contains ("publicOUT"));
         Assert.assertTrue (sRequestInfo.contains ("puit"));
+      }
+      finally
+      {
+        HeaderSecurity.clear ();
+      }
+    }).start ();
+  }
+
+  @Test
+  public void testLazyInit ()
+  {
+    new Thread ( () -> {
+      try
+      {
+        Assert.assertTrue (HeaderSecurity.isLogRequestHeadersOnError ());
+        Assert.assertTrue (HeaderSecurity.isLogResponseHeadersOnError ());
+        Assert.assertFalse (HeaderSecurity.isSensitiveHeader ("foo"));
       }
       finally
       {
